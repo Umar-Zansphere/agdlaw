@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ultra Premium Legal Hero</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Inter, sans-serif;
+      background: #0b0f0d;
+    }
+
+    .hero {
+      padding: 40px;
+    }
+
+    .hero__wrapper {
+      display: flex;
+      gap: 30px;
+      border-radius: 30px;
+      overflow: hidden;
+    }
+
+    .hero__left {
+      flex: 1;
+      padding: 50px;
+      background: linear-gradient(145deg, #0e1512, #0b0f0d);
+      color: #ccc;
+      display: flex;
+      align-items: center;
+    }
+
+    .hero__logo {
+      color: #c79855;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .hero__title {
+      font-size: clamp(2.5rem, 4vw, 3.5rem);
+      color: white;
+      line-height: 1.2;
+    }
+
+    .hero__title span {
+      display: block;
+      color: #c79855;
+    }
+
+    .hero__desc {
+      margin: 20px 0;
+      color: #aaa;
+      max-width: 420px;
+    }
+
+    .hero__actions {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .hero__services {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pill {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      color: #ddd;
+      transition: 0.3s;
+    }
+
+    .pill:hover {
+      background: #c79855;
+      color: black;
+      transform: translateY(-2px);
+    }
+
+    .hero__right {
+      flex: 2;
+      position: relative;
+    }
+
+    .hero__nav {
+      position: absolute;
+      top: 20px;
+      left: 30px;
+      right: 30px;
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 20px;
+      backdrop-filter: blur(12px);
+      background: rgba(0,0,0,0.3);
+      border-radius: 50px;
+      z-index: 2;
+    }
+
+    .nav__links a {
+      color: #eee;
+      margin-right: 20px;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .hero__image {
+      position: relative;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .hero__image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      animation: zoom 20s ease-in-out infinite alternate;
+    }
+
+    .hero__image::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,0.8), transparent),
+        radial-gradient(circle at 70% 40%, rgba(199,152,85,0.25), transparent);
+    }
+
+    .hero__overlay-text {
+      position: absolute;
+      bottom: 50px;
+      left: 50px;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      color: white;
+      z-index: 2;
+    }
+
+    .hero__scroll {
+      position: absolute;
+      bottom: 30px;
+      right: 30px;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      z-index: 2;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn--gold {
+      background: linear-gradient(135deg, #c79855, #e6c07b);
+      color: black;
+      font-weight: 600;
+    }
+
+    .btn--ghost {
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    .btn--nav {
+      background: white;
+      color: black;
+    }
+
+    @keyframes zoom {
+      from { transform: scale(1); }
+      to { transform: scale(1.08); }
+    }
+
+    @media (max-width: 900px) {
+      .hero__wrapper {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<section class="hero">
+  <div class="hero__wrapper">
+
+    <!-- LEFT -->
+    <div class="hero__left">
+      <div>
+        <div class="hero__logo">
+          ⚖️ LEGAL POINT
+        </div>
+
+        <h1 class="hero__title">
+          Strategic Legal Expertise
+          <span>For High-Stakes Decisions</span>
+        </h1>
+
+        <p class="hero__desc">
+          Trusted by businesses and individuals to handle complex legal challenges
+          with precision, discretion, and results.
+        </p>
+
+        <div class="hero__actions">
+          <a href="#" class="btn btn--gold">Get Legal Advice</a>
+          <a href="#" class="btn btn--ghost">Free Consultation</a>
+        </div>
+
+        <div class="hero__services">
+          <span class="pill">Corporate & Business Law</span>
+          <span class="pill">Litigation & Disputes</span>
+          <span class="pill">Employment Law</span>
+          <span class="pill pill--more">+5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="hero__right">
+
+      <div class="hero__nav">
+        <div class="nav__links">
+          <a href="#">Services</a>
+          <a href="#">About</a>
+          <a href="#">Resources</a>
+          <a href="#">Stories</a>
+        </div>
+        <a href="#" class="btn btn--nav">Book a Call ↗</a>
+      </div>
+
+      <div class="hero__image">
+        <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=1600" alt="Law team">
+
+        <h2 class="hero__overlay-text">
+          Your compass<br>in law
+        </h2>
+
+        <div class="hero__scroll">↓</div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+</body>
+</html>
