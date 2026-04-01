@@ -125,7 +125,7 @@ const services = [
     title: "Consumer protection",
     description:
       "Consumer complaints, deficiency in service claims, product liability disputes, and compensation-focused consumer litigation.",
-    img: "https://images.unsplash.com/photo-1609220136736-443140cfeaa8?w=600&h=399&fit=crop",
+    img: "https://plus.unsplash.com/premium_photo-1661720120987-9723da4de350?w=600&auto=format&fit=crop",
     alt: "Consumer protection",
   },
   {
