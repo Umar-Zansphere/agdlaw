@@ -205,6 +205,179 @@ const faqs = [
   },
 ];
 
+const teamMembers = [
+  {
+    name: "AGD Bala Kumar",
+    role: "Managing Counsel",
+    specialization: "Criminal & Civil Litigation",
+    experience: "12+ Years",
+    img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&h=800&fit=crop&crop=faces",
+    social: { linkedin: "#", twitter: "#" },
+  },
+  {
+    name: "Priya Sundaram",
+    role: "Senior Associate",
+    specialization: "Family & Matrimonial Law",
+    experience: "8 Years",
+    img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&h=800&fit=crop&crop=faces",
+    social: { linkedin: "#", twitter: "#" },
+  },
+  {
+    name: "Karthik Raj",
+    role: "Associate Counsel",
+    specialization: "Corporate & Commercial Advisory",
+    experience: "5 Years",
+    img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&h=800&fit=crop&crop=faces",
+    social: { linkedin: "#", twitter: "#" },
+  },
+  {
+    name: "Meena Lakshmi",
+    role: "Associate Advocate",
+    specialization: "Property & Real Estate Law",
+    experience: "4 Years",
+    img: "https://images.unsplash.com/photo-1580894732444-8ecded7900cd?w=600&h=800&fit=crop&crop=faces",
+    social: { linkedin: "#", twitter: "#" },
+  },
+];
+
+const caseResults = [
+  {
+    category: "Criminal Law",
+    title: "Anticipatory Bail Granted",
+    description: "Secured anticipatory bail for a client in a high-profile financial fraud matter at Madras High Court within 72 hours of filing.",
+    outcome: "Bail Granted",
+    court: "Madras High Court",
+    year: "2024",
+    highlight: true,
+  },
+  {
+    category: "Property Dispute",
+    title: "Title Dispute Resolved",
+    description: "Successfully defended a multi-acre agricultural property title dispute spanning 3 generations, resulting in clear title decree.",
+    outcome: "Decree in Favour",
+    court: "District Court, Coimbatore",
+    year: "2023",
+    highlight: false,
+  },
+  {
+    category: "Consumer Protection",
+    title: "₹18 Lakh Compensation",
+    description: "Obtained ₹18 lakh compensation for a client against a leading builder for deficiency in service and delayed possession.",
+    outcome: "₹18L Awarded",
+    court: "State Consumer Commission",
+    year: "2024",
+    highlight: false,
+  },
+  {
+    category: "Family Law",
+    title: "Child Custody Secured",
+    description: "Represented a mother in a contested custody matter, securing full custody with defined visitation rights for the opposing party.",
+    outcome: "Custody Secured",
+    court: "Family Court, Chennai",
+    year: "2023",
+    highlight: true,
+  },
+  {
+    category: "Writ Petition",
+    title: "Service Matter Relief",
+    description: "Filed and succeeded in a writ petition challenging arbitrary termination of a government employee, securing reinstatement with back wages.",
+    outcome: "Reinstatement Ordered",
+    court: "Madras High Court",
+    year: "2024",
+    highlight: false,
+  },
+  {
+    category: "MCOP",
+    title: "Motor Accident Claim",
+    description: "Achieved ₹42 lakh compensation for a family that lost their sole breadwinner in a road accident through MCOP proceedings.",
+    outcome: "₹42L Awarded",
+    court: "Motor Accidents Tribunal",
+    year: "2023",
+    highlight: false,
+  },
+];
+
+const blogPosts = [
+  {
+    slug: "anticipatory-bail-guide-india",
+    category: "Criminal Law",
+    title: "Anticipatory Bail in India: What It Is and When You Need It",
+    excerpt:
+      "A pre-arrest bail can be the difference between freedom and custody. We break down Section 438 CrPC, who qualifies, and how the process works at the High Court.",
+    author: "AGD Bala Kumar",
+    authorRole: "Managing Counsel",
+    date: "March 18, 2025",
+    readTime: "6 min read",
+    img: "https://images.unsplash.com/photo-1589994965851-a8f479c573a9?w=800&h=500&fit=crop",
+    featured: true,
+  },
+  {
+    slug: "property-due-diligence-checklist",
+    category: "Property Law",
+    title: "The Essential Due Diligence Checklist Before Buying Property in Tamil Nadu",
+    excerpt:
+      "Title verification, encumbrance certificates, patta, and chitta — here is exactly what to check before signing any property sale agreement.",
+    author: "Meena Lakshmi",
+    authorRole: "Associate Advocate",
+    date: "February 28, 2025",
+    readTime: "8 min read",
+    img: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&h=500&fit=crop",
+    featured: false,
+  },
+  {
+    slug: "divorce-mutual-consent-process",
+    category: "Family Law",
+    title: "Mutual Consent Divorce in India: Timeline, Process & What to Expect",
+    excerpt:
+      "From the first motion to the final decree, we walk through the full process of an uncontested divorce and the cooling-off period under Hindu Marriage Act.",
+    author: "Priya Sundaram",
+    authorRole: "Senior Associate",
+    date: "February 10, 2025",
+    readTime: "7 min read",
+    img: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&h=500&fit=crop",
+    featured: false,
+  },
+  {
+    slug: "consumer-court-how-to-file",
+    category: "Consumer Protection",
+    title: "How to File a Consumer Complaint: A Step-by-Step Guide",
+    excerpt:
+      "Defective goods, service failures, builder delays — find out which forum to approach, the pecuniary limits, and how to build a winning complaint.",
+    author: "Karthik Raj",
+    authorRole: "Associate Counsel",
+    date: "January 22, 2025",
+    readTime: "5 min read",
+    img: "https://plus.unsplash.com/premium_photo-1661720120987-9723da4de350?w=800&h=500&fit=crop",
+    featured: false,
+  },
+  {
+    slug: "writ-petition-high-court-guide",
+    category: "Constitutional Law",
+    title: "When and How to File a Writ Petition at the Madras High Court",
+    excerpt:
+      "Certiorari, mandamus, habeas corpus — understanding the five writs and choosing the right remedy when your fundamental or legal rights are violated.",
+    author: "AGD Bala Kumar",
+    authorRole: "Managing Counsel",
+    date: "January 8, 2025",
+    readTime: "9 min read",
+    img: "https://images.unsplash.com/photo-1589994160839-163cd867cfe8?w=800&h=500&fit=crop",
+    featured: false,
+  },
+  {
+    slug: "arbitration-vs-litigation-india",
+    category: "Arbitration & ADR",
+    title: "Arbitration vs. Litigation: Which Dispute Route Is Right for You?",
+    excerpt:
+      "Cost, time, confidentiality, enforceability — a practical comparison to help businesses and individuals choose the right path to resolving disputes.",
+    author: "Karthik Raj",
+    authorRole: "Associate Counsel",
+    date: "December 14, 2024",
+    readTime: "6 min read",
+    img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=500&fit=crop",
+    featured: false,
+  },
+];
+
 // ─── Reusable Button ──────────────────────────────────────────────────────────
 
 function BtnPrimary({ children, icon, href = "#", className = "" }) {
@@ -1436,6 +1609,557 @@ function Testimonial() {
     </section>
   );
 }
+// ─── Team ─────────────────────────────────────────────────────────────────────
+
+function Team() {
+  const [hoveredIdx, setHoveredIdx] = useState(null);
+
+  return (
+    <section
+      id="team"
+      className="bg-white pt-[clamp(3rem,2rem+4vw,5rem)] pb-[clamp(2rem,1.5rem+3vw,4rem)]"
+    >
+      <style>{`
+        .team-card {
+          position: relative;
+          border-radius: 28px;
+          overflow: hidden;
+          cursor: default;
+          background: #0b0b0b;
+          aspect-ratio: 3/4;
+          transition: transform 0.45s cubic-bezier(0.22,1,0.36,1), box-shadow 0.45s ease;
+        }
+        .team-card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 36px 72px rgba(11,11,11,0.22);
+        }
+        .team-card-photo {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: top center;
+          transition: transform 0.65s cubic-bezier(0.22,1,0.36,1), filter 0.45s ease;
+          will-change: transform;
+        }
+        .team-card:hover .team-card-photo {
+          transform: scale(1.06);
+          filter: brightness(0.72);
+        }
+        .team-card-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(180deg, transparent 30%, rgba(11,11,11,0.72) 70%, rgba(11,11,11,0.96) 100%);
+          transition: opacity 0.4s ease;
+        }
+        .team-card-body {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          padding: 1.5rem;
+          transform: translateY(0);
+          transition: transform 0.45s cubic-bezier(0.22,1,0.36,1);
+        }
+        .team-card-extra {
+          overflow: hidden;
+          max-height: 0;
+          opacity: 0;
+          transition: max-height 0.4s cubic-bezier(0.22,1,0.36,1), opacity 0.35s ease, margin 0.4s ease;
+        }
+        .team-card:hover .team-card-extra {
+          max-height: 80px;
+          opacity: 1;
+          margin-top: 10px;
+        }
+        .team-card-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          background: rgba(197,223,192,0.18);
+          border: 1px solid rgba(197,223,192,0.35);
+          border-radius: 50px;
+          padding: 5px 12px;
+          font-size: 0.68rem;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: #c5dfc0;
+          font-weight: 500;
+          width: fit-content;
+          margin-bottom: 10px;
+        }
+        .team-experience-tag {
+          position: absolute;
+          top: 18px;
+          right: 18px;
+          background: rgba(11,11,11,0.7);
+          backdrop-filter: blur(8px);
+          border: 1px solid rgba(197,223,192,0.3);
+          border-radius: 50px;
+          padding: 6px 14px;
+          font-size: 0.72rem;
+          letter-spacing: 0.08em;
+          color: #c5dfc0;
+          font-family: 'Inter', sans-serif;
+          font-weight: 500;
+        }
+      `}</style>
+
+      <div className="max-w-[1200px] px-6 mx-auto w-full">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-[clamp(2rem,1.5rem+2vw,3rem)]">
+          <div className="flex flex-col gap-3">
+            <span className="inline-flex w-fit items-center gap-2 px-4 py-2 rounded-full border border-[#c5dfc0] text-[#0b0b0b] uppercase tracking-[0.16em] text-[0.66rem] font-semibold">
+              Our Legal Team
+            </span>
+            <h2
+              className="text-[clamp(2rem,1.4rem+2.133vw,3rem)] font-normal leading-[118%] text-[#0b0b0b]"
+              style={{ fontFamily: "Georgia, serif" }}
+            >
+              The minds behind
+              <span className="text-[#c5dfc0]"> your defence</span>
+            </h2>
+          </div>
+          <p className="text-[#0b0b0b] leading-relaxed max-w-[380px] text-[0.95rem] opacity-75">
+            A dedicated team of advocates combining deep legal knowledge with a client-first approach to deliver results that matter.
+          </p>
+        </div>
+
+        {/* Cards grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+          {teamMembers.map((member, i) => (
+            <div
+              key={member.name}
+              className="team-card"
+              onMouseEnter={() => setHoveredIdx(i)}
+              onMouseLeave={() => setHoveredIdx(null)}
+            >
+              <img
+                src={member.img}
+                alt={member.name}
+                className="team-card-photo"
+                loading="lazy"
+              />
+              <div className="team-card-overlay" />
+
+              {/* Experience tag top-right */}
+              <div className="team-experience-tag">{member.experience}</div>
+
+              {/* Body */}
+              <div className="team-card-body">
+                <div className="team-card-badge">
+                  {member.specialization}
+                </div>
+                <h3
+                  className="text-white font-normal text-[clamp(1rem,0.85rem+0.5vw,1.25rem)] leading-tight"
+                  style={{ fontFamily: "Georgia, serif" }}
+                >
+                  {member.name}
+                </h3>
+                <p className="text-[#c5dfc0] text-[0.72rem] uppercase tracking-[0.11em] mt-1 font-medium">
+                  {member.role}
+                </p>
+                <div className="team-card-extra">
+                  <div className="flex items-center gap-3 mt-2">
+                    <a
+                      href={member.social.linkedin}
+                      aria-label={`${member.name} LinkedIn`}
+                      onClick={(e) => e.stopPropagation()}
+                      className="w-8 h-8 rounded-full border border-[rgba(197,223,192,0.4)] inline-flex items-center justify-center text-[#c5dfc0] hover:bg-[#c5dfc0] hover:text-[#0b0b0b] hover:border-[#c5dfc0] transition-colors"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/>
+                        <circle cx="4" cy="4" r="2"/>
+                      </svg>
+                    </a>
+                    <a
+                      href={`#contact`}
+                      className="flex-1 text-center text-[0.7rem] tracking-[0.08em] uppercase py-1.5 rounded-full border border-[rgba(197,223,192,0.4)] text-[#c5dfc0] hover:bg-[#c5dfc0] hover:text-[#0b0b0b] hover:border-[#c5dfc0] transition-colors"
+                    >
+                      Consult
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Case Results ─────────────────────────────────────────────────────────────
+
+function CaseResults() {
+  const stats = [
+    { number: "500+", label: "Cases Handled" },
+    { number: "12+", label: "Years of Practice" },
+    { number: "95%", label: "Success Rate" },
+    { number: "6", label: "Cities Active" },
+  ];
+
+  return (
+    <section
+      id="case-results"
+      className="bg-[#0b0b0b] rounded-[40px_40px_0_0] pt-[clamp(3rem,2rem+4vw,5rem)] pb-[clamp(2rem,1.5rem+3vw,4rem)] -mb-[50px]"
+    >
+      <style>{`
+        @keyframes countUp {
+          from { opacity: 0; transform: translateY(16px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .result-card {
+          position: relative;
+          border: 1px solid rgba(197,223,192,0.15);
+          border-radius: 24px;
+          padding: 1.5rem;
+          background: rgba(255,255,255,0.03);
+          transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+          overflow: hidden;
+        }
+        .result-card:hover {
+          border-color: rgba(197,223,192,0.45);
+          background: rgba(197,223,192,0.05);
+          transform: translateY(-4px);
+        }
+        .result-card.highlight-card {
+          border-color: rgba(197,223,192,0.4);
+          background: rgba(197,223,192,0.07);
+        }
+        .result-card::before {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, rgba(197,223,192,0.6), transparent);
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+        .result-card:hover::before,
+        .result-card.highlight-card::before { opacity: 1; }
+        .result-category-pill {
+          display: inline-flex;
+          align-items: center;
+          border-radius: 50px;
+          padding: 4px 12px;
+          font-size: 0.66rem;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          font-weight: 600;
+          background: rgba(197,223,192,0.12);
+          border: 1px solid rgba(197,223,192,0.25);
+          color: #c5dfc0;
+          width: fit-content;
+          margin-bottom: 12px;
+        }
+        .result-outcome-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          border-radius: 50px;
+          padding: 6px 14px;
+          font-size: 0.72rem;
+          letter-spacing: 0.08em;
+          font-weight: 600;
+          background: #c5dfc0;
+          color: #0b0b0b;
+          width: fit-content;
+        }
+        .stat-number {
+          font-family: 'Playfair Display', Georgia, serif;
+          font-size: clamp(2.4rem, 1.8rem + 2vw, 3.5rem);
+          font-weight: 400;
+          color: #ffffff;
+          line-height: 1;
+        }
+      `}</style>
+
+      <div className="max-w-[1200px] px-6 mx-auto w-full">
+        {/* Header */}
+        <div className="flex flex-col gap-3 mb-[clamp(2rem,1.5rem+2vw,3rem)]">
+          <span className="inline-flex w-fit items-center gap-2 px-4 py-2 rounded-full border border-[rgba(197,223,192,0.35)] text-[#c5dfc0] uppercase tracking-[0.16em] text-[0.66rem] font-semibold">
+            Case Results
+          </span>
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5">
+            <h2
+              className="text-[clamp(2rem,1.4rem+2.133vw,3rem)] font-normal leading-[118%] text-white"
+              style={{ fontFamily: "Georgia, serif" }}
+            >
+              Outcomes that
+              <span className="text-[#c5dfc0]"> speak for themselves</span>
+            </h2>
+            <p className="text-white/60 text-[0.9rem] leading-relaxed max-w-[360px]">
+              A record of decisive legal victories across practice areas and courts throughout Tamil Nadu.
+            </p>
+          </div>
+        </div>
+
+        {/* Stats row */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-[clamp(2rem,1.5rem+2vw,3rem)]">
+          {stats.map((stat) => (
+            <div
+              key={stat.label}
+              className="flex flex-col gap-1 rounded-2xl border border-[rgba(197,223,192,0.12)] bg-[rgba(255,255,255,0.03)] px-5 py-4"
+            >
+              <span className="stat-number">{stat.number}</span>
+              <span className="text-white/55 text-[0.78rem] uppercase tracking-[0.1em] font-medium">
+                {stat.label}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Results grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {caseResults.map((c, i) => (
+            <article
+              key={i}
+              className={`result-card ${c.highlight ? "highlight-card" : ""}`}
+            >
+              <div className="result-category-pill">{c.category}</div>
+              <h3
+                className="text-white font-normal text-[clamp(1.05rem,0.95rem+0.4vw,1.2rem)] leading-snug mb-3"
+                style={{ fontFamily: "Georgia, serif" }}
+              >
+                {c.title}
+              </h3>
+              <p className="text-white/55 text-[0.86rem] leading-[1.7] mb-4">{c.description}</p>
+              <div className="flex items-end justify-between gap-3 mt-auto pt-4 border-t border-[rgba(197,223,192,0.1)]">
+                <div className="flex flex-col gap-1">
+                  <span className="text-white/40 text-[0.68rem] uppercase tracking-[0.1em]">{c.court}</span>
+                  <span className="text-white/30 text-[0.68rem]">{c.year}</span>
+                </div>
+                <div className="result-outcome-badge">
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                    <circle cx="5" cy="5" r="5" fill="#0b0b0b" opacity="0.2"/>
+                    <path d="M3 5l1.5 1.5L7 3.5" stroke="#0b0b0b" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  {c.outcome}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <div className="mt-[clamp(2rem,1.5rem+2vw,3rem)] flex justify-center">
+          <a
+            href="#contact"
+            className="inline-flex items-center gap-3 px-7 py-3 rounded-full bg-[#c5dfc0] text-[#0b0b0b] text-sm font-semibold uppercase tracking-[0.1em] hover:bg-white transition-colors"
+          >
+            Discuss your case
+            <ArrowRight size={15} strokeWidth={2.5} />
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Blog ─────────────────────────────────────────────────────────────────────
+
+function Blog() {
+  const featured = blogPosts.find((p) => p.featured);
+  const rest = blogPosts.filter((p) => !p.featured);
+
+  return (
+    <section
+      id="blog"
+      className="bg-white pt-[clamp(3rem,2rem+4vw,5rem)] pb-[clamp(2rem,1.5rem+3vw,4rem)]"
+    >
+      <style>{`
+        .blog-card {
+          display: flex;
+          flex-direction: column;
+          border: 1px solid #e8f0e7;
+          border-radius: 24px;
+          overflow: hidden;
+          background: #fff;
+          transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s cubic-bezier(0.22,1,0.36,1);
+          text-decoration: none;
+          color: inherit;
+        }
+        .blog-card:hover {
+          border-color: #c5dfc0;
+          box-shadow: 0 24px 60px rgba(11,11,11,0.1);
+          transform: translateY(-5px);
+        }
+        .blog-card-img {
+          width: 100%;
+          aspect-ratio: 16/9;
+          object-fit: cover;
+          transition: transform 0.55s cubic-bezier(0.22,1,0.36,1);
+        }
+        .blog-card:hover .blog-card-img { transform: scale(1.04); }
+        .blog-card-img-wrap { overflow: hidden; }
+
+        .blog-featured-card {
+          display: grid;
+          grid-template-columns: 1fr;
+          border: 1px solid #e8f0e7;
+          border-radius: 28px;
+          overflow: hidden;
+          background: #fff;
+          transition: border-color 0.35s ease, box-shadow 0.35s ease;
+          text-decoration: none;
+          color: inherit;
+        }
+        @media (min-width: 768px) {
+          .blog-featured-card { grid-template-columns: 1.1fr 1fr; }
+        }
+        .blog-featured-card:hover {
+          border-color: #c5dfc0;
+          box-shadow: 0 28px 70px rgba(11,11,11,0.12);
+        }
+        .blog-featured-img {
+          width: 100%;
+          height: 100%;
+          min-height: 260px;
+          object-fit: cover;
+          transition: transform 0.55s cubic-bezier(0.22,1,0.36,1);
+        }
+        .blog-featured-card:hover .blog-featured-img { transform: scale(1.04); }
+        .blog-featured-img-wrap { overflow: hidden; }
+
+        .blog-category-pill {
+          display: inline-flex;
+          align-items: center;
+          background: rgba(197,223,192,0.2);
+          border: 1px solid rgba(197,223,192,0.5);
+          border-radius: 50px;
+          padding: 4px 12px;
+          font-size: 0.65rem;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          font-weight: 600;
+          color: #3a5c3d;
+          width: fit-content;
+        }
+      `}</style>
+
+      <div className="max-w-[1200px] px-6 mx-auto w-full">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5 mb-[clamp(2rem,1.5rem+2vw,3rem)]">
+          <div className="flex flex-col gap-3">
+            <span className="inline-flex w-fit items-center gap-2 px-4 py-2 rounded-full border border-[#c5dfc0] text-[#0b0b0b] uppercase tracking-[0.16em] text-[0.66rem] font-semibold">
+              Legal Insights
+            </span>
+            <h2
+              className="text-[clamp(2rem,1.4rem+2.133vw,3rem)] font-normal leading-[118%] text-[#0b0b0b]"
+              style={{ fontFamily: "Georgia, serif" }}
+            >
+              From our desk to
+              <span className="text-[#c5dfc0]"> yours</span>
+            </h2>
+          </div>
+          <a
+            href="/blog"
+            className="inline-flex items-center gap-2 text-[0.82rem] font-semibold uppercase tracking-[0.1em] text-[#0b0b0b] hover:text-[#3a5c3d] transition-colors"
+          >
+            All articles
+            <ArrowRight size={14} strokeWidth={2.5} />
+          </a>
+        </div>
+
+        {/* Featured post */}
+        {featured && (
+          <a href={`/blog/${featured.slug}`} className="blog-featured-card block mb-5">
+            <div className="blog-featured-img-wrap">
+              <img
+                src={featured.img}
+                alt={featured.title}
+                className="blog-featured-img"
+                loading="lazy"
+              />
+            </div>
+            <div className="flex flex-col justify-between gap-5 p-[clamp(1.5rem,1rem+2vw,2.5rem)]">
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-3">
+                  <span className="blog-category-pill">{featured.category}</span>
+                  <span className="text-[0.68rem] uppercase tracking-[0.1em] text-[#0b0b0b]/50 font-medium">
+                    Featured
+                  </span>
+                </div>
+                <h3
+                  className="text-[clamp(1.4rem,1.1rem+1.2vw,2rem)] font-normal leading-[128%] text-[#0b0b0b]"
+                  style={{ fontFamily: "Georgia, serif" }}
+                >
+                  {featured.title}
+                </h3>
+                <p className="text-[#0b0b0b]/65 leading-[1.75] text-[0.9rem]">
+                  {featured.excerpt}
+                </p>
+              </div>
+              <div className="flex items-center justify-between gap-3 pt-4 border-t border-[#e8f0e7]">
+                <div className="flex flex-col gap-0.5">
+                  <span
+                    className="text-[0.9rem] text-[#0b0b0b] font-normal"
+                    style={{ fontFamily: "Georgia, serif" }}
+                  >
+                    {featured.author}
+                  </span>
+                  <span className="text-[0.7rem] uppercase tracking-[0.09em] text-[#0b0b0b]/50">
+                    {featured.date} · {featured.readTime}
+                  </span>
+                </div>
+                <span className="inline-flex items-center gap-2 text-[0.78rem] font-semibold uppercase tracking-[0.09em] text-[#0b0b0b] group-hover:text-[#3a5c3d]">
+                  Read article
+                  <span className="w-8 h-8 rounded-full bg-[#c5dfc0] inline-flex items-center justify-center">
+                    <ArrowRight size={13} strokeWidth={2.5} />
+                  </span>
+                </span>
+              </div>
+            </div>
+          </a>
+        )}
+
+        {/* Grid of remaining posts */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+          {rest.map((post) => (
+            <a key={post.slug} href={`/blog/${post.slug}`} className="blog-card">
+              <div className="blog-card-img-wrap">
+                <img
+                  src={post.img}
+                  alt={post.title}
+                  className="blog-card-img"
+                  loading="lazy"
+                />
+              </div>
+              <div className="flex flex-col gap-3 p-5 flex-1">
+                <span className="blog-category-pill">{post.category}</span>
+                <h3
+                  className="text-[1.05rem] font-normal leading-[140%] text-[#0b0b0b] flex-1"
+                  style={{ fontFamily: "Georgia, serif" }}
+                >
+                  {post.title}
+                </h3>
+                <p className="text-[0.83rem] text-[#0b0b0b]/60 leading-[1.7] line-clamp-2">
+                  {post.excerpt}
+                </p>
+                <div className="flex items-center justify-between pt-3 border-t border-[#e8f0e7] mt-auto">
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-[0.78rem] font-medium text-[#0b0b0b]">
+                      {post.author}
+                    </span>
+                    <span className="text-[0.68rem] text-[#0b0b0b]/45 uppercase tracking-[0.08em]">
+                      {post.date} · {post.readTime}
+                    </span>
+                  </div>
+                  <span className="w-8 h-8 rounded-full border border-[#c5dfc0] inline-flex items-center justify-center text-[#0b0b0b] hover:bg-[#c5dfc0] transition-colors">
+                    <ArrowRight size={13} strokeWidth={2.5} />
+                  </span>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ─── FAQ ──────────────────────────────────────────────────────────────────────
 
 function FAQ() {
@@ -2096,9 +2820,12 @@ export default function Page() {
       <main className="relative">
         <Hero />
         <About />
+        <Team />
         <Service />
         <WhyMe />
         <Testimonial />
+        <CaseResults />
+        <Blog />
         <FAQ />
         <Contact />
       </main>
