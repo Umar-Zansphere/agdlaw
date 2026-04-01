@@ -7,9 +7,6 @@ import {
   Phone,
   ArrowLeft,
   MessageCircle,
-  // Facebook,
-  // Twitter,
-  Play,
   MapPin,
   Mail,
   PhoneCall,
@@ -42,6 +39,32 @@ const ArrowDiagonalIcon = () => (
       d="M23.9973 2.07298C24.0376 1.52216 23.6238 1.04297 23.073 1.00267L14.097 0.345886C13.5462 0.305583 13.067 0.719432 13.0267 1.27024C12.9864 1.82106 13.4002 2.30025 13.951 2.34055L21.9297 2.92436L21.3459 10.903C21.3056 11.4538 21.7194 11.933 22.2702 11.9733C22.8211 12.0136 23.3003 11.5998 23.3406 11.049L23.9973 2.07298ZM1 21L1.65362 21.7568L23.6536 2.75682L23 2L22.3464 1.24318L0.34638 20.2432L1 21Z"
       fill="currentColor"
     />
+  </svg>
+);
+
+const FacebookBrandIcon = ({ size = 16 }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.1 0 2.24.2 2.24.2v2.46H15.2c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12Z" />
+  </svg>
+);
+
+const XBrandIcon = ({ size = 16 }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path d="M18.9 2H22l-6.8 7.8L23 22h-6.2l-4.9-6.9L5.9 22H2.8l7.3-8.3L1 2h6.3l4.4 6.3L18.9 2Zm-1.1 18h1.7L6.4 3.9H4.6L17.8 20Z" />
   </svg>
 );
 
@@ -167,11 +190,11 @@ function BtnPrimary({ children, icon, href = "#", className = "" }) {
   return (
     <a
       href={href}
-      className={`inline-flex items-center justify-center gap-2.5 w-fit px-7 py-2.5 pl-8 text-base font-medium rounded-full no-underline transition-all duration-300 cursor-pointer select-none bg-[#c5dfc0] text-white hover:bg-[#2d5a3b] ${className}`}
+      className={`inline-flex items-center justify-center gap-2.5 w-fit px-7 py-2.5 pl-8 text-base font-medium rounded-full no-underline transition-all duration-300 cursor-pointer select-none bg-[#c5dfc0] text-[#0b0b0b] hover:bg-[#0b0b0b] hover:text-white ${className}`}
     >
       <span>{children}</span>
       {icon && (
-        <span className="text-[#c5dfc0] bg-white p-2 rounded-full inline-flex items-center justify-center leading-none">
+        <span className="text-[#0b0b0b] bg-white p-2 rounded-full inline-flex items-center justify-center leading-none">
           {icon}
         </span>
       )}
@@ -183,11 +206,11 @@ function BtnSecondary({ children, icon, href = "#", className = "" }) {
   return (
     <a
       href={href}
-      className={`inline-flex items-center justify-center gap-2.5 w-fit px-7 py-2.5 pl-8 text-base font-medium rounded-full no-underline transition-all duration-300 cursor-pointer select-none bg-white text-[#0b0b0b] hover:bg-gray-100 ${className}`}
+      className={`inline-flex items-center justify-center gap-2.5 w-fit px-7 py-2.5 pl-8 text-base font-medium rounded-full no-underline transition-all duration-300 cursor-pointer select-none bg-white text-[#0b0b0b] border border-[#c5dfc0] hover:bg-[#c5dfc0] ${className}`}
     >
       <span>{children}</span>
       {icon && (
-        <span className="text-white bg-[#c5dfc0] p-2 rounded-full inline-flex items-center justify-center leading-none">
+        <span className="text-[#c5dfc0] bg-[#0b0b0b] p-2 rounded-full inline-flex items-center justify-center leading-none">
           {icon}
         </span>
       )}
@@ -245,7 +268,7 @@ function Header() {
           font-size: 0.78rem;
           text-transform: uppercase;
           font-weight: 500;
-          color: rgba(242,246,241,0.85);
+          color: rgba(255,255,255,0.84);
           text-decoration: none;
           padding: 4px 0;
           transition: color 0.25s ease;
@@ -266,7 +289,7 @@ function Header() {
         .nav-link.active { color: #c5dfc0; }
  
         .scrolled-header {
-          background: rgba(26,36,29,0.92);
+          background: rgba(11,11,11,0.94);
           backdrop-filter: blur(18px);
           -webkit-backdrop-filter: blur(18px);
           box-shadow: 0 4px 32px rgba(0,0,0,0.18);
@@ -284,7 +307,7 @@ function Header() {
           font-size: clamp(1.6rem, 5vw, 2.2rem);
           font-family: 'Playfair Display', Georgia, serif;
           font-weight: 400;
-          color: #f2f6f1;
+          color: #ffffff;
           text-decoration: none;
           padding: 18px 0;
           border-bottom: 1px solid rgba(197,223,192,0.15);
@@ -309,7 +332,7 @@ function Header() {
           letter-spacing: 0.09em;
           text-transform: uppercase;
           text-decoration: none;
-          color: #1a241d;
+          color: #0b0b0b;
           background: #c5dfc0;
           padding: 9px 22px;
           border-radius: 50px;
@@ -318,7 +341,8 @@ function Header() {
           white-space: nowrap;
         }
         .cta-btn-header:hover {
-          background: #a8cfa2;
+          background: #0b0b0b;
+          color: #ffffff;
           transform: translateY(-1px);
           box-shadow: 0 6px 20px rgba(197,223,192,0.35);
         }
@@ -328,7 +352,7 @@ function Header() {
           display: block;
           width: 100%;
           height: 1.5px;
-          background: #f2f6f1;
+          background: #ffffff;
           border-radius: 2px;
           transition: transform 0.35s cubic-bezier(0.22,1,0.36,1),
                       opacity 0.2s ease,
@@ -473,7 +497,7 @@ function Header() {
         <div
           id="mobile-nav"
           className="mobile-menu-panel fixed inset-0 z-[800] lg:hidden flex flex-col"
-          style={{ background: "#1a241d" }}
+          style={{ background: "#0b0b0b" }}
         >
           {/* Header row inside panel */}
           <div className="flex items-center justify-between px-6 h-[76px] flex-shrink-0 border-b border-white/10">
@@ -522,7 +546,7 @@ function Header() {
               <a
                 href="#contact"
                 onClick={() => setMenuOpen(false)}
-                className="flex items-center justify-center gap-2 w-full py-4 rounded-2xl text-[#1a241d] font-semibold text-sm tracking-widest uppercase no-underline transition-all"
+                className="flex items-center justify-center gap-2 w-full py-4 rounded-2xl text-[#0b0b0b] font-semibold text-sm tracking-widest uppercase no-underline transition-all"
                 style={{ background: "#c5dfc0", letterSpacing: "0.1em" }}
               >
                 Book Free Consultation
@@ -537,7 +561,7 @@ function Header() {
               className="text-xs uppercase tracking-widest"
               style={{ color: "rgba(197,223,192,0.5)", letterSpacing: "0.15em" }}
             >
-              © 2025 Anthony · Attorney at Law
+              © {new Date().getFullYear()} Anthony · Attorney at Law
             </p>
           </div>
         </div>
@@ -562,7 +586,7 @@ function Hero() {
             "url('https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=1400&h=900&fit=crop') no-repeat center center / cover",
         }}
       >
-        <div className="w-full h-full" style={{ backgroundColor: "#1a241dda" }} />
+        <div className="w-full h-full" style={{ backgroundColor: "#0b0b0bda" }} />
       </div>
       {/* bg-2: light right */}
       <div
@@ -581,7 +605,7 @@ function Hero() {
       {/* Container */}
       <div className="flex flex-col lg:flex-row max-w-[1200px] px-6 w-full mx-auto gap-5 lg:-translate-y-[50px] lg:overflow-hidden">
         {/* Content */}
-        <div className="flex flex-col text-[#f2f6f1] pb-5 gap-5 lg:max-w-[60%] lg:justify-center">
+        <div className="flex flex-col text-[#ffffff] pb-5 gap-5 lg:max-w-[60%] lg:justify-center">
           <p className="flex items-center w-fit text-[14px] font-medium tracking-[0.5px] bg-white/20 backdrop-blur-md px-5 py-1 rounded-full border border-white/20 gap-2">
             <span className="inline-flex items-center text-xl leading-none text-[#c5dfc0]">
               <GavelIcon />
@@ -602,8 +626,10 @@ function Hero() {
           </p>
 
           <div className="flex flex-wrap gap-4">
-            <BtnPrimary icon={<ArrowRight size={16} />}>Contact now</BtnPrimary>
-            <BtnSecondary icon={<Phone size={16} />}>
+            <BtnPrimary href="#contact" icon={<ArrowRight size={16} />}>
+              Contact now
+            </BtnPrimary>
+            <BtnSecondary href="tel:+15559876543" icon={<Phone size={16} />}>
               Free consultation
             </BtnSecondary>
           </div>
@@ -723,7 +749,7 @@ function About() {
           padding: 20px 24px 20px 20px;
           border-radius: 20px;
           background: #fff;
-          border: 1.5px solid #e8f0e8;
+          border: 1.5px solid #c5dfc0;
           overflow: hidden;
           transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.25s ease;
           cursor: default;
@@ -733,7 +759,7 @@ function About() {
           position: absolute;
           left: 0; top: 0; bottom: 0;
           width: 4px;
-          background: linear-gradient(180deg, #c5dfc0 0%, #a8cfa2 100%);
+          background: linear-gradient(180deg, #c5dfc0 0%, #c5dfc0 100%);
           border-radius: 4px 0 0 4px;
           transition: width 0.3s ease;
         }
@@ -751,12 +777,12 @@ function About() {
           gap: 6px;
           padding: 5px 14px;
           border-radius: 50px;
-          border: 1.5px solid #dbecd8;
+          border: 1.5px solid #c5dfc0;
           background: rgba(197,223,192,0.08);
           font-size: 0.75rem;
           font-weight: 500;
           letter-spacing: 0.04em;
-          color: #4a6e50;
+          color: #0b0b0b;
           white-space: nowrap;
         }
         .cred-pill::before {
@@ -773,7 +799,7 @@ function About() {
           font-size: clamp(1.5rem, 3vw, 2rem);
           font-style: italic;
           font-weight: 400;
-          color: #1a241d;
+          color: #0b0b0b;
           letter-spacing: -0.01em;
           line-height: 1.1;
         }
@@ -795,10 +821,10 @@ function About() {
           position: absolute;
           bottom: 28px;
           right: -16px;
-          background: #1a241d;
+          background: #0b0b0b;
           border-radius: 16px;
           padding: 14px 18px;
-          box-shadow: 0 12px 40px rgba(26,36,29,0.28);
+          box-shadow: 0 12px 40px rgba(11,11,11,0.28);
           display: flex;
           flex-direction: column;
           gap: 4px;
@@ -855,7 +881,7 @@ function About() {
                   position: "absolute",
                   inset: 0,
                   borderRadius: "clamp(1.5rem,1rem+2vw,2.5rem)",
-                  background: "linear-gradient(145deg,#c5dfc022 0%,#a8cfa214 100%)",
+                  background: "linear-gradient(145deg,#c5dfc022 0%,#c5dfc014 100%)",
                   transform: "translate(10px, 10px)",
                   zIndex: 0,
                 }}
@@ -868,7 +894,7 @@ function About() {
                 style={{
                   borderRadius: "clamp(1.5rem,1rem+2vw,2.5rem)",
                   zIndex: 1,
-                  boxShadow: "0 24px 80px rgba(26,36,29,0.16)",
+                  boxShadow: "0 24px 80px rgba(11,11,11,0.16)",
                 }}
               />
               {/* Floating achievement badge */}
@@ -885,14 +911,14 @@ function About() {
           <div className="order-1 lg:order-2 flex flex-col gap-6 flex-1 min-w-0 lg:pt-6">
 
             {/* Trust bar */}
-            <div className={`ab vis d0 about-trust-bar ${visible ? "vis" : ""}`}>
+            <div className={`ab d0 about-trust-bar ${visible ? "vis" : ""}`}>
               <span style={{
                 width: 8, height: 8, borderRadius: "50%",
                 background: "#c5dfc0", display: "inline-block", flexShrink: 0,
               }} />
               <span style={{
                 fontSize: "0.72rem", letterSpacing: "0.12em",
-                textTransform: "uppercase", fontWeight: 600, color: "#4a6e50",
+                textTransform: "uppercase", fontWeight: 600, color: "#0b0b0b",
               }}>
                 Trusted Legal Counsel Since 2004
               </span>
@@ -913,7 +939,7 @@ function About() {
               style={{
                 fontSize: "clamp(1rem,0.95rem+0.2vw,1.15rem)",
                 lineHeight: 1.8,
-                color: "#555",
+                color: "#0b0b0b",
                 margin: 0,
               }}
             >
@@ -927,10 +953,10 @@ function About() {
             <div className={`ab ${visible ? "vis d3" : ""} flex items-center gap-4`}>
               <span className="about-sig">Anthony G.</span>
               <span style={{
-                width: 1, height: 36, background: "#dbecd8", flexShrink: 0,
+                width: 1, height: 36, background: "#c5dfc0", flexShrink: 0,
               }} />
               <span style={{
-                fontSize: "0.75rem", color: "#7a8c7e",
+                fontSize: "0.75rem", color: "#0b0b0b",
                 lineHeight: 1.5, letterSpacing: "0.04em",
               }}>
                 Esq. &middot; Attorney at Law<br />State Bar No. 284701
@@ -964,7 +990,7 @@ function About() {
                     </span>
                     <span style={{
                       fontSize: "0.72rem",
-                      color: "#7a8c7e",
+                      color: "#0b0b0b",
                       letterSpacing: "0.07em",
                       textTransform: "uppercase",
                       fontWeight: 500,
@@ -1017,13 +1043,13 @@ function Service() {
           My areas of <span className="text-[#c5dfc0]">Expertise</span>
         </h2>
 
-        <div className="flex flex-col relative w-full border-t border-[#d5e2d2]">
+        <div className="flex flex-col relative w-full border-t border-[#c5dfc0]">
           {services.map((s, i) => {
             const isHovered = hoveredIndex === i;
             return (
               <article
                 key={s.title}
-                className="relative flex justify-between items-start py-8 lg:py-[30px] border-b border-[#d5e2d2] group cursor-pointer transition-colors duration-300"
+                className="relative flex justify-between items-start py-8 lg:py-[30px] border-b border-[#c5dfc0] group cursor-pointer transition-colors duration-300"
                 onMouseEnter={() => setHoveredIndex(i)}
                 onMouseLeave={() => setHoveredIndex(null)}
                 onClick={() => setHoveredIndex(hoveredIndex === i ? null : i)}
@@ -1043,7 +1069,7 @@ function Service() {
                       }`}
                   >
                     <div className="overflow-hidden">
-                      <p className="text-[#1a1a1a] text-[clamp(0.95rem,0.5vw+0.8rem,1.1rem)] leading-[1.6]">
+                      <p className="text-[#0b0b0b] text-[clamp(0.95rem,0.5vw+0.8rem,1.1rem)] leading-[1.6]">
                         {s.description}
                       </p>
                       <a
@@ -1059,7 +1085,7 @@ function Service() {
 
                 {/* Right side: Arrow Diagonal Icon */}
                 <span
-                  className={`flex w-fit p-3 rounded-full transition-all duration-200 mt-0 lg:mt-2 ${isHovered ? "bg-[#c5dfc0] scale-110 text-white" : "text-[#0b0b0b]"
+                  className={`flex w-fit p-3 rounded-full transition-all duration-200 mt-0 lg:mt-2 ${isHovered ? "bg-[#c5dfc0] scale-110 text-[#0b0b0b]" : "text-[#0b0b0b]"
                     }`}
                 >
                   <ArrowDiagonalIcon />
@@ -1118,7 +1144,7 @@ function WhyMe() {
       {/* Overlay */}
       <div
         className="absolute inset-0 z-[inherit]"
-        style={{ background: "linear-gradient(180deg, #0000001a, #1a241d)" }}
+        style={{ background: "linear-gradient(180deg, #0000001a, #0b0b0b)" }}
       />
 
       <div className="relative flex flex-col max-w-[1200px] px-6 w-full mx-auto min-h-[55vh] justify-around items-center gap-5 z-[2]">
@@ -1161,7 +1187,7 @@ function WhyMe() {
               onClick={(e) => e.stopPropagation()}
             >
               <button
-                className="absolute top-2.5 right-2.5 bg-[#111] text-white rounded-full w-10 h-10 text-[32px] leading-none flex items-center justify-center z-[2] hover:bg-black transition-colors"
+                className="absolute top-2.5 right-2.5 bg-[#0b0b0b] text-white rounded-full w-10 h-10 text-[32px] leading-none flex items-center justify-center z-[2] hover:bg-black transition-colors"
                 aria-label="Close video popup"
                 onClick={() => setShowPopup(false)}
               >
@@ -1189,8 +1215,8 @@ function WhyMe() {
           ].map((item, i) => (
             <li
               key={item}
-              className={`relative text-center text-[#f2f6f1] font-serif text-[clamp(1.5rem,1.35rem+.533vw,1.75rem)] p-5 sm:w-1/2 md:w-auto md:flex-1 ${i < 2
-                ? "after:content-[''] after:absolute after:left-1/2 after:bottom-0 after:w-1/2 after:h-px after:bg-[#d5e2d2] after:-translate-x-1/2 sm:after:w-px sm:after:h-[calc(100%-20px)] sm:after:left-auto sm:after:right-0 sm:after:top-0 sm:after:bottom-auto sm:after:translate-x-0"
+              className={`relative text-center text-[#ffffff] font-serif text-[clamp(1.5rem,1.35rem+.533vw,1.75rem)] p-5 sm:w-1/2 md:w-auto md:flex-1 ${i < 2
+                ? "after:content-[''] after:absolute after:left-1/2 after:bottom-0 after:w-1/2 after:h-px after:bg-[#c5dfc0] after:-translate-x-1/2 sm:after:w-px sm:after:h-[calc(100%-20px)] sm:after:left-auto sm:after:right-0 sm:after:top-0 sm:after:bottom-auto sm:after:translate-x-0"
                 : ""
                 }`}
               style={{ fontFamily: "Georgia, serif" }}
@@ -1252,13 +1278,13 @@ function Testimonial() {
       <div
         aria-hidden
         className="absolute -bottom-24 -left-20 w-[300px] h-[300px] rounded-full blur-3xl"
-        style={{ background: "radial-gradient(circle, rgba(168,207,162,0.28) 0%, rgba(168,207,162,0) 70%)" }}
+        style={{ background: "radial-gradient(circle, rgba(197,223,192,0.28) 0%, rgba(197,223,192,0) 70%)" }}
       />
 
       <div className="relative grid lg:grid-cols-[minmax(290px,420px)_1fr] max-w-[1200px] px-6 w-full mx-auto gap-[clamp(2rem,1.25rem+2.5vw,4rem)] items-start">
         {/* Intro panel */}
         <div className="flex flex-col gap-6 lg:sticky lg:top-[92px]">
-          <span className="inline-flex w-fit items-center gap-2 px-4 py-2 rounded-full border border-[#d8e9d4] bg-[#f4faf2] text-[#4a6e50] uppercase tracking-[0.16em] text-[0.66rem] font-semibold">
+          <span className="inline-flex w-fit items-center gap-2 px-4 py-2 rounded-full border border-[#c5dfc0] bg-[#ffffff] text-[#0b0b0b] uppercase tracking-[0.16em] text-[0.66rem] font-semibold">
             Client testimonials
           </span>
           <h2
@@ -1268,7 +1294,7 @@ function Testimonial() {
             Stories from clients who felt
             <span className="text-[#c5dfc0]"> heard and protected</span>
           </h2>
-          <p className="text-[#1f2924] leading-[1.75]">
+          <p className="text-[#0b0b0b] leading-[1.75]">
             Real words from real people. Every case receives direct attention,
             practical guidance, and clear communication from start to finish.
           </p>
@@ -1276,7 +1302,7 @@ function Testimonial() {
             <button
               type="button"
               onClick={prev}
-              className="group inline-flex items-center justify-center w-11 h-11 border border-[#cbdcc7] text-[#1a241d] rounded-full hover:bg-[#c5dfc0] hover:border-[#c5dfc0] hover:text-white transition-all"
+              className="group inline-flex items-center justify-center w-11 h-11 border border-[#c5dfc0] text-[#0b0b0b] rounded-full hover:bg-[#c5dfc0] hover:border-[#c5dfc0] hover:text-[#0b0b0b] transition-all"
               aria-label="Previous"
             >
               <ArrowLeft size={18} className="transition-transform duration-300 group-hover:-translate-x-0.5" />
@@ -1284,22 +1310,22 @@ function Testimonial() {
             <button
               type="button"
               onClick={next}
-              className="group inline-flex items-center justify-center w-11 h-11 border border-[#cbdcc7] text-[#1a241d] rounded-full hover:bg-[#c5dfc0] hover:border-[#c5dfc0] hover:text-white transition-all"
+              className="group inline-flex items-center justify-center w-11 h-11 border border-[#c5dfc0] text-[#0b0b0b] rounded-full hover:bg-[#c5dfc0] hover:border-[#c5dfc0] hover:text-[#0b0b0b] transition-all"
               aria-label="Next"
             >
               <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-0.5" />
             </button>
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#1a241d] text-[#f2f6f1] text-[0.72rem] tracking-[0.14em] uppercase font-medium">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-[#0b0b0b] text-[#ffffff] text-[0.72rem] tracking-[0.14em] uppercase font-medium">
               {String(current + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
             </div>
           </div>
 
-          <div className="w-full h-1.5 rounded-full bg-[#ecf3ea] overflow-hidden">
+          <div className="w-full h-1.5 rounded-full bg-[#ffffff] overflow-hidden">
             <span
               className="block h-full rounded-full transition-all duration-500"
               style={{
                 width: `${progress}%`,
-                background: "linear-gradient(90deg, #c5dfc0 0%, #9dc995 100%)",
+                background: "linear-gradient(90deg, #c5dfc0 0%, #c5dfc0 100%)",
               }}
             />
           </div>
@@ -1311,7 +1337,7 @@ function Testimonial() {
                 type="button"
                 onClick={() => goTo(i)}
                 aria-label={`Show testimonial from ${item.name}`}
-                className={`h-2.5 rounded-full transition-all duration-300 ${i === current ? "w-10 bg-[#1a241d]" : "w-2.5 bg-[#ccdbc8] hover:bg-[#c5dfc0]"}`}
+                className={`h-2.5 rounded-full transition-all duration-300 ${i === current ? "w-10 bg-[#0b0b0b]" : "w-2.5 bg-[#c5dfc0] hover:bg-[#c5dfc0]"}`}
               />
             ))}
           </div>
@@ -1323,8 +1349,8 @@ function Testimonial() {
                 type="button"
                 onClick={() => goTo(i)}
                 className={`text-left flex items-center gap-3 rounded-2xl p-3 transition-all border ${i === current
-                  ? "bg-[#1a241d] text-white border-[#1a241d]"
-                  : "bg-white border-[#e2ece0] hover:border-[#c5dfc0]"
+                  ? "bg-[#0b0b0b] text-white border-[#0b0b0b]"
+                  : "bg-white border-[#c5dfc0] hover:border-[#c5dfc0]"
                   }`}
                 aria-label={`Open review by ${item.name}`}
               >
@@ -1336,7 +1362,7 @@ function Testimonial() {
                 />
                 <span className="min-w-0">
                   <span className="block text-sm font-medium truncate">{item.name}</span>
-                  <span className={`block text-[0.7rem] uppercase tracking-[0.08em] truncate ${i === current ? "text-[#c5dfc0]" : "text-[#6e826f]"}`}>
+                  <span className={`block text-[0.7rem] uppercase tracking-[0.08em] truncate ${i === current ? "text-[#c5dfc0]" : "text-[#0b0b0b]"}`}>
                     {item.role}
                   </span>
                 </span>
@@ -1349,7 +1375,7 @@ function Testimonial() {
         <div className="relative">
           <article
             key={`${t.name}-${current}`}
-            className="testimonial-card-enter relative bg-[linear-gradient(160deg,#ffffff_0%,#f4faf2_100%)] border border-[#dbe9d8] rounded-[30px] p-[clamp(1.25rem,1rem+1vw,2rem)] lg:p-[clamp(1.75rem,1.1rem+1.2vw,2.4rem)] shadow-[0_24px_70px_rgba(26,36,29,0.08)]"
+            className="testimonial-card-enter relative bg-[linear-gradient(160deg,#ffffff_0%,#ffffff_100%)] border border-[#c5dfc0] rounded-[30px] p-[clamp(1.25rem,1rem+1vw,2rem)] lg:p-[clamp(1.75rem,1.1rem+1.2vw,2.4rem)] shadow-[0_24px_70px_rgba(11,11,11,0.08)]"
           >
             <div className="flex items-start justify-between gap-4">
               <span
@@ -1359,29 +1385,29 @@ function Testimonial() {
               >
                 &ldquo;
               </span>
-              <div className="inline-flex items-center gap-1 rounded-full border border-[#dbe9d8] bg-white px-3 py-1.5">
+              <div className="inline-flex items-center gap-1 rounded-full border border-[#c5dfc0] bg-white px-3 py-1.5">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <span key={i} className="text-[#c5dfc0] text-base leading-none">★</span>
                 ))}
-                <span className="ml-1 text-[0.72rem] uppercase tracking-[0.11em] text-[#627b66] font-semibold">
+                <span className="ml-1 text-[0.72rem] uppercase tracking-[0.11em] text-[#0b0b0b] font-semibold">
                   Verified
                 </span>
               </div>
             </div>
 
             <blockquote className="mt-4">
-              <p className="text-[clamp(1.06rem,0.95rem+0.45vw,1.32rem)] leading-[1.85] text-[#24302a]">
+              <p className="text-[clamp(1.06rem,0.95rem+0.45vw,1.32rem)] leading-[1.85] text-[#0b0b0b]">
                 {t.feedback}
               </p>
             </blockquote>
 
-            <div className="mt-8 pt-6 border-t border-[#dbe9d8] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
+            <div className="mt-8 pt-6 border-t border-[#c5dfc0] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
               <div className="flex items-center gap-4">
                 <div className="relative">
                   <span
                     aria-hidden
                     className="absolute -inset-1 rounded-2xl"
-                    style={{ background: "linear-gradient(135deg, #c5dfc0 0%, #9dc995 100%)" }}
+                    style={{ background: "linear-gradient(135deg, #c5dfc0 0%, #c5dfc0 100%)" }}
                   />
                   <img
                     src={t.img}
@@ -1397,7 +1423,7 @@ function Testimonial() {
                   >
                     {t.name}
                   </h4>
-                  <p className="text-[0.82rem] tracking-[0.1em] uppercase text-[#607563] mt-1">
+                  <p className="text-[0.82rem] tracking-[0.1em] uppercase text-[#0b0b0b] mt-1">
                     {t.role}
                   </p>
                 </div>
@@ -1406,7 +1432,7 @@ function Testimonial() {
               <button
                 type="button"
                 onClick={() => goTo(nextIndex)}
-                className="inline-flex items-center justify-center gap-2 w-fit px-5 py-2.5 rounded-full border border-[#c5dfc0] text-[#1a241d] hover:bg-[#c5dfc0] hover:text-white transition-colors text-sm font-medium"
+                className="inline-flex items-center justify-center gap-2 w-fit px-5 py-2.5 rounded-full border border-[#c5dfc0] text-[#0b0b0b] hover:bg-[#c5dfc0] hover:text-[#0b0b0b] transition-colors text-sm font-medium"
               >
                 Read next story
                 <ArrowRight size={15} />
@@ -1416,10 +1442,10 @@ function Testimonial() {
 
           {/* <div className="mt-4 rounded-2xl border border-[#e0eade] bg-[#f7fbf6] px-4 py-3 flex items-center justify-between gap-3 text-sm">
             <div className="min-w-0">
-              <p className="text-[#1a241d] font-medium truncate">
+              <p className="text-[#0b0b0b] font-medium truncate">
                 Up next: {testimonials[nextIndex].name}
               </p>
-              <p className="text-[#6f8370] text-[0.78rem] uppercase tracking-[0.08em] truncate">
+              <p className="text-[#0b0b0b] text-[0.78rem] uppercase tracking-[0.08em] truncate">
                 {testimonials[nextIndex].role}
               </p>
             </div>
@@ -1464,7 +1490,7 @@ function FAQ() {
             return (
               <div
                 key={i}
-                className={`flex flex-col gap-[15px] ${i < faqs.length - 1 ? "border-b border-[#d5e2d2]" : ""
+                className={`flex flex-col gap-[15px] ${i < faqs.length - 1 ? "border-b border-[#c5dfc0]" : ""
                   }`}
               >
                 <button
@@ -1488,14 +1514,12 @@ function FAQ() {
                   id={`accordion-content-${i}`}
                   role="region"
                   aria-labelledby={`accordion-button-${i}`}
-                  className="overflow-hidden transition-all duration-200"
-                  style={{
-                    maxHeight: isOpen ? "9em" : "0",
-                    opacity: isOpen ? 1 : 0,
-                    paddingBottom: isOpen ? "20px" : "0",
-                  }}
+                  className={`grid transition-all duration-300 ease-out ${isOpen ? "grid-rows-[1fr] opacity-100 pb-5" : "grid-rows-[0fr] opacity-0 pb-0"
+                    }`}
                 >
-                  <p className="text-[#1a1a1a] lg:max-w-[90%]">{faq.a}</p>
+                  <div className="overflow-hidden">
+                    <p className="text-[#0b0b0b] lg:max-w-[90%]">{faq.a}</p>
+                  </div>
                 </div>
               </div>
             );
@@ -1539,10 +1563,10 @@ function Contact() {
     }
 
     const serviceLabel =
-      services.find((s) => s.value === form.service_type)?.label ||
+      serviceOptions.find((s) => s.value === form.service_type)?.label ||
       form.service_type;
     const budgetLabel =
-      budgets.find((b) => b.value === form.budget)?.label || form.budget;
+      budgetOptions.find((b) => b.value === form.budget)?.label || form.budget;
 
     try {
       setIsSubmitting(true);
@@ -1582,7 +1606,7 @@ function Contact() {
     }
   };
 
-  const services = [
+  const serviceOptions = [
     { value: "consultation", label: "Consultation" },
     { value: "case_review", label: "Case review" },
     { value: "contract_drafting", label: "Contract drafting" },
@@ -1590,7 +1614,7 @@ function Contact() {
     { value: "data_privacy_compliance", label: "Data privacy & compliance" },
   ];
 
-  const budgets = [
+  const budgetOptions = [
     { value: "500_2k", label: "500 - 2K" },
     { value: "2k_10k", label: "2K - 10K" },
     { value: "more_than_10k", label: "More than 10K" },
@@ -1599,8 +1623,8 @@ function Contact() {
   const chipClass = (active) =>
     `px-5 py-2.5 rounded-full text-[0.98rem] transition-all border ${
       active
-        ? "bg-[#1a241d] text-white border-[#1a241d] shadow-[0_8px_22px_rgba(26,36,29,0.22)]"
-        : "bg-[#f3f8f1] text-[#2b3b2f] border-[#e2ece0] hover:border-[#c5dfc0] hover:bg-[#edf5ea]"
+        ? "bg-[#c5dfc0] text-[#0b0b0b] border-[#c5dfc0] shadow-[0_8px_22px_rgba(11,11,11,0.18)]"
+        : "bg-[#ffffff] text-[#0b0b0b] border-[#c5dfc0] hover:border-[#c5dfc0] hover:bg-[#ffffff]"
     }`;
 
   return (
@@ -1615,34 +1639,34 @@ function Contact() {
       />
       <div className="relative grid lg:grid-cols-[280px_1fr] max-w-[1200px] px-6 w-full mx-auto gap-[clamp(1.25rem,0.9rem+2vw,2.4rem)] items-start">
         {/* Contact Info Card */}
-        <aside className="order-2 lg:order-1 rounded-[28px] bg-[#f3f8f1] border border-[#dbe9d8] p-6 sm:p-7 lg:p-8 min-h-[480px] flex flex-col">
+        <aside className="order-2 lg:order-1 rounded-[28px] bg-[#ffffff] border border-[#c5dfc0] p-6 sm:p-7 lg:p-8 min-h-0 lg:min-h-[480px] flex flex-col">
           <div className="flex items-start justify-between gap-4">
-            <h3 className="text-[1.35rem] text-[#1a241d] font-medium">Contacts</h3>
+            <h3 className="text-[1.35rem] text-[#0b0b0b] font-medium">Contacts</h3>
             <div className="flex items-center gap-2">
               <a
                 href="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
-                className="w-8 h-8 rounded-full bg-[#e2eee0] text-[#456148] inline-flex items-center justify-center hover:bg-[#d4e5d0] transition-colors"
+                className="w-8 h-8 rounded-full bg-[#ffffff] text-[#0b0b0b] inline-flex items-center justify-center hover:bg-[#c5dfc0] transition-colors"
               >
-                <Phone size={14} />
+                <FacebookBrandIcon size={14} />
               </a>
               <a
                 href="https://x.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="X"
-                className="w-8 h-8 rounded-full bg-[#e2eee0] text-[#456148] inline-flex items-center justify-center hover:bg-[#d4e5d0] transition-colors"
+                className="w-8 h-8 rounded-full bg-[#ffffff] text-[#0b0b0b] inline-flex items-center justify-center hover:bg-[#c5dfc0] transition-colors"
               >
-                <Phone size={14} />
+                <XBrandIcon size={14} />
               </a>
             </div>
           </div>
 
-          <div className="mt-7 space-y-5 text-[#2f4432]">
+          <div className="mt-7 space-y-5 text-[#0b0b0b]">
             <div className="flex items-start gap-3">
-              <MapPin size={16} className="mt-1 text-[#5f7b60] flex-shrink-0" />
+              <MapPin size={16} className="mt-1 text-[#0b0b0b] flex-shrink-0" />
               <p className="text-[0.98rem] leading-7">
                 456 Justice Street,
                 <br />
@@ -1655,15 +1679,15 @@ function Contact() {
 
           <div className="mt-auto space-y-7 pt-10">
             <div className="space-y-2">
-              <p className="text-[0.92rem] text-[#6d836f]">Call us</p>
-              <a href="tel:+15559876543" className="inline-flex items-center gap-2 text-[2rem] leading-none text-[#1a241d] hover:text-[#2d5a3b] transition-colors">
+              <p className="text-[0.92rem] text-[#0b0b0b]">Call us</p>
+              <a href="tel:+15559876543" className="inline-flex items-center gap-2 text-[clamp(1.2rem,2.5vw,1.7rem)] leading-none text-[#0b0b0b] hover:text-[#0b0b0b] transition-colors">
                 <PhoneCall size={20} />
-                <span className="text-[1.65rem] font-medium">+1 (555) 987-6543</span>
+                <span className="text-[clamp(1rem,2.2vw,1.45rem)] font-medium">+1 (555) 987-6543</span>
               </a>
             </div>
             <div className="space-y-2">
-              <p className="text-[0.92rem] text-[#6d836f]">For general inquiries</p>
-              <a href="mailto:contact@legalpoint.com" className="inline-flex items-center gap-2 text-[1.3rem] text-[#1a241d] hover:text-[#2d5a3b] transition-colors">
+              <p className="text-[0.92rem] text-[#0b0b0b]">For general inquiries</p>
+              <a href="mailto:contact@legalpoint.com" className="inline-flex items-center gap-2 text-[clamp(1rem,2.2vw,1.2rem)] text-[#0b0b0b] hover:text-[#0b0b0b] transition-colors break-all">
                 <Mail size={18} />
                 <span>contact@legalpoint.com</span>
               </a>
@@ -1672,9 +1696,9 @@ function Contact() {
         </aside>
 
         {/* Form Panel */}
-        <div className="order-1 lg:order-2 rounded-[30px] border border-[#e2ece0] bg-white px-[clamp(1rem,.55rem+1.85vw,2rem)] py-[clamp(1.25rem,.7rem+2vw,2.25rem)] shadow-[0_22px_55px_rgba(21,34,28,0.08)]">
+        <div className="order-1 lg:order-2 rounded-[30px] border border-[#c5dfc0] bg-white px-[clamp(1rem,.55rem+1.85vw,2rem)] py-[clamp(1.25rem,.7rem+2vw,2.25rem)] shadow-[0_22px_55px_rgba(11,11,11,0.08)]">
           <h2
-            className="text-[clamp(2.2rem,1.4rem+2.8vw,4rem)] font-normal leading-[110%] text-[#1a241d] max-w-[680px]"
+            className="text-[clamp(2.2rem,1.4rem+2.8vw,4rem)] font-normal leading-[110%] text-[#0b0b0b] max-w-[680px]"
             style={{ fontFamily: "Georgia, serif" }}
           >
             Need legal expertise?
@@ -1684,9 +1708,9 @@ function Contact() {
 
           <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-8">
             <div className="space-y-3">
-              <p className="text-[1rem] text-[#2f4333] font-medium">Services</p>
+              <p className="text-[1rem] text-[#0b0b0b] font-medium">Services</p>
               <div className="flex flex-wrap gap-3">
-                {services.map((service) => (
+                {serviceOptions.map((service) => (
                   <button
                     key={service.value}
                     type="button"
@@ -1701,9 +1725,9 @@ function Contact() {
             </div>
 
             <div className="space-y-3">
-              <p className="text-[1rem] text-[#2f4333] font-medium">Your budget</p>
+              <p className="text-[1rem] text-[#0b0b0b] font-medium">Your budget</p>
               <div className="flex flex-wrap gap-3">
-                {budgets.map((budget) => (
+                {budgetOptions.map((budget) => (
                   <button
                     key={budget.value}
                     type="button"
@@ -1719,7 +1743,7 @@ function Contact() {
 
             <div className="grid sm:grid-cols-2 gap-5">
               <div>
-                <label htmlFor="your-name" className="block text-[0.98rem] text-[#3b543f] mb-2">
+                <label htmlFor="your-name" className="block text-[0.98rem] text-[#0b0b0b] mb-2">
                   Your Name
                 </label>
                 <input
@@ -1731,11 +1755,11 @@ function Contact() {
                   aria-required="true"
                   value={form.your_name}
                   onChange={handleChange}
-                  className="w-full bg-transparent border-0 border-b border-[#d5e2d2] px-0 pb-2.5 text-[#1a241d] focus:outline-none focus:border-[#95bf8f] transition-colors"
+                  className="w-full bg-transparent border-0 border-b border-[#c5dfc0] px-0 pb-2.5 text-[#0b0b0b] focus:outline-none focus:border-[#c5dfc0] transition-colors"
                 />
               </div>
               <div>
-                <label htmlFor="your-email" className="block text-[0.98rem] text-[#3b543f] mb-2">
+                <label htmlFor="your-email" className="block text-[0.98rem] text-[#0b0b0b] mb-2">
                   Your Email
                 </label>
                 <input
@@ -1747,15 +1771,15 @@ function Contact() {
                   aria-required="true"
                   value={form.your_email}
                   onChange={handleChange}
-                  className="w-full bg-transparent border-0 border-b border-[#d5e2d2] px-0 pb-2.5 text-[#1a241d] focus:outline-none focus:border-[#95bf8f] transition-colors"
+                  className="w-full bg-transparent border-0 border-b border-[#c5dfc0] px-0 pb-2.5 text-[#0b0b0b] focus:outline-none focus:border-[#c5dfc0] transition-colors"
                 />
               </div>
             </div>
 
             {/* Row 3 — textarea */}
             <div>
-              <label htmlFor="message" className="block text-[0.98rem] text-[#3b543f] mb-2">
-                Details <span className="text-[#7c907d]">(optional)</span>
+              <label htmlFor="message" className="block text-[0.98rem] text-[#0b0b0b] mb-2">
+                Details <span className="text-[#0b0b0b]">(optional)</span>
               </label>
               <textarea
                 id="message"
@@ -1764,7 +1788,7 @@ function Contact() {
                 placeholder="Looking for support with a cross-border SaaS acquisition ..."
                 value={form.message}
                 onChange={handleChange}
-                className="w-full bg-transparent border-0 border-b border-[#d5e2d2] px-0 pb-2.5 text-[#1a241d] placeholder:text-[#9eb09f] focus:outline-none focus:border-[#95bf8f] transition-colors resize-none"
+                className="w-full bg-transparent border-0 border-b border-[#c5dfc0] px-0 pb-2.5 text-[#0b0b0b] placeholder:text-[#0b0b0b] focus:outline-none focus:border-[#c5dfc0] transition-colors resize-none"
               />
             </div>
 
@@ -1773,19 +1797,19 @@ function Contact() {
                 type="submit"
                 aria-label="Send message"
                 disabled={isSubmitting}
-                className="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-[#c5dfc0] text-white text-[0.83rem] font-semibold tracking-[0.08em] uppercase hover:bg-[#2d5a3b] transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                className="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-[#c5dfc0] text-[#0b0b0b] text-[0.83rem] font-semibold tracking-[0.08em] uppercase hover:bg-[#0b0b0b] hover:text-white transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? "Sending..." : "Send Message"}
               </button>
-              <span className="w-9 h-9 rounded-full bg-[#1a241d] text-[#c5dfc0] inline-flex items-center justify-center">
+              <span className="w-9 h-9 rounded-full bg-[#0b0b0b] text-[#c5dfc0] inline-flex items-center justify-center">
                 <ArrowRight size={15} />
               </span>
             </div>
             {submitState.message && (
               <p
                 className={`text-sm ${submitState.type === "success"
-                  ? "text-[#2d5a3b]"
-                  : "text-[#b04a4a]"
+                  ? "text-[#0b0b0b]"
+                  : "text-[#0b0b0b]"
                   }`}
               >
                 {submitState.message}
@@ -1820,7 +1844,7 @@ function Footer() {
   return (
     <footer
       id="footer"
-      className="relative bg-[#1a241d] text-[#f2f6f1] pt-[clamp(3rem,2rem+4vw,5rem)] pb-[clamp(2rem,1.25rem+3vw,3.5rem)]"
+      className="relative bg-[#0b0b0b] text-[#ffffff] pt-[clamp(3rem,2rem+4vw,5rem)] pb-[clamp(2rem,1.25rem+3vw,3.5rem)]"
     >
       <div
         aria-hidden
@@ -1842,7 +1866,7 @@ function Footer() {
               <br />
               <span className="text-[#c5dfc0]">Attorney at Law</span>
             </p>
-            <p className="text-[#cdd9cb] max-w-[420px] leading-7">
+            <p className="text-[#ffffff] max-w-[420px] leading-7">
               Personalized legal guidance with practical strategies and clear
               communication for every stage of your case.
             </p>
@@ -1852,18 +1876,18 @@ function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
-                className="w-10 h-10 rounded-full border border-white/20 text-[#c5dfc0] inline-flex items-center justify-center hover:bg-[#c5dfc0] hover:text-[#1a241d] transition-colors"
+                className="w-10 h-10 rounded-full border border-white/20 text-[#c5dfc0] inline-flex items-center justify-center hover:bg-[#c5dfc0] hover:text-[#0b0b0b] transition-colors"
               >
-                <Phone size={16} />
+                <FacebookBrandIcon size={16} />
               </a>
               <a
                 href="https://x.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="X"
-                className="w-10 h-10 rounded-full border border-white/20 text-[#c5dfc0] inline-flex items-center justify-center hover:bg-[#c5dfc0] hover:text-[#1a241d] transition-colors"
+                className="w-10 h-10 rounded-full border border-white/20 text-[#c5dfc0] inline-flex items-center justify-center hover:bg-[#c5dfc0] hover:text-[#0b0b0b] transition-colors"
               >
-                <Phone size={16} />
+                <XBrandIcon size={16} />
               </a>
             </div>
           </div>
@@ -1875,7 +1899,7 @@ function Footer() {
                 <li key={item.href}>
                   <a
                     href={item.href}
-                    className="text-[#cdd9cb] hover:text-[#c5dfc0] transition-colors"
+                    className="text-[#ffffff] hover:text-[#c5dfc0] transition-colors"
                   >
                     {item.label}
                   </a>
@@ -1888,7 +1912,7 @@ function Footer() {
             <h3 className="text-lg text-white font-medium">Practice Areas</h3>
             <ul className="space-y-2.5">
               {services.map((item) => (
-                <li key={item} className="text-[#cdd9cb]">
+                <li key={item} className="text-[#ffffff]">
                   {item}
                 </li>
               ))}
@@ -1897,20 +1921,20 @@ function Footer() {
         </div>
 
         <div className="mt-10 pt-6 border-t border-white/15 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <p className="text-[#a6b6a8] text-sm">
+          <p className="text-[#ffffff] text-sm">
             © {new Date().getFullYear()} Anthony Law. All rights reserved.
           </p>
-          <div className="flex items-center gap-5 text-sm">
+          <div className="flex flex-wrap items-center gap-4 text-sm">
             <a
               href="mailto:contact@legalpoint.com"
-              className="inline-flex items-center gap-2 text-[#cdd9cb] hover:text-[#c5dfc0] transition-colors"
+              className="inline-flex items-center gap-2 text-[#ffffff] hover:text-[#c5dfc0] transition-colors"
             >
               <Mail size={15} />
               contact@legalpoint.com
             </a>
             <a
               href="tel:+15559876543"
-              className="inline-flex items-center gap-2 text-[#cdd9cb] hover:text-[#c5dfc0] transition-colors"
+              className="inline-flex items-center gap-2 text-[#ffffff] hover:text-[#c5dfc0] transition-colors"
             >
               <PhoneCall size={15} />
               +1 (555) 987-6543
@@ -1949,14 +1973,14 @@ function WhatsAppFloatingChat() {
   return (
     <div className="fixed bottom-5 right-5 z-[980] flex flex-col items-end">
       <div
-        className={`mb-3 w-[min(92vw,360px)] rounded-[22px] overflow-hidden border border-[#d5e2d2] bg-white shadow-[0_22px_60px_rgba(26,36,29,0.2)] transition-all duration-300 origin-bottom-right ${open
+        className={`mb-3 w-[min(92vw,360px)] rounded-[22px] overflow-hidden border border-[#c5dfc0] bg-white shadow-[0_22px_60px_rgba(11,11,11,0.2)] transition-all duration-300 origin-bottom-right ${open
           ? "opacity-100 translate-y-0 scale-100 pointer-events-auto"
           : "opacity-0 translate-y-4 scale-95 pointer-events-none"
           }`}
       >
-        <div className="px-4 py-3 bg-[#1a241d] text-[#f2f6f1] flex items-center justify-between">
+        <div className="px-4 py-3 bg-[#0b0b0b] text-[#ffffff] flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <span className="w-8 h-8 rounded-full bg-[#c5dfc0] text-[#1a241d] inline-flex items-center justify-center">
+            <span className="w-8 h-8 rounded-full bg-[#c5dfc0] text-[#0b0b0b] inline-flex items-center justify-center">
               <MessageCircle size={16} />
             </span>
             <div>
@@ -1974,8 +1998,8 @@ function WhatsAppFloatingChat() {
           </button>
         </div>
 
-        <div className="p-4 bg-[#f6fbf5] space-y-3">
-          <div className="max-w-[90%] bg-white border border-[#e1ecdf] text-[#2a3b2d] rounded-2xl rounded-tl-sm px-3 py-2.5 text-sm leading-6">
+        <div className="p-4 bg-[#ffffff] space-y-3">
+          <div className="max-w-[90%] bg-white border border-[#c5dfc0] text-[#0b0b0b] rounded-2xl rounded-tl-sm px-3 py-2.5 text-sm leading-6">
             Hi, thanks for reaching out. Select a smart message or type your own and we will continue on WhatsApp.
           </div>
 
@@ -1985,7 +2009,7 @@ function WhatsAppFloatingChat() {
                 key={item}
                 type="button"
                 onClick={() => setMessage(item)}
-                className="text-left text-[0.8rem] px-3 py-2 rounded-full border border-[#dbe9d8] text-[#35513a] bg-white hover:border-[#c5dfc0] hover:bg-[#eff7ec] transition-colors"
+                className="text-left text-[0.8rem] px-3 py-2 rounded-full border border-[#c5dfc0] text-[#0b0b0b] bg-white hover:border-[#c5dfc0] hover:bg-[#c5dfc0] transition-colors"
               >
                 {item}
               </button>
@@ -2008,13 +2032,13 @@ function WhatsAppFloatingChat() {
                 }
               }}
               placeholder="Type your message..."
-              className="w-full resize-none rounded-2xl border border-[#d5e2d2] bg-white px-3 py-2.5 text-sm text-[#1a241d] placeholder:text-[#94a896] focus:outline-none focus:border-[#95bf8f]"
+              className="w-full resize-none rounded-2xl border border-[#c5dfc0] bg-white px-3 py-2.5 text-sm text-[#0b0b0b] placeholder:text-[#0b0b0b] focus:outline-none focus:border-[#c5dfc0]"
             />
             <button
               type="button"
               onClick={() => openWhatsApp()}
               aria-label="Send message to WhatsApp"
-              className="h-11 w-11 flex-shrink-0 rounded-full bg-[#c5dfc0] text-white inline-flex items-center justify-center hover:bg-[#2d5a3b] transition-colors"
+              className="h-11 w-11 flex-shrink-0 rounded-full bg-[#c5dfc0] text-[#0b0b0b] inline-flex items-center justify-center hover:bg-[#0b0b0b] hover:text-white transition-colors"
             >
               <Send size={16} />
             </button>
@@ -2023,7 +2047,7 @@ function WhatsAppFloatingChat() {
       </div>
 
       {!open && (
-        <p className="mb-2 mr-1 px-3 py-1.5 rounded-full bg-[#1a241d] text-[#c5dfc0] text-[0.7rem] tracking-[0.08em] uppercase">
+        <p className="mb-2 mr-1 px-3 py-1.5 rounded-full bg-[#0b0b0b] text-[#c5dfc0] text-[0.7rem] tracking-[0.08em] uppercase">
           Chat on WhatsApp
         </p>
       )}
@@ -2032,9 +2056,9 @@ function WhatsAppFloatingChat() {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? "Close WhatsApp chat" : "Open WhatsApp chat"}
-        className={`group w-14 h-14 rounded-full shadow-[0_14px_35px_rgba(26,36,29,0.35)] inline-flex items-center justify-center transition-all duration-300 ${open
-          ? "bg-[#1a241d] text-[#c5dfc0]"
-          : "bg-[#25D366] text-white hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(37,211,102,0.38)]"
+        className={`group w-14 h-14 rounded-full shadow-[0_14px_35px_rgba(11,11,11,0.35)] inline-flex items-center justify-center transition-all duration-300 ${open
+          ? "bg-[#0b0b0b] text-[#c5dfc0]"
+          : "bg-[#c5dfc0] text-[#0b0b0b] hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(197,223,192,0.45)]"
           }`}
       >
         {open ? <X size={20} /> : <MessageCircle size={22} />}
@@ -2051,14 +2075,19 @@ export default function Page() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Inter:wght@400;500;600&display=swap');
 
+        :root {
+          --theme-paper: #ffffff;
+          --theme-ink: #0b0b0b;
+          --theme-accent: #c5dfc0;
+        }
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body {
           margin: 0;
           padding: 0;
           font-family: 'Inter', system-ui, -apple-system, sans-serif;
-          background-color: #ffffff;
-          color: #1a1a1a;
+          background-color: var(--theme-paper);
+          color: var(--theme-ink);
           -webkit-font-smoothing: antialiased;
         }
         h1, h2, h3, h4, h5, h6 {
