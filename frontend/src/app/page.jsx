@@ -101,86 +101,107 @@ const AccordionPlusIcon = ({ expanded }) => (
 
 const services = [
   {
-    title: "Personal injury",
+    title: "Criminal law practice",
     description:
-      "I defend clients facing criminal charges with a focused, strategic approach to protect your rights and achieve the best possible outcome.",
+      "Bail (anticipatory and regular), criminal trials, FIR quashing, cheque dishonour matters, white-collar crime defense, and cybercrime and financial fraud litigation.",
     img: "https://images.unsplash.com/photo-1589994965851-a8f479c573a9?w=700&h=394&fit=crop",
-    alt: "Personal injury",
+    alt: "Criminal law practice",
   },
   {
-    title: "Business & corporate law",
+    title: "Civil litigation",
     description:
-      "I support businesses with contracts, compliance, and legal planning to help you grow confidently and avoid risks.",
+      "Property disputes, partition and inheritance matters, injunction and declaration suits, contractual and recovery disputes, execution proceedings, and civil appeals.",
     img: "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&h=410&fit=crop",
-    alt: "Business & corporate law",
+    alt: "Civil litigation",
   },
   {
-    title: "Criminal defense",
+    title: "Writs & constitutional remedies",
     description:
-      "I defend clients facing criminal charges with a focused, strategic approach to protect your rights and achieve the best possible outcome.",
+      "Writ petitions, PIL matters, and challenges to governmental or statutory actions before constitutional courts.",
     img: "https://images.unsplash.com/photo-1589994160839-163cd867cfe8?w=600&h=400&fit=crop",
-    alt: "Criminal defense",
+    alt: "Writs and constitutional remedies",
   },
   {
-    title: "Family law",
+    title: "Consumer protection",
     description:
-      "I help clients navigate divorce, custody, and family disputes with compassion, clarity, and practical legal solutions.",
+      "Consumer complaints, deficiency in service claims, product liability disputes, and compensation-focused consumer litigation.",
     img: "https://images.unsplash.com/photo-1609220136736-443140cfeaa8?w=600&h=399&fit=crop",
-    alt: "Family law",
+    alt: "Consumer protection",
   },
   {
-    title: "Real estate law",
+    title: "Property & real estate law",
     description:
-      "Whether buying, selling, or resolving disputes, I provide clear legal guidance to protect your real estate interests.",
+      "Title verification, due diligence, sale and lease drafting, registration support, encumbrance verification, and real estate dispute resolution.",
     img: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&h=410&fit=crop",
-    alt: "Real estate law",
+    alt: "Property and real estate law",
   },
   {
-    title: "Will estate & planning",
+    title: "Family & matrimonial law",
     description:
-      "I help you create wills and estate plans that secure your legacy and give your loved ones peace of mind.",
+      "Divorce matters (mutual and contested), child custody, guardianship, maintenance, alimony, and domestic violence proceedings.",
     img: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&h=410&fit=crop",
-    alt: "Will estate & planning",
+    alt: "Family and matrimonial law",
+  },
+  {
+    title: "Arbitration & ADR",
+    description:
+      "Arbitration, mediation, conciliation, commercial dispute settlement, and enforcement of arbitral awards.",
+    img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&h=410&fit=crop",
+    alt: "Arbitration and alternative dispute resolution",
+  },
+  {
+    title: "Corporate & commercial advisory",
+    description:
+      "Contract drafting and vetting, compliance advisory, business dispute strategy, partnership and shareholder agreements, and legal due diligence.",
+    img: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=410&fit=crop",
+    alt: "Corporate and commercial advisory",
+  },
+  {
+    title: "Motor accident & rent control",
+    description:
+      "MCOP and RCOP matters, accident compensation claims, insurance disputes, eviction proceedings, fair rent fixation, and rent control litigation.",
+    img: "https://images.unsplash.com/photo-1444653614773-995cb1ef9efa?w=600&h=410&fit=crop",
+    alt: "Motor accident and rent control matters",
   },
 ];
 
 const testimonials = [
   {
-    name: "Sarah Mitchell",
-    role: "Small business Owner",
+    name: "AGD Bala Kumar",
+    role: "Advocate | Managing Counsel",
     feedback:
-      "Antony was exactly the kind of lawyer I needed—professional, patient, and genuinely invested in my case. He explained every step clearly and made me feel supported throughout a very difficult time. I couldn't have asked for better representation.",
-    img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=450&h=300&fit=crop",
+      "AGD Bala Kumar has over 12 years of experience in litigation and legal advisory, with focused practice across criminal law, civil disputes, constitutional remedies, consumer matters, property law, family law, arbitration, corporate advisory, MCOP, and RCOP matters.",
+    img: "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=450&h=300&fit=crop",
   },
   {
-    name: "James Carter",
-    role: "Corporate Executive",
+    name: "AGD Law Associates",
+    role: "Our Vision",
     feedback:
-      "Antony was exactly the kind of lawyer I needed—professional, patient, and genuinely invested in my case. He explained every step clearly and made me feel supported throughout a very difficult time. I couldn't have asked for better representation.",
-    img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=450&h=300&fit=crop",
+      "To become a trusted and leading boutique law firm recognized for excellence, integrity, and client satisfaction through precision-driven advocacy, transparent communication, and timely legal solutions.",
+    img: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=450&h=300&fit=crop",
   },
 ];
 
 const faqs = [
   {
-    q: "What type of cases do you handle?",
-    a: "I handle a range of legal matters including criminal defense, family law, personal injury, business law, real estate, and estate planning.",
+    q: "What forums do you represent clients before?",
+    a: "We regularly appear before the Madras High Court, District Courts, Metropolitan Courts, Tribunals, and Consumer Disputes Redressal Commissions.",
   },
   {
-    q: "Do you offer a free consultation?",
-    a: "I handle a range of legal matters including criminal defense, family law, personal injury, business law, real estate, and estate planning.",
+    q: "Why choose AGD Law Associates?",
+    a: "We are a boutique firm with personalized attention, strong litigation and advisory expertise, ethical and transparent practice, efficient case management, and active Pan-Tamil Nadu plus inter-state presence.",
   },
   {
-    q: "How much do you charge for your business?",
-    a: "I handle a range of legal matters including criminal defense, family law, personal injury, business law, real estate, and estate planning.",
+    q: "What is your legal approach?",
+    a: "Our structured process includes detailed case analysis, clear legal opinion and roadmap, transparent communication, strong courtroom advocacy, and focus on timely resolution.",
   },
   {
-    q: "Will you personally handle my case?",
-    a: "I handle a range of legal matters including criminal defense, family law, personal injury, business law, real estate, and estate planning.",
+    q: "What are your office hours?",
+    a: "Monday to Friday: 10:00 AM to 6:30 PM. Saturday: 11:00 AM to 5:00 PM. Second and last Saturdays are holidays.",
   },
   {
-    q: "How do I get started?",
-    a: "I handle a range of legal matters including criminal defense, family law, personal injury, business law, real estate, and estate planning.",
+    q: "Where do you have active practice presence?",
+    a: "Our active litigation presence includes Chennai, Tambaram, Avadi, Coimbatore, Tiruppur, and Bangalore, along with districts such as Chengalpattu, Tiruvallur, Kancheepuram, and Dindigul.",
   },
 ];
 
@@ -228,7 +249,7 @@ function Header() {
   const navLinks = [
     { href: "#about", label: "About" },
     { href: "#service", label: "Practice Areas" },
-    { href: "#testimonial", label: "Testimonials" },
+    { href: "#testimonial", label: "Founder" },
     { href: "#contact", label: "Contact" },
   ];
 
@@ -324,9 +345,6 @@ function Header() {
         }
  
         .cta-btn-header {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
           font-size: 0.78rem;
           font-weight: 600;
           letter-spacing: 0.09em;
@@ -363,23 +381,29 @@ function Header() {
         }
  
         .logo-badge {
-          display: inline-flex;
+          display: flex;
           align-items: center;
-          gap: 6px;
-          font-size: 0.6rem;
-          letter-spacing: 0.18em;
+          gap: 4px;
+          font-size: clamp(0.5rem, 1.5vw, 0.6rem);
+          letter-spacing: clamp(0.05em, 1.5vw, 0.18em);
           text-transform: uppercase;
           color: #c5dfc0;
           opacity: 0.7;
           font-family: 'Inter', sans-serif;
           font-weight: 500;
           padding-top: 2px;
+          min-width: 0;
         }
         .logo-badge-dot {
-          width: 4px; height: 4px;
+          width: 3px; height: 3px;
           border-radius: 50%;
           background: #c5dfc0;
           opacity: 0.7;
+          flex-shrink: 0;
+        }
+        @media (min-width: 640px) {
+          .logo-badge { gap: 6px; }
+          .logo-badge-dot { width: 4px; height: 4px; }
         }
       `}</style>
 
@@ -393,30 +417,30 @@ function Header() {
         >
           <div className="max-w-[1200px] mx-auto px-6">
             <nav
-              className="flex items-center h-[76px] gap-8"
+              className="flex items-center justify-between h-[76px] gap-3 sm:gap-5 lg:gap-8 min-w-0"
               aria-label="Main navigation"
             >
               {/* Logo */}
               <Link
                 href="/"
-                aria-label="Anthony — Home"
-                className="flex flex-col no-underline flex-shrink-0 group"
+                aria-label="AGD Law Associates — Home"
+                className="flex flex-col no-underline flex-shrink-1 min-w-0 group"
               >
                 <span
-                  className="text-white leading-none transition-opacity duration-200 group-hover:opacity-80"
+                  className="text-white leading-none transition-opacity duration-200 group-hover:opacity-80 truncate"
                   style={{
                     fontFamily: "'Playfair Display', Georgia, serif",
-                    fontSize: "clamp(1.5rem, 3vw, 1.9rem)",
+                    fontSize: "clamp(1.1rem, 4.5vw, 1.55rem)",
                     fontWeight: 400,
-                    letterSpacing: "-0.01em",
+                    letterSpacing: "0.02em",
                   }}
                 >
-                  Anthony
+                  AGD LAW ASSOCIATES
                 </span>
-                <span className="logo-badge">
-                  <span className="logo-badge-dot" />
-                  Attorney at Law
-                  <span className="logo-badge-dot" />
+                <span className="logo-badge truncate">
+                  <span className="logo-badge-dot hidden sm:block" />
+                  <span className="truncate">Boutique Law Firm | Est. 2016</span>
+                  <span className="logo-badge-dot hidden sm:block" />
                 </span>
               </Link>
 
@@ -448,13 +472,14 @@ function Header() {
               />
 
               {/* Desktop CTA */}
-              <a href="#contact" className="cta-btn-header hidden lg:inline-flex">
-                Free Consultation
+              <a href="#contact" className="cta-btn-header hidden lg:inline-flex items-center gap-2">
+                Schedule Consultation
                 <ArrowRight size={13} strokeWidth={2.5} />
               </a>
 
               {/* Mobile hamburger */}
               <button
+                type="button"
                 className="relative w-7 h-5 lg:hidden flex-shrink-0 focus-visible:outline-none"
                 aria-label={menuOpen ? "Close menu" : "Open menu"}
                 aria-expanded={menuOpen}
@@ -500,24 +525,16 @@ function Header() {
           style={{ background: "#0b0b0b" }}
         >
           {/* Header row inside panel */}
-          <div className="flex items-center justify-between px-6 h-[76px] flex-shrink-0 border-b border-white/10">
-            <span
-              className="text-white"
-              style={{
-                fontFamily: "'Playfair Display', Georgia, serif",
-                fontSize: "1.5rem",
-                fontWeight: 400,
-              }}
-            >
-              Anthony
-            </span>
-            <button
+          <div className="flex items-center justify-between px-6 h-[76px] flex-shrink-0 border-b border-white/10 gap-3">
+
+            {/* <button
+              type="button"
               aria-label="Close menu"
               onClick={() => setMenuOpen(false)}
               className="w-10 h-10 flex items-center justify-center rounded-full border border-white/20 text-white hover:border-[#c5dfc0] hover:text-[#c5dfc0] transition-colors"
             >
               <X size={18} />
-            </button>
+            </button> */}
           </div>
 
           {/* Nav links */}
@@ -549,7 +566,7 @@ function Header() {
                 className="flex items-center justify-center gap-2 w-full py-4 rounded-2xl text-[#0b0b0b] font-semibold text-sm tracking-widest uppercase no-underline transition-all"
                 style={{ background: "#c5dfc0", letterSpacing: "0.1em" }}
               >
-                Book Free Consultation
+                Schedule Consultation
                 <ArrowRight size={15} />
               </a>
             </div>
@@ -561,7 +578,7 @@ function Header() {
               className="text-xs uppercase tracking-widest"
               style={{ color: "rgba(197,223,192,0.5)", letterSpacing: "0.15em" }}
             >
-              © {new Date().getFullYear()} Anthony · Attorney at Law
+              © {new Date().getFullYear()} AGD Law Associates
             </p>
           </div>
         </div>
@@ -580,7 +597,7 @@ function Hero() {
     >
       {/* bg-1: dark overlay left */}
       <div
-        className="absolute top-0 left-0 right-0 w-full h-[60%] rounded-b-[50px] overflow-hidden -z-[1] lg:right-auto lg:bottom-0 lg:w-[58%] lg:h-full lg:rounded-none lg:rounded-r-[50px]"
+        className="pointer-events-none absolute top-0 left-0 right-0 w-full h-[60%] rounded-b-[50px] overflow-hidden -z-[1] lg:right-auto lg:bottom-0 lg:w-[58%] lg:h-full lg:rounded-none lg:rounded-r-[50px]"
         style={{
           background:
             "url('https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=1400&h=900&fit=crop') no-repeat center center / cover",
@@ -590,7 +607,7 @@ function Hero() {
       </div>
       {/* bg-2: light right */}
       <div
-        className="absolute w-full h-[50%] left-0 top-[50%] -z-[2] lg:left-auto lg:right-0 lg:top-0 lg:w-[52%] lg:h-full"
+        className="pointer-events-none absolute w-full h-[50%] left-0 top-[50%] -z-[2] lg:left-auto lg:right-0 lg:top-0 lg:w-[52%] lg:h-full"
         style={{
           background:
             "url('https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=900&fit=crop') no-repeat 50% 50% / cover",
@@ -610,27 +627,30 @@ function Hero() {
             <span className="inline-flex items-center text-xl leading-none text-[#c5dfc0]">
               <GavelIcon />
             </span>
-            <span>Justice, Expertise, Results</span>
+            <span>Boutique Law Firm | Chennai</span>
           </p>
 
           <h1
             className="text-[clamp(2.5rem,1.3rem+4.267vw,4.5rem)] text-white font-normal capitalize leading-[120%]"
             style={{ fontFamily: "Georgia, serif" }}
           >
-            Your trusted partner for legal solutions
+            AGD Law Associates
+            <br />
+            Precision. Strategy. Results.
           </h1>
 
           <p className="text-[clamp(1.125rem,1.05rem+.267vw,1.25rem)] lg:max-w-[550px]">
-            Expert legal guidance for your personal and business needs. Let&apos;s
-            build your strongest case together.
+            Established in 2016, AGD Law Associates delivers high-quality
+            litigation and advisory services across criminal, civil, consumer,
+            constitutional, and commercial matters.
           </p>
 
           <div className="flex flex-wrap gap-4">
             <BtnPrimary href="#contact" icon={<ArrowRight size={16} />}>
-              Contact now
+              Request consultation
             </BtnPrimary>
-            <BtnSecondary href="tel:+15559876543" icon={<Phone size={16} />}>
-              Free consultation
+            <BtnSecondary href="tel:+919994388855" icon={<Phone size={16} />}>
+              Call now
             </BtnSecondary>
           </div>
         </div>
@@ -638,8 +658,8 @@ function Hero() {
         {/* Media */}
         <div className="text-center lg:max-w-[50%] overflow-hidden">
           <img
-            src="/image.png"
-            alt="Anthony the lawyer"
+            src="/image.webp"
+            alt="AGD Law Associates legal team"
             width={670}
             height={828}
             loading="lazy"
@@ -690,16 +710,17 @@ function About() {
   }, []);
 
   const stats = [
-    { number: "20+", label: "Years of experience", delay: 0 },
-    { number: "500+", label: "Successful cases", delay: 120 },
-    { number: "98%", label: "Client satisfaction", delay: 240 },
+    { number: "2016", label: "Established", delay: 0 },
+    { number: "10+", label: "Associate advocates", delay: 120 },
+    { number: "12+", label: "Years of founder practice", delay: 240 },
   ];
 
   const credentials = [
-    "Bar Association Member",
-    "Certified Mediator",
-    "Harvard Law Alumnus",
-    "AV Rated Attorney",
+    "Integrity & Professionalism",
+    "Confidentiality & Trust",
+    "Client-Focused Service",
+    "Excellence in Advocacy",
+    "Timely Legal Solutions",
   ];
 
   return (
@@ -888,7 +909,7 @@ function About() {
               />
               <img
                 src="https://images.unsplash.com/photo-1556157382-97eda2d62296?w=800&h=1000&fit=crop&crop=faces"
-                alt="Anthony — Attorney at Law"
+                alt="AGD Law Associates counsel"
                 loading="lazy"
                 className="relative w-full h-full object-cover"
                 style={{
@@ -900,9 +921,9 @@ function About() {
               {/* Floating achievement badge */}
               <div className={`photo-badge ${visible ? "vis" : ""}`}>
                 <span className="photo-badge-num">
-                  {visible ? <CountUpNumber target="20+" duration={1600} delay={500} /> : "0+"}
+                  {visible ? <CountUpNumber target="2016" duration={1600} delay={500} /> : "0"}
                 </span>
-                <span className="photo-badge-lbl">Years of<br />excellence</span>
+                <span className="photo-badge-lbl">Founded<br />in</span>
               </div>
             </div>
           </div>
@@ -920,18 +941,18 @@ function About() {
                 fontSize: "0.72rem", letterSpacing: "0.12em",
                 textTransform: "uppercase", fontWeight: 600, color: "#0b0b0b",
               }}>
-                Trusted Legal Counsel Since 2004
+                Chennai-Based Boutique Law Firm
               </span>
             </div>
 
             {/* Headline */}
             <h2
-            className="text-[clamp(2rem,1.4rem+2.133vw,3rem)] font-normal capitalize leading-[120%] text-[#0b0b0b]"
-            style={{ fontFamily: "Georgia, serif" }}
-          >
-            Your advocate. Your voice.{" "}
-            <span className="text-[#c5dfc0]">Your legal ally</span>
-          </h2>
+              className="text-[clamp(2rem,1.4rem+2.133vw,3rem)] font-normal capitalize leading-[120%] text-[#0b0b0b]"
+              style={{ fontFamily: "Georgia, serif" }}
+            >
+              Litigation excellence with{" "}
+              <span className="text-[#c5dfc0]">precision and integrity</span>
+            </h2>
 
             {/* Body copy */}
             <p
@@ -943,15 +964,16 @@ function About() {
                 margin: 0,
               }}
             >
-              With 20 years of legal experience, I&apos;m committed to helping
-              individuals and families navigate the legal system with clarity and
-              confidence. I offer honest advice, strong representation, and
-              personal attention to every case — from consultation to resolution.
+              AGD Law Associates was founded to provide efficient, client-centric,
+              and result-driven legal solutions. We represent clients before the
+              Madras High Court, District Courts, Metropolitan Courts, Tribunals,
+              and Consumer Disputes Redressal Commissions with direct involvement
+              and careful scrutiny in every matter.
             </p>
 
             {/* Signature */}
             <div className={`ab ${visible ? "vis d3" : ""} flex items-center gap-4`}>
-              <span className="about-sig">Anthony G.</span>
+              <span className="about-sig">AGD Bala Kumar</span>
               <span style={{
                 width: 1, height: 36, background: "#c5dfc0", flexShrink: 0,
               }} />
@@ -959,7 +981,7 @@ function About() {
                 fontSize: "0.75rem", color: "#0b0b0b",
                 lineHeight: 1.5, letterSpacing: "0.04em",
               }}>
-                Esq. &middot; Attorney at Law<br />State Bar No. 284701
+                Advocate &middot; Managing Counsel<br />AGD Law Associates
               </span>
             </div>
 
@@ -1013,7 +1035,7 @@ function About() {
             {/* CTA */}
             <div className={`ab ${visible ? "vis d5" : ""}`}>
               <BtnPrimary icon={<ArrowRight size={16} />} href="#contact">
-                Book a free consultation
+                Consult with our team
               </BtnPrimary>
             </div>
           </div>
@@ -1040,7 +1062,7 @@ function Service() {
           className="text-[clamp(2rem,1.4rem+2.133vw,3rem)] font-normal capitalize leading-[120%] text-[#0b0b0b] sm:text-center"
           style={{ fontFamily: "Georgia, serif" }}
         >
-          My areas of <span className="text-[#c5dfc0]">Expertise</span>
+          Key <span className="text-[#c5dfc0]">Practice Areas</span>
         </h2>
 
         <div className="flex flex-col relative w-full border-t border-[#c5dfc0]">
@@ -1077,7 +1099,7 @@ function Service() {
                         className="inline-block mt-5 text-sm font-semibold tracking-wide uppercase border-b border-[#0b0b0b] pb-1 text-[#0b0b0b] hover:text-[#c5dfc0] hover:border-[#c5dfc0] transition-colors duration-300"
                         onClick={(e) => e.stopPropagation()}
                       >
-                        Read More
+                        Discuss this matter
                       </a>
                     </div>
                   </div>
@@ -1143,7 +1165,7 @@ function WhyMe() {
     >
       {/* Overlay */}
       <div
-        className="absolute inset-0 z-[inherit]"
+        className="pointer-events-none absolute inset-0"
         style={{ background: "linear-gradient(180deg, #0000001a, #0b0b0b)" }}
       />
 
@@ -1152,66 +1174,16 @@ function WhyMe() {
           className="text-white text-center text-[clamp(2rem,1.4rem+2.133vw,3rem)] font-normal"
           style={{ fontFamily: "Georgia, serif" }}
         >
-          Legal support made simple
+          Our Presence Across Regions
         </h2>
 
-        {/* Play button */}
-        <button
-          aria-label="Play video"
-          onClick={() => setShowPopup(true)}
-          className="relative flex justify-center items-center w-[85px] h-[85px] bg-white p-2.5 m-5 rounded-full before:content-[''] before:absolute before:inset-0 before:bg-white/40 before:rounded-full before:scale-[1.3] before:-z-[1]"
-        >
-          <svg
-            width="32"
-            height="49"
-            viewBox="0 0 38 49"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="translate-x-1"
-          >
-            <path
-              d="M37.0596 24.4849L0.083036 48.883L0.0830382 0.0866664L37.0596 24.4849Z"
-              fill="#C5DFC0"
-            />
-          </svg>
-        </button>
-
-        {/* Video popup */}
-        {showPopup && (
-          <div
-            className="fixed inset-0 flex justify-center items-center bg-black/50 z-[1000]"
-            onClick={() => setShowPopup(false)}
-          >
-            <div
-              className="relative max-w-[800px] w-[90%] bg-white rounded-[10px] overflow-hidden"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                className="absolute top-2.5 right-2.5 bg-[#0b0b0b] text-white rounded-full w-10 h-10 text-[32px] leading-none flex items-center justify-center z-[2] hover:bg-black transition-colors"
-                aria-label="Close video popup"
-                onClick={() => setShowPopup(false)}
-              >
-                &times;
-              </button>
-              <div className="relative pb-[56.25%] h-0 z-[1]">
-                <iframe
-                  src="https://www.youtube.com/embed/DWw-RxwEK5M"
-                  frameBorder="0"
-                  allowFullScreen
-                  className="absolute top-0 left-0 w-full h-full"
-                  title="Legal support video"
-                />
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* List */}
         <ul className="flex flex-col sm:flex-row sm:flex-wrap md:flex-nowrap justify-center w-full">
           {[
-            "Personalized legal support",
-            "No cost initial consultation",
-            "Transparent affordable fees",
+            "Chennai, Tambaram, Avadi",
+            "Coimbatore, Tiruppur, Bangalore",
+            "Chengalpattu, Tiruvallur, Kancheepuram, Dindigul",
           ].map((item, i) => (
             <li
               key={item}
@@ -1272,12 +1244,12 @@ function Testimonial() {
 
       <div
         aria-hidden
-        className="absolute -top-24 -right-20 w-[340px] h-[340px] rounded-full blur-3xl"
+        className="pointer-events-none absolute -top-24 -right-20 w-[340px] h-[340px] rounded-full blur-3xl"
         style={{ background: "radial-gradient(circle, rgba(197,223,192,0.34) 0%, rgba(197,223,192,0) 70%)" }}
       />
       <div
         aria-hidden
-        className="absolute -bottom-24 -left-20 w-[300px] h-[300px] rounded-full blur-3xl"
+        className="pointer-events-none absolute -bottom-24 -left-20 w-[300px] h-[300px] rounded-full blur-3xl"
         style={{ background: "radial-gradient(circle, rgba(197,223,192,0.28) 0%, rgba(197,223,192,0) 70%)" }}
       />
 
@@ -1285,18 +1257,19 @@ function Testimonial() {
         {/* Intro panel */}
         <div className="flex flex-col gap-6 lg:sticky lg:top-[92px]">
           <span className="inline-flex w-fit items-center gap-2 px-4 py-2 rounded-full border border-[#c5dfc0] bg-[#ffffff] text-[#0b0b0b] uppercase tracking-[0.16em] text-[0.66rem] font-semibold">
-            Client testimonials
+            Founder & managing counsel
           </span>
           <h2
             className="text-[clamp(2rem,1.3rem+2.4vw,3.1rem)] font-normal leading-[118%] text-[#0b0b0b]"
             style={{ fontFamily: "Georgia, serif" }}
           >
-            Stories from clients who felt
-            <span className="text-[#c5dfc0]"> heard and protected</span>
+            Leadership with
+            <span className="text-[#c5dfc0]"> courtroom precision</span>
           </h2>
           <p className="text-[#0b0b0b] leading-[1.75]">
-            Real words from real people. Every case receives direct attention,
-            practical guidance, and clear communication from start to finish.
+            AGD Bala Kumar leads the firm with over 12 years of practice,
+            combining litigation strength with strategic advisory for complex,
+            sensitive, and high-impact legal matters.
           </p>
           <div className="flex items-center gap-3">
             <button
@@ -1434,7 +1407,7 @@ function Testimonial() {
                 onClick={() => goTo(nextIndex)}
                 className="inline-flex items-center justify-center gap-2 w-fit px-5 py-2.5 rounded-full border border-[#c5dfc0] text-[#0b0b0b] hover:bg-[#c5dfc0] hover:text-[#0b0b0b] transition-colors text-sm font-medium"
               >
-                Read next story
+                View next profile
                 <ArrowRight size={15} />
               </button>
             </div>
@@ -1480,8 +1453,8 @@ function FAQ() {
           className="text-[clamp(2rem,1.4rem+2.133vw,3rem)] font-normal capitalize leading-[120%] text-[#0b0b0b] lg:text-center"
           style={{ fontFamily: "Georgia, serif" }}
         >
-          Frequently asked{" "}
-          <span className="text-[#c5dfc0] block">questions</span>
+          Core values &{" "}
+          <span className="text-[#c5dfc0] block">firm clarity</span>
         </h2>
 
         <div className="flex flex-col gap-[clamp(1.5rem,1rem+2vw,2.5rem)]">
@@ -1494,6 +1467,7 @@ function FAQ() {
                   }`}
               >
                 <button
+                  type="button"
                   id={`accordion-button-${i}`}
                   aria-expanded={isOpen}
                   aria-controls={`accordion-content-${i}`}
@@ -1557,7 +1531,7 @@ function Contact() {
     if (!form.service_type || !form.budget) {
       setSubmitState({
         type: "error",
-        message: "Please select a service and budget range.",
+        message: "Please select a service and preferred timeline.",
       });
       return;
     }
@@ -1607,108 +1581,54 @@ function Contact() {
   };
 
   const serviceOptions = [
-    { value: "consultation", label: "Consultation" },
-    { value: "case_review", label: "Case review" },
-    { value: "contract_drafting", label: "Contract drafting" },
-    { value: "legal_representation", label: "Legal representation" },
-    { value: "data_privacy_compliance", label: "Data privacy & compliance" },
+    { value: "criminal_law", label: "Criminal law practice" },
+    { value: "civil_litigation", label: "Civil litigation" },
+    { value: "writ_constitutional", label: "Writs & constitutional remedies" },
+    { value: "consumer_protection", label: "Consumer protection" },
+    { value: "property_real_estate", label: "Property & real estate law" },
+    { value: "family_matrimonial", label: "Family & matrimonial law" },
+    { value: "arbitration_adr", label: "Arbitration & ADR" },
+    { value: "corporate_advisory", label: "Corporate & commercial advisory" },
+    { value: "mcop_rcop", label: "Motor accident & rent control" },
   ];
 
   const budgetOptions = [
-    { value: "500_2k", label: "500 - 2K" },
-    { value: "2k_10k", label: "2K - 10K" },
-    { value: "more_than_10k", label: "More than 10K" },
+    { value: "immediate", label: "Immediate assistance" },
+    { value: "within_week", label: "Within this week" },
+    { value: "scheduled", label: "Scheduled consultation" },
   ];
 
   const chipClass = (active) =>
-    `px-5 py-2.5 rounded-full text-[0.98rem] transition-all border ${
-      active
-        ? "bg-[#c5dfc0] text-[#0b0b0b] border-[#c5dfc0] shadow-[0_8px_22px_rgba(11,11,11,0.18)]"
-        : "bg-[#ffffff] text-[#0b0b0b] border-[#c5dfc0] hover:border-[#c5dfc0] hover:bg-[#ffffff]"
+    `px-[clamp(1.2rem,1rem+1vw,1.5rem)] py-[clamp(0.6rem,0.5rem+0.5vw,0.8rem)] rounded-full text-[clamp(0.9rem,0.8rem+0.5vw,1rem)] font-medium transition-all duration-300 border ${active
+      ? "bg-[#c5dfc0] text-[#0b0b0b] border-[#c5dfc0] ring-2 ring-[#c5dfc0]/70 shadow-[0_8px_20px_rgba(197,223,192,0.4)] scale-[1.02]"
+      : "bg-[#ffffff] text-[#0b0b0b] border-[#e0e0e0] hover:border-[#c5dfc0] hover:bg-[#f9fdf8] hover:-translate-y-0.5"
     }`;
 
   return (
     <section
       id="contact"
-      className="relative bg-white pt-[clamp(2.5rem,1.4rem+4vw,5rem)] pb-[clamp(3rem,2rem+4vw,5.5rem)] rounded-[0_0_40px_40px] lg:rounded-[0_0_50px_50px] overflow-hidden z-[inherit]"
+      className="relative z-0 bg-white pt-[clamp(2.5rem,1.4rem+4vw,5rem)] pb-[clamp(3rem,2rem+4vw,5.5rem)] rounded-[0_0_40px_40px] lg:rounded-[0_0_50px_50px] overflow-hidden"
     >
       <div
         aria-hidden
-        className="absolute -top-24 -right-24 w-[330px] h-[330px] rounded-full blur-3xl"
+        className="pointer-events-none absolute -top-24 -right-24 w-[330px] h-[330px] rounded-full blur-3xl"
         style={{ background: "radial-gradient(circle, rgba(197,223,192,0.32) 0%, rgba(197,223,192,0) 70%)" }}
       />
-      <div className="relative grid lg:grid-cols-[280px_1fr] max-w-[1200px] px-6 w-full mx-auto gap-[clamp(1.25rem,0.9rem+2vw,2.4rem)] items-start">
-        {/* Contact Info Card */}
-        <aside className="order-2 lg:order-1 rounded-[28px] bg-[#ffffff] border border-[#c5dfc0] p-6 sm:p-7 lg:p-8 min-h-0 lg:min-h-[480px] flex flex-col">
-          <div className="flex items-start justify-between gap-4">
-            <h3 className="text-[1.35rem] text-[#0b0b0b] font-medium">Contacts</h3>
-            <div className="flex items-center gap-2">
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook"
-                className="w-8 h-8 rounded-full bg-[#ffffff] text-[#0b0b0b] inline-flex items-center justify-center hover:bg-[#c5dfc0] transition-colors"
-              >
-                <FacebookBrandIcon size={14} />
-              </a>
-              <a
-                href="https://x.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="X"
-                className="w-8 h-8 rounded-full bg-[#ffffff] text-[#0b0b0b] inline-flex items-center justify-center hover:bg-[#c5dfc0] transition-colors"
-              >
-                <XBrandIcon size={14} />
-              </a>
-            </div>
-          </div>
-
-          <div className="mt-7 space-y-5 text-[#0b0b0b]">
-            <div className="flex items-start gap-3">
-              <MapPin size={16} className="mt-1 text-[#0b0b0b] flex-shrink-0" />
-              <p className="text-[0.98rem] leading-7">
-                456 Justice Street,
-                <br />
-                Lawtown, NY 10001,
-                <br />
-                United States
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-auto space-y-7 pt-10">
-            <div className="space-y-2">
-              <p className="text-[0.92rem] text-[#0b0b0b]">Call us</p>
-              <a href="tel:+15559876543" className="inline-flex items-center gap-2 text-[clamp(1.2rem,2.5vw,1.7rem)] leading-none text-[#0b0b0b] hover:text-[#0b0b0b] transition-colors">
-                <PhoneCall size={20} />
-                <span className="text-[clamp(1rem,2.2vw,1.45rem)] font-medium">+1 (555) 987-6543</span>
-              </a>
-            </div>
-            <div className="space-y-2">
-              <p className="text-[0.92rem] text-[#0b0b0b]">For general inquiries</p>
-              <a href="mailto:contact@legalpoint.com" className="inline-flex items-center gap-2 text-[clamp(1rem,2.2vw,1.2rem)] text-[#0b0b0b] hover:text-[#0b0b0b] transition-colors break-all">
-                <Mail size={18} />
-                <span>contact@legalpoint.com</span>
-              </a>
-            </div>
-          </div>
-        </aside>
-
+      <div className="relative flex flex-col max-w-[1200px] px-6 w-full mx-auto gap-[clamp(2rem,1.5rem+3vw,4rem)] items-center">
         {/* Form Panel */}
-        <div className="order-1 lg:order-2 rounded-[30px] border border-[#c5dfc0] bg-white px-[clamp(1rem,.55rem+1.85vw,2rem)] py-[clamp(1.25rem,.7rem+2vw,2.25rem)] shadow-[0_22px_55px_rgba(11,11,11,0.08)]">
+        <div className="w-full rounded-[40px] border border-[#c5dfc0] bg-white px-[clamp(1.5rem,1rem+3vw,3.5rem)] py-[clamp(2rem,1.5rem+3vw,4rem)] shadow-[0_24px_60px_rgba(11,11,11,0.08)]">
           <h2
-            className="text-[clamp(2.2rem,1.4rem+2.8vw,4rem)] font-normal leading-[110%] text-[#0b0b0b] max-w-[680px]"
+            className="text-[clamp(2.5rem,1.8rem+2.8vw,4.5rem)] font-normal leading-[110%] text-[#0b0b0b] max-w-[680px]"
             style={{ fontFamily: "Georgia, serif" }}
           >
-            Need legal expertise?
+            Need legal support?
             <br />
-            <span className="text-[#c5dfc0]">Let&apos;s talk.</span>
+            <span className="text-[#c5dfc0]">Let&apos;s connect.</span>
           </h2>
 
-          <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-8">
-            <div className="space-y-3">
-              <p className="text-[1rem] text-[#0b0b0b] font-medium">Services</p>
+          <form onSubmit={handleSubmit} className="mt-10 lg:mt-12 flex flex-col gap-[clamp(2rem,1.5rem+2vw,3rem)]">
+            <div className="space-y-4">
+              <p className="text-[1.05rem] text-[#0b0b0b] font-semibold tracking-wide">Select Service Area</p>
               <div className="flex flex-wrap gap-3">
                 {serviceOptions.map((service) => (
                   <button
@@ -1724,8 +1644,8 @@ function Contact() {
               </div>
             </div>
 
-            <div className="space-y-3">
-              <p className="text-[1rem] text-[#0b0b0b] font-medium">Your budget</p>
+            <div className="space-y-4">
+              <p className="text-[1.05rem] text-[#0b0b0b] font-semibold tracking-wide">Preferred Timeline</p>
               <div className="flex flex-wrap gap-3">
                 {budgetOptions.map((budget) => (
                   <button
@@ -1741,69 +1661,68 @@ function Contact() {
               </div>
             </div>
 
-            <div className="grid sm:grid-cols-2 gap-5">
-              <div>
-                <label htmlFor="your-name" className="block text-[0.98rem] text-[#0b0b0b] mb-2">
+            <div className="grid sm:grid-cols-2 gap-8 lg:gap-10">
+              <div className="relative group">
+                <label htmlFor="your-name" className="block text-[0.95rem] text-[#555] font-medium mb-3 transition-colors group-focus-within:text-[#0b0b0b]">
                   Your Name
                 </label>
                 <input
                   type="text"
                   name="your_name"
                   id="your-name"
-                  placeholder="Emily Robinson"
+                  placeholder="John Doe"
                   required
                   aria-required="true"
                   value={form.your_name}
                   onChange={handleChange}
-                  className="w-full bg-transparent border-0 border-b border-[#c5dfc0] px-0 pb-2.5 text-[#0b0b0b] focus:outline-none focus:border-[#c5dfc0] transition-colors"
+                  className="w-full bg-transparent border-0 border-b-2 border-[#e0e0e0] px-0 pb-3 text-[1.1rem] text-[#0b0b0b] focus:outline-none focus:border-[#c5dfc0] transition-colors placeholder:text-[#a0a0a0]"
                 />
               </div>
-              <div>
-                <label htmlFor="your-email" className="block text-[0.98rem] text-[#0b0b0b] mb-2">
+              <div className="relative group">
+                <label htmlFor="your-email" className="block text-[0.95rem] text-[#555] font-medium mb-3 transition-colors group-focus-within:text-[#0b0b0b]">
                   Your Email
                 </label>
                 <input
                   type="email"
                   name="your_email"
                   id="your-email"
-                  placeholder="emily.robinson@startuphub.io"
+                  placeholder="john@example.com"
                   required
                   aria-required="true"
                   value={form.your_email}
                   onChange={handleChange}
-                  className="w-full bg-transparent border-0 border-b border-[#c5dfc0] px-0 pb-2.5 text-[#0b0b0b] focus:outline-none focus:border-[#c5dfc0] transition-colors"
+                  className="w-full bg-transparent border-0 border-b-2 border-[#e0e0e0] px-0 pb-3 text-[1.1rem] text-[#0b0b0b] focus:outline-none focus:border-[#c5dfc0] transition-colors placeholder:text-[#a0a0a0]"
                 />
               </div>
             </div>
 
-            {/* Row 3 — textarea */}
-            <div>
-              <label htmlFor="message" className="block text-[0.98rem] text-[#0b0b0b] mb-2">
-                Details <span className="text-[#0b0b0b]">(optional)</span>
+            <div className="relative group mt-2">
+              <label htmlFor="message" className="block text-[0.95rem] text-[#555] font-medium mb-3 transition-colors group-focus-within:text-[#0b0b0b]">
+                Details <span className="text-[#888] font-normal">(optional)</span>
               </label>
               <textarea
                 id="message"
                 name="message"
                 rows={3}
-                placeholder="Looking for support with a cross-border SaaS acquisition ..."
+                placeholder="Share brief details about your case or inquiry..."
                 value={form.message}
                 onChange={handleChange}
-                className="w-full bg-transparent border-0 border-b border-[#c5dfc0] px-0 pb-2.5 text-[#0b0b0b] placeholder:text-[#0b0b0b] focus:outline-none focus:border-[#c5dfc0] transition-colors resize-none"
+                className="w-full bg-transparent border-0 border-b-2 border-[#e0e0e0] px-0 pb-3 text-[1.1rem] text-[#0b0b0b] placeholder:text-[#a0a0a0] focus:outline-none focus:border-[#c5dfc0] transition-colors resize-none"
               />
             </div>
 
-            <div className="pt-1 flex items-center gap-2">
+            <div className="pt-4 lg:pt-6 flex items-center gap-4">
               <button
                 type="submit"
                 aria-label="Send message"
                 disabled={isSubmitting}
-                className="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-[#c5dfc0] text-[#0b0b0b] text-[0.83rem] font-semibold tracking-[0.08em] uppercase hover:bg-[#0b0b0b] hover:text-white transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                className="group relative inline-flex items-center justify-center px-8 py-4 rounded-full bg-[#c5dfc0] text-[#0b0b0b] text-[0.9rem] font-bold tracking-[0.08em] uppercase overflow-hidden hover:bg-[#0b0b0b] hover:text-white transition-all duration-500 disabled:opacity-70 disabled:cursor-not-allowed shadow-[0_8px_20px_rgba(197,223,192,0.4)] hover:shadow-[0_12px_25px_rgba(11,11,11,0.2)]"
               >
-                {isSubmitting ? "Sending..." : "Send Message"}
+                <span className="relative z-10 flex items-center gap-3">
+                  {isSubmitting ? "Sending..." : "Send Message"}
+                  <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
+                </span>
               </button>
-              <span className="w-9 h-9 rounded-full bg-[#0b0b0b] text-[#c5dfc0] inline-flex items-center justify-center">
-                <ArrowRight size={15} />
-              </span>
             </div>
             {submitState.message && (
               <p
@@ -1817,6 +1736,69 @@ function Contact() {
             )}
           </form>
         </div>
+
+        {/* Contact Info Card */}
+        <aside className="w-full rounded-[32px] bg-[#ffffff] border border-[#c5dfc0] p-[clamp(1.5rem,1.5rem+2vw,3rem)] flex flex-col md:flex-row gap-[clamp(2rem,2vw+1.5rem,4rem)] transition-shadow duration-300 hover:shadow-[0_12px_40px_rgba(11,11,11,0.05)]">
+          <div className="flex-1 space-y-8">
+            <div className="flex items-center justify-between gap-4">
+              <h3 className="text-[1.8rem] text-[#0b0b0b] font-medium" style={{ fontFamily: "Georgia, serif" }}>Contacts</h3>
+              <div className="flex items-center gap-2">
+                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-10 h-10 rounded-full bg-[#f9fdf8] border border-[#c5dfc0] text-[#0b0b0b] inline-flex items-center justify-center hover:bg-[#c5dfc0] transition-colors"><FacebookBrandIcon size={15} /></a>
+                <a href="https://x.com" target="_blank" rel="noopener noreferrer" aria-label="X" className="w-10 h-10 rounded-full bg-[#f9fdf8] border border-[#c5dfc0] text-[#0b0b0b] inline-flex items-center justify-center hover:bg-[#c5dfc0] transition-colors"><XBrandIcon size={15} /></a>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <MapPin size={22} className="mt-1 text-[#0b0b0b] flex-shrink-0" />
+              <p className="text-[1.05rem] leading-relaxed text-[#0b0b0b]">
+                No.5c, 5th Floor, Sri Venkatesh Bhavan,<br />
+                No.75/31, Armenian Street,<br />Chennai - 600001
+              </p>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <PhoneCall size={22} className="mt-1 text-[#0b0b0b] flex-shrink-0" />
+              <div>
+                <p className="text-[0.92rem] text-[#555] font-medium mb-1">Call us directly</p>
+                <a href="tel:+919994388855" className="text-[1.2rem] sm:text-[1.35rem] font-medium text-[#0b0b0b] hover:text-opacity-80 transition-colors">99943 88855 / 89395 88855</a>
+              </div>
+            </div>
+          </div>
+
+          <div className="hidden md:block w-px bg-[#e0eade]" />
+
+          <div className="flex-1 space-y-8 flex flex-col justify-center">
+            <div className="flex items-start gap-4">
+              <Mail size={22} className="mt-1 text-[#0b0b0b] flex-shrink-0" />
+              <div>
+                <p className="text-[0.92rem] text-[#555] font-medium mb-1">For general inquiries</p>
+                <a href="mailto:agdlawassociatesoffice@gmail.com" className="text-[1.05rem] text-[#0b0b0b] font-medium hover:text-opacity-80 transition-colors break-all">agdlawassociatesoffice@gmail.com</a>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="w-5 h-5 mt-1 border-[1.5px] border-[#0b0b0b] rounded-full flex items-center justify-center opacity-80" aria-hidden="true">
+                <div className="w-1.5 h-1.5 bg-[#0b0b0b] rounded-full" />
+              </div>
+              <div>
+                <p className="text-[0.92rem] text-[#555] font-medium mb-1">Website</p>
+                <a href="https://www.agdlawassociates.in" target="_blank" rel="noopener noreferrer" className="text-[1.05rem] text-[#0b0b0b] font-medium hover:text-opacity-80 transition-colors break-all">www.agdlawassociates.in</a>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="w-5 h-5 mt-1 border-[1.5px] border-[#0b0b0b] border-t-transparent rounded-full opacity-80" aria-hidden="true" />
+              <div>
+                <p className="text-[0.92rem] text-[#555] font-medium mb-1">Office hours</p>
+                <p className="text-[1.05rem] leading-relaxed text-[#0b0b0b]">
+                  Mon - Fri: 10:00 AM - 6:30 PM<br />
+                  Sat: 11:00 AM - 5:00 PM<br />
+                  <span className="text-[0.85rem] text-[#555] block mt-1">(2nd & last Saturday holiday)</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </aside>
       </div>
     </section>
   );
@@ -1828,17 +1810,17 @@ function Footer() {
   const quickLinks = [
     { href: "#about", label: "About" },
     { href: "#service", label: "Practice Areas" },
-    { href: "#testimonial", label: "Testimonials" },
+    { href: "#testimonial", label: "Founder" },
     { href: "#faq", label: "FAQ" },
     { href: "#contact", label: "Contact" },
   ];
 
   const services = [
-    "Personal Injury",
-    "Family Law",
-    "Criminal Defense",
-    "Business Law",
-    "Estate Planning",
+    "Criminal Law Practice",
+    "Civil Litigation",
+    "Property & Real Estate",
+    "Family & Matrimonial",
+    "Arbitration & ADR",
   ];
 
   return (
@@ -1848,7 +1830,7 @@ function Footer() {
     >
       <div
         aria-hidden
-        className="absolute inset-x-0 top-0 h-24"
+        className="pointer-events-none absolute inset-x-0 top-0 h-24"
         style={{
           background:
             "linear-gradient(180deg, rgba(197,223,192,0.16) 0%, rgba(197,223,192,0) 100%)",
@@ -1862,13 +1844,14 @@ function Footer() {
               className="text-[clamp(2rem,1.2rem+3vw,3rem)] leading-[1.08]"
               style={{ fontFamily: "Georgia, serif" }}
             >
-              Anthony
+              AGD Law
               <br />
-              <span className="text-[#c5dfc0]">Attorney at Law</span>
+              <span className="text-[#c5dfc0]">Associates</span>
             </p>
             <p className="text-[#ffffff] max-w-[420px] leading-7">
-              Personalized legal guidance with practical strategies and clear
-              communication for every stage of your case.
+              Boutique Law Firm | Established in 2016
+              <br />
+              Chennai | Tamil Nadu
             </p>
             <div className="flex items-center gap-3">
               <a
@@ -1922,22 +1905,30 @@ function Footer() {
 
         <div className="mt-10 pt-6 border-t border-white/15 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <p className="text-[#ffffff] text-sm">
-            © {new Date().getFullYear()} Anthony Law. All rights reserved.
+            © {new Date().getFullYear()} AGD Law Associates. All rights reserved.
           </p>
           <div className="flex flex-wrap items-center gap-4 text-sm">
             <a
-              href="mailto:contact@legalpoint.com"
+              href="mailto:agdlawassociatesoffice@gmail.com"
               className="inline-flex items-center gap-2 text-[#ffffff] hover:text-[#c5dfc0] transition-colors"
             >
               <Mail size={15} />
-              contact@legalpoint.com
+              agdlawassociatesoffice@gmail.com
             </a>
             <a
-              href="tel:+15559876543"
+              href="tel:+919994388855"
               className="inline-flex items-center gap-2 text-[#ffffff] hover:text-[#c5dfc0] transition-colors"
             >
               <PhoneCall size={15} />
-              +1 (555) 987-6543
+              +91 99943 88855
+            </a>
+            <a
+              href="https://www.agdlawassociates.in"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-[#ffffff] hover:text-[#c5dfc0] transition-colors"
+            >
+              www.agdlawassociates.in
             </a>
           </div>
         </div>
@@ -1951,13 +1942,13 @@ function Footer() {
 function WhatsAppFloatingChat() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const phoneNumber = "15559876543";
+  const phoneNumber = "919994388855";
 
   const quickMessages = [
-    "Hi, I need legal consultation.",
-    "Can I book a free consultation?",
-    "I need help with a family law case.",
-    "I want to discuss my case details.",
+    "Hi, I need a legal consultation with AGD Law Associates.",
+    "I want to discuss a criminal law matter.",
+    "I need support in a property dispute.",
+    "Please schedule a consultation call.",
   ];
 
   const openWhatsApp = (textToSend) => {
@@ -1984,8 +1975,8 @@ function WhatsAppFloatingChat() {
               <MessageCircle size={16} />
             </span>
             <div>
-              <p className="text-sm font-medium leading-tight">WhatsApp Chat</p>
-              <p className="text-[0.72rem] text-[#c5dfc0]">Typically replies in minutes</p>
+              <p className="text-sm font-medium leading-tight">AGD Legal Desk</p>
+              <p className="text-[0.72rem] text-[#c5dfc0]">Replies during office hours</p>
             </div>
           </div>
           <button
@@ -2000,7 +1991,7 @@ function WhatsAppFloatingChat() {
 
         <div className="p-4 bg-[#ffffff] space-y-3">
           <div className="max-w-[90%] bg-white border border-[#c5dfc0] text-[#0b0b0b] rounded-2xl rounded-tl-sm px-3 py-2.5 text-sm leading-6">
-            Hi, thanks for reaching out. Select a smart message or type your own and we will continue on WhatsApp.
+            Hi, thanks for contacting AGD Law Associates. Select a message or type your query and continue on WhatsApp.
           </div>
 
           <div className="flex flex-wrap gap-2">
@@ -2048,7 +2039,7 @@ function WhatsAppFloatingChat() {
 
       {!open && (
         <p className="mb-2 mr-1 px-3 py-1.5 rounded-full bg-[#0b0b0b] text-[#c5dfc0] text-[0.7rem] tracking-[0.08em] uppercase">
-          Chat on WhatsApp
+          Chat with AGD
         </p>
       )}
 
@@ -2096,7 +2087,7 @@ export default function Page() {
         }
         img, picture, video { max-width: 100%; height: auto; }
         a[class] { text-decoration: none; }
-        button { background: none; border: none; color: inherit; cursor: pointer; }
+        button { cursor: pointer; }
         ul[class], ol[class] { padding: 0; list-style: none; }
         :focus-visible { outline: 2px solid #c5dfc0; outline-offset: 2px; }
       `}</style>
