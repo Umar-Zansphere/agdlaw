@@ -1,1282 +1,1472 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  BriefcaseBusiness,
+  CheckCircle2,
+  ChevronDown,
+  Clock3,
+  Gavel,
+  Landmark,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Phone,
+  Scale,
+  Send,
+  ShieldCheck,
+  X,
+} from "lucide-react";
 
-// ─── DATA ENGINE ─────────────────────────────────────────────────────────────
+const navLinks = [
+  { href: "#overview", label: "Overview" },
+  { href: "#team", label: "Team" },
+  { href: "#practice", label: "Practice Areas" },
+  { href: "#results", label: "Results" },
+  { href: "#faq", label: "FAQs" },
+  { href: "#contact", label: "Contact" },
+];
 
-const SITUATIONS = [
+const trustPoints = [
+  "Madras High Court representation",
+  "District courts and tribunals",
+  "Consumer and commercial litigation",
+  "Pan-Tamil Nadu matter handling",
+];
+
+const heroStats = [
+  { value: "2016", label: "Established" },
+  { value: "12+", label: "Years of founder practice" },
+  { value: "500+", label: "Matters handled" },
+];
+
+const practiceAreas = [
   {
-    id: "criminal",
-    icon: "⚖",
-    label: "Criminal Matter",
-    sub: "FIR, arrest, bail, trial defence",
-    hint: "We handle cases from station-level to High Court",
+    icon: "shield",
+    title: "Criminal Defence & Bail",
+    summary:
+      "Urgent representation across anticipatory bail, regular bail, trial strategy, FIR issues, and white-collar allegations.",
+    matters: [
+      "Anticipatory and regular bail",
+      "FIR quashing and trial defence",
+      "Cybercrime and financial fraud matters",
+    ],
   },
   {
-    id: "property",
-    icon: "⬡",
-    label: "Property Dispute",
-    sub: "Title, encroachment, partition, registration",
-    hint: "Most property disputes resolve through negotiation — we try that first",
+    icon: "landmark",
+    title: "Civil & Property Disputes",
+    summary:
+      "Structured litigation and advisory support for ownership, possession, inheritance, recovery, and title-related disputes.",
+    matters: [
+      "Partition and inheritance disputes",
+      "Title due diligence and injunctions",
+      "Contractual and recovery suits",
+    ],
   },
   {
-    id: "family",
-    icon: "◈",
-    label: "Family & Matrimonial",
-    sub: "Divorce, custody, maintenance, DV Act",
-    hint: "Sensitive matters handled with strict confidentiality",
+    icon: "scale",
+    title: "Writ & Constitutional Remedies",
+    summary:
+      "Focused action on judicial review, public law remedies, and challenges to statutory or governmental action.",
+    matters: [
+      "Writ petitions and service matters",
+      "Public interest litigation support",
+      "Challenges to arbitrary state action",
+    ],
   },
   {
-    id: "civil",
-    icon: "◻",
-    label: "Civil Recovery",
-    sub: "Money dues, cheque bounce, injunction",
-    hint: "Cheque bounce cases: 94% settlement rate before trial",
+    icon: "gavel",
+    title: "Family & Matrimonial Matters",
+    summary:
+      "Careful, confidential handling of family disputes where legal precision and humane pacing both matter.",
+    matters: [
+      "Mutual and contested divorce",
+      "Custody, guardianship, maintenance",
+      "Domestic violence proceedings",
+    ],
   },
   {
-    id: "employment",
-    icon: "◇",
-    label: "Employment & Labour",
-    sub: "Wrongful termination, PF/ESI, service matters",
-    hint: "Government employees: special tribunals available",
+    icon: "check",
+    title: "Consumer, Accident & Rent Control",
+    summary:
+      "Relief-oriented representation for compensation, service deficiency, builder delay, insurance, and tenancy matters.",
+    matters: [
+      "Consumer complaints and compensation",
+      "Motor accident claims",
+      "Eviction and fair rent proceedings",
+    ],
   },
   {
-    id: "consumer",
-    icon: "△",
-    label: "Consumer & RERA",
-    sub: "Deficiency of service, builder disputes, refunds",
-    hint: "RERA complaints: mandatory 60-day builder response window",
-  },
-  {
-    id: "writ",
-    icon: "☰",
-    label: "Constitutional / Writ",
-    sub: "HC petition, service writ, fundamental rights",
-    hint: "High Court admits writs on urgency — we can file within 48 hours",
+    icon: "brief",
+    title: "Commercial Advisory & ADR",
+    summary:
+      "Practical legal support for businesses, founders, and stakeholders needing documents, negotiation, and dispute strategy.",
+    matters: [
+      "Contracts and compliance advisory",
+      "Shareholder and partnership arrangements",
+      "Arbitration, mediation, and award enforcement",
+    ],
   },
 ];
 
-const STAGES = [
-  { id: "explore", label: "Just exploring", sub: "I want to understand my options" },
-  { id: "urgent", label: "Urgent — need action now", sub: "Arrest, notice, or deadline imminent" },
-  { id: "stuck", label: "Case already filed", sub: "I have a lawyer but things aren't moving" },
-  { id: "appeal", label: "Lost at lower court", sub: "Looking to challenge or appeal" },
+const methodSteps = [
+  {
+    step: "01",
+    title: "Initial Legal Assessment",
+    body:
+      "We review the facts, documents, urgency, and forum position before suggesting a practical course of action.",
+  },
+  {
+    step: "02",
+    title: "Strategy & Risk Mapping",
+    body:
+      "You get a clear roadmap covering immediate next steps, procedural risks, and the likely legal timeline.",
+  },
+  {
+    step: "03",
+    title: "Drafting & Representation",
+    body:
+      "Our team prepares filings, appearances, and communication with a strong focus on precision and responsiveness.",
+  },
+  {
+    step: "04",
+    title: "Progress Visibility",
+    body:
+      "We stay transparent through the matter so clients understand status, decisions, and upcoming milestones.",
+  },
 ];
 
-const PATHS = {
-  criminal: {
-    explore: {
-      confidence: 81,
-      caseCount: 340,
-      timeline: "4–18 months depending on severity",
-      outcomes: ["Quash FIR at High Court", "Secure anticipatory bail", "Negotiate compounding of offence"],
-      trust: ["17 FIRs quashed in 2023–24", "Available 24/7 for arrest situations", "Maintains confidentiality under Bar Council rules"],
-      risks: ["Delay in approaching court weakens anticipatory bail plea", "Statements already given to police cannot be retracted", "Cognisable offences require immediate strategy"],
-      waMsg: "Hello AGD Law. I have a criminal matter and want to understand my options. I haven't taken any steps yet. Could you guide me on the process?",
-    },
-    urgent: {
-      confidence: 88,
-      caseCount: 212,
-      timeline: "48 hrs for bail · 2–6 weeks for quash",
-      outcomes: ["File anticipatory bail today", "Quash FIR via HC", "Section 482 CrPC relief"],
-      trust: ["24/7 emergency response for arrests", "Bail secured same-day in 68% of urgent cases", "Direct line to HC filing team"],
-      risks: ["Delay beyond 24 hours reduces bail success rate", "Self-incriminating statements made before counsel engagement are on record", "Police can invoke NDPS / POCSO to resist bail — counter-strategy needed immediately"],
-      waMsg: "URGENT: I need immediate legal help for a criminal matter — arrest or FIR is imminent. Please contact me right away. I need anticipatory bail or FIR quashing.",
-    },
-    stuck: {
-      confidence: 74,
-      caseCount: 98,
-      timeline: "Fresh strategy assessment: 1 week · Course correction: 4–12 weeks",
-      outcomes: ["Transfer petition to HC", "Discharge application", "Revision petition against lower court orders"],
-      trust: ["We review case files before committing", "No fee for first file-review consultation", "Managed 41 mid-case takeovers in 3 years"],
-      risks: ["Prior counsel's strategy may have foreclosed some arguments", "Late filing of revision has strict limitation periods", "Client must be candid about what previous counsel filed"],
-      waMsg: "My criminal case is already filed but not progressing. My current situation feels stuck. I'd like a second opinion from AGD Law Associates.",
-    },
-    appeal: {
-      confidence: 67,
-      caseCount: 54,
-      timeline: "Appeal filing: 2–4 weeks · HC hearing: 6–24 months",
-      outcomes: ["File criminal appeal at Sessions/HC", "Apply for bail pending appeal", "Challenge conviction on grounds of error"],
-      trust: ["Conviction reversed in 31% of our criminal appeals", "We identify grounds others miss", "Bail pending appeal granted in 79% of our applications"],
-      risks: ["Limitation: 30 days from conviction date for Sessions appeal", "Appellate courts rarely re-examine facts — legal errors are primary ground", "Sentence may run during appeal if bail denied"],
-      waMsg: "I've lost at a lower court in a criminal matter and want to appeal. I need to understand my grounds and next steps. Please advise.",
-    },
+const results = [
+  {
+    category: "Criminal Law",
+    title: "Anticipatory Bail Granted",
+    description:
+      "Urgent relief secured in a financial fraud matter before the Madras High Court within 72 hours of filing.",
+    outcome: "Bail Granted",
+    meta: "Madras High Court · 2024",
   },
-  property: {
-    explore: {
-      confidence: 76,
-      caseCount: 287,
-      timeline: "Negotiated settlement: 2–6 months · Litigation: 2–5 years",
-      outcomes: ["Title declaration suit", "Injunction to stop sale", "Partition of joint property"],
-      trust: ["62% of property disputes settled before trial", "Title search & document audit at intake", "Registered with Sub-Registrar offices across TN"],
-      risks: ["Limitation period: 12 years for title suits — act before it lapses", "Oral agreements are very hard to prove in court", "Joint heirs must be impleaded or decree is incomplete"],
-      waMsg: "Hello AGD Law. I have a property matter I'd like to understand better — no immediate urgency, just want to know my options.",
-    },
-    urgent: {
-      confidence: 83,
-      caseCount: 119,
-      timeline: "Interim injunction: 24–72 hours · Full suit: 12–36 months",
-      outcomes: ["Emergency injunction to stop sale/construction", "Attachment before judgement", "Caveat filing at Sub-Registrar"],
-      trust: ["Interim injunctions granted in 77% of our urgent property applications", "Can file and appear same day in Chennai HC", "Caveats lodged within hours"],
-      risks: ["Injunctions require clear prima facie title — documents must be in order", "Court will demand undertaking to indemnify if wrong", "Notice to opposite party can accelerate their actions — timing is critical"],
-      waMsg: "URGENT: I need to stop a property transaction or construction immediately. Please help me with an emergency injunction or caveat. AGD Law — please call back.",
-    },
-    stuck: {
-      confidence: 70,
-      caseCount: 76,
-      timeline: "Case review: 1 week · Amended pleadings or interlocutory: 3–8 weeks",
-      outcomes: ["Amend plaint to strengthen case", "File interlocutory application", "Mediation referral to accelerate"],
-      trust: ["Document audit identifies gaps current counsel missed", "Property cases often stall due to incomplete impleadment — we fix that", "Mediation success rate: 58% in stalled property suits"],
-      risks: ["Amendment of plaint becomes harder as case progresses", "Key witnesses may turn hostile over time", "Court may dismiss if summons not served — monitor closely"],
-      waMsg: "My property case is filed but has been stalled. I'd like AGD Law Associates to review and suggest how to move it forward.",
-    },
-    appeal: {
-      confidence: 63,
-      caseCount: 41,
-      timeline: "Appeal filing: 1–2 weeks · HC disposal: 1–4 years",
-      outcomes: ["Regular first appeal before HC", "Second appeal on substantial question of law", "Revision against interlocutory orders"],
-      trust: ["Property appeals require meticulous record compilation — our strength", "We frame questions of law that courts accept", "Stayed execution of decree in 84% of our appeals"],
-      risks: ["Limitation: 90 days for HC first appeal from decree date", "Lower court findings of fact rarely disturbed", "Costs may be heavy if appeal is dismissed"],
-      waMsg: "I've lost a property case and want to appeal. Please review my options for an appeal or revision at the High Court.",
-    },
+  {
+    category: "Property Dispute",
+    title: "Title Decree in Favour",
+    description:
+      "Multi-generation agricultural property dispute resolved with a decree affirming clear ownership rights.",
+    outcome: "Decree in Favour",
+    meta: "District Court, Coimbatore · 2023",
   },
-  family: {
-    explore: {
-      confidence: 79,
-      caseCount: 203,
-      timeline: "Mutual divorce: 6–18 months · Contested: 2–4 years",
-      outcomes: ["Mutual consent divorce", "Judicial separation", "Custody arrangement", "Maintenance order"],
-      trust: ["All family matters handled with absolute confidentiality", "Female counsel available on request", "Mediation-first approach saves time and trauma"],
-      risks: ["Rushed petitions without documentation weaken custody claims", "Social investigation reports heavily influence custody orders", "Maintenance applications take time — interim maintenance must be sought separately"],
-      waMsg: "Hello AGD Law. I have a family law matter I'd like to discuss privately. Could we schedule a confidential consultation?",
-    },
-    urgent: {
-      confidence: 85,
-      caseCount: 94,
-      timeline: "Protection order: 24–48 hours · Custody: 1–4 weeks",
-      outcomes: ["Emergency DV Act protection order", "Ex-parte custody interim order", "Habeas corpus for child recovery"],
-      trust: ["DV Act protection orders obtained within 48 hours", "Habeas corpus for child filed same day", "Women's safety is non-negotiable — we act immediately"],
-      risks: ["Physical safety must be the first priority — police complaint may be needed alongside legal action", "Ex-parte orders require strong affidavit — evidence is critical", "Child recovery orders involve welfare assessment — prepare documentation"],
-      waMsg: "URGENT: I need immediate protection under the DV Act or help with an urgent custody situation. Please contact me right away.",
-    },
-    stuck: {
-      confidence: 72,
-      caseCount: 67,
-      timeline: "Strategy reset: 1–2 weeks · Amended petition or fresh relief: 3–6 weeks",
-      outcomes: ["Amend petition for additional reliefs", "Apply for interim maintenance", "Mediation referral at Family Court"],
-      trust: ["Family Court mediators often respond better to fresh counsel", "We identify missed reliefs that can be added", "Interim maintenance can be filed even after main petition"],
-      risks: ["Prolonged litigation harms children — court takes note of who delays", "Conciliation at Family Court is mandatory — prepare for it", "Evidence must be preserved now if case is ongoing"],
-      waMsg: "My family law case is ongoing but not moving. I'd like AGD Law Associates to review and advise on how to progress.",
-    },
-    appeal: {
-      confidence: 61,
-      caseCount: 38,
-      timeline: "HC Family Court appeal: 6–18 months",
-      outcomes: ["Appeal custody or maintenance order", "Challenge divorce decree", "Enforce or modify existing order"],
-      trust: ["We handle sensitive HC family appeals with discretion", "Maintenance enhancement: 71% success in our appeals", "Enforcement petitions moved urgently when needed"],
-      risks: ["Custody appeals are decided on child welfare — facts must show change in circumstances", "HC rarely reverses Family Court on facts alone", "Modification of order is easier than reversal — frame it correctly"],
-      waMsg: "I have an adverse family court order I want to appeal or challenge at the High Court. Please advise on next steps.",
-    },
+  {
+    category: "Consumer Protection",
+    title: "Builder Delay Compensation",
+    description:
+      "Compensation awarded against a leading builder for deficiency in service and delayed possession.",
+    outcome: "₹18L Awarded",
+    meta: "State Consumer Commission · 2024",
   },
-  civil: {
-    explore: {
-      confidence: 82,
-      caseCount: 318,
-      timeline: "Summary suit: 4–12 months · Cheque bounce: 6–18 months",
-      outcomes: ["Money recovery suit", "Cheque bounce prosecution", "Injunction against disposal of assets"],
-      trust: ["94% settlement rate on cheque bounce matters", "Legal notice alone resolves 48% of civil dues", "Execution of decree: we pursue until money is recovered"],
-      risks: ["Limitation: 3 years from date of default — do not delay", "Partial payment resets limitation — document all receipts", "Judgment debtor may transfer assets — attachment before judgment is available"],
-      waMsg: "Hello AGD Law. I have a civil recovery matter — unpaid dues or cheque bounce. I'd like to understand my options.",
-    },
-    urgent: {
-      confidence: 87,
-      caseCount: 141,
-      timeline: "Attachment before judgment: 48 hours · Legal notice: same day",
-      outcomes: ["Attachment before judgment", "Injunction against asset disposal", "Emergency decree on summary suit"],
-      trust: ["Attachment before judgment granted in 81% of our applications", "Legal notices sent same day with read receipts", "We trace assets through official searches"],
-      risks: ["Court requires prima facie proof of debt and evasion risk", "Attachment does not transfer ownership — execution still needed", "Opposite party will get notice — they may file a counter-claim"],
-      waMsg: "URGENT: I need to freeze assets or get an emergency attachment before a debtor moves funds. Please contact me immediately — AGD Law.",
-    },
-    stuck: {
-      confidence: 75,
-      caseCount: 89,
-      timeline: "Execution revival or amendment: 2–4 weeks",
-      outcomes: ["Execution petition to recover decree amount", "Amend plaint to add defendants", "Contempt for non-compliance of court order"],
-      trust: ["We revive stalled execution petitions", "Contempt is a powerful tool — we use it when needed", "Garnishee orders: we attach salary or bank accounts"],
-      risks: ["Decree must be executed within 12 years — check limitation", "Judgment debtor may have become insolvent — investigate first", "Multiple execution tools may be needed simultaneously"],
-      waMsg: "My civil recovery case or decree is stuck. I'd like AGD Law to review and suggest execution or enforcement options.",
-    },
-    appeal: {
-      confidence: 69,
-      caseCount: 52,
-      timeline: "Appellate court: 6 months to 2 years",
-      outcomes: ["Regular first appeal", "Second appeal on question of law", "Revision against procedural orders"],
-      trust: ["Decree reversed or enhanced in 44% of our civil appeals", "Interest on decree amount continues to run during appeal", "We draft compelling memoranda of appeal"],
-      risks: ["Costs awarded against unsuccessful appellant", "Stay of decree requires deposit or security", "Limitation: 30–90 days depending on court — act quickly"],
-      waMsg: "I've lost a civil recovery case and want to explore an appeal. Please advise on my chances and the process.",
-    },
+  {
+    category: "Family Law",
+    title: "Custody Relief Secured",
+    description:
+      "Full child custody obtained for a parent in a contested family matter with structured visitation rights.",
+    outcome: "Custody Secured",
+    meta: "Family Court, Chennai · 2023",
   },
-  employment: {
-    explore: {
-      confidence: 73,
-      caseCount: 164,
-      timeline: "Labour court: 6 months–2 years · Service tribunal: 1–3 years",
-      outcomes: ["Reinstatement with back wages", "Compensation for wrongful termination", "PF/ESI recovery", "Government service writ"],
-      trust: ["Government employees: direct HC writ bypasses lengthy tribunals", "PF defaults: we file with EPFO enforcement simultaneously", "Private sector: Industrial Disputes Act and Model Standing Orders both applicable"],
-      risks: ["Limitation: 3 years from termination for ID Act claims", "Contractual employees have weaker protection than permanent", "Domestic enquiry must be challenged on procedural grounds — get records immediately"],
-      waMsg: "Hello AGD Law. I have an employment matter — wrongful termination or PF issue. I'd like to know my legal options.",
-    },
-    urgent: {
-      confidence: 78,
-      caseCount: 61,
-      timeline: "Interim stay of termination: 1–2 weeks · Writ: 2–4 weeks",
-      outcomes: ["Stay of termination order via HC writ", "Immediate reinstatement application", "Ex-parte injunction against illegal lockout"],
-      trust: ["HC writ for government employees filed within 48 hours", "Interim stay obtained in 72% of our urgent employment matters", "Union coordination available for mass termination cases"],
-      risks: ["Domestic enquiry completion removes most interim relief options", "Notice of termination must be challenged quickly — limitation is strict", "Evidence of victimization must be documented now"],
-      waMsg: "URGENT: I've been illegally terminated or suspended and need immediate legal action. Please help me with an emergency stay. AGD Law.",
-    },
-    stuck: {
-      confidence: 66,
-      caseCount: 43,
-      timeline: "Rejoinder or fresh application: 2–3 weeks",
-      outcomes: ["Amend claim to add new grounds", "File contempt for non-implementation of order", "Transfer case to appropriate forum"],
-      trust: ["Forum selection errors are common — we correct them", "Contempt for non-payment of ordered wages: effective tool", "We manage multiple parallel proceedings simultaneously"],
-      risks: ["Labour courts move slowly — witness management is critical", "Interim orders may lapse if not renewed", "Settlement offers should be evaluated carefully before rejecting"],
-      waMsg: "My employment case is already filed but has stalled. I'd like AGD Law to review and suggest how to accelerate or strengthen it.",
-    },
-    appeal: {
-      confidence: 59,
-      caseCount: 29,
-      timeline: "HC writ or appeal: 1–3 years",
-      outcomes: ["Writ against tribunal or labour court order", "Contempt of HC direction", "Restoration of service with full benefits"],
-      trust: ["Service matters: HC is sympathetic to government employees", "Back wages with interest claimed in all appeals", "Constitutional arguments prepared when warranted"],
-      risks: ["HC does not re-examine facts — legal error must be shown", "Limitation for writ against labour court: 90 days", "Employer may have complied partially — full relief may not be available"],
-      waMsg: "I've lost an employment case and want to challenge the order. Please advise on my options for an appeal or HC writ.",
-    },
+];
+
+const articles = [
+  {
+    slug: "anticipatory-bail-guide-india",
+    category: "Criminal Law",
+    title: "Anticipatory Bail in India: What It Is and When You Need It",
+    excerpt:
+      "A practical guide to Section 438 CrPC, when urgent protection is available, and how timing affects outcomes.",
   },
-  consumer: {
-    explore: {
-      confidence: 77,
-      caseCount: 229,
-      timeline: "Consumer forum: 3–12 months · RERA: 2–6 months",
-      outcomes: ["Compensation for deficiency of service", "Refund with interest from builder", "RERA complaint for possession delay"],
-      trust: ["RERA complaints: mandatory 60-day builder response", "Consumer forums: no lengthy trial process", "Builder refund orders enforced with attachment"],
-      risks: ["Pecuniary jurisdiction: DCDRC up to ₹50L, SCDRC up to ₹2Cr", "Limitation: 2 years from cause of action — do not delay", "Arbitration clause in builder agreement may restrict forum — we assess"],
-      waMsg: "Hello AGD Law. I have a consumer or RERA matter — builder dispute or service deficiency. Please guide me on my options.",
-    },
-    urgent: {
-      confidence: 84,
-      caseCount: 87,
-      timeline: "RERA injunction: 1–2 weeks · Emergency consumer relief: 3–4 weeks",
-      outcomes: ["RERA injunction to stop project cancellation", "Emergency attachment of builder's escrow", "Interim relief against ongoing deficiency"],
-      trust: ["RERA Authority grants interim stay within 2 weeks", "We have filed and obtained relief in 91% of urgent RERA applications", "Escrow attachment prevents fund diversion"],
-      risks: ["RERA interim relief requires strong prima facie case with documents", "Builder may invoke force majeure — we have counter-arguments ready", "Allotment letter and payment receipts are essential — gather them now"],
-      waMsg: "URGENT: I need immediate action on a RERA or consumer matter — builder is cancelling or a dispute is escalating. Please contact me now.",
-    },
-    stuck: {
-      confidence: 71,
-      caseCount: 58,
-      timeline: "Amended complaint or enforcement petition: 2–3 weeks",
-      outcomes: ["Execution of consumer forum order", "Appeal to SCDRC if DCDRC order inadequate", "Contempt against builder for non-compliance"],
-      trust: ["Consumer forum decrees are enforceable through civil courts", "We file contempt without hesitation for non-compliance", "Interest on award accrues daily — enforcement is profitable"],
-      risks: ["Consumer forums are often underfunded — follow up is critical", "Builder may file appeal to stay execution — we oppose immediately", "Attachment of builder's registered assets may be needed"],
-      waMsg: "My consumer or RERA case is pending but not moving. I'd like AGD Law to review the file and suggest enforcement or next steps.",
-    },
-    appeal: {
-      confidence: 65,
-      caseCount: 34,
-      timeline: "SCDRC / NCDRC appeal: 6–18 months",
-      outcomes: ["Appeal to State Commission", "Revision to National Commission", "Contempt of appellate order"],
-      trust: ["Consumer appeal fee is nominal — low barrier to challenge", "Enhanced compensation: obtained in 53% of our consumer appeals", "NCDRC revision: we appear in Delhi cases too"],
-      risks: ["Appeal does not automatically stay the order — apply separately", "New evidence rarely admitted at appellate stage", "Limitation for SCDRC appeal: 30 days from forum order"],
-      waMsg: "I've received an inadequate consumer forum order and want to appeal for better compensation. Please advise on the next steps.",
-    },
+  {
+    slug: "property-due-diligence-checklist",
+    category: "Property Law",
+    title: "The Essential Due Diligence Checklist Before Buying Property in Tamil Nadu",
+    excerpt:
+      "A tighter checklist for title verification, encumbrance review, and pre-sale document scrutiny.",
   },
-  writ: {
-    explore: {
-      confidence: 71,
-      caseCount: 176,
-      timeline: "Writ admission: 2–8 weeks · Final disposal: 6 months–3 years",
-      outcomes: ["Mandamus against government inaction", "Certiorari to quash illegal order", "Quo warranto on appointments", "Habeas corpus for detention"],
-      trust: ["Direct HC access bypasses lengthy tribunal delays", "Emergency writs filed same day with production affidavit", "Constitutional rights arguments: our core strength"],
-      risks: ["HC examines legality, not facts — distinguish your case from others", "Alternative remedy must be exhausted first in most cases", "Laches: delay weakens writ — file within reasonable time"],
-      waMsg: "Hello AGD Law. I have a matter that may require a High Court writ petition. I'd like to explore whether this is the right approach.",
-    },
-    urgent: {
-      confidence: 86,
-      caseCount: 89,
-      timeline: "Habeas corpus: 24 hours · Stay of order: 24–48 hours",
-      outcomes: ["Habeas corpus for illegal detention", "Emergency stay of government order", "Mandamus with interim relief"],
-      trust: ["Habeas corpus production before HC: filed within 24 hours of instruction", "Emergency mention before vacation bench if needed", "3 AM calls accepted for arrest situations"],
-      risks: ["HC requires detailed affidavit even for urgent hearings", "Government notices may trigger counter-affidavit that delays final relief", "Detention under NSA or UAPA: specific HC bench — we know the procedure"],
-      waMsg: "URGENT: I need immediate High Court relief — illegal detention, arrest, or an order that must be stayed today. Please contact me NOW. AGD Law.",
-    },
-    stuck: {
-      confidence: 68,
-      caseCount: 52,
-      timeline: "Interlocutory application or transfer: 1–3 weeks",
-      outcomes: ["Contempt of HC direction", "Supplementary affidavit with new material", "Transfer to appropriate bench"],
-      trust: ["HC contempt is our most effective tool against government inaction", "We monitor writ case status and follow up proactively", "Supplementary pleadings admitted when circumstances change"],
-      risks: ["Counter-affidavit may introduce new facts — be prepared to respond", "HC may suggest mediation — be open, it can accelerate relief", "Bench composition changes affect strategy — monitor closely"],
-      waMsg: "My High Court writ petition is pending but not progressing. I'd like AGD Law to review and advise on how to move things forward.",
-    },
-    appeal: {
-      confidence: 57,
-      caseCount: 27,
-      timeline: "Division Bench appeal: 6 months–2 years · Supreme Court SLP: 1–4 years",
-      outcomes: ["Appeal to Division Bench of HC", "Special Leave Petition to Supreme Court", "Review petition of HC judgment"],
-      trust: ["Division Bench appeals: we argue constitutional questions effectively", "SLP filed in Delhi — we coordinate with Supreme Court counsel", "Review petitions: admitted in 31% of our applications"],
-      risks: ["Division Bench is reluctant to disturb Single Judge findings of fact", "SLP: Supreme Court admits only if substantial question of law", "Limitation for Division Bench appeal: 30 days from Single Judge order"],
-      waMsg: "I've received an adverse HC writ order and want to appeal to the Division Bench or Supreme Court. Please advise on next steps and SLP prospects.",
-    },
+  {
+    slug: "consumer-court-how-to-file",
+    category: "Consumer Protection",
+    title: "How to File a Consumer Complaint: A Step-by-Step Guide",
+    excerpt:
+      "Forum selection, complaint structure, and the documentation that makes a consumer matter stronger.",
   },
-};
+];
 
-// ─── FONTS & CSS ──────────────────────────────────────────────────────────────
+const faqs = [
+  {
+    q: "What forums do you represent clients before?",
+    a: "We regularly appear before the Madras High Court, District Courts, Metropolitan Courts, Tribunals, and Consumer Disputes Redressal Commissions.",
+  },
+  {
+    q: "Why choose AGD Law Associates?",
+    a: "Clients come to us for direct involvement, clear communication, careful scrutiny of documents, and litigation strategy that stays practical as well as aggressive where needed.",
+  },
+  {
+    q: "What types of legal matters do you handle?",
+    a: "Our work spans criminal defence, civil disputes, writs, consumer matters, property, family law, arbitration, commercial advisory, MCOP, and RCOP matters.",
+  },
+  {
+    q: "What are your office hours?",
+    a: "Monday to Friday: 10:00 AM to 6:30 PM. Saturday: 11:00 AM to 5:00 PM. Second and last Saturdays are holidays.",
+  },
+  {
+    q: "Where do you have active practice presence?",
+    a: "We actively handle matters in Chennai, Tambaram, Avadi, Coimbatore, Tiruppur, Bangalore, and nearby districts including Chengalpattu, Tiruvallur, Kancheepuram, and Dindigul.",
+  },
+];
 
-const GLOBAL_CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+const officeRegions = [
+  "Chennai, Tambaram, and Avadi",
+  "Coimbatore, Tiruppur, and Bangalore",
+  "Chengalpattu, Tiruvallur, Kancheepuram, and Dindigul",
+];
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+const teamMembers = [
+  {
+    initials: "AB",
+    name: "AGD Bala Kumar",
+    role: "Managing Counsel",
+    focus: "Criminal defence, civil disputes, constitutional remedies",
+    experience: "12+ years",
+  },
+  {
+    initials: "PS",
+    name: "Priya Sundaram",
+    role: "Senior Associate",
+    focus: "Family and matrimonial law, custody, maintenance",
+    experience: "8 years",
+  },
+  {
+    initials: "KR",
+    name: "Karthik Raj",
+    role: "Associate Counsel",
+    focus: "Commercial advisory, contract strategy, arbitration",
+    experience: "5 years",
+  },
+  {
+    initials: "ML",
+    name: "Meena Lakshmi",
+    role: "Associate Advocate",
+    focus: "Property due diligence, title disputes, real estate matters",
+    experience: "4 years",
+  },
+];
 
-:root {
-  --void: #f5f0e8;
-  --surface: #ede8db;
-  --panel: #ede8db;
-  --border: rgba(26,22,18,0.12);
-  --border-gold: rgba(184,147,74,0.34);
-  --text: #1a1612;
-  --text-dim: rgba(26,22,18,0.72);
-  --text-muted: rgba(26,22,18,0.52);
-  --gold: #b8934a;
-  --gold-lt: #ceb16f;
-  --gold-glow: rgba(184,147,74,0.14);
-  --sage: #8fa888;
-  --sage-glow: rgba(143,168,136,0.16);
-  --syne: 'Instrument Sans', system-ui, sans-serif;
-  --serif: 'Libre Baskerville', Georgia, serif;
-  --sans: 'Instrument Sans', system-ui, sans-serif;
+const serviceOptions = [
+  { value: "criminal_defence", label: "Criminal defence & bail" },
+  { value: "civil_property", label: "Civil & property disputes" },
+  { value: "writ_constitutional", label: "Writ & constitutional remedies" },
+  { value: "family_matrimonial", label: "Family & matrimonial matters" },
+  { value: "consumer_accident", label: "Consumer, accident & rent control" },
+  { value: "commercial_adr", label: "Commercial advisory & ADR" },
+];
+
+const timelineOptions = [
+  { value: "immediate", label: "Immediate assistance" },
+  { value: "within_week", label: "Within this week" },
+  { value: "scheduled", label: "Scheduled consultation" },
+];
+
+function PracticeIcon({ icon }) {
+  const className = "h-5 w-5";
+
+  if (icon === "shield") return <ShieldCheck className={className} />;
+  if (icon === "landmark") return <Landmark className={className} />;
+  if (icon === "scale") return <Scale className={className} />;
+  if (icon === "gavel") return <Gavel className={className} />;
+  if (icon === "check") return <CheckCircle2 className={className} />;
+  if (icon === "brief") return <BriefcaseBusiness className={className} />;
+
+  return <ArrowUpRight className={className} />;
 }
 
-html, body {
-  height: 100%;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at top right, rgba(143,168,136,0.16), transparent 32%),
-    radial-gradient(circle at bottom left, rgba(184,147,74,0.08), transparent 28%),
-    linear-gradient(180deg, var(--void) 0%, var(--surface) 100%);
-  color: var(--text);
-  font-family: var(--sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  cursor: default;
-  user-select: none;
-}
-
-#root { height: 100%; }
-
-/* Screen swap transitions */
-.screen {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  transition: opacity 0.55s cubic-bezier(0.4,0,0.2,1), transform 0.55s cubic-bezier(0.4,0,0.2,1);
-}
-.screen.enter { opacity: 0; transform: translateY(18px); }
-.screen.visible { opacity: 1; transform: translateY(0); }
-.screen.exit { opacity: 0; transform: translateY(-14px); }
-
-/* Gold bar animation */
-@keyframes barFill {
-  from { width: 0%; }
-}
-.confidence-bar-fill {
-  animation: barFill 1.4s cubic-bezier(0.16,1,0.3,1) 0.3s both;
-}
-
-/* Pulse on companion */
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-.pulse { animation: pulse 2s ease-in-out infinite; }
-
-/* Number count-up feel */
-@keyframes countUp {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.count-up { animation: countUp 0.6s cubic-bezier(0.16,1,0.3,1) both; }
-
-/* Hover states */
-.card-btn {
-  background: rgba(245,240,232,0.72);
-  border: 0.5px solid var(--border);
-  color: var(--text);
-  box-shadow: 0 10px 24px rgba(26,22,18,0.04);
-  cursor: pointer;
-  transition: border-color 0.2s, background 0.2s, transform 0.15s;
-  text-align: left;
-  font-family: var(--sans);
-}
-.card-btn:hover {
-  border-color: var(--gold);
-  background: linear-gradient(180deg, rgba(245,240,232,0.96), rgba(184,147,74,0.08));
-  transform: translateY(-1px);
-}
-.card-btn:active { transform: translateY(0); }
-.card-btn.selected {
-  border-color: var(--gold);
-  background: var(--gold-glow);
-}
-
-/* Stage pill button */
-.stage-btn {
-  background: rgba(245,240,232,0.68);
-  border: 0.5px solid var(--border);
-  color: var(--text-dim);
-  box-shadow: 0 10px 24px rgba(26,22,18,0.04);
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: var(--sans);
-  text-align: left;
-  width: 100%;
-  padding: 18px 22px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.stage-btn:hover {
-  border-color: rgba(184,147,74,0.45);
-  color: var(--text);
-  background: linear-gradient(180deg, rgba(245,240,232,0.94), var(--sage-glow));
-}
-
-/* Result risk tag */
-.risk-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  background: rgba(245,240,232,0.72);
-  border: 0.5px solid rgba(26,22,18,0.09);
-  font-family: var(--sans);
-  font-size: 11px;
-  color: var(--text-dim);
-  line-height: 1.4;
-}
-
-/* Scrollable result pane */
-.result-scroll {
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(184,147,74,0.26) transparent;
-}
-.result-scroll::-webkit-scrollbar { width: 2px; }
-.result-scroll::-webkit-scrollbar-thumb { background: rgba(184,147,74,0.34); border-radius: 0; }
-
-/* Back button */
-.back-btn {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  font-family: var(--sans);
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0;
-  transition: color 0.2s;
-}
-.back-btn:hover { color: var(--text-dim); }
-
-/* WA button */
-.wa-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--gold);
-  color: var(--text);
-  border: none;
-  cursor: pointer;
-  font-family: var(--syne);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 14px 28px;
-  transition: background 0.2s, transform 0.15s;
-}
-.wa-btn:hover { background: var(--gold-lt); transform: translateY(-1px); }
-
-/* Companion */
-.companion {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  z-index: 999;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 8px;
-  pointer-events: none;
-}
-
-/* Grid overlay (decorative) */
-.grid-overlay {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background-image:
-    linear-gradient(rgba(143,168,136,0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(143,168,136,0.08) 1px, transparent 1px);
-  background-size: 80px 80px;
-}
-`;
-
-// ─── COMPANION ────────────────────────────────────────────────────────────────
-
-function Companion({ step, situation, stage }) {
-  const hints = {
-    0: "Select the type of matter that fits your situation.",
-    1: situation ? `${SITUATIONS.find(s => s.id === situation)?.hint}` : "Choose a category.",
-    2: "Where are you in the process?",
-    3: "Your personalised result is ready.",
-  };
-
+function SectionEyebrow({ children, invert = false }) {
   return (
-    <div className="companion">
-      <div style={{
-        background: "var(--panel)",
-        border: "0.5px solid var(--border-gold)",
-        padding: "10px 14px",
-        maxWidth: 200,
-        pointerEvents: "none",
-      }}>
-        <div style={{
-          fontFamily: "var(--sans)",
-          fontSize: 11,
-          color: "var(--text-dim)",
-          lineHeight: 1.55,
-          marginBottom: 8,
-        }}>
-          {hints[step] || hints[0]}
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <div className="pulse" style={{
-            width: 5, height: 5, borderRadius: "50%",
-            background: "var(--gold)",
-          }} />
-          <a
-            href="tel:+919994388855"
-            style={{
-              fontFamily: "var(--syne)",
-              fontSize: 11,
-              fontWeight: 700,
-              color: "var(--gold)",
-              textDecoration: "none",
-              letterSpacing: "0.06em",
-              pointerEvents: "all",
-            }}
-          >
-            +91 99943 88855
-          </a>
-        </div>
-      </div>
-    </div>
+    <span
+      className={`inline-flex w-fit items-center gap-2 rounded-full border px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.22em] ${invert
+          ? "border-white/15 bg-white/5 text-[#c5dfc0]"
+          : "border-[#c5dfc0] bg-[#eef5ec] text-[#35513a]"
+        }`}
+    >
+      <span className="h-1.5 w-1.5 rounded-full bg-current" />
+      {children}
+    </span>
   );
 }
 
-// ─── SCREEN 1 — SITUATION ─────────────────────────────────────────────────────
-
-function SituationScreen({ onSelect, phase }) {
+function PrimaryButton({ href, children, className = "", ...props }) {
   return (
-    <div className={`screen ${phase}`} style={{ background: "var(--void)", zIndex: 10 }}>
-      <div className="grid-overlay" />
-
-      {/* Header */}
-      <div style={{
-        padding: "28px 40px",
-        borderBottom: "0.5px solid var(--border)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        flexShrink: 0,
-        position: "relative",
-        zIndex: 1,
-      }}>
-        <div>
-          <div style={{
-            fontFamily: "var(--syne)",
-            fontSize: 13,
-            fontWeight: 700,
-            color: "var(--gold)",
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            marginBottom: 2,
-          }}>AGD Law Associates</div>
-          <div style={{
-            fontFamily: "var(--sans)",
-            fontSize: 11,
-            color: "var(--text-muted)",
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-          }}>Chennai · Tamil Nadu</div>
-        </div>
-        <div style={{
-          fontFamily: "var(--syne)",
-          fontSize: 10,
-          color: "var(--text-muted)",
-          letterSpacing: "0.18em",
-          textTransform: "uppercase",
-        }}>Step 1 of 2</div>
-      </div>
-
-      {/* Content */}
-      <div style={{
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        padding: "0 40px",
-        position: "relative",
-        zIndex: 1,
-        maxWidth: 1100,
-        margin: "0 auto",
-        width: "100%",
-      }}>
-        <div style={{ marginBottom: 48 }}>
-          <div style={{
-            fontFamily: "var(--syne)",
-            fontSize: 10,
-            color: "var(--gold)",
-            letterSpacing: "0.22em",
-            textTransform: "uppercase",
-            marginBottom: 16,
-          }}>Situation</div>
-          <h1 style={{
-            fontFamily: "var(--serif)",
-            fontSize: "clamp(2rem, 4vw, 3.2rem)",
-            fontWeight: 400,
-            lineHeight: 1.1,
-            color: "var(--text)",
-            letterSpacing: "-0.01em",
-          }}>
-            What is your<br />
-            <em style={{ fontStyle: "italic", color: "var(--text-dim)" }}>legal situation?</em>
-          </h1>
-        </div>
-
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-          gap: 10,
-        }}>
-          {SITUATIONS.map((s, i) => (
-            <button
-              key={s.id}
-              className="card-btn"
-              onClick={() => onSelect(s.id)}
-              style={{
-                padding: "20px 22px",
-                animationDelay: `${i * 40}ms`,
-              }}
-            >
-              <div style={{
-                fontFamily: "var(--syne)",
-                fontSize: 20,
-                color: "var(--gold)",
-                marginBottom: 10,
-                lineHeight: 1,
-              }}>{s.icon}</div>
-              <div style={{
-                fontFamily: "var(--serif)",
-                fontSize: 16,
-                fontWeight: 400,
-                color: "var(--text)",
-                marginBottom: 5,
-                lineHeight: 1.2,
-              }}>{s.label}</div>
-              <div style={{
-                fontFamily: "var(--sans)",
-                fontSize: 11,
-                color: "var(--text-dim)",
-                lineHeight: 1.5,
-              }}>{s.sub}</div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Footer rule */}
-      <div style={{
-        padding: "16px 40px",
-        borderTop: "0.5px solid var(--border)",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        flexShrink: 0,
-        position: "relative",
-        zIndex: 1,
-      }}>
-        <div style={{
-          fontFamily: "var(--sans)",
-          fontSize: 11,
-          color: "var(--text-muted)",
-          letterSpacing: "0.06em",
-        }}>7 practice areas · 28 case paths</div>
-        <div style={{
-          fontFamily: "var(--sans)",
-          fontSize: 11,
-          color: "var(--text-muted)",
-          letterSpacing: "0.06em",
-        }}>Mon–Fri 10AM–6:30PM · +91 99943 88855</div>
-      </div>
-    </div>
+    <a
+      href={href}
+      {...props}
+      className={`inline-flex items-center justify-center gap-2 rounded-full bg-[#c5dfc0] px-6 py-3 text-sm font-semibold uppercase tracking-[0.14em] text-[#0b0b0b] transition-all duration-300 hover:-translate-y-0.5 hover:bg-white ${className}`}
+    >
+      {children}
+      <ArrowRight className="h-4 w-4" />
+    </a>
   );
 }
 
-// ─── SCREEN 2 — STAGE ────────────────────────────────────────────────────────
-
-function StageScreen({ situation, onSelect, onBack, phase }) {
-  const sit = SITUATIONS.find(s => s.id === situation);
+function SecondaryButton({ href, children, className = "" }) {
   return (
-    <div className={`screen ${phase}`} style={{ background: "var(--void)", zIndex: 10 }}>
-      <div className="grid-overlay" />
-
-      {/* Header */}
-      <div style={{
-        padding: "28px 40px",
-        borderBottom: "0.5px solid var(--border)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        flexShrink: 0,
-        position: "relative",
-        zIndex: 1,
-      }}>
-        <button className="back-btn" onClick={onBack}>
-          ← Back
-        </button>
-        <div style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 10,
-          background: "var(--panel)",
-          border: "0.5px solid var(--border-gold)",
-          padding: "8px 14px",
-        }}>
-          <span style={{ fontFamily: "var(--syne)", fontSize: 14, color: "var(--gold)" }}>{sit?.icon}</span>
-          <span style={{ fontFamily: "var(--sans)", fontSize: 12, color: "var(--text-dim)" }}>{sit?.label}</span>
-        </div>
-        <div style={{
-          fontFamily: "var(--syne)",
-          fontSize: 10,
-          color: "var(--text-muted)",
-          letterSpacing: "0.18em",
-          textTransform: "uppercase",
-        }}>Step 2 of 2</div>
-      </div>
-
-      {/* Content */}
-      <div style={{
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        padding: "0 40px",
-        position: "relative",
-        zIndex: 1,
-        maxWidth: 800,
-        margin: "0 auto",
-        width: "100%",
-      }}>
-        <div style={{ marginBottom: 48 }}>
-          <div style={{
-            fontFamily: "var(--syne)",
-            fontSize: 10,
-            color: "var(--gold)",
-            letterSpacing: "0.22em",
-            textTransform: "uppercase",
-            marginBottom: 16,
-          }}>Stage</div>
-          <h1 style={{
-            fontFamily: "var(--serif)",
-            fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",
-            fontWeight: 400,
-            lineHeight: 1.1,
-            color: "var(--text)",
-          }}>
-            Where are you<br />
-            <em style={{ fontStyle: "italic", color: "var(--text-dim)" }}>in the process?</em>
-          </h1>
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          {STAGES.map((stage, i) => (
-            <button
-              key={stage.id}
-              className="stage-btn"
-              onClick={() => onSelect(stage.id)}
-              style={{ animationDelay: `${i * 60}ms` }}
-            >
-              <div style={{
-                fontFamily: "var(--serif)",
-                fontSize: 18,
-                color: "var(--text)",
-                lineHeight: 1.2,
-              }}>{stage.label}</div>
-              <div style={{
-                fontFamily: "var(--sans)",
-                fontSize: 12,
-                color: "var(--text-muted)",
-              }}>{stage.sub}</div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div style={{
-        padding: "16px 40px",
-        borderTop: "0.5px solid var(--border)",
-        flexShrink: 0,
-        position: "relative",
-        zIndex: 1,
-      }}>
-        <div style={{
-          fontFamily: "var(--sans)",
-          fontSize: 11,
-          color: "var(--text-muted)",
-          letterSpacing: "0.06em",
-        }}>Your answer generates a personalised assessment from our case database</div>
-      </div>
-    </div>
+    <a
+      href={href}
+      className={`inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold uppercase tracking-[0.14em] text-white transition-all duration-300 hover:border-[#c5dfc0] hover:bg-[#c5dfc0] hover:text-[#0b0b0b] ${className}`}
+    >
+      {children}
+    </a>
   );
 }
 
-// ─── SCREEN 3 — RESULT ───────────────────────────────────────────────────────
-
-function ResultScreen({ situation, stage, onReset, phase }) {
-  const sit = SITUATIONS.find(s => s.id === situation);
-  const stageData = STAGES.find(s => s.id === stage);
-  const result = PATHS[situation]?.[stage];
-  const [barReady, setBarReady] = useState(false);
+function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const t = setTimeout(() => setBarReady(true), 200);
-    return () => clearTimeout(t);
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  if (!result) return null;
-
-  const openWA = () => {
-    window.open(
-      `https://wa.me/919994388855?text=${encodeURIComponent(result.waMsg)}`,
-      "_blank", "noopener"
-    );
-  };
-
-  return (
-    <div className={`screen ${phase}`} style={{ background: "var(--void)", zIndex: 10, overflow: "hidden" }}>
-      <div className="grid-overlay" />
-
-      {/* Header */}
-      <div style={{
-        padding: "20px 40px",
-        borderBottom: "0.5px solid var(--border)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        flexShrink: 0,
-        position: "relative",
-        zIndex: 1,
-      }}>
-        <button className="back-btn" onClick={onReset}>
-          ← Start over
-        </button>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{
-            background: "var(--panel)",
-            border: "0.5px solid var(--border-gold)",
-            padding: "6px 12px",
-            display: "flex",
-            gap: 8,
-            alignItems: "center",
-          }}>
-            <span style={{ fontFamily: "var(--syne)", fontSize: 12, color: "var(--gold)" }}>{sit?.icon}</span>
-            <span style={{ fontFamily: "var(--sans)", fontSize: 11, color: "var(--text-dim)" }}>{sit?.label}</span>
-          </div>
-          <div style={{
-            background: "var(--panel)",
-            border: "0.5px solid var(--border)",
-            padding: "6px 12px",
-            fontFamily: "var(--sans)",
-            fontSize: 11,
-            color: "var(--text-muted)",
-          }}>{stageData?.label}</div>
-        </div>
-        <div style={{
-          fontFamily: "var(--syne)",
-          fontSize: 10,
-          color: "var(--gold)",
-          letterSpacing: "0.18em",
-          textTransform: "uppercase",
-        }}>Assessment</div>
-      </div>
-
-      {/* Two-column layout */}
-      <div style={{
-        flex: 1,
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        overflow: "hidden",
-        position: "relative",
-        zIndex: 1,
-      }}>
-
-        {/* LEFT — Confidence + Outcomes */}
-        <div className="result-scroll" style={{
-          borderRight: "0.5px solid var(--border)",
-          padding: "36px 40px",
-          display: "flex",
-          flexDirection: "column",
-          gap: 36,
-        }}>
-
-          {/* Confidence */}
-          <div>
-            <div style={{
-              fontFamily: "var(--syne)",
-              fontSize: 10,
-              color: "var(--gold)",
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              marginBottom: 16,
-            }}>Success Likelihood</div>
-            <div style={{
-              fontFamily: "var(--syne)",
-              fontSize: "clamp(3rem, 7vw, 5rem)",
-              fontWeight: 700,
-              color: "var(--gold)",
-              lineHeight: 0.9,
-              marginBottom: 12,
-              letterSpacing: "-0.02em",
-            }} className="count-up">
-              {result.confidence}<span style={{ fontSize: "0.4em", color: "var(--text-dim)", fontWeight: 400 }}>%</span>
-            </div>
-            <div style={{
-              fontFamily: "var(--sans)",
-              fontSize: 12,
-              color: "var(--text-muted)",
-              marginBottom: 14,
-              lineHeight: 1.5,
-            }}>
-              of cases matching your profile achieve favourable outcome
-            </div>
-            <div style={{
-              height: 3,
-              background: "rgba(26,22,18,0.08)",
-              position: "relative",
-              overflow: "hidden",
-            }}>
-              {barReady && (
-                <div
-                  className="confidence-bar-fill"
-                  style={{
-                    height: "100%",
-                    width: `${result.confidence}%`,
-                    background: `linear-gradient(90deg, var(--gold), var(--gold-lt))`,
-                  }}
-                />
-              )}
-            </div>
-            <div style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginTop: 8,
-              fontFamily: "var(--sans)",
-              fontSize: 10,
-              color: "var(--text-muted)",
-              letterSpacing: "0.06em",
-            }}>
-              <span>Based on {result.caseCount} similar cases</span>
-              <span>{result.confidence}%</span>
-            </div>
-          </div>
-
-          {/* Timeline */}
-          <div>
-            <div style={{
-              fontFamily: "var(--syne)",
-              fontSize: 10,
-              color: "var(--text-muted)",
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              marginBottom: 12,
-            }}>Realistic Timeline</div>
-            <div style={{
-              fontFamily: "var(--serif)",
-              fontSize: 18,
-              color: "var(--text)",
-              lineHeight: 1.4,
-              fontStyle: "italic",
-            }}>{result.timeline}</div>
-          </div>
-
-          {/* What we can do */}
-          <div>
-            <div style={{
-              fontFamily: "var(--syne)",
-              fontSize: 10,
-              color: "var(--text-muted)",
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              marginBottom: 14,
-            }}>What We Can Do</div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {result.outcomes.map((o, i) => (
-                <div key={i} style={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: 10,
-                  padding: "12px 14px",
-                  background: "var(--panel)",
-                  border: "0.5px solid var(--border)",
-                }}>
-                  <div style={{
-                    fontFamily: "var(--syne)",
-                    fontSize: 10,
-                    color: "var(--gold)",
-                    flexShrink: 0,
-                    marginTop: 1,
-                    fontWeight: 700,
-                  }}>→</div>
-                  <div style={{
-                    fontFamily: "var(--sans)",
-                    fontSize: 13,
-                    color: "var(--text)",
-                    lineHeight: 1.4,
-                    fontWeight: 400,
-                  }}>{o}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* CTA */}
-          <div style={{ paddingTop: 4 }}>
-            <button className="wa-btn" onClick={openWA}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-              </svg>
-              Connect on WhatsApp
-            </button>
-            <div style={{
-              fontFamily: "var(--sans)",
-              fontSize: 10,
-              color: "var(--text-muted)",
-              marginTop: 10,
-              lineHeight: 1.6,
-              letterSpacing: "0.04em",
-            }}>Message pre-filled with your case details · Responds within 1 business day</div>
-          </div>
-        </div>
-
-        {/* RIGHT — Trust + Risk */}
-        <div className="result-scroll" style={{
-          padding: "36px 40px",
-          display: "flex",
-          flexDirection: "column",
-          gap: 36,
-        }}>
-
-          {/* Contextual Trust */}
-          <div>
-            <div style={{
-              fontFamily: "var(--syne)",
-              fontSize: 10,
-              color: "var(--text-muted)",
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              marginBottom: 14,
-            }}>Why Trust Us on This</div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {result.trust.map((t, i) => (
-                <div key={i} style={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: 10,
-                  padding: "12px 14px",
-                  border: "0.5px solid var(--border-gold)",
-                  background: "var(--gold-glow)",
-                }}>
-                  <div style={{
-                    width: 5, height: 5, borderRadius: "50%",
-                    background: "var(--gold)",
-                    flexShrink: 0,
-                    marginTop: 5,
-                  }} />
-                  <div style={{
-                    fontFamily: "var(--sans)",
-                    fontSize: 12,
-                    color: "var(--text)",
-                    lineHeight: 1.55,
-                  }}>{t}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Risk Factors */}
-          <div>
-            <div style={{
-              fontFamily: "var(--syne)",
-              fontSize: 10,
-              color: "var(--text-muted)",
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              marginBottom: 6,
-            }}>Risk Factors</div>
-            <div style={{
-              fontFamily: "var(--sans)",
-              fontSize: 11,
-              color: "var(--text-muted)",
-              marginBottom: 14,
-              lineHeight: 1.5,
-            }}>Honest factors that could affect your case — most can be managed if raised early.</div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              {result.risks.map((r, i) => (
-                <div key={i} className="risk-tag">
-                  <span style={{ color: "var(--gold)", fontSize: 10, flexShrink: 0 }}>!</span>
-                  <span>{r}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Firm tagline */}
-          <div style={{
-            borderTop: "0.5px solid var(--border)",
-            paddingTop: 24,
-            marginTop: "auto",
-          }}>
-            <div style={{
-              fontFamily: "var(--syne)",
-              fontSize: 13,
-              fontWeight: 700,
-              color: "var(--gold)",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              marginBottom: 4,
-            }}>AGD Law Associates</div>
-            <div style={{
-              fontFamily: "var(--serif)",
-              fontSize: 14,
-              color: "var(--text-dim)",
-              fontStyle: "italic",
-              lineHeight: 1.6,
-            }}>
-              Precision, transparency, and integrity — <br />
-              across Tamil Nadu's courts since inception.
-            </div>
-            <div style={{
-              marginTop: 16,
-              fontFamily: "var(--sans)",
-              fontSize: 11,
-              color: "var(--text-muted)",
-              lineHeight: 1.7,
-            }}>
-              Chennai · Pan-TN Presence<br />
-              Mon–Fri 10AM–6:30PM · Sat 11AM–5PM
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ─── MAIN ─────────────────────────────────────────────────────────────────────
-
-export default function Page() {
-  const [screen, setScreen] = useState("situation"); // situation | stage | result
-  const [situation, setSituation] = useState(null);
-  const [stage, setStage] = useState(null);
-  const [phase, setPhase] = useState("visible"); // enter | visible | exit
-  const transitioning = useRef(false);
-
-  const transition = (fn) => {
-    if (transitioning.current) return;
-    transitioning.current = true;
-    setPhase("exit");
-    setTimeout(() => {
-      fn();
-      setPhase("enter");
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-          setPhase("visible");
-          transitioning.current = false;
-        }, 30);
-      });
-    }, 380);
-  };
-
-  const selectSituation = (id) => {
-    transition(() => {
-      setSituation(id);
-      setScreen("stage");
-    });
-  };
-
-  const selectStage = (id) => {
-    transition(() => {
-      setStage(id);
-      setScreen("result");
-    });
-  };
-
-  const goBack = () => {
-    transition(() => {
-      if (screen === "stage") {
-        setScreen("situation");
-        setSituation(null);
-      } else if (screen === "result") {
-        setScreen("stage");
-        setStage(null);
-      }
-    });
-  };
-
-  const reset = () => {
-    transition(() => {
-      setScreen("situation");
-      setSituation(null);
-      setStage(null);
-    });
-  };
-
-  const stepNum = screen === "situation" ? 0 : screen === "stage" ? 2 : 3;
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
 
   return (
     <>
-      <style>{GLOBAL_CSS}</style>
+      <header
+        className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${scrolled ? "border-b border-white/10 bg-[#0b0b0b]/92 shadow-2xl backdrop-blur-xl" : ""
+          }`}
+      >
+        <div className="border-b border-white/10 bg-[#0b0b0b] text-white/75">
+          <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-4 px-6 py-2 text-[0.72rem] uppercase tracking-[0.18em]">
+            <p className="hidden sm:block">Boutique law firm · Chennai · Established 2016</p>
+            <div className="ml-auto flex items-center gap-4 text-white/70">
+              <a href="tel:+919994388855" className="hover:text-[#c5dfc0]">
+                +91 99943 88855
+              </a>
+              <a
+                href="mailto:agdlawassociatesoffice@gmail.com"
+                className="hidden hover:text-[#c5dfc0] md:block"
+              >
+                agdlawassociatesoffice@gmail.com
+              </a>
+            </div>
+          </div>
+        </div>
 
-      {screen === "situation" && (
-        <SituationScreen onSelect={selectSituation} phase={phase} />
+        <div className="mx-auto flex max-w-[1280px] items-center justify-between px-6 py-4 text-white">
+          <Link href="/" className="min-w-0 no-underline">
+            <div className="agd-display text-[1.65rem] leading-none tracking-[0.08em]">
+              AGD LAW ASSOCIATES
+            </div>
+            <div className="mt-1 text-[0.65rem] uppercase tracking-[0.26em] text-[#c5dfc0]/70">
+              Precision. Strategy. Results.
+            </div>
+          </Link>
+
+          <nav className="hidden items-center gap-8 lg:flex">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="text-[0.76rem] font-semibold uppercase tracking-[0.16em] text-white/75 transition-colors hover:text-[#c5dfc0]"
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
+
+          <div className="hidden lg:block">
+            <PrimaryButton href="#contact">Schedule consultation</PrimaryButton>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setMenuOpen((value) => !value)}
+            className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white lg:hidden"
+            aria-expanded={menuOpen}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+          >
+            {menuOpen ? <X className="h-5 w-5" /> : <ChevronDown className="h-5 w-5 -rotate-90" />}
+          </button>
+        </div>
+      </header>
+
+      <div className="h-[114px] sm:h-[116px]" />
+
+      {menuOpen && (
+        <div className="fixed inset-0 z-40 bg-[#0b0b0b]/98 px-6 pt-36 text-white lg:hidden">
+          <div className="mx-auto flex max-w-[520px] flex-col gap-6">
+            {navLinks.map((link, index) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                className="flex items-center justify-between border-b border-white/10 py-4 text-[1.35rem]"
+              >
+                <span className="agd-display">{link.label}</span>
+                <span className="text-[0.75rem] uppercase tracking-[0.22em] text-[#c5dfc0]">
+                  0{index + 1}
+                </span>
+              </a>
+            ))}
+            <PrimaryButton href="#contact" className="mt-4 w-full" onClick={() => setMenuOpen(false)}>
+              Schedule consultation
+            </PrimaryButton>
+          </div>
+        </div>
       )}
-      {screen === "stage" && (
-        <StageScreen situation={situation} onSelect={selectStage} onBack={goBack} phase={phase} />
-      )}
-      {screen === "result" && (
-        <ResultScreen situation={situation} stage={stage} onReset={reset} phase={phase} />
+    </>
+  );
+}
+
+function Hero() {
+  return (
+    <section className="relative overflow-hidden bg-[#0b0b0b] pb-16 pt-10 text-white sm:pb-20">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(197,223,192,0.28),transparent_33%),radial-gradient(circle_at_bottom_right,rgba(197,223,192,0.14),transparent_28%)]" />
+      <div className="pointer-events-none absolute inset-y-16 right-[8%] hidden w-px bg-white/8 lg:block" />
+
+      <div className="relative mx-auto grid max-w-[1280px] gap-10 px-6 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
+        <div className="max-w-[720px]">
+          <SectionEyebrow invert>Litigation & advisory support across key practice areas</SectionEyebrow>
+          <h1 className="agd-display mt-6 text-[clamp(3.3rem,7vw,6.6rem)] leading-[0.92] text-white">
+            Legal counsel built for decisive moments.
+          </h1>
+          <p className="mt-6 max-w-[640px] text-[1.02rem] leading-8 text-white/72 sm:text-[1.1rem]">
+            AGD Law Associates is a Chennai-based boutique law firm focused on
+            litigation strength, practical legal strategy, and clear client
+            communication across criminal, civil, constitutional, family, and
+            commercial matters.
+          </p>
+
+          <div className="mt-8 flex flex-wrap gap-4">
+            <PrimaryButton href="#contact">Request consultation</PrimaryButton>
+            <SecondaryButton href="tel:+919994388855">
+              Call now
+              <Phone className="h-4 w-4" />
+            </SecondaryButton>
+          </div>
+
+          <div className="mt-10 grid gap-4 sm:grid-cols-3">
+            {heroStats.map((item) => (
+              <div
+                key={item.label}
+                className="rounded-[24px] border border-white/12 bg-white/5 px-5 py-5 backdrop-blur-sm"
+              >
+                <div className="agd-display text-4xl text-[#c5dfc0]">{item.value}</div>
+                <p className="mt-2 text-[0.78rem] uppercase tracking-[0.18em] text-white/65">
+                  {item.label}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="relative">
+          <div className="overflow-hidden rounded-[34px] border border-white/10 bg-white/5 p-3 shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
+            <div className="relative overflow-hidden rounded-[28px]">
+              <Image
+                src="/image.webp"
+                loading="eager"
+                alt="AGD Law Associates team"
+                width={1200}
+                height={1400}
+                className="h-[520px] w-full object-cover object-top"
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(11,11,11,0.04),rgba(11,11,11,0.58))]" />
+              {/* <div className="absolute bottom-0 left-0 right-0 p-6">
+                <div className="rounded-[24px] border border-white/12 bg-[#0b0b0b]/72 p-5 backdrop-blur-md">
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <p className="text-[0.72rem] uppercase tracking-[0.2em] text-[#c5dfc0]">
+                        Court-facing legal team
+                      </p>
+                      <p className="mt-2 agd-display text-[1.9rem] leading-none">
+                        Chennai office. Regional reach.
+                      </p>
+                    </div>
+                    <div className="rounded-full border border-white/15 bg-white/5 p-3">
+                      <ArrowUpRight className="h-5 w-5 text-[#c5dfc0]" />
+                    </div>
+                  </div>
+                  <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                    <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                      <p className="text-[0.72rem] uppercase tracking-[0.18em] text-white/55">
+                        Forums
+                      </p>
+                      <p className="mt-2 text-sm leading-6 text-white/80">
+                        High Court, District Courts, Tribunals, and Consumer Commissions.
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                      <p className="text-[0.72rem] uppercase tracking-[0.18em] text-white/55">
+                        Approach
+                      </p>
+                      <p className="mt-2 text-sm leading-6 text-white/80">
+                        Direct involvement, transparent updates, and precision in filings.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div> */}
+            </div>
+          </div>
+
+          <div className="mt-5 grid gap-4 sm:grid-cols-2">
+            <div className="rounded-[24px] border border-[#c5dfc0]/25 bg-[#c5dfc0]/10 p-5 text-white">
+              <p className="text-[0.72rem] uppercase tracking-[0.18em] text-[#c5dfc0]">
+                Coverage
+              </p>
+              <p className="mt-2 text-sm leading-7 text-white/76">
+                Active matter handling across Chennai, Coimbatore, Tiruppur, Bangalore, and nearby districts.
+              </p>
+            </div>
+            <div className="rounded-[24px] border border-white/10 bg-white/5 p-5 text-white">
+              <p className="flex items-center gap-2 text-[0.72rem] uppercase tracking-[0.18em] text-[#c5dfc0]">
+                <Clock3 className="h-4 w-4" />
+                Consultation desk
+              </p>
+              <p className="mt-2 text-sm leading-7 text-white/76">
+                Monday to Friday: 10:00 AM to 6:30 PM
+                <br />
+                Saturday: 11:00 AM to 5:00 PM
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TrustStrip() {
+  return (
+    <section className="border-b border-[#dce8d9] bg-white py-5">
+      <div className="mx-auto flex max-w-[1280px] flex-col gap-4 px-6 lg:flex-row lg:items-center lg:justify-between">
+        <p className="text-[0.74rem] font-semibold uppercase tracking-[0.24em] text-[#537258]">
+          Built for high-stakes matters and practical outcomes
+        </p>
+        <div className="flex flex-wrap gap-3">
+          {trustPoints.map((item) => (
+            <div
+              key={item}
+              className="rounded-full border border-[#d9e7d6] bg-[#f7fbf6] px-4 py-2 text-[0.78rem] font-medium text-[#35513a]"
+            >
+              {item}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function OverviewSection() {
+  return (
+    <section id="overview" className="bg-white py-[4.5rem] sm:py-24">
+      <div className="mx-auto grid max-w-[1280px] gap-10 px-6 lg:grid-cols-[0.86fr_1.14fr]">
+        <div className="lg:sticky lg:top-32 lg:self-start">
+          <SectionEyebrow>Firm overview</SectionEyebrow>
+          <h2 className="agd-display mt-5 text-[clamp(2.7rem,5vw,4.5rem)] leading-[0.96] text-[#111]">
+            A cleaner legal experience for complicated cases.
+          </h2>
+          <p className="mt-5 max-w-[430px] text-[1rem] leading-8 text-[#475447]">
+            The redesigned homepage now puts decision-making first: what the
+            firm does, how it works, where it appears, and how a client can move
+            forward without having to scan through repetitive sections.
+          </p>
+          <div className="mt-7 flex flex-wrap gap-3 text-sm text-[#35513a]">
+            <span className="rounded-full border border-[#c5dfc0] bg-[#eef5ec] px-4 py-2">
+              Direct lawyer access
+            </span>
+            <span className="rounded-full border border-[#c5dfc0] bg-[#eef5ec] px-4 py-2">
+              Court-ready strategy
+            </span>
+            <span className="rounded-full border border-[#c5dfc0] bg-[#eef5ec] px-4 py-2">
+              Transparent communication
+            </span>
+          </div>
+        </div>
+
+        <div className="space-y-6">
+          <article className="grid gap-6 rounded-[34px] bg-[#0b0b0b] p-6 text-white sm:p-8 lg:grid-cols-[0.9fr_1.1fr]">
+            <div className="overflow-hidden rounded-[28px] border border-white/10">
+              <Image
+                src="/hero_bg.webp"
+                alt="AGD Law Associates office interior"
+                width={1600}
+                height={1067}
+                className="h-full min-h-[300px] w-full object-cover"
+              />
+            </div>
+            <div className="flex flex-col justify-between">
+              <div>
+                <p className="text-[0.72rem] uppercase tracking-[0.2em] text-[#c5dfc0]">
+                  Founder note
+                </p>
+                <h3 className="agd-display mt-4 text-[2.2rem] leading-none">
+                  Litigation discipline with a boutique-firm pace.
+                </h3>
+                <p className="mt-5 text-[0.98rem] leading-8 text-white/72">
+                  AGD Bala Kumar leads the firm with over 12 years of practice,
+                  combining courtroom advocacy with advisory support that stays
+                  practical, responsive, and sharply documented.
+                </p>
+              </div>
+              <div className="mt-6 rounded-[24px] border border-white/10 bg-white/5 p-5">
+                <p className="text-[0.72rem] uppercase tracking-[0.2em] text-white/55">
+                  Active practice presence
+                </p>
+                <div className="mt-3 grid gap-3">
+                  {officeRegions.map((region) => (
+                    <div key={region} className="flex items-start gap-3">
+                      <MapPin className="mt-1 h-4 w-4 flex-shrink-0 text-[#c5dfc0]" />
+                      <p className="text-sm leading-6 text-white/80">{region}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article className="rounded-[34px] border border-[#dbe8d8] bg-[#f7fbf6] p-6 sm:p-8">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-[#537258]">
+                  Working method
+                </p>
+                <h3 className="agd-display mt-3 text-[2.35rem] leading-none text-[#111]">
+                  Clear steps. Fewer blind spots.
+                </h3>
+              </div>
+              <p className="max-w-[340px] text-sm leading-7 text-[#516050]">
+                The page now explains the firm process directly so potential
+                clients understand what happens after they make contact.
+              </p>
+            </div>
+
+            <div className="mt-8 grid gap-4 md:grid-cols-2">
+              {methodSteps.map((item) => (
+                <div
+                  key={item.step}
+                  className="rounded-[26px] border border-[#dbe8d8] bg-white p-5 shadow-[0_16px_32px_rgba(11,11,11,0.04)]"
+                >
+                  <p className="text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-[#537258]">
+                    Step {item.step}
+                  </p>
+                  <h4 className="mt-3 text-[1.25rem] font-semibold text-[#111]">
+                    {item.title}
+                  </h4>
+                  <p className="mt-3 text-sm leading-7 text-[#526052]">{item.body}</p>
+                </div>
+              ))}
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TeamSection() {
+  return (
+    <section id="team" className="bg-[#f7fbf6] py-[4.5rem] sm:py-24">
+      <div className="mx-auto max-w-[1280px] px-6">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-[700px]">
+            <SectionEyebrow>Our team</SectionEyebrow>
+            <h2 className="agd-display mt-5 text-[clamp(2.8rem,5vw,4.5rem)] leading-[0.95] text-[#111]">
+              The people behind the firm&apos;s courtroom discipline.
+            </h2>
+          </div>
+          <p className="max-w-[420px] text-[0.98rem] leading-8 text-[#4f5d4e]">
+            This brings the team back into the homepage in a cleaner format,
+            with stronger hierarchy and without breaking the new layout rhythm.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          {teamMembers.map((member) => (
+            <article
+              key={member.name}
+              className="group rounded-[30px] border border-[#dbe8d8] bg-white p-6 shadow-[0_18px_36px_rgba(11,11,11,0.04)] transition-all duration-300 hover:-translate-y-1 hover:border-[#c5dfc0] hover:shadow-[0_24px_48px_rgba(11,11,11,0.08)]"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex h-14 w-14 items-center justify-center rounded-[18px] bg-[#0b0b0b] text-[1.05rem] font-semibold uppercase tracking-[0.12em] text-[#c5dfc0]">
+                  {member.initials}
+                </div>
+                <span className="rounded-full border border-[#dbe8d8] bg-[#f7fbf6] px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#537258]">
+                  {member.experience}
+                </span>
+              </div>
+
+              <h3 className="mt-6 agd-display text-[2rem] leading-none text-[#111]">
+                {member.name}
+              </h3>
+              <p className="mt-2 text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-[#537258]">
+                {member.role}
+              </p>
+              <p className="mt-4 text-sm leading-7 text-[#526052]">{member.focus}</p>
+
+              <a
+                href="#contact"
+                className="mt-6 inline-flex items-center gap-2 text-[0.76rem] font-semibold uppercase tracking-[0.16em] text-[#35513a] transition-colors hover:text-[#111]"
+              >
+                Consult with the team
+                <ArrowUpRight className="h-4 w-4" />
+              </a>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PracticeSection() {
+  return (
+    <section id="practice" className="bg-[#0b0b0b] py-[4.5rem] text-white sm:py-24">
+      <div className="mx-auto max-w-[1280px] px-6">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-[700px]">
+            <SectionEyebrow invert>Practice areas</SectionEyebrow>
+            <h2 className="agd-display mt-5 text-[clamp(2.8rem,5vw,4.6rem)] leading-[0.95]">
+              Consolidated services, better hierarchy, stronger readability.
+            </h2>
+          </div>
+          <p className="max-w-[420px] text-[0.98rem] leading-8 text-white/66">
+            Instead of a long hover-driven list, the homepage now uses grouped
+            service cards so visitors can scan practice coverage quickly on both
+            desktop and mobile.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {practiceAreas.map((area) => (
+            <article
+              key={area.title}
+              className="group rounded-[30px] border border-white/10 bg-white/5 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[#c5dfc0]/40 hover:bg-white/[0.07]"
+            >
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[#c5dfc0]/25 bg-[#c5dfc0]/12 text-[#c5dfc0]">
+                  <PracticeIcon icon={area.icon} />
+                </div>
+                <span className="rounded-full border border-white/10 px-3 py-1 text-[0.65rem] uppercase tracking-[0.2em] text-white/50">
+                  Advisory + litigation
+                </span>
+              </div>
+              <h3 className="mt-5 agd-display text-[2rem] leading-none text-white">
+                {area.title}
+              </h3>
+              <p className="mt-4 text-sm leading-7 text-white/68">{area.summary}</p>
+              <div className="mt-6 space-y-3 border-t border-white/10 pt-5">
+                {area.matters.map((matter) => (
+                  <div key={matter} className="flex items-start gap-3">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#c5dfc0]" />
+                    <p className="text-sm leading-6 text-white/84">{matter}</p>
+                  </div>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ResultsSection() {
+  return (
+    <section id="results" className="bg-white py-[4.5rem] sm:py-24">
+      <div className="mx-auto max-w-[1280px] px-6">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-[720px]">
+            <SectionEyebrow>Results & insights</SectionEyebrow>
+            <h2 className="agd-display mt-5 text-[clamp(2.8rem,5vw,4.5rem)] leading-[0.95] text-[#111]">
+              A homepage that proves credibility before asking for action.
+            </h2>
+          </div>
+          <p className="max-w-[420px] text-[0.98rem] leading-8 text-[#4f5d4e]">
+            The case result section now carries more weight, and the insight
+            links sit beside it instead of feeling like a separate mini-site.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-6 xl:grid-cols-[1.12fr_0.88fr]">
+          <div className="rounded-[34px] bg-[#0b0b0b] p-6 text-white sm:p-8">
+            <div className="grid gap-4 sm:grid-cols-2">
+              {results.map((item) => (
+                <article
+                  key={item.title}
+                  className="rounded-[26px] border border-white/10 bg-white/5 p-5"
+                >
+                  <span className="inline-flex rounded-full border border-[#c5dfc0]/20 bg-[#c5dfc0]/10 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-[#c5dfc0]">
+                    {item.category}
+                  </span>
+                  <h3 className="mt-4 agd-display text-[1.8rem] leading-none">
+                    {item.title}
+                  </h3>
+                  <p className="mt-4 text-sm leading-7 text-white/68">{item.description}</p>
+                  <div className="mt-5 border-t border-white/10 pt-4">
+                    <div className="inline-flex rounded-full bg-[#c5dfc0] px-3 py-2 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[#0b0b0b]">
+                      {item.outcome}
+                    </div>
+                    <p className="mt-3 text-[0.76rem] uppercase tracking-[0.18em] text-white/45">
+                      {item.meta}
+                    </p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-[34px] border border-[#dbe8d8] bg-[#f7fbf6] p-6 sm:p-8">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-[#537258]">
+                  Legal insights
+                </p>
+                <h3 className="agd-display mt-3 text-[2.2rem] leading-none text-[#111]">
+                  Read before you act.
+                </h3>
+              </div>
+              <Link
+                href="/blog"
+                className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[#c5dfc0] bg-white text-[#111] transition-colors hover:bg-[#c5dfc0]"
+                aria-label="View all articles"
+              >
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+
+            <div className="mt-8 space-y-4">
+              {articles.map((article) => (
+                <Link
+                  key={article.slug}
+                  href={`/blog/${article.slug}`}
+                  className="block rounded-[26px] border border-[#dbe8d8] bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#c5dfc0] hover:shadow-[0_18px_36px_rgba(11,11,11,0.06)]"
+                >
+                  <span className="text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-[#537258]">
+                    {article.category}
+                  </span>
+                  <h4 className="mt-3 text-[1.12rem] font-semibold leading-7 text-[#111]">
+                    {article.title}
+                  </h4>
+                  <p className="mt-3 text-sm leading-7 text-[#526052]">{article.excerpt}</p>
+                  <span className="mt-5 inline-flex items-center gap-2 text-[0.74rem] font-semibold uppercase tracking-[0.16em] text-[#35513a]">
+                    Read article
+                    <ArrowUpRight className="h-4 w-4" />
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FAQSection() {
+  const [openIndex, setOpenIndex] = useState(0);
+
+  return (
+    <section id="faq" className="bg-[#0b0b0b] py-[4.5rem] text-white sm:py-24">
+      <div className="mx-auto grid max-w-[1280px] gap-10 px-6 lg:grid-cols-[0.84fr_1.16fr]">
+        <div className="lg:sticky lg:top-32 lg:self-start">
+          <SectionEyebrow invert>FAQs</SectionEyebrow>
+          <h2 className="agd-display mt-5 text-[clamp(2.8rem,5vw,4.4rem)] leading-[0.95]">
+            Fewer generic claims. More client clarity.
+          </h2>
+          <p className="mt-5 max-w-[420px] text-[1rem] leading-8 text-white/68">
+            The FAQ area is now positioned as a decision aid, with cleaner
+            spacing, stronger contrast, and a shorter path from question to
+            contact.
+          </p>
+          <div className="mt-8 rounded-[28px] border border-white/10 bg-white/5 p-5">
+            <p className="text-[0.72rem] uppercase tracking-[0.2em] text-[#c5dfc0]">
+              Need a direct answer?
+            </p>
+            <p className="mt-3 text-sm leading-7 text-white/72">
+              Use the consultation form or call during office hours if your
+              matter needs immediate assessment.
+            </p>
+            <PrimaryButton href="#contact" className="mt-5">
+              Speak with the firm
+            </PrimaryButton>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          {faqs.map((faq, index) => {
+            const isOpen = openIndex === index;
+
+            return (
+              <article
+                key={faq.q}
+                className={`rounded-[28px] border px-5 py-5 transition-all sm:px-6 ${isOpen
+                    ? "border-[#c5dfc0]/30 bg-[#c5dfc0]/10"
+                    : "border-white/10 bg-white/5"
+                  }`}
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpenIndex(isOpen ? -1 : index)}
+                  className="flex w-full items-start justify-between gap-5 text-left"
+                  aria-expanded={isOpen}
+                >
+                  <span className="pr-4 text-[1.08rem] font-semibold leading-7 text-white">
+                    {faq.q}
+                  </span>
+                  <span
+                    className={`mt-1 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border transition-transform duration-300 ${isOpen
+                        ? "rotate-180 border-[#c5dfc0] bg-[#c5dfc0] text-[#0b0b0b]"
+                        : "border-white/15 bg-white/5 text-white"
+                      }`}
+                  >
+                    <ChevronDown className="h-4 w-4" />
+                  </span>
+                </button>
+                {isOpen && (
+                  <p className="mt-4 max-w-[760px] pr-12 text-sm leading-7 text-white/72">
+                    {faq.a}
+                  </p>
+                )}
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ContactSection() {
+  const initialForm = {
+    your_name: "",
+    your_email: "",
+    service_type: "",
+    budget: "",
+    message: "",
+  };
+
+  const [form, setForm] = useState(initialForm);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitState, setSubmitState] = useState({ type: "", message: "" });
+
+  const selectPill = (field, value) => {
+    setForm((current) => ({ ...current, [field]: value }));
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setForm((current) => ({ ...current, [name]: value }));
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (!form.service_type || !form.budget) {
+      setSubmitState({
+        type: "error",
+        message: "Please select a service area and preferred timeline.",
+      });
+      return;
+    }
+
+    const serviceLabel =
+      serviceOptions.find((item) => item.value === form.service_type)?.label ||
+      form.service_type;
+    const budgetLabel =
+      timelineOptions.find((item) => item.value === form.budget)?.label ||
+      form.budget;
+
+    try {
+      setIsSubmitting(true);
+      setSubmitState({ type: "", message: "" });
+
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...form,
+          service_label: serviceLabel,
+          budget_label: budgetLabel,
+        }),
+      });
+
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to send message.");
+      }
+
+      setSubmitState({
+        type: "success",
+        message: "Thanks, your message was sent successfully. We will contact you soon.",
+      });
+      setForm(initialForm);
+    } catch (error) {
+      setSubmitState({
+        type: "error",
+        message:
+          error.message ||
+          "Something went wrong while sending your message. Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const chipClass = (active) =>
+    `rounded-full border px-4 py-3 text-sm font-semibold transition-all duration-300 ${active
+      ? "border-[#c5dfc0] bg-[#c5dfc0] text-[#0b0b0b] shadow-[0_14px_28px_rgba(197,223,192,0.35)]"
+      : "border-[#dbe8d8] bg-white text-[#2f3c30] hover:border-[#c5dfc0] hover:bg-[#f7fbf6]"
+    }`;
+
+  return (
+    <section id="contact" className="bg-white py-[4.5rem] sm:py-24">
+      <div className="mx-auto grid max-w-[1280px] gap-6 px-6 lg:grid-cols-[0.88fr_1.12fr]">
+        <aside className="overflow-hidden rounded-[36px] bg-[#0b0b0b] text-white">
+          <div className="border-b border-white/10 p-7 sm:p-8">
+            <SectionEyebrow invert>Contact</SectionEyebrow>
+            <h2 className="agd-display mt-5 text-[clamp(2.7rem,5vw,4.2rem)] leading-[0.95]">
+              Start with the right conversation.
+            </h2>
+            <p className="mt-5 max-w-[430px] text-[0.98rem] leading-8 text-white/68">
+              This redesigned contact block separates firm information from the
+              action form, making the conversion path much easier to scan.
+            </p>
+          </div>
+
+          <div className="space-y-6 p-7 sm:p-8">
+            <div className="rounded-[28px] border border-white/10 bg-white/5 p-5">
+              <div className="flex items-start gap-3">
+                <MapPin className="mt-1 h-5 w-5 text-[#c5dfc0]" />
+                <div>
+                  <p className="text-[0.72rem] uppercase tracking-[0.18em] text-white/55">
+                    Office
+                  </p>
+                  <p className="mt-2 text-sm leading-7 text-white/78">
+                    No.5c, 5th Floor, Sri Venkatesh Bhavan,
+                    <br />
+                    No.75/31, Armenian Street,
+                    <br />
+                    Chennai - 600001
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="rounded-[28px] border border-white/10 bg-white/5 p-5">
+                <Phone className="h-5 w-5 text-[#c5dfc0]" />
+                <p className="mt-4 text-[0.72rem] uppercase tracking-[0.18em] text-white/55">
+                  Call us
+                </p>
+                <a
+                  href="tel:+919994388855"
+                  className="mt-2 block text-[1rem] font-semibold leading-7 text-white hover:text-[#c5dfc0]"
+                >
+                  99943 88855 / 89395 88855
+                </a>
+              </div>
+
+              <div className="rounded-[28px] border border-white/10 bg-white/5 p-5">
+                <Mail className="h-5 w-5 text-[#c5dfc0]" />
+                <p className="mt-4 text-[0.72rem] uppercase tracking-[0.18em] text-white/55">
+                  Email
+                </p>
+                <a
+                  href="mailto:agdlawassociatesoffice@gmail.com"
+                  className="mt-2 block break-all text-[1rem] font-semibold leading-7 text-white hover:text-[#c5dfc0]"
+                >
+                  agdlawassociatesoffice@gmail.com
+                </a>
+              </div>
+            </div>
+
+            <div className="rounded-[28px] border border-white/10 bg-white/5 p-5">
+              <p className="text-[0.72rem] uppercase tracking-[0.18em] text-white/55">
+                Office hours
+              </p>
+              <p className="mt-3 text-sm leading-7 text-white/78">
+                Monday to Friday: 10:00 AM to 6:30 PM
+                <br />
+                Saturday: 11:00 AM to 5:00 PM
+                <br />
+                Second and last Saturdays are holidays.
+              </p>
+            </div>
+          </div>
+        </aside>
+
+        <div className="rounded-[36px] border border-[#dbe8d8] bg-[#f7fbf6] p-7 sm:p-8">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-[0.72rem] font-semibold uppercase tracking-[0.2em] text-[#537258]">
+                Consultation request
+              </p>
+              <h3 className="agd-display mt-3 text-[2.5rem] leading-none text-[#111]">
+                Tell us what you need.
+              </h3>
+            </div>
+            <p className="max-w-[320px] text-sm leading-7 text-[#526052]">
+              Service and timeline chips stay, but they now sit in a cleaner,
+              better-balanced form layout.
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="mt-8 space-y-8">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#35513a]">
+                Select service area
+              </p>
+              <div className="mt-4 flex flex-wrap gap-3">
+                {serviceOptions.map((service) => (
+                  <button
+                    key={service.value}
+                    type="button"
+                    onClick={() => selectPill("service_type", service.value)}
+                    className={chipClass(form.service_type === service.value)}
+                    aria-pressed={form.service_type === service.value}
+                  >
+                    {service.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#35513a]">
+                Preferred timeline
+              </p>
+              <div className="mt-4 flex flex-wrap gap-3">
+                {timelineOptions.map((timeline) => (
+                  <button
+                    key={timeline.value}
+                    type="button"
+                    onClick={() => selectPill("budget", timeline.value)}
+                    className={chipClass(form.budget === timeline.value)}
+                    aria-pressed={form.budget === timeline.value}
+                  >
+                    {timeline.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2">
+              <label className="block">
+                <span className="text-sm font-semibold uppercase tracking-[0.18em] text-[#35513a]">
+                  Your name
+                </span>
+                <input
+                  type="text"
+                  name="your_name"
+                  value={form.your_name}
+                  onChange={handleChange}
+                  required
+                  className="mt-3 w-full rounded-[22px] border border-[#dbe8d8] bg-white px-4 py-4 text-[1rem] text-[#111] outline-none transition-colors focus:border-[#c5dfc0]"
+                  placeholder="John Doe"
+                />
+              </label>
+
+              <label className="block">
+                <span className="text-sm font-semibold uppercase tracking-[0.18em] text-[#35513a]">
+                  Your email
+                </span>
+                <input
+                  type="email"
+                  name="your_email"
+                  value={form.your_email}
+                  onChange={handleChange}
+                  required
+                  className="mt-3 w-full rounded-[22px] border border-[#dbe8d8] bg-white px-4 py-4 text-[1rem] text-[#111] outline-none transition-colors focus:border-[#c5dfc0]"
+                  placeholder="john@example.com"
+                />
+              </label>
+            </div>
+
+            <label className="block">
+              <span className="text-sm font-semibold uppercase tracking-[0.18em] text-[#35513a]">
+                Details
+              </span>
+              <textarea
+                name="message"
+                rows={5}
+                value={form.message}
+                onChange={handleChange}
+                className="mt-3 w-full rounded-[24px] border border-[#dbe8d8] bg-white px-4 py-4 text-[1rem] text-[#111] outline-none transition-colors focus:border-[#c5dfc0]"
+                placeholder="Share brief details about the matter, urgency, or documents involved."
+              />
+            </label>
+
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#0b0b0b] px-7 py-4 text-sm font-semibold uppercase tracking-[0.16em] text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1a1a1a] disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {isSubmitting ? "Sending..." : "Send message"}
+                <ArrowRight className="h-4 w-4" />
+              </button>
+              {submitState.message && (
+                <p
+                  className={`text-sm ${submitState.type === "success" ? "text-[#35513a]" : "text-[#8d2e2e]"
+                    }`}
+                >
+                  {submitState.message}
+                </p>
+              )}
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="border-t border-white/10 bg-[#0b0b0b] py-10 text-white">
+      <div className="mx-auto grid max-w-[1280px] gap-8 px-6 md:grid-cols-[1.1fr_0.9fr_0.9fr]">
+        <div>
+          <div className="agd-display text-[2rem] leading-none tracking-[0.08em]">
+            AGD LAW ASSOCIATES
+          </div>
+          <p className="mt-4 max-w-[360px] text-sm leading-7 text-white/68">
+            Boutique law firm serving clients across litigation and advisory
+            matters with a focused black, white, and sage visual identity that
+            now feels more premium and structured.
+          </p>
+        </div>
+
+        <div>
+          <p className="text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-[#c5dfc0]">
+            Navigation
+          </p>
+          <div className="mt-4 space-y-3">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="block text-sm text-white/72 transition-colors hover:text-[#c5dfc0]"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <p className="text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-[#c5dfc0]">
+            Contact
+          </p>
+          <div className="mt-4 space-y-3 text-sm text-white/72">
+            <a href="tel:+919994388855" className="block hover:text-[#c5dfc0]">
+              +91 99943 88855
+            </a>
+            <a
+              href="mailto:agdlawassociatesoffice@gmail.com"
+              className="block break-all hover:text-[#c5dfc0]"
+            >
+              agdlawassociatesoffice@gmail.com
+            </a>
+            <a
+              href="https://www.agdlawassociates.in"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block hover:text-[#c5dfc0]"
+            >
+              www.agdlawassociates.in
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div className="mx-auto mt-8 max-w-[1280px] border-t border-white/10 px-6 pt-6 text-sm text-white/50">
+        © {new Date().getFullYear()} AGD Law Associates. All rights reserved.
+      </div>
+    </footer>
+  );
+}
+
+function WhatsAppFloatingChat() {
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("");
+  const phoneNumber = "919994388855";
+
+  const quickMessages = [
+    "Hi, I need a legal consultation with AGD Law Associates.",
+    "I want to discuss a criminal matter.",
+    "Please schedule a consultation call.",
+  ];
+
+  const openWhatsApp = (textToSend) => {
+    const finalMessage = (textToSend || message).trim();
+    if (!finalMessage) return;
+
+    window.open(
+      `https://wa.me/${phoneNumber}?text=${encodeURIComponent(finalMessage)}`,
+      "_blank",
+      "noopener,noreferrer"
+    );
+    setMessage("");
+    setOpen(false);
+  };
+
+  return (
+    <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end">
+      <div
+        className={`mb-3 w-[min(92vw,340px)] overflow-hidden rounded-[24px] border border-[#c5dfc0] bg-white shadow-[0_24px_60px_rgba(11,11,11,0.24)] transition-all duration-300 ${open
+            ? "pointer-events-auto translate-y-0 scale-100 opacity-100"
+            : "pointer-events-none translate-y-4 scale-95 opacity-0"
+          }`}
+      >
+        <div className="flex items-center justify-between bg-[#0b0b0b] px-4 py-3 text-white">
+          <div className="flex items-center gap-3">
+            <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#c5dfc0] text-[#0b0b0b]">
+              <MessageCircle className="h-4 w-4" />
+            </span>
+            <div>
+              <p className="text-sm font-semibold">AGD Legal Desk</p>
+              <p className="text-[0.72rem] text-[#c5dfc0]">Replies during office hours</p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/15"
+            aria-label="Close WhatsApp chat"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="space-y-4 p-4">
+          <p className="rounded-[20px] border border-[#dbe8d8] bg-[#f7fbf6] px-4 py-3 text-sm leading-6 text-[#2f3c30]">
+            Select a prompt or type a message and continue on WhatsApp.
+          </p>
+
+          <div className="flex flex-wrap gap-2">
+            {quickMessages.map((item) => (
+              <button
+                key={item}
+                type="button"
+                onClick={() => setMessage(item)}
+                className="rounded-full border border-[#dbe8d8] px-3 py-2 text-left text-[0.8rem] text-[#2f3c30] transition-colors hover:border-[#c5dfc0] hover:bg-[#f7fbf6]"
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex items-end gap-2">
+            <textarea
+              rows={2}
+              value={message}
+              onChange={(event) => setMessage(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" && !event.shiftKey) {
+                  event.preventDefault();
+                  openWhatsApp();
+                }
+              }}
+              className="w-full resize-none rounded-[20px] border border-[#dbe8d8] px-4 py-3 text-sm text-[#111] outline-none focus:border-[#c5dfc0]"
+              placeholder="Type your message..."
+            />
+            <button
+              type="button"
+              onClick={() => openWhatsApp()}
+              className="inline-flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-[#c5dfc0] text-[#0b0b0b] transition-colors hover:bg-[#0b0b0b] hover:text-white"
+              aria-label="Send to WhatsApp"
+            >
+              <Send className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {!open && (
+        <p className="mb-2 rounded-full bg-[#0b0b0b] px-3 py-1.5 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[#c5dfc0]">
+          Chat with AGD
+        </p>
       )}
 
-      <Companion step={stepNum} situation={situation} stage={stage} />
+      <button
+        type="button"
+        onClick={() => setOpen((current) => !current)}
+        className={`inline-flex h-14 w-14 items-center justify-center rounded-full shadow-[0_16px_34px_rgba(11,11,11,0.28)] transition-all duration-300 ${open ? "bg-[#0b0b0b] text-[#c5dfc0]" : "bg-[#c5dfc0] text-[#0b0b0b]"
+          }`}
+        aria-label={open ? "Close WhatsApp chat" : "Open WhatsApp chat"}
+      >
+        {open ? <X className="h-5 w-5" /> : <MessageCircle className="h-5 w-5" />}
+      </button>
+    </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+        :root {
+          --agd-display: 'Cormorant Garamond', Georgia, serif;
+          --agd-body: 'Manrope', system-ui, sans-serif;
+        }
+
+        html {
+          scroll-behavior: smooth;
+        }
+
+        body {
+          margin: 0;
+          font-family: var(--agd-body);
+          background: #ffffff;
+          color: #111111;
+          -webkit-font-smoothing: antialiased;
+        }
+
+        .agd-display {
+          font-family: var(--agd-display);
+          font-weight: 600;
+          letter-spacing: -0.02em;
+        }
+
+        ::selection {
+          background: rgba(197, 223, 192, 0.7);
+          color: #0b0b0b;
+        }
+      `}</style>
+
+      <Header />
+      <main>
+        <Hero />
+        <TrustStrip />
+        <OverviewSection />
+        <TeamSection />
+        <PracticeSection />
+        <ResultsSection />
+        <FAQSection />
+        <ContactSection />
+      </main>
+      <Footer />
+      <WhatsAppFloatingChat />
     </>
   );
 }

@@ -2,1224 +2,1192 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Phone, Mail, MapPin, PhoneCall, Send, X, MessageCircle, ChevronRight, Scale, Gavel, FileText, BookOpen, Stamp } from "lucide-react";
+import {
+  ArrowRight,
+  Phone,
+  ArrowLeft,
+  MessageCircle,
+  MapPin,
+  Mail,
+  PhoneCall,
+  Send,
+  X,
+  Scale,
+  Shield,
+  Clock,
+  Award,
+  Users,
+  BookOpen,
+  Menu,
+  ExternalLink,
+  CheckCircle,
+} from "lucide-react";
 
 // ─── Global Styles ─────────────────────────────────────────────────────────────
 
-const GLOBAL_CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+const GlobalStyles = () => (
+  <style>{`
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap');
 
-  :root {
-    --void:     #0a0906;
-    --chamber:  #121009;
-    --bench:    #1a1610;
-    --mahogany: #1f1a13;
-    --parch:    #c8b89a;
-    --parch2:   #b8a585;
-    --vellum:   #e8dcc8;
-    --ivory:    #f2ead8;
-    --ink:      #f2ead8;
-    --ink-dim:  #9a8e78;
-    --ink-fade: #6a5e4a;
-    --crimson:  #8b1a1a;
-    --crimson2: #b82222;
-    --gold:     #c49a3c;
-    --gold-lt:  #e8c86a;
-    --gold-dim: #6a5020;
-    --sage:     #4a6855;
-    --rule:     rgba(196,154,60,0.15);
-    --rule-med: rgba(196,154,60,0.25);
-    --rule-str: rgba(196,154,60,0.4);
-    --stamp-r:  rgba(139,26,26,0.85);
-  }
+    :root {
+      --ink: #0b0b0b;
+      --paper: #ffffff;
+      --sage: #c5dfc0;
+      --sage-dark: #3a5c3d;
+      --sage-pale: #f0f7ee;
+      --muted: #6b7280;
+      --border: rgba(197,223,192,0.35);
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 32px;
+    }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; font-size: 16px; }
-  body {
-    background: var(--void);
-    color: var(--ink);
-    font-family: 'DM Mono', 'Courier New', monospace;
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-  }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--ink);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 400;
+      line-height: 1.1;
+    }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: inherit; border: none; background: none; }
+    :focus-visible { outline: 2px solid var(--sage); outline-offset: 3px; }
+    ul { list-style: none; }
 
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 3px; }
-  ::-webkit-scrollbar-track { background: var(--chamber); }
-  ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 0; }
+    /* ── Fixed Background ── */
+    .fixed-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: var(--ink);
+      overflow: hidden;
+    }
+    .fixed-bg-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.07;
+    }
+    .fixed-bg-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 900px;
+      height: 900px;
+      background: radial-gradient(circle, rgba(197,223,192,0.12) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .fixed-bg-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(11,11,11,0.7) 100%);
+    }
 
-  h1, h2, h3, h4 {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-weight: 400;
-    line-height: 1.06;
-    letter-spacing: -0.015em;
-  }
+    /* ── Scrollable Layer ── */
+    .scroll-layer {
+      position: relative;
+      z-index: 10;
+    }
 
-  .mono {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.68rem;
-    font-weight: 400;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--gold);
-  }
+    /* ── Container ── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; width: 100%; }
 
-  .case-ref {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.58rem;
-    letter-spacing: 0.2em;
-    color: var(--ink-dim);
-    text-transform: uppercase;
-  }
+    .section-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--sage);
+      background: rgba(197,223,192,0.1); border: 1px solid rgba(197,223,192,0.2);
+      border-radius: 100px; padding: 5px 14px;
+    }
+    .section-label::before {
+      content: ''; width: 5px; height: 5px; border-radius: 50%;
+      background: var(--sage);
+    }
+    .section-label-dark {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--sage);
+      background: rgba(197,223,192,0.08); border: 1px solid rgba(197,223,192,0.2);
+      border-radius: 100px; padding: 5px 14px;
+    }
+    .section-label-dark::before {
+      content: ''; width: 5px; height: 5px; border-radius: 50%;
+      background: var(--sage);
+    }
 
-  .rule-h { width: 100%; height: 0.5px; background: var(--rule-med); }
-  .rule-h-gold { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity: 0.4; }
-  .rule-v { width: 0.5px; background: var(--rule-med); }
+    /* ── Header ── */
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+      transition: background 0.4s, box-shadow 0.4s, backdrop-filter 0.4s;
+    }
+    .header.scrolled {
+      background: rgba(11,11,11,0.88);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 1px 0 rgba(197,223,192,0.1), 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .header-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 70px; gap: 24px;
+    }
+    .logo-mark {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.35rem; font-weight: 500; color: #fff;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .logo-glyph {
+      width: 34px; height: 34px; border-radius: 9px;
+      background: var(--sage); color: var(--ink);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 1rem; font-weight: 700; flex-shrink: 0;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .nav-links { display: flex; align-items: center; gap: 2px; }
+    .nav-link {
+      font-size: 0.8rem; font-weight: 500; color: rgba(255,255,255,0.65);
+      padding: 8px 13px; border-radius: 8px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-link:hover { color: var(--sage); background: rgba(197,223,192,0.07); }
+    .header-cta {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--sage); color: var(--ink);
+      font-size: 0.78rem; font-weight: 700;
+      padding: 9px 18px; border-radius: 100px;
+      transition: background 0.25s, transform 0.2s;
+      letter-spacing: 0.04em; white-space: nowrap;
+    }
+    .header-cta:hover { background: #fff; transform: translateY(-1px); }
 
-  /* Stamped SEAL effect */
-  .stamp {
-    display: inline-block;
-    border: 2px solid var(--crimson);
-    color: var(--crimson2);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.58rem;
-    font-weight: 500;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    padding: 4px 10px;
-    transform: rotate(-2deg);
-    opacity: 0.88;
-    position: relative;
-  }
-  .stamp::before {
-    content: '';
-    position: absolute; inset: 2px;
-    border: 0.5px solid var(--crimson);
-    opacity: 0.4;
-  }
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: flex-end;
+      padding: 0 0 80px;
+      position: relative;
+    }
+    .hero-ornament {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      border: 1px solid rgba(197,223,192,0.06);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero-ornament::after {
+      content: '';
+      position: absolute;
+      inset: 40px;
+      border: 1px solid rgba(197,223,192,0.04);
+      border-radius: 50%;
+    }
+    .hero-content {
+      text-align: center;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--sage);
+      border: 1px solid rgba(197,223,192,0.25);
+      border-radius: 100px; padding: 6px 16px; margin-bottom: 32px;
+    }
+    .hero-title {
+      font-size: clamp(4rem, 9vw, 9rem);
+      color: #fff; line-height: 0.92;
+      letter-spacing: -0.025em; margin-bottom: 12px;
+    }
+    .hero-title em { color: var(--sage); font-style: italic; }
+    .hero-firm-name {
+      font-size: clamp(1rem, 2vw, 1.5rem);
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.3em; text-transform: uppercase;
+      font-family: 'DM Sans', sans-serif; font-weight: 300;
+      margin-bottom: 36px;
+    }
+    .hero-tagline {
+      font-size: 1.05rem; color: rgba(255,255,255,0.5);
+      line-height: 1.75; max-width: 520px; margin: 0 auto 44px;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 9px;
+      background: var(--sage); color: var(--ink);
+      font-size: 0.85rem; font-weight: 700;
+      padding: 13px 24px; border-radius: 100px;
+      transition: all 0.25s; letter-spacing: 0.03em; white-space: nowrap;
+    }
+    .btn-primary:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 12px 32px rgba(197,223,192,0.3); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 9px;
+      color: rgba(255,255,255,0.6);
+      font-size: 0.85rem; font-weight: 500;
+      padding: 13px 24px; border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.15);
+      transition: all 0.25s; white-space: nowrap;
+    }
+    .btn-ghost:hover { border-color: var(--sage); color: var(--sage); }
+    .hero-stats-row {
+      display: flex; justify-content: center; gap: 0;
+      margin-top: 56px;
+      border: 1px solid rgba(197,223,192,0.12);
+      border-radius: 20px; overflow: hidden; width: fit-content;
+      margin-left: auto; margin-right: auto;
+    }
+    .hero-stat {
+      padding: 18px 32px; border-right: 1px solid rgba(197,223,192,0.12);
+    }
+    .hero-stat:last-child { border-right: none; }
+    .hero-stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; color: var(--sage); line-height: 1;
+    }
+    .hero-stat-lbl {
+      font-size: 0.65rem; color: rgba(255,255,255,0.35);
+      text-transform: uppercase; letter-spacing: 0.12em; margin-top: 4px;
+    }
+    .hero-scroll-hint {
+      position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    .hero-scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, rgba(197,223,192,0.5), transparent);
+      animation: scrollHint 2s ease-in-out infinite;
+    }
+    @keyframes scrollHint {
+      0%, 100% { opacity: 0.4; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.2); }
+    }
+    .hero-scroll-lbl {
+      font-size: 0.6rem; color: rgba(197,223,192,0.35);
+      text-transform: uppercase; letter-spacing: 0.2em;
+    }
 
-  .stamp-green {
-    border-color: var(--sage);
-    color: #6a9978;
-  }
-  .stamp-green::before { border-color: var(--sage); }
+    /* ── Ticker ── */
+    .ticker-wrap {
+      background: var(--sage); overflow: hidden; height: 38px;
+      display: flex; align-items: center;
+    }
+    .ticker-track {
+      display: flex; gap: 0; white-space: nowrap;
+      animation: tickerMove 30s linear infinite;
+    }
+    @keyframes tickerMove {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .ticker-item {
+      display: inline-flex; align-items: center; gap: 16px;
+      font-size: 0.7rem; font-weight: 700; color: var(--ink);
+      text-transform: uppercase; letter-spacing: 0.14em;
+      padding: 0 28px;
+    }
+    .ticker-sep { opacity: 0.35; }
 
-  /* Fade-in animation */
-  .fade-up {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
-  }
-  .fade-up.visible { opacity: 1; transform: translateY(0); }
-  .fade-up.delay-1 { transition-delay: 100ms; }
-  .fade-up.delay-2 { transition-delay: 200ms; }
-  .fade-up.delay-3 { transition-delay: 320ms; }
-  .fade-up.delay-4 { transition-delay: 440ms; }
+    /* ── All sections are transparent — fixed bg always shows through ── */
+    .panel, .panel-dark, .panel-tinted {
+      background: transparent;
+      position: relative;
+    }
 
-  /* Paper texture overlay on sections */
-  .paper-bg {
-    position: relative;
-    background: var(--chamber);
-  }
-  .paper-bg::before {
-    content: '';
-    position: absolute; inset: 0;
-    background-image: 
-      repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(196,154,60,0.03) 27px, rgba(196,154,60,0.03) 28px);
-    pointer-events: none; z-index: 0;
-  }
+    /* ── About ── */
+    .about-inner {
+      display: grid; grid-template-columns: 1fr 1.1fr;
+      gap: clamp(3rem, 5vw, 6rem); align-items: center;
+      padding: clamp(5rem, 8vw, 9rem) 0;
+    }
+    .about-left { display: flex; flex-direction: column; gap: 28px; }
+    .about-pretitle {
+      font-size: clamp(2.6rem, 4vw, 4.2rem);
+      line-height: 1.05; letter-spacing: -0.015em; color: #fff;
+    }
+    .about-pretitle em { color: var(--sage); font-style: italic; }
+    .about-body { font-size: 0.97rem; line-height: 1.85; color: rgba(255,255,255,0.6); }
+    .about-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    }
+    .about-stat-box {
+      background: rgba(255,255,255,0.07); backdrop-filter: blur(12px);
+      border: 1px solid rgba(197,223,192,0.15); border-radius: 16px; padding: 20px 18px;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .about-stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem; color: var(--sage); line-height: 1;
+    }
+    .about-stat-lbl {
+      font-size: 0.65rem; color: rgba(255,255,255,0.4);
+      text-transform: uppercase; letter-spacing: 0.1em;
+    }
+    .about-creds { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cred-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.77rem; color: var(--sage); font-weight: 500;
+      background: rgba(197,223,192,0.1); border: 1px solid rgba(197,223,192,0.2);
+      border-radius: 100px; padding: 5px 12px;
+    }
+    .cred-tag svg { color: var(--sage); flex-shrink: 0; }
+    .about-right { position: relative; }
+    .about-img-wrap {
+      border-radius: 28px; overflow: hidden;
+      box-shadow: 0 40px 100px rgba(11,11,11,0.15);
+      aspect-ratio: 4/5;
+    }
+    .about-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover; object-position: top;
+    }
+    .about-img-badge {
+      position: absolute; bottom: -20px; left: -20px;
+      background: var(--ink); border-radius: 20px;
+      padding: 20px 24px; color: #fff;
+      box-shadow: 0 20px 56px rgba(11,11,11,0.3);
+    }
+    .about-badge-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.6rem; color: var(--sage); line-height: 1;
+    }
+    .about-badge-lbl {
+      font-size: 0.62rem; text-transform: uppercase;
+      letter-spacing: 0.1em; color: rgba(197,223,192,0.55); margin-top: 4px;
+    }
+    .about-img-accent {
+      position: absolute; top: -20px; right: -20px;
+      width: 48%; aspect-ratio: 1; border-radius: 20px;
+      overflow: hidden; border: 3px solid #fff;
+      box-shadow: 0 16px 48px rgba(11,11,11,0.15);
+    }
+    .about-img-accent img { width: 100%; height: 100%; object-fit: cover; }
 
-  /* Red margin line */
-  .margin-line {
-    position: absolute; top: 0; left: 72px; bottom: 0;
-    width: 1px;
-    background: linear-gradient(to bottom, var(--crimson) 0%, rgba(139,26,26,0.2) 100%);
-    opacity: 0.3;
-    pointer-events: none;
-  }
+    /* ── Services ── */
+    .services-inner { padding: clamp(4rem, 7vw, 8rem) 0; }
+    .services-head {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: clamp(2.5rem, 4vw, 4rem); gap: 24px; flex-wrap: wrap;
+    }
+    .services-title {
+      font-size: clamp(2.2rem, 3.5vw, 3.6rem);
+      color: #fff; letter-spacing: -0.015em; margin-top: 14px;
+    }
+    .services-title em { color: var(--sage); font-style: italic; }
+    .services-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border: 1px solid rgba(197,223,192,0.1); border-radius: 28px;
+      overflow: hidden;
+    }
+    .service-card {
+      padding: 30px 26px; position: relative; overflow: hidden;
+      display: flex; flex-direction: column; gap: 12px;
+      border-right: 1px solid rgba(197,223,192,0.08);
+      border-bottom: 1px solid rgba(197,223,192,0.08);
+      transition: background 0.3s;
+      background: rgba(255,255,255,0.02);
+    }
+    .service-card:hover { background: rgba(197,223,192,0.05); }
+    .service-card:nth-child(3n) { border-right: none; }
+    .service-card:nth-child(7), .service-card:nth-child(8), .service-card:nth-child(9) { border-bottom: none; }
+    .service-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem; color: rgba(197,223,192,0.3);
+      letter-spacing: 0.08em;
+    }
+    .service-icon-wrap {
+      width: 42px; height: 42px; border-radius: 11px;
+      border: 1px solid rgba(197,223,192,0.18); color: var(--sage);
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .service-card:hover .service-icon-wrap {
+      background: rgba(197,223,192,0.1); border-color: var(--sage);
+    }
+    .service-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.28rem; color: #fff; line-height: 1.2;
+    }
+    .service-desc { font-size: 0.81rem; color: rgba(255,255,255,0.42); line-height: 1.72; }
+    .service-arrow {
+      margin-top: auto; width: 30px; height: 30px; border-radius: 50%;
+      border: 1px solid rgba(197,223,192,0.18); color: var(--sage);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.25s;
+    }
+    .service-card:hover .service-arrow {
+      background: var(--sage); color: var(--ink); border-color: var(--sage);
+    }
 
-  /* ── HEADER ── */
-  .hdr {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 900;
-    background: var(--void);
-    border-bottom: 0.5px solid var(--rule-med);
-    transition: box-shadow 0.3s;
-  }
-  .hdr.shadow { box-shadow: 0 2px 40px rgba(0,0,0,0.6); }
-  .hdr-inner {
-    max-width: 1440px; margin: 0 auto;
-    padding: 0 48px;
-    height: 60px;
-    display: flex; align-items: center; justify-content: space-between; gap: 40px;
-  }
-  .hdr-left {
-    display: flex; align-items: center; gap: 24px;
-  }
-  .hdr-emblem {
-    width: 32px; height: 32px;
-    border: 1px solid var(--rule-str);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--gold);
-  }
-  .logo-wordmark {
-    font-family: 'Playfair Display', serif;
-    font-size: 0.9rem; font-weight: 600;
-    color: var(--ivory);
-    text-decoration: none; flex-shrink: 0;
-    letter-spacing: 0.02em;
-  }
-  .logo-sub {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.48rem; font-weight: 400;
-    letter-spacing: 0.25em; text-transform: uppercase;
-    color: var(--gold-dim); margin-top: 2px;
-  }
-  .nav-links { display: flex; gap: 32px; align-items: center; }
-  .nav-a {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem; font-weight: 400; letter-spacing: 0.18em;
-    text-transform: uppercase; color: var(--ink-dim);
-    text-decoration: none; transition: color 0.2s;
-    position: relative; padding-bottom: 2px;
-  }
-  .nav-a::after {
-    content: ''; position: absolute; bottom: -2px; left: 0;
-    width: 0; height: 0.5px; background: var(--gold);
-    transition: width 0.3s ease;
-  }
-  .nav-a:hover { color: var(--ivory); }
-  .nav-a:hover::after { width: 100%; }
-  .nav-cta {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem; font-weight: 500; letter-spacing: 0.15em;
-    text-transform: uppercase; color: var(--void);
-    background: var(--gold); padding: 9px 20px;
-    text-decoration: none;
-    transition: background 0.25s, color 0.25s;
-    border: 1px solid var(--gold);
-  }
-  .nav-cta:hover { background: transparent; color: var(--gold); }
+    /* ── Team ── */
+    .team-inner { padding: clamp(4rem, 7vw, 8rem) 0; }
+    .team-head {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: clamp(2.5rem, 4vw, 4rem); gap: 24px; flex-wrap: wrap;
+    }
+    .team-title {
+      font-size: clamp(2.2rem, 3.5vw, 3.6rem);
+      color: #fff; letter-spacing: -0.015em; margin-top: 14px;
+    }
+    .team-title em { color: var(--sage); font-style: italic; }
+    .team-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+    }
+    .team-card {
+      border-radius: 28px; overflow: hidden; position: relative;
+      aspect-ratio: 3/4; background: var(--ink);
+      transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), box-shadow 0.4s;
+    }
+    .team-card:hover { transform: translateY(-8px); box-shadow: 0 32px 64px rgba(11,11,11,0.18); }
+    .team-photo {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; object-position: top;
+      transition: transform 0.6s cubic-bezier(0.22,1,0.36,1), filter 0.4s;
+    }
+    .team-card:hover .team-photo { transform: scale(1.05); filter: brightness(0.65); }
+    .team-gradient {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(11,11,11,0.95) 0%, rgba(11,11,11,0.45) 45%, transparent 70%);
+    }
+    .team-exp {
+      position: absolute; top: 16px; right: 16px;
+      font-size: 0.65rem; font-weight: 700; color: var(--ink);
+      background: var(--sage); border-radius: 100px;
+      padding: 4px 10px; text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .team-body {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 22px 18px; display: flex; flex-direction: column; gap: 3px;
+    }
+    .team-spec { font-size: 0.63rem; color: var(--sage); text-transform: uppercase; letter-spacing: 0.1em; }
+    .team-name { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: #fff; line-height: 1.1; }
+    .team-role { font-size: 0.72rem; color: rgba(255,255,255,0.45); }
+    .team-social { margin-top: 8px; }
+    .team-social-btn {
+      width: 28px; height: 28px; border-radius: 8px;
+      border: 1px solid rgba(197,223,192,0.25); color: var(--sage);
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .team-social-btn:hover { background: var(--sage); color: var(--ink); }
 
-  /* ─── LEGAL NOTICE STRIP ─── */
-  .notice-strip {
-    overflow: hidden;
-    border-bottom: 0.5px solid var(--rule-med);
-    background: var(--crimson);
-    padding: 10px 0;
-    position: relative;
-  }
-  .notice-strip::before {
-    content: 'LEGAL NOTICE';
-    position: absolute; left: 0; top: 0; bottom: 0;
-    background: var(--void);
-    color: var(--gold);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.55rem; font-weight: 500; letter-spacing: 0.3em;
-    display: flex; align-items: center; padding: 0 20px;
-    z-index: 2; border-right: 1px solid var(--crimson);
-    white-space: nowrap;
-  }
-  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-  .notice-track {
-    display: flex; white-space: nowrap; width: max-content;
-    animation: marquee 35s linear infinite;
-    padding-left: 200px;
-  }
-  .notice-item {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem; font-weight: 400;
-    letter-spacing: 0.22em; text-transform: uppercase;
-    color: rgba(242,234,216,0.9); padding: 0 40px;
-    display: inline-flex; align-items: center; gap: 40px;
-  }
-  .notice-sep {
-    width: 4px; height: 4px;
-    background: rgba(242,234,216,0.4);
-    display: inline-block; transform: rotate(45deg);
-  }
+    /* ── Cases ── */
+    .cases-inner { padding: clamp(4rem, 7vw, 8rem) 0; }
+    .cases-head {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: clamp(2rem, 4vw, 3.5rem); gap: 24px; flex-wrap: wrap;
+    }
+    .cases-title {
+      font-size: clamp(2.2rem, 3.5vw, 3.6rem);
+      color: #fff; letter-spacing: -0.015em; margin-top: 14px;
+    }
+    .cases-title em { color: var(--sage); font-style: italic; }
+    .cases-stats {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 12px; margin-bottom: 32px;
+    }
+    .cstat-box {
+      background: rgba(255,255,255,0.06); backdrop-filter: blur(12px);
+      border: 1px solid rgba(197,223,192,0.15);
+      border-radius: 18px; padding: 22px 20px;
+      text-align: center;
+    }
+    .cstat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem; color: var(--sage); line-height: 1;
+    }
+    .cstat-lbl { font-size: 0.67rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 5px; }
+    .cases-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    }
+    .case-card {
+      background: rgba(255,255,255,0.07); backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px; padding: 26px 24px;
+      display: flex; flex-direction: column; gap: 10px;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .case-card:hover { transform: translateY(-4px); border-color: rgba(197,223,192,0.3); }
+    .case-card.highlight {
+      background: rgba(197,223,192,0.1); border-color: rgba(197,223,192,0.25);
+    }
+    .case-category {
+      font-size: 0.63rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--sage);
+    }
+    .case-card.highlight .case-category { color: var(--sage); }
+    .case-title { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; color: #fff; }
+    .case-card.highlight .case-title { color: #fff; }
+    .case-desc { font-size: 0.82rem; color: rgba(255,255,255,0.5); line-height: 1.7; flex: 1; }
+    .case-card.highlight .case-desc { color: rgba(255,255,255,0.6); }
+    .case-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08); }
+    .case-card.highlight .case-footer { border-top-color: rgba(197,223,192,0.15); }
+    .case-court { font-size: 0.72rem; color: rgba(255,255,255,0.35); }
+    .case-card.highlight .case-court { color: rgba(255,255,255,0.45); }
+    .case-year { font-size: 0.7rem; color: rgba(255,255,255,0.25); margin-top: 2px; }
+    .case-card.highlight .case-year { color: rgba(255,255,255,0.35); }
+    .case-outcome {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 0.7rem; font-weight: 700; color: var(--sage);
+      background: rgba(197,223,192,0.12); border-radius: 100px;
+      padding: 4px 10px;
+    }
+    .case-card.highlight .case-outcome { background: rgba(197,223,192,0.15); color: var(--sage); }
 
-  /* ── HERO / OPENING STATEMENT ── */
-  .hero-wrap {
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    border-bottom: 0.5px solid var(--rule-med);
-    padding-top: 60px;
-    position: relative;
-    background: var(--void);
-  }
+    /* ── Why / Regions ── */
+    .regions-inner-content { padding: clamp(4rem, 7vw, 8rem) 0; }
+    .regions-head { text-align: center; margin-bottom: clamp(2.5rem, 4vw, 4rem); }
+    .regions-title {
+      font-size: clamp(2.4rem, 4vw, 4rem);
+      color: #fff; letter-spacing: -0.015em; margin: 14px 0 12px;
+    }
+    .regions-title em { color: var(--sage); font-style: italic; }
+    .regions-sub { font-size: 0.95rem; color: rgba(255,255,255,0.45); }
+    .why-cards {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+      margin-bottom: 48px;
+    }
+    .why-card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(197,223,192,0.1);
+      border-radius: 20px; padding: 28px 22px;
+      display: flex; flex-direction: column; gap: 12px;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .why-card:hover { background: rgba(197,223,192,0.06); border-color: rgba(197,223,192,0.25); }
+    .why-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: rgba(197,223,192,0.1); color: var(--sage);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .why-title { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; color: #fff; }
+    .why-desc { font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.68; }
+    .regions-presence {
+      border: 1px solid rgba(197,223,192,0.1); border-radius: 20px; overflow: hidden;
+    }
+    .regions-presence-header {
+      padding: 14px 24px;
+      font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.16em;
+      color: rgba(197,223,192,0.4); background: rgba(197,223,192,0.04);
+      border-bottom: 1px solid rgba(197,223,192,0.1);
+    }
+    .regions-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+    }
+    .region-item {
+      padding: 20px 24px;
+      border-right: 1px solid rgba(197,223,192,0.08);
+      border-bottom: 1px solid rgba(197,223,192,0.08);
+    }
+    .region-item:nth-child(3n) { border-right: none; }
+    .region-item:nth-child(4), .region-item:nth-child(5), .region-item:nth-child(6) { border-bottom: none; }
+    .region-name { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: #fff; margin-bottom: 4px; }
+    .region-cities { font-size: 0.77rem; color: rgba(255,255,255,0.35); }
 
-  /* Decorative large case number watermark */
-  .hero-watermark {
-    position: absolute;
-    bottom: -60px; right: -40px;
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(14rem, 26vw, 24rem);
-    font-weight: 700; line-height: 1;
-    color: transparent;
-    -webkit-text-stroke: 0.5px rgba(196,154,60,0.07);
-    user-select: none; pointer-events: none;
-    white-space: nowrap; letter-spacing: -0.05em;
-  }
+    /* ── Testimonial / Leadership ── */
+    .testi-section { padding: clamp(4rem, 7vw, 8rem) 0; }
+    .testi-inner {
+      display: grid; grid-template-columns: 1fr 1.4fr; gap: 60px; align-items: start;
+    }
+    .testi-sidebar { position: sticky; top: 100px; display: flex; flex-direction: column; gap: 20px; }
+    .testi-sidebar-title {
+      font-size: clamp(2rem, 3.2vw, 3.2rem); color: #fff;
+      line-height: 1.08; margin-top: 12px;
+    }
+    .testi-sidebar-title em { color: var(--sage); font-style: italic; }
+    .testi-sidebar-body { font-size: 0.9rem; line-height: 1.8; color: rgba(255,255,255,0.5); }
+    .testi-nav { display: flex; align-items: center; gap: 10px; }
+    .testi-nav-btn {
+      width: 38px; height: 38px; border-radius: 50%;
+      border: 1px solid rgba(197,223,192,0.2); color: rgba(255,255,255,0.7);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .testi-nav-btn:hover { background: var(--sage); color: var(--ink); border-color: var(--sage); }
+    .testi-counter { font-size: 0.78rem; color: rgba(255,255,255,0.35); letter-spacing: 0.08em; }
+    .testi-progress {
+      height: 2px; background: rgba(197,223,192,0.15); border-radius: 100px; overflow: hidden;
+    }
+    .testi-bar { height: 100%; background: var(--sage); border-radius: 100px; transition: width 0.5s; }
+    .testi-dots { display: flex; gap: 6px; }
+    .testi-dot {
+      height: 6px; border-radius: 100px;
+      background: var(--sage); border: none; transition: width 0.3s;
+    }
+    .testi-card {
+      background: rgba(255,255,255,0.07); backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px; padding: 36px 32px;
+      animation: fadeSlide 0.45s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .testi-stars { color: var(--sage); font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 20px; }
+    .testi-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem; line-height: 1.55; color: #fff;
+      font-style: italic; margin-bottom: 24px;
+    }
+    .testi-author { display: flex; align-items: center; gap: 14px; }
+    .testi-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; object-position: top; }
+    .testi-name { font-weight: 600; font-size: 0.88rem; color: #fff; }
+    .testi-role { font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 2px; }
 
-  .hero-left {
-    border-right: 0.5px solid var(--rule-med);
-    display: flex; flex-direction: column;
-    padding: 72px 44px 60px;
-    justify-content: space-between;
-    background: var(--chamber);
-    position: relative;
-    overflow: hidden;
-  }
+    /* ── Blog ── */
+    .blog-inner { padding: clamp(4rem, 7vw, 8rem) 0; }
+    .blog-head {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: clamp(2rem, 4vw, 3.5rem); gap: 24px; flex-wrap: wrap;
+    }
+    .blog-title {
+      font-size: clamp(2.2rem, 3.5vw, 3.6rem);
+      color: #fff; letter-spacing: -0.015em; margin-top: 14px;
+    }
+    .blog-title em { color: var(--sage); font-style: italic; }
+    .blog-layout {
+      display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px;
+    }
+    .blog-featured {
+      border-radius: 24px; overflow: hidden; background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(197,223,192,0.1);
+      display: flex; flex-direction: column;
+      transition: border-color 0.3s;
+    }
+    .blog-featured:hover { border-color: rgba(197,223,192,0.3); }
+    .blog-featured-img {
+      width: 100%; aspect-ratio: 16/9; object-fit: cover;
+    }
+    .blog-featured-body { padding: 28px 26px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+    .blog-cat {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.14em; color: var(--sage);
+    }
+    .blog-title-main {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem; color: #fff; line-height: 1.2;
+    }
+    .blog-excerpt { font-size: 0.83rem; color: rgba(255,255,255,0.45); line-height: 1.7; }
+    .blog-meta { display: flex; align-items: center; gap: 12px; font-size: 0.72rem; color: rgba(255,255,255,0.3); margin-top: auto; }
+    .blog-meta-sep { opacity: 0.4; }
+    .blog-list { display: flex; flex-direction: column; gap: 12px; }
+    .blog-item {
+      border-radius: 18px; overflow: hidden; background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(197,223,192,0.1);
+      display: flex; transition: border-color 0.3s;
+    }
+    .blog-item:hover { border-color: rgba(197,223,192,0.25); }
+    .blog-item-img { width: 110px; flex-shrink: 0; object-fit: cover; }
+    .blog-item-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
+    .blog-item-cat { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--sage); }
+    .blog-item-title { font-family: 'Cormorant Garamond', serif; font-size: 1.08rem; color: #fff; line-height: 1.25; }
+    .blog-item-meta { font-size: 0.68rem; color: rgba(255,255,255,0.3); margin-top: auto; }
 
-  /* Case file tab at top of left panel */
-  .case-file-tab {
-    position: absolute; top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--crimson), var(--gold), var(--crimson));
-    opacity: 0.8;
-  }
+    /* ── FAQ ── */
+    .faq-inner { padding: clamp(4rem, 7vw, 8rem) 0; }
+    .faq-layout { display: grid; grid-template-columns: 1fr 1.6fr; gap: 60px; align-items: start; }
+    .faq-sidebar { position: sticky; top: 100px; display: flex; flex-direction: column; gap: 20px; }
+    .faq-sidebar-title {
+      font-size: clamp(2rem, 3.2vw, 3.2rem); color: #fff;
+      line-height: 1.08; margin-top: 12px;
+    }
+    .faq-sidebar-title em { color: var(--sage); font-style: italic; }
+    .faq-sidebar-body { font-size: 0.9rem; color: rgba(255,255,255,0.5); line-height: 1.8; }
+    .faq-cta { width: fit-content; }
+    .faq-list { display: flex; flex-direction: column; gap: 0; border: 1px solid rgba(197,223,192,0.15); border-radius: 20px; overflow: hidden; }
+    .faq-item { border-bottom: 1px solid rgba(197,223,192,0.1); }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-question {
+      width: 100%; display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 24px; text-align: left; gap: 16px;
+      font-size: 0.93rem; font-weight: 500; color: rgba(255,255,255,0.85);
+      transition: color 0.2s; background: rgba(255,255,255,0.04);
+    }
+    .faq-question:hover { color: var(--sage); background: rgba(197,223,192,0.05); }
+    .faq-toggle {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      border: 1px solid rgba(197,223,192,0.2);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.4); transition: all 0.3s;
+    }
+    .faq-toggle.open { background: var(--sage); border-color: var(--sage); color: var(--ink); transform: rotate(45deg); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; background: rgba(255,255,255,0.03); }
+    .faq-answer.open { max-height: 220px; }
+    .faq-answer-inner { padding: 0 24px 20px; }
+    .faq-answer-text { font-size: 0.87rem; color: rgba(255,255,255,0.5); line-height: 1.8; }
 
-  .hero-right {
-    display: flex; flex-direction: column;
-    justify-content: flex-end;
-    padding: 72px 80px 60px;
-    position: relative; overflow: hidden;
-  }
+    /* ── Contact ── */
+    .contact-inner { padding: clamp(4rem, 7vw, 8rem) 0; }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1.35fr; gap: 60px; align-items: start; }
+    .contact-left { display: flex; flex-direction: column; gap: 24px; position: sticky; top: 100px; }
+    .contact-title {
+      font-size: clamp(2.4rem, 4vw, 4rem);
+      color: #fff; letter-spacing: -0.015em; margin-top: 14px; line-height: 1.05;
+    }
+    .contact-title em { color: var(--sage); font-style: italic; }
+    .contact-sub { font-size: 0.9rem; color: rgba(255,255,255,0.45); line-height: 1.8; }
+    .contact-detail {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 16px; border-radius: 14px;
+      border: 1px solid rgba(197,223,192,0.12);
+      background: rgba(255,255,255,0.04);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .contact-detail:hover { border-color: rgba(197,223,192,0.3); background: rgba(197,223,192,0.06); }
+    .contact-detail-icon {
+      width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+      background: rgba(197,223,192,0.1); color: var(--sage);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .contact-detail-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.35); }
+    .contact-detail-value { font-size: 0.88rem; color: rgba(255,255,255,0.8); margin-top: 2px; font-weight: 500; }
+    .contact-hours {
+      background: rgba(197,223,192,0.05); border: 1px solid rgba(197,223,192,0.1);
+      border-radius: 16px; padding: 20px;
+    }
+    .contact-hours-title {
+      font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.14em;
+      color: rgba(197,223,192,0.45); font-weight: 600; margin-bottom: 14px;
+    }
+    .hours-row { display: flex; justify-content: space-between; font-size: 0.82rem; padding: 7px 0; border-bottom: 1px solid rgba(197,223,192,0.08); }
+    .hours-row:last-child { border-bottom: none; }
+    .hours-day { color: rgba(255,255,255,0.45); }
+    .hours-time { color: rgba(255,255,255,0.75); font-weight: 500; }
 
-  /* Horizontal ruling lines on hero right */
-  .hero-right::before {
-    content: '';
-    position: absolute; inset: 0;
-    background-image: repeating-linear-gradient(
-      0deg, transparent, transparent 35px,
-      rgba(196,154,60,0.04) 35px, rgba(196,154,60,0.04) 36px
-    );
-    pointer-events: none;
-  }
+    /* ── Form ── */
+    .contact-form-panel {
+      background: rgba(255,255,255,0.08); backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 28px; padding: 36px 32px;
+    }
+    .form-panel-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: #fff; margin-bottom: 6px; }
+    .form-panel-sub { font-size: 0.82rem; color: rgba(255,255,255,0.4); margin-bottom: 28px; }
+    .form-section-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
+    .chip-group { display: flex; flex-wrap: wrap; gap: 7px; }
+    .chip {
+      font-size: 0.77rem; padding: 6px 13px; border-radius: 100px;
+      border: 1px solid rgba(197,223,192,0.2); background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.6); transition: all 0.2s; font-family: inherit;
+    }
+    .chip:hover { border-color: var(--sage); color: var(--sage); }
+    .chip.active { background: var(--sage); border-color: var(--sage); color: var(--ink); font-weight: 600; }
+    .form-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-field { display: flex; flex-direction: column; gap: 5px; }
+    .form-field.full { grid-column: 1 / -1; }
+    .form-label { font-size: 0.72rem; font-weight: 600; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.06em; }
+    .form-input {
+      border: 1px solid rgba(197,223,192,0.15); border-radius: 12px;
+      padding: 11px 14px; font-size: 0.88rem; font-family: inherit;
+      color: #fff; background: rgba(255,255,255,0.06);
+      transition: border-color 0.2s, box-shadow 0.2s; resize: vertical;
+    }
+    .form-input::placeholder { color: rgba(255,255,255,0.25); }
+    .form-input:focus { outline: none; border-color: var(--sage); box-shadow: 0 0 0 3px rgba(197,223,192,0.1); }
+    .form-msg { padding: 12px 16px; border-radius: 10px; font-size: 0.85rem; font-weight: 500; }
+    .form-msg.success { background: rgba(197,223,192,0.15); color: var(--sage); border: 1px solid rgba(197,223,192,0.25); }
+    .form-msg.error { background: rgba(255,100,100,0.1); color: #ff8080; border: 1px solid rgba(255,100,100,0.2); }
+    .form-submit {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      background: var(--sage); color: var(--ink);
+      font-size: 0.88rem; font-weight: 700; letter-spacing: 0.05em;
+      padding: 14px 28px; border-radius: 100px; width: 100%;
+      transition: background 0.25s, transform 0.2s;
+    }
+    .form-submit:hover:not(:disabled) { background: #fff; transform: translateY(-1px); }
+    .form-submit:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  /* Red margin line */
-  .hero-right-margin {
-    position: absolute; left: 44px; top: 60px; bottom: 60px;
-    width: 1px; background: var(--crimson); opacity: 0.2;
-  }
+    /* ── Footer ── */
+    .footer-section { background: var(--ink); border-top: 1px solid rgba(197,223,192,0.08); padding: clamp(3rem, 5vw, 5rem) 0 0; }
+    .footer-top {
+      display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px;
+      padding-bottom: clamp(2.5rem, 4vw, 4rem);
+      border-bottom: 1px solid rgba(197,223,192,0.1);
+    }
+    .footer-brand { display: flex; flex-direction: column; gap: 16px; }
+    .footer-tagline { font-size: 0.84rem; color: rgba(255,255,255,0.4); line-height: 1.7; max-width: 260px; }
+    .footer-socials { display: flex; gap: 10px; }
+    .footer-social {
+      width: 34px; height: 34px; border-radius: 9px;
+      border: 1px solid rgba(197,223,192,0.18); color: rgba(255,255,255,0.45);
+      display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+    }
+    .footer-social:hover { background: rgba(197,223,192,0.1); color: var(--sage); border-color: var(--sage); }
+    .footer-col { display: flex; flex-direction: column; gap: 14px; }
+    .footer-col-title { font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--sage); font-weight: 700; }
+    .footer-links { display: flex; flex-direction: column; gap: 9px; }
+    .footer-link { font-size: 0.83rem; color: rgba(255,255,255,0.4); transition: color 0.2s; }
+    .footer-link:hover { color: rgba(255,255,255,0.8); }
+    .footer-contact-item { display: flex; align-items: flex-start; gap: 10px; }
+    .footer-contact-icon { color: var(--sage); flex-shrink: 0; margin-top: 1px; }
+    .footer-contact-text { font-size: 0.81rem; color: rgba(255,255,255,0.4); line-height: 1.5; transition: color 0.2s; }
+    .footer-contact-item:hover .footer-contact-text { color: rgba(255,255,255,0.7); }
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 0; gap: 16px; flex-wrap: wrap;
+    }
+    .footer-copy { font-size: 0.76rem; color: rgba(255,255,255,0.25); }
+    .footer-web { font-size: 0.76rem; color: rgba(255,255,255,0.25); transition: color 0.2s; }
+    .footer-web:hover { color: var(--sage); }
 
-  .hero-h1 {
-    font-size: clamp(3.4rem, 6.5vw, 6.5rem);
-    line-height: 1.0; color: var(--ivory);
-    margin-bottom: 32px;
-    font-family: 'Playfair Display', serif;
-  }
-  .hero-h1 em {
-    font-style: italic; color: var(--gold);
-  }
-  .hero-body {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.1rem; font-weight: 300; line-height: 1.8;
-    color: var(--parch); max-width: 520px;
-    font-style: italic;
-  }
+    /* ── WhatsApp ── */
+    .wa-fab { position: fixed; bottom: 24px; right: 24px; z-index: 980; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+    .wa-panel {
+      width: min(90vw, 360px); border-radius: 20px; overflow: hidden;
+      background: #fff; border: 1px solid var(--border);
+      box-shadow: 0 24px 64px rgba(11,11,11,0.18);
+      transition: all 0.35s cubic-bezier(0.22,1,0.36,1);
+      transform-origin: bottom right;
+    }
+    .wa-panel.closed { opacity: 0; transform: scale(0.9) translateY(16px); pointer-events: none; }
+    .wa-panel.open { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
+    .wa-header { background: var(--ink); padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; }
+    .wa-header-info { display: flex; align-items: center; gap: 10px; }
+    .wa-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--sage); color: var(--ink); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .wa-name { font-size: 0.86rem; font-weight: 600; color: #fff; }
+    .wa-status { font-size: 0.68rem; color: var(--sage); }
+    .wa-close { width: 28px; height: 28px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.55); display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .wa-close:hover { border-color: var(--sage); color: var(--sage); }
+    .wa-body { padding: 16px; background: #f8fbf7; display: flex; flex-direction: column; gap: 12px; }
+    .wa-bubble { background: #fff; border: 1px solid var(--border); border-radius: 16px; border-top-left-radius: 4px; padding: 12px 14px; font-size: 0.84rem; line-height: 1.6; color: var(--ink); max-width: 90%; box-shadow: 0 2px 8px rgba(11,11,11,0.05); }
+    .wa-quick { display: flex; flex-wrap: wrap; gap: 6px; }
+    .wa-quick-btn { font-size: 0.74rem; padding: 6px 11px; border-radius: 100px; border: 1px solid var(--border); background: #fff; color: var(--ink); transition: all 0.2s; text-align: left; }
+    .wa-quick-btn:hover, .wa-quick-btn.selected { background: var(--sage); border-color: var(--sage); }
+    .wa-input-row { display: flex; gap: 8px; align-items: flex-end; }
+    .wa-textarea { flex: 1; resize: none; border: 1px solid var(--border); border-radius: 12px; padding: 9px 13px; font-size: 0.84rem; font-family: inherit; color: var(--ink); background: #fff; transition: border-color 0.2s; }
+    .wa-textarea:focus { outline: none; border-color: var(--sage); }
+    .wa-send { width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0; background: var(--sage); color: var(--ink); display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .wa-send:hover { background: var(--ink); color: var(--sage); }
+    .wa-label { background: var(--ink); color: var(--sage); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.1em; padding: 5px 13px; border-radius: 100px; font-weight: 700; }
+    .wa-toggle { width: 54px; height: 54px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 32px rgba(11,11,11,0.3); transition: all 0.3s; border: none; }
+    .wa-toggle.closed { background: var(--sage); color: var(--ink); }
+    .wa-toggle.closed:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 18px 40px rgba(197,223,192,0.4); }
+    .wa-toggle.open-state { background: var(--ink); color: var(--sage); }
 
-  /* Animated case-file opening effect */
-  @keyframes fileUnfold {
-    0% { clip-path: inset(0 0 100% 0); opacity: 0; }
-    100% { clip-path: inset(0 0 0% 0); opacity: 1; }
-  }
-  .case-file-reveal {
-    animation: fileUnfold 1.2s cubic-bezier(0.16,1,0.3,1) 0.4s both;
-  }
+    /* ── Mobile ── */
+    .mobile-panel { position: fixed; inset: 0; z-index: 800; background: var(--ink); display: flex; flex-direction: column; }
+    .mobile-nav-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 0; border-bottom: 1px solid rgba(197,223,192,0.08);
+      font-family: 'Cormorant Garamond', serif; font-size: 2rem;
+      color: rgba(255,255,255,0.75); transition: color 0.2s; text-decoration: none;
+      animation: mobileNavIn 0.4s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .mobile-nav-item:hover { color: var(--sage); }
+    @keyframes mobileNavIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .mobile-num { font-family: 'DM Sans', sans-serif; font-size: 0.68rem; color: rgba(197,223,192,0.35); letter-spacing: 0.1em; }
 
-  /* ── DOSSIER / ABOUT ── */
-  .dossier-section {
-    border-bottom: 0.5px solid var(--rule-med);
-    background: var(--chamber);
-    position: relative;
-  }
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .hero-stats-row { flex-wrap: wrap; }
+      .about-inner { grid-template-columns: 1fr; }
+      .about-right { display: none; }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .team-grid { grid-template-columns: repeat(2, 1fr); }
+      .cases-stats { grid-template-columns: repeat(2, 1fr); }
+      .cases-grid { grid-template-columns: repeat(2, 1fr); }
+      .why-cards { grid-template-columns: repeat(2, 1fr); }
+      .regions-grid { grid-template-columns: repeat(2, 1fr); }
+      .testi-inner { grid-template-columns: 1fr; }
+      .testi-sidebar { position: static; }
+      .blog-layout { grid-template-columns: 1fr; }
+      .faq-layout { grid-template-columns: 1fr; }
+      .faq-sidebar { position: static; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .contact-left { position: static; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .nav-links { display: none; }
+      .header-cta-desktop { display: none; }
+    }
+    @media (max-width: 640px) {
+      .services-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: 1fr 1fr; }
+      .cases-grid { grid-template-columns: 1fr; }
+      .cases-stats { grid-template-columns: repeat(2, 1fr); }
+      .why-cards { grid-template-columns: 1fr; }
+      .regions-grid { grid-template-columns: 1fr; }
+      .form-fields { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .hero-title { font-size: clamp(3rem, 14vw, 5rem); }
+    }
+  `}</style>
+);
 
-  .dossier-tabs {
-    display: flex; border-bottom: 0.5px solid var(--rule-med);
-    overflow: hidden;
-  }
-  .dossier-tab {
-    flex: 1; padding: 20px 32px;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.62rem; font-weight: 400; letter-spacing: 0.2em;
-    text-transform: uppercase; background: none; border: none;
-    border-right: 0.5px solid var(--rule-med);
-    color: var(--ink-dim); cursor: pointer;
-    transition: all 0.3s; position: relative;
-    text-align: left;
-  }
-  .dossier-tab:last-child { border-right: none; }
-  .dossier-tab::after {
-    content: '';
-    position: absolute; bottom: -0.5px; left: 0; right: 0;
-    height: 2px; background: var(--gold);
-    transform: scaleX(0); transform-origin: left;
-    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
-  }
-  .dossier-tab.active { color: var(--ivory); background: var(--bench); }
-  .dossier-tab.active::after { transform: scaleX(1); }
+// ─── Fixed Background (Law-themed SVG) ────────────────────────────────────────
 
-  .tab-num {
-    display: block;
-    font-size: 0.45rem; letter-spacing: 0.3em;
-    color: var(--gold-dim); margin-bottom: 4px;
-  }
-
-  .dossier-body {
-    display: grid; grid-template-columns: 240px 1fr 1fr;
-    min-height: 70vh;
-  }
-  .dossier-index {
-    border-right: 0.5px solid var(--rule-med);
-    padding: 60px 32px;
-    background: var(--bench);
-    display: flex; flex-direction: column; gap: 32px;
-    position: relative; overflow: hidden;
-  }
-  .dossier-index::before {
-    content: attr(data-label);
-    position: absolute; bottom: 40px; right: -20px;
-    font-family: 'Playfair Display', serif;
-    font-size: 7rem; font-weight: 700;
-    color: rgba(196,154,60,0.05);
-    transform: rotate(90deg); transform-origin: bottom right;
-    white-space: nowrap; pointer-events: none;
-  }
-
-  .dossier-col {
-    padding: 60px 52px;
-    border-right: 0.5px solid var(--rule-med);
-    display: flex; flex-direction: column;
-    position: relative;
-  }
-  .dossier-col-last { border-right: none; }
-
-  .portrait-frame {
-    width: 100%; aspect-ratio: 3/4; overflow: hidden;
-    position: relative;
-    border: 1px solid var(--rule-med);
-    background: var(--bench);
-  }
-  .portrait-frame img {
-    width: 100%; height: 100%; object-fit: cover;
-    filter: sepia(40%) contrast(1.1) brightness(0.85) saturate(0.8);
-    transition: transform 0.7s ease;
-    mix-blend-mode: luminosity;
-  }
-  .portrait-frame:hover img { transform: scale(1.03); }
-  .portrait-caption {
-    position: absolute; bottom: 0; left: 0; right: 0;
-    padding: 24px 20px;
-    background: linear-gradient(transparent, rgba(0,0,0,0.85));
-    border-top: 1px solid var(--rule-med);
-  }
-
-  /* ── STATS BAND ── */
-  .stats-band {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    border-bottom: 0.5px solid var(--rule-med);
-    background: var(--bench);
-  }
-  .stat-cell {
-    padding: 48px 40px;
-    border-right: 0.5px solid var(--rule-med);
-    position: relative; overflow: hidden;
-    transition: background 0.3s;
-  }
-  .stat-cell:last-child { border-right: none; }
-  .stat-cell:hover { background: var(--mahogany); }
-  .stat-num {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.8rem, 5vw, 4.2rem);
-    font-weight: 400; line-height: 1; color: var(--gold);
-    letter-spacing: -0.03em;
-  }
-  .stat-num sup {
-    font-size: 0.38em; vertical-align: super;
-    color: var(--gold-dim);
-  }
-  .stat-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.62rem; font-weight: 400; letter-spacing: 0.14em;
-    text-transform: uppercase; color: var(--ink-dim); margin-top: 10px;
-  }
-  .stat-line {
-    position: absolute; bottom: 0; left: 0;
-    height: 1px; background: var(--gold); width: 0;
-    transition: width 0.6s ease;
-  }
-  .stat-cell:hover .stat-line { width: 100%; }
-
-  /* ── TRIAL TIMELINE / PROCESS ── */
-  .timeline-section {
-    border-bottom: 0.5px solid var(--rule-med);
-    background: var(--void);
-  }
-  .timeline-header {
-    display: grid; grid-template-columns: 1fr 1fr;
-    border-bottom: 0.5px solid var(--rule-med);
-  }
-  .timeline-header-left {
-    padding: 60px 72px;
-    border-right: 0.5px solid var(--rule-med);
-    background: var(--chamber);
-  }
-  .timeline-header-right { padding: 60px 72px; }
-
-  /* Scrubber */
-  .timeline-scrubber {
-    display: flex; align-items: center; gap: 0;
-    border-bottom: 0.5px solid var(--rule-med);
-    overflow-x: auto;
-    background: var(--bench);
-  }
-  .timeline-scrubber::-webkit-scrollbar { display: none; }
-  .scrubber-step {
-    flex: 1; min-width: 180px; padding: 20px 28px;
-    border-right: 0.5px solid var(--rule-med);
-    cursor: pointer; transition: all 0.3s;
-    position: relative;
-  }
-  .scrubber-step:last-child { border-right: none; }
-  .scrubber-step.active { background: var(--mahogany); }
-  .scrubber-step::after {
-    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-    height: 2px; background: var(--gold);
-    transform: scaleX(0); transform-origin: left;
-    transition: transform 0.4s;
-  }
-  .scrubber-step.active::after { transform: scaleX(1); }
-  .scrubber-num {
-    font-family: 'DM Mono', monospace; font-size: 0.5rem;
-    letter-spacing: 0.25em; color: var(--gold-dim);
-    text-transform: uppercase; margin-bottom: 6px;
-  }
-  .scrubber-label {
-    font-family: 'DM Mono', monospace; font-size: 0.65rem;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--ink-dim); transition: color 0.3s;
-  }
-  .scrubber-step.active .scrubber-label { color: var(--ivory); }
-
-  .timeline-panel {
-    min-height: 360px;
-    display: flex;
-  }
-  .timeline-panel-num {
-    width: 120px; flex-shrink: 0;
-    border-right: 0.5px solid var(--rule-med);
-    display: flex; align-items: flex-start; justify-content: center;
-    padding-top: 60px; background: var(--bench);
-  }
-  .timeline-big-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 8rem; font-weight: 700; line-height: 1;
-    color: rgba(196,154,60,0.12); letter-spacing: -0.05em;
-    writing-mode: vertical-rl; transform: rotate(180deg);
-  }
-  .timeline-content {
-    flex: 1; padding: 64px 72px;
-    animation: fadeSlide 0.5s cubic-bezier(0.16,1,0.3,1);
-    position: relative;
-  }
-  @keyframes fadeSlide {
-    from { opacity: 0; transform: translateX(20px); }
-    to { opacity: 1; transform: translateX(0); }
-  }
-  .timeline-notes-bar {
-    width: 280px; flex-shrink: 0;
-    border-left: 0.5px solid var(--rule-med);
-    padding: 40px 32px;
-    background: var(--chamber);
-  }
-
-  /* ── PRACTICE AREAS REGISTER ── */
-  .register-section {
-    border-bottom: 0.5px solid var(--rule-med);
-    background: var(--void);
-  }
-  .register-header {
-    padding: 64px 72px 52px;
-    border-bottom: 0.5px solid var(--rule-med);
-    display: flex; align-items: flex-end; justify-content: space-between; gap: 40px;
-    background: var(--chamber);
-    position: relative;
-  }
-  /* Ledger lines in register header */
-  .register-header::after {
-    content: '';
-    position: absolute; inset: 0;
-    background-image: repeating-linear-gradient(
-      0deg, transparent, transparent 31px,
-      rgba(196,154,60,0.03) 31px, rgba(196,154,60,0.03) 32px
-    );
-    pointer-events: none;
-  }
-
-  .register-ledger {
-    display: grid;
-    grid-template-columns: 64px 1fr 1fr 1fr;
-  }
-  .register-ledger-head {
-    display: contents;
-  }
-  .register-col-head {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.52rem; font-weight: 500; letter-spacing: 0.25em;
-    text-transform: uppercase; color: var(--gold-dim);
-    padding: 16px 28px;
-    border-right: 0.5px solid var(--rule-med);
-    border-bottom: 0.5px solid var(--rule-str);
-    background: var(--bench);
-  }
-  .register-col-head:last-child { border-right: none; }
-  .register-col-head:first-child { padding-left: 20px; text-align: center; }
-
-  .register-row {
-    display: contents;
-  }
-  .register-cell {
-    padding: 28px 28px;
-    border-right: 0.5px solid var(--rule-med);
-    border-bottom: 0.5px solid var(--rule-med);
-    transition: background 0.2s;
-    position: relative; overflow: hidden;
-  }
-  .register-cell:last-child { border-right: none; }
-  .register-row-num {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem; color: var(--gold-dim);
-    text-align: center; letter-spacing: 0.1em;
-  }
-
-  /* Ink underline hover effect */
-  .register-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem; color: var(--ivory); margin-bottom: 8px;
-    position: relative; display: inline-block;
-  }
-  .register-title::after {
-    content: '';
-    position: absolute; bottom: -2px; left: 0;
-    width: 0; height: 1px;
-    background: var(--gold);
-    transition: width 0.4s cubic-bezier(0.16,1,0.3,1);
-  }
-  .register-cell:hover .register-title::after { width: 100%; }
-  .register-cell:hover { background: var(--bench); }
-
-  /* Urgent matters highlight */
-  .register-urgent {
-    background: rgba(139,26,26,0.12) !important;
-    border-left: 2px solid var(--crimson) !important;
-  }
-  .register-urgent:hover { background: rgba(139,26,26,0.2) !important; }
-
-  /* ── JUDGMENT ARCHIVE / RESULTS ── */
-  .archive-section {
-    border-bottom: 0.5px solid var(--rule-med);
-    background: var(--chamber);
-  }
-  .archive-grid {
-    display: grid; grid-template-columns: 300px 1fr;
-  }
-  .archive-sidebar {
-    border-right: 0.5px solid var(--rule-med);
-    padding: 72px 44px;
-    background: var(--bench);
-    display: flex; flex-direction: column;
-    position: sticky; top: 60px; align-self: start;
-  }
-  .archive-filter-head {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.54rem; font-weight: 500; letter-spacing: 0.28em;
-    text-transform: uppercase; color: var(--gold-dim);
-    margin-bottom: 12px;
-    padding-bottom: 12px;
-    border-bottom: 0.5px solid var(--rule-med);
-  }
-  .archive-filter-btn {
-    display: block; width: 100%;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem; letter-spacing: 0.14em;
-    text-transform: uppercase; color: var(--ink-dim);
-    background: none; border: none; cursor: pointer;
-    text-align: left; padding: 10px 0;
-    border-bottom: 0.5px solid rgba(196,154,60,0.08);
-    transition: color 0.2s;
-  }
-  .archive-filter-btn:hover, .archive-filter-btn.active { color: var(--gold); }
-  .archive-filter-btn.active { padding-left: 12px; border-left: 1px solid var(--gold); }
-
-  .archive-list { flex: 1; }
-  .archive-row {
-    border-bottom: 0.5px solid var(--rule-med);
-    padding: 36px 52px;
-    display: grid; grid-template-columns: 1fr auto;
-    gap: 24px; align-items: start;
-    transition: background 0.25s; cursor: pointer;
-    position: relative;
-  }
-  .archive-row::before {
-    content: '';
-    position: absolute; left: 0; top: 0; bottom: 0;
-    width: 2px; background: var(--gold);
-    transform: scaleY(0); transform-origin: bottom;
-    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
-  }
-  .archive-row:hover { background: var(--bench); }
-  .archive-row:hover::before { transform: scaleY(1); }
-
-  /* Simulated PDF scan effect on hover */
-  .archive-preview {
-    display: none; position: absolute;
-    right: 100px; top: 50%; transform: translateY(-50%);
-    width: 120px; height: 160px;
-    background: var(--chamber);
-    border: 1px solid var(--rule-str);
-    z-index: 10; pointer-events: none;
-    overflow: hidden;
-  }
-  .archive-row:hover .archive-preview { display: block; }
-  .archive-preview-inner {
-    padding: 10px 8px;
-    height: 100%;
-    background-image: repeating-linear-gradient(
-      0deg, transparent, transparent 11px,
-      rgba(196,154,60,0.06) 11px, rgba(196,154,60,0.06) 12px
-    );
-  }
-  .archive-preview-line {
-    height: 5px; margin-bottom: 7px;
-    background: rgba(196,154,60,0.15); border-radius: 1px;
-  }
-  .archive-preview-line:first-child { width: 80%; background: rgba(196,154,60,0.3); }
-  .archive-preview-line:nth-child(2) { width: 60%; }
-  .archive-preview-line:nth-child(3) { width: 90%; }
-  .archive-preview-line:nth-child(4) { width: 70%; }
-  .archive-preview-line:nth-child(5) { width: 85%; }
-  .archive-preview-line:nth-child(6) { width: 55%; }
-
-  .archive-cat {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.54rem; font-weight: 400; letter-spacing: 0.22em;
-    text-transform: uppercase; color: var(--gold-dim); margin-bottom: 8px;
-  }
-  .archive-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.2rem; color: var(--ivory); margin-bottom: 8px; line-height: 1.25;
-  }
-  .archive-court {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.62rem; color: var(--ink-dim); font-weight: 300;
-    letter-spacing: 0.08em;
-  }
-  .archive-badge {
-    background: rgba(74,104,85,0.2); color: #6a9978;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.56rem; font-weight: 400; letter-spacing: 0.14em;
-    text-transform: uppercase; padding: 7px 14px;
-    white-space: nowrap;
-    border: 0.5px solid rgba(74,104,85,0.3);
-  }
-
-  /* ── FAQ ── */
-  .faq-section {
-    border-bottom: 0.5px solid var(--rule-med);
-    background: var(--void);
-  }
-  .faq-grid { display: grid; grid-template-columns: 1fr 1.4fr; min-height: 60vh; }
-  .faq-left {
-    border-right: 0.5px solid var(--rule-med);
-    padding: 80px 72px;
-    background: var(--chamber);
-    display: flex; flex-direction: column; justify-content: flex-end;
-  }
-  .faq-right { padding: 0; background: var(--bench); }
-  .faq-item { border-bottom: 0.5px solid var(--rule-med); }
-  .faq-trigger {
-    width: 100%; display: flex; align-items: center; justify-content: space-between;
-    gap: 32px; padding: 28px 48px;
-    background: none; border: none; cursor: pointer; text-align: left;
-    transition: background 0.2s;
-  }
-  .faq-trigger:hover { background: var(--mahogany); }
-  .faq-q {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.15rem; font-weight: 400; color: var(--ivory); line-height: 1.35;
-    font-style: italic;
-  }
-  .faq-icon {
-    width: 28px; height: 28px; flex-shrink: 0;
-    border: 0.5px solid var(--rule-str); border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--gold); transition: transform 0.35s, border-color 0.25s;
-  }
-  .faq-icon.open { transform: rotate(45deg); border-color: var(--gold); }
-  .faq-body {
-    padding: 0 48px 28px;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1rem; line-height: 1.85; color: var(--parch);
-    font-weight: 300; max-height: 0; overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.16,1,0.3,1), padding 0.3s;
-  }
-  .faq-body.open { max-height: 400px; }
-
-  /* ── CONTACT / PETITION FILING ── */
-  .contact-section {
-    border-bottom: 0.5px solid var(--rule-med);
-    background: var(--void);
-  }
-  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; }
-  .contact-left {
-    border-right: 0.5px solid var(--rule-med);
-    padding: 80px 72px;
-    display: flex; flex-direction: column; justify-content: space-between;
-    background: var(--chamber); color: var(--ivory);
-    position: relative; overflow: hidden;
-  }
-  .contact-left::before {
-    content: '';
-    position: absolute; inset: 0;
-    background-image: repeating-linear-gradient(
-      0deg, transparent, transparent 31px,
-      rgba(196,154,60,0.04) 31px, rgba(196,154,60,0.04) 32px
-    );
-    pointer-events: none;
-  }
-  .contact-right { padding: 80px 72px; background: var(--bench); }
-  .contact-info-row {
-    padding: 20px 0; border-bottom: 0.5px solid var(--rule-med);
-    display: flex; gap: 20px; align-items: flex-start;
-    text-decoration: none; color: inherit;
-    transition: opacity 0.2s; position: relative;
-  }
-  .contact-info-row:hover { opacity: 0.75; }
-  .contact-info-icon {
-    width: 30px; height: 30px; flex-shrink: 0;
-    border: 0.5px solid var(--rule-str); border-radius: 50%;
-    display: flex; align-items: center; justify-content: center; color: var(--gold);
-  }
-  .field-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.52rem; font-weight: 500; letter-spacing: 0.25em;
-    text-transform: uppercase; color: var(--gold-dim); margin-bottom: 8px; display: block;
-  }
-  .field-input {
-    width: 100%; background: transparent;
-    border: none; border-bottom: 0.5px solid var(--rule-str);
-    padding: 10px 0; font-size: 0.92rem;
-    font-family: 'Cormorant Garamond', sans-serif; color: var(--ivory);
-    outline: none; transition: border-color 0.2s;
-  }
-  .field-input:focus { border-color: var(--gold); }
-  .field-input::placeholder { color: var(--ink-fade); }
-  .field-textarea {
-    width: 100%; background: transparent;
-    border: none; border-bottom: 0.5px solid var(--rule-str);
-    padding: 10px 0; font-size: 0.92rem; resize: none;
-    font-family: 'Cormorant Garamond', sans-serif; color: var(--ivory);
-    outline: none; transition: border-color 0.2s;
-  }
-  .field-textarea:focus { border-color: var(--gold); }
-  .field-textarea::placeholder { color: var(--ink-fade); }
-  .submit-btn {
-    display: inline-flex; align-items: center; gap: 12px;
-    background: var(--gold); color: var(--void);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.62rem; font-weight: 500; letter-spacing: 0.18em;
-    text-transform: uppercase; padding: 14px 28px;
-    border: 1px solid var(--gold); cursor: pointer; transition: all 0.25s;
-  }
-  .submit-btn:hover { background: transparent; color: var(--gold); }
-
-  /* ── FOOTER ── */
-  .footer {
-    padding: 64px 0 0;
-    background: var(--bench);
-    border-top: 0.5px solid var(--rule-med);
-  }
-  .footer-main {
-    display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
-    padding: 0 72px 64px;
-    gap: 64px;
-    border-bottom: 0.5px solid var(--rule-med);
-  }
-  .footer-nav-head {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.52rem; font-weight: 500; letter-spacing: 0.28em;
-    text-transform: uppercase; color: var(--gold-dim); margin-bottom: 20px;
-  }
-  .footer-nav-a {
-    display: block;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem; color: var(--ink-dim);
-    text-decoration: none; padding: 7px 0;
-    letter-spacing: 0.06em;
-    transition: color 0.2s;
-  }
-  .footer-nav-a:hover { color: var(--gold); }
-  .footer-base {
-    padding: 22px 72px;
-    display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: wrap; gap: 16px;
-  }
-
-  /* ── WHATSAPP ── */
-  .wa-bubble {
-    position: fixed; bottom: 28px; right: 28px; z-index: 980;
-    display: flex; flex-direction: column; align-items: flex-end;
-  }
-  .wa-panel {
-    margin-bottom: 12px; width: min(92vw, 340px);
-    background: var(--bench); border: 0.5px solid var(--rule-str);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-    transition: opacity 0.3s, transform 0.3s; transform-origin: bottom right;
-  }
-  .wa-panel.closed { opacity: 0; transform: scale(0.92); pointer-events: none; }
-  .wa-panel.open   { opacity: 1; transform: scale(1); }
-  .wa-header {
-    padding: 14px 18px; background: var(--mahogany);
-    display: flex; align-items: center; justify-content: space-between;
-    border-bottom: 0.5px solid var(--rule-str);
-  }
-  .wa-btn {
-    width: 48px; height: 48px; border-radius: 0;
-    background: var(--gold); border: none; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-    transition: background 0.25s, transform 0.2s;
-    color: var(--void);
-  }
-  .wa-btn:hover { background: var(--crimson); color: var(--ivory); transform: scale(1.05); }
-
-  /* ── MOBILE ── */
-  @media (max-width: 1100px) {
-    .hero-wrap { grid-template-columns: 1fr; }
-    .hero-left { border-right: none; border-bottom: 0.5px solid var(--rule-med); min-height: unset; padding: 60px 32px 40px; }
-    .hero-right { padding: 48px 32px 60px; }
-    .hero-watermark { display: none; }
-    .dossier-body { grid-template-columns: 1fr; }
-    .dossier-index { display: none; }
-    .dossier-col { padding: 48px 32px; border-right: none; border-bottom: 0.5px solid var(--rule-med); }
-    .stats-band { grid-template-columns: repeat(2, 1fr); }
-    .stat-cell { border-bottom: 0.5px solid var(--rule-med); }
-    .timeline-header { grid-template-columns: 1fr; }
-    .timeline-header-left { border-right: none; border-bottom: 0.5px solid var(--rule-med); padding: 48px 32px; }
-    .timeline-header-right { padding: 40px 32px; }
-    .timeline-content { padding: 40px 32px; }
-    .timeline-notes-bar { display: none; }
-    .register-ledger { grid-template-columns: 32px 1fr; }
-    .register-cell:nth-child(4n), .register-cell:nth-child(4n-1) { display: none; }
-    .register-col-head:nth-child(3), .register-col-head:nth-child(4) { display: none; }
-    .archive-grid { grid-template-columns: 1fr; }
-    .archive-sidebar { position: static; border-right: none; border-bottom: 0.5px solid var(--rule-med); }
-    .archive-row { padding: 28px 28px; }
-    .archive-preview { display: none !important; }
-    .faq-grid { grid-template-columns: 1fr; }
-    .faq-left { border-right: none; border-bottom: 0.5px solid var(--rule-med); padding: 48px 32px; }
-    .faq-trigger { padding: 24px 28px; }
-    .faq-body { padding: 0 28px 24px; }
-    .contact-grid { grid-template-columns: 1fr; }
-    .contact-left { border-right: none; border-bottom: 0.5px solid var(--rule-med); padding: 60px 32px; }
-    .contact-right { padding: 60px 32px; }
-    .footer-main { grid-template-columns: 1fr 1fr; padding: 0 32px 48px; gap: 40px; }
-    .footer-base { padding: 24px 32px; }
-    .nav-links { display: none; }
-    .hdr-inner { padding: 0 24px; }
-    .register-header { padding: 48px 32px; flex-direction: column; align-items: flex-start; }
-    .dossier-tabs { overflow-x: auto; }
-  }
-
-  @media (max-width: 640px) {
-    .stats-band { grid-template-columns: 1fr 1fr; }
-    .footer-main { grid-template-columns: 1fr; }
-  }
-`;
-
-// ─── Data ─────────────────────────────────────────────────────────────────────
-
-const SERVICES = [
-  { icon: "§", num: "001", title: "Criminal Law", desc: "Bail, FIR quashing, white-collar crime defense, cybercrime & financial fraud litigation before High Court and Sessions Courts.", urgent: false },
-  { icon: "⚖", num: "002", title: "Civil Litigation", desc: "Property disputes, injunction suits, partition matters, contractual recovery & civil appeals.", urgent: false },
-  { icon: "📜", num: "003", title: "Writs & Constitutional", desc: "PIL matters, writ petitions, and challenges to governmental or statutory actions before constitutional courts.", urgent: true },
-  { icon: "🏠", num: "004", title: "Property & Real Estate", desc: "Title verification, due diligence, sale drafting & real estate dispute resolution.", urgent: false },
-  { icon: "⚖", num: "005", title: "Family & Matrimonial", desc: "Divorce, child custody, guardianship, maintenance & domestic violence proceedings.", urgent: false },
-  { icon: "§", num: "006", title: "Arbitration & ADR", desc: "Arbitration, mediation, commercial settlement & enforcement of arbitral awards.", urgent: false },
-  { icon: "🏛", num: "007", title: "Corporate Advisory", desc: "Contract drafting, compliance advisory, shareholder agreements & legal due diligence.", urgent: false },
-  { icon: "⚖", num: "008", title: "Consumer Protection", desc: "Consumer complaints, deficiency claims, product liability disputes and compensation recovery.", urgent: false },
-  { icon: "§", num: "009", title: "MCOP & Rent Control", desc: "Motor accident compensation claims, insurance disputes, eviction & fair rent proceedings.", urgent: false },
-];
-
-const RESULTS = [
-  { cat: "Criminal Law", title: "Anticipatory Bail Granted in 72 Hours", court: "Madras High Court", year: "2024", outcome: "Bail Granted", type: "Criminal" },
-  { cat: "Property Dispute", title: "Multi-Acre Title Dispute — Clear Decree", court: "District Court, Coimbatore", year: "2023", outcome: "Decree in Favour", type: "Civil" },
-  { cat: "Consumer Protection", title: "₹18 Lakh Builder Compensation", court: "State Consumer Commission", year: "2024", outcome: "₹18L Awarded", type: "Consumer" },
-  { cat: "Family Law", title: "Full Child Custody Secured", court: "Family Court, Chennai", year: "2023", outcome: "Custody Secured", type: "Family" },
-  { cat: "Writ Petition", title: "Reinstatement of Wrongfully Terminated Employee", court: "Madras High Court", year: "2024", outcome: "Reinstatement", type: "Writ" },
-  { cat: "MCOP", title: "₹42 Lakh Motor Accident Compensation", court: "Motor Accidents Tribunal", year: "2023", outcome: "₹42L Awarded", type: "MCOP" },
-];
-
-const PROCESS_STEPS = [
-  { num: "01", stage: "Filing", title: "Case Filing & Initial Intake", body: "Every matter begins with an undivided consultation. We map the full legal landscape, document the facts, and establish the grounds before forming any position — no assumptions, no templates." },
-  { num: "02", stage: "Review", title: "Legal Opinion & Case Review", body: "A clear written legal opinion. Every option laid out with its risks, timeline, and cost. Documentary review, precedent analysis, and strategic assessment. You decide — fully informed." },
-  { num: "03", stage: "Argument", title: "Drafting & Court Preparation", body: "Precision drafting of every petition, brief and supporting document. Structured for the forum, argued from day one. Every argument considered, every contingency prepared." },
-  { num: "04", stage: "Judgment", title: "Advocacy & Oral Arguments", body: "Focused courtroom advocacy before the bench. Cross-examination, witness handling, and oral argument — your case receives our full and undivided attention through every hearing." },
-  { num: "05", stage: "Execution", title: "Resolution & Execution", body: "Timely, decisive outcomes. Whether a verdict, settlement or injunction — we close every matter clearly, execute decrees where required, and keep you informed to the last step." },
-];
-
-const FAQS = [
-  { q: "What forums do you appear before?", a: "We regularly appear before the Madras High Court, District Courts, Metropolitan Courts, Tribunals, and Consumer Disputes Redressal Commissions across Tamil Nadu." },
-  { q: "Why choose AGD Law Associates?", a: "We are a boutique firm — which means personalized attention, direct access to counsel, and no file being handed to a junior without your knowledge. Ethical, transparent, and efficient." },
-  { q: "What is your approach to a new matter?", a: "Every matter begins with a detailed consultation. We provide a written legal opinion, a proposed timeline, and an honest assessment of outcomes before filing anything." },
-  { q: "What are your office hours?", a: "Monday to Friday: 10:00 AM – 6:30 PM. Saturday: 11:00 AM – 5:00 PM. Second and last Saturdays are holidays." },
-  { q: "Where do you have active presence?", a: "Chennai, Tambaram, Avadi, Coimbatore, Tiruppur, Bangalore, and districts including Chengalpattu, Tiruvallur, Kancheepuram, and Dindigul." },
-];
-
-const NOTICE_ITEMS = [
-  "Recent Judgment — Anticipatory Bail Granted · Madras HC · Jan 2024",
-  "Filing Deadline — Consumer Commission · 30 Apr 2024",
-  "Court Update — Madras High Court resumes vacation bench · May 2024",
-  "Recent Judgment — Decree in Title Dispute · Coimbatore District Court",
-  "Filing Deadline — Writ Petition Window Open · HC Registry",
-  "Court Update — E-filing mandatory for High Court matters from June 2024",
-];
-
-// ─── Hooks ─────────────────────────────────────────────────────────────────────
-
-function useFade(threshold = 0.08) {
-  const ref = useRef(null);
-  const [vis, setVis] = useState(false);
-  useEffect(() => {
-    const el = ref.current; if (!el) return;
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVis(true); obs.disconnect(); } }, { threshold });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-  return [ref, vis];
-}
-
-function Fade({ children, className = "", delay = 0, style = {} }) {
-  const [ref, vis] = useFade(0.06);
+function FixedBackground() {
   return (
-    <div ref={ref} className={`fade-up${vis ? " visible" : ""} ${className}`}
-      style={{ ...style, transitionDelay: `${delay}ms` }}>
-      {children}
+    <div className="fixed-bg" aria-hidden="true" style={{ position: "fixed", inset: 0, zIndex: 0, background: "#0b0b0b" }}>
+      {/* Background image */}
+      <img
+        src="https://images.pexels.com/photos/9685285/pexels-photo-9685285.jpeg"
+        alt="bg"
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 1 }}
+      />
+      {/* Black overlay for readability */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          background: "rgba(0,0,0,0.68)",
+          zIndex: 2,
+        }}
+      />
+      <div className="fixed-bg-glow" style={{ zIndex: 3 }} />
+      <div className="fixed-bg-vignette" style={{ zIndex: 4 }} />
     </div>
   );
 }
 
-// ─── Header ────────────────────────────────────────────────────────────────────
+// ─── Data ─────────────────────────────────────────────────────────────────────
+
+const services = [
+  { title: "Criminal Law", description: "Bail, criminal trials, FIR quashing, cheque dishonour, white-collar crime defense, and cybercrime litigation.", icon: Scale },
+  { title: "Civil Litigation", description: "Property disputes, partition matters, injunction suits, contractual disputes, execution proceedings, and civil appeals.", icon: BookOpen },
+  { title: "Writs & Constitutional", description: "Writ petitions, PIL matters, and challenges to governmental or statutory actions before constitutional courts.", icon: Shield },
+  { title: "Consumer Protection", description: "Consumer complaints, deficiency in service claims, product liability disputes, and consumer litigation.", icon: CheckCircle },
+  { title: "Property & Real Estate", description: "Title verification, due diligence, sale and lease drafting, registration support, and dispute resolution.", icon: MapPin },
+  { title: "Family & Matrimonial", description: "Divorce matters (mutual and contested), child custody, guardianship, maintenance, and domestic violence proceedings.", icon: Users },
+  { title: "Arbitration & ADR", description: "Arbitration, mediation, conciliation, commercial dispute settlement, and enforcement of arbitral awards.", icon: Award },
+  { title: "Corporate Advisory", description: "Contract drafting, compliance advisory, business dispute strategy, partnership agreements, and legal due diligence.", icon: BookOpen },
+  { title: "MCOP & Rent Control", description: "Motor accident compensation claims, insurance disputes, eviction proceedings, fair rent fixation, and rent control litigation.", icon: Clock },
+];
+
+const teamMembers = [
+  { name: "AGD Bala Kumar", role: "Managing Counsel", specialization: "Criminal & Civil Litigation", experience: "12+ Years", img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&h=800&fit=crop&crop=faces" },
+  { name: "Priya Sundaram", role: "Senior Associate", specialization: "Family & Matrimonial Law", experience: "8 Years", img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&h=800&fit=crop&crop=faces" },
+  { name: "Karthik Raj", role: "Associate Counsel", specialization: "Corporate & Commercial Advisory", experience: "5 Years", img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&h=800&fit=crop&crop=faces" },
+  { name: "Meena Lakshmi", role: "Associate Advocate", specialization: "Property & Real Estate Law", experience: "4 Years", img: "https://images.unsplash.com/photo-1580894732444-8ecded7900cd?w=600&h=800&fit=crop&crop=faces" },
+];
+
+const caseResults = [
+  { category: "Criminal Law", title: "Anticipatory Bail Granted", description: "Secured anticipatory bail in a high-profile financial fraud matter at Madras High Court within 72 hours of filing.", outcome: "Bail Granted", court: "Madras High Court", year: "2024", highlight: true },
+  { category: "Property Dispute", title: "Title Dispute Resolved", description: "Successfully defended a multi-acre agricultural property title dispute spanning 3 generations, resulting in clear title decree.", outcome: "Decree in Favour", court: "District Court, Coimbatore", year: "2023", highlight: false },
+  { category: "Consumer Protection", title: "₹18 Lakh Compensation", description: "Obtained ₹18 lakh compensation for a client against a leading builder for deficiency in service and delayed possession.", outcome: "₹18L Awarded", court: "State Consumer Commission", year: "2024", highlight: false },
+  { category: "Family Law", title: "Child Custody Secured", description: "Represented a mother in a contested custody matter, securing full custody with defined visitation rights.", outcome: "Custody Secured", court: "Family Court, Chennai", year: "2023", highlight: true },
+  { category: "Writ Petition", title: "Service Matter Relief", description: "Succeeded in a writ petition challenging arbitrary termination of a government employee, securing reinstatement with back wages.", outcome: "Reinstatement Ordered", court: "Madras High Court", year: "2024", highlight: false },
+  { category: "MCOP", title: "Motor Accident Claim", description: "Achieved ₹42 lakh compensation for a family that lost their breadwinner in a road accident through MCOP proceedings.", outcome: "₹42L Awarded", court: "Motor Accidents Tribunal", year: "2023", highlight: false },
+];
+
+const blogPosts = [
+  { slug: "anticipatory-bail-guide-india", category: "Criminal Law", title: "Anticipatory Bail in India: What It Is and When You Need It", excerpt: "A pre-arrest bail can be the difference between freedom and custody. We break down Section 438 CrPC, who qualifies, and how the process works.", author: "AGD Bala Kumar", date: "March 18, 2025", readTime: "6 min read", img: "https://images.unsplash.com/photo-1589994965851-a8f479c573a9?w=800&h=500&fit=crop", featured: true },
+  { slug: "property-due-diligence-checklist", category: "Property Law", title: "The Essential Due Diligence Checklist Before Buying Property in Tamil Nadu", excerpt: "Title verification, encumbrance certificates, patta, and chitta — exactly what to check before signing.", author: "Meena Lakshmi", date: "Feb 28, 2025", readTime: "8 min read", img: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&h=500&fit=crop", featured: false },
+  { slug: "divorce-mutual-consent-process", category: "Family Law", title: "Mutual Consent Divorce in India: Timeline, Process & What to Expect", excerpt: "From the first motion to the final decree, a full walkthrough of the uncontested divorce process.", author: "Priya Sundaram", date: "Feb 10, 2025", readTime: "7 min read", img: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&h=500&fit=crop", featured: false },
+  { slug: "consumer-court-how-to-file", category: "Consumer Protection", title: "How to File a Consumer Complaint: A Step-by-Step Guide", excerpt: "Defective goods, service failures, builder delays — find out which forum to approach.", author: "Karthik Raj", date: "Jan 22, 2025", readTime: "5 min read", img: "https://plus.unsplash.com/premium_photo-1661720120987-9723da4de350?w=800&h=500&fit=crop", featured: false },
+];
+
+const faqs = [
+  { q: "What forums do you represent clients before?", a: "We regularly appear before the Madras High Court, District Courts, Metropolitan Courts, Tribunals, and Consumer Disputes Redressal Commissions." },
+  { q: "Why choose AGD Law Associates?", a: "We are a boutique firm offering personalized attention, strong litigation and advisory expertise, ethical and transparent practice, efficient case management, and active Pan-Tamil Nadu plus inter-state presence." },
+  { q: "What is your legal approach?", a: "Our structured process includes detailed case analysis, clear legal opinion and roadmap, transparent communication, strong courtroom advocacy, and focus on timely resolution." },
+  { q: "What are your office hours?", a: "Monday to Friday: 10:00 AM to 6:30 PM. Saturday: 11:00 AM to 5:00 PM. Second and last Saturdays are holidays." },
+  { q: "Where do you have active practice presence?", a: "Our active litigation presence includes Chennai, Tambaram, Avadi, Coimbatore, Tiruppur, and Bangalore, along with districts such as Chengalpattu, Tiruvallur, Kancheepuram, and Dindigul." },
+];
+
+const serviceOptions = [
+  { value: "criminal_law", label: "Criminal Law" },
+  { value: "civil_litigation", label: "Civil Litigation" },
+  { value: "writ_constitutional", label: "Writs & Constitutional" },
+  { value: "consumer_protection", label: "Consumer Protection" },
+  { value: "property_real_estate", label: "Property & Real Estate" },
+  { value: "family_matrimonial", label: "Family & Matrimonial" },
+  { value: "arbitration_adr", label: "Arbitration & ADR" },
+  { value: "corporate_advisory", label: "Corporate Advisory" },
+  { value: "mcop_rcop", label: "MCOP & Rent Control" },
+];
+
+const budgetOptions = [
+  { value: "immediate", label: "Immediate Assistance" },
+  { value: "within_week", label: "Within This Week" },
+  { value: "scheduled", label: "Scheduled Consultation" },
+];
+
+// ─── SVG Icons ────────────────────────────────────────────────────────────────
+
+const FacebookIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.1 0 2.24.2 2.24.2v2.46H15.2c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12Z" />
+  </svg>
+);
+
+const XIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M18.9 2H22l-6.8 7.8L23 22h-6.2l-4.9-6.9L5.9 22H2.8l7.3-8.3L1 2h6.3l4.4 6.3L18.9 2Zm-1.1 18h1.7L6.4 3.9H4.6L17.8 20Z" />
+  </svg>
+);
+
+// ─── Header ───────────────────────────────────────────────────────────────────
 
 function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [mobOpen, setMobOpen] = useState(false);
 
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 30);
-    window.addEventListener("scroll", fn, { passive: true });
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = mobOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [mobOpen]);
-
-  const links = [
-    { href: "#about", label: "Counsel Profile" },
-    { href: "#process", label: "Trial Timeline" },
-    { href: "#practice", label: "Practice Register" },
-    { href: "#results", label: "Judgment Archive" },
-    { href: "#contact", label: "File a Petition" },
+  const navLinks = [
+    { href: "#about", label: "About" },
+    { href: "#services", label: "Services" },
+    { href: "#team", label: "Team" },
+    { href: "#cases", label: "Case Results" },
+    { href: "#blog", label: "Insights" },
+    { href: "#faq", label: "FAQ" },
+    { href: "#contact", label: "Contact" },
   ];
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <>
-      <header className={`hdr${scrolled ? " shadow" : ""}`}>
-        <div className="hdr-inner">
-          <div className="hdr-left">
-            <div className="hdr-emblem">
-              <Scale size={14} />
+      <header className={`header ${scrolled ? "scrolled" : ""}`}>
+        <div className="container">
+          <div className="header-inner">
+            <a href="#" className="logo-mark">
+              <span className="logo-glyph">A</span>
+              <span>AGD Law Associates</span>
+            </a>
+            <nav className="nav-links" aria-label="Main navigation">
+              {navLinks.map((l) => (
+                <a key={l.href} href={l.href} className="nav-link">{l.label}</a>
+              ))}
+            </nav>
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <a href="#contact" className="header-cta header-cta-desktop">
+                Consultation <ArrowRight size={13} />
+              </a>
+              <button
+                type="button"
+                aria-label="Toggle menu"
+                aria-expanded={menuOpen}
+                onClick={() => setMenuOpen((v) => !v)}
+                className="mobile-menu-btn"
+                style={{ display: "none", alignItems: "center", justifyContent: "center", width: "38px", height: "38px", borderRadius: "9px", border: "1px solid rgba(197,223,192,0.2)", background: "transparent", color: "#fff", cursor: "pointer" }}
+              >
+                {menuOpen ? <X size={17} /> : <Menu size={17} />}
+              </button>
             </div>
-            <Link href="/" style={{ textDecoration: "none" }}>
-              <div className="logo-wordmark">
-                AGD Law Associates
-                <div className="logo-sub">Advocates & Legal Consultants · Est. 2012</div>
-              </div>
-            </Link>
           </div>
-          <nav className="nav-links">
-            {links.map(l => <a key={l.href} href={l.href} className="nav-a">{l.label}</a>)}
-            <a href="tel:+919994388855" className="nav-cta">+91 99943 88855</a>
-          </nav>
-          <button onClick={() => setMobOpen(v => !v)}
-            style={{ display: "none", background: "none", border: "none", cursor: "pointer", padding: 6 }}
-            className="mob-hdr-btn">
-            <style>{`.mob-hdr-btn { display: flex !important; flex-direction: column; gap: 5px; } @media(min-width:1100px){.mob-hdr-btn{display:none !important;}}`}</style>
-            {mobOpen ? <X size={20} color="var(--gold)" /> : <>
-              <span style={{ width: 22, height: 1, background: "var(--gold)", display: "block" }} />
-              <span style={{ width: 14, height: 1, background: "var(--crimson)", display: "block" }} />
-              <span style={{ width: 22, height: 1, background: "var(--gold)", display: "block" }} />
-            </>}
-          </button>
         </div>
       </header>
-
-      <div style={{
-        position: "fixed", inset: 0, zIndex: 850, background: "var(--void)",
-        paddingTop: 100, padding: "100px 36px 40px",
-        display: "flex", flexDirection: "column",
-        opacity: mobOpen ? 1 : 0, pointerEvents: mobOpen ? "auto" : "none",
-        transform: mobOpen ? "translateX(0)" : "translateX(100%)",
-        transition: "opacity 0.35s ease, transform 0.35s ease",
-        borderLeft: "1px solid var(--rule-str)",
-      }}>
-        {/* Red margin line */}
-        <div style={{ position: "absolute", left: 80, top: 0, bottom: 0, width: 1, background: "var(--crimson)", opacity: 0.25 }} />
-        {links.map((l, i) => (
-          <a key={l.href} href={l.href} onClick={() => setMobOpen(false)} style={{
-            fontFamily: "'Playfair Display', serif",
-            fontSize: "clamp(1.6rem, 5vw, 2.4rem)", fontWeight: 400,
-            color: "var(--ivory)", textDecoration: "none",
-            padding: "18px 0", borderBottom: "0.5px solid var(--rule-med)",
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            opacity: mobOpen ? 1 : 0,
-            transform: mobOpen ? "translateX(0)" : "translateX(30px)",
-            transition: `opacity 0.4s ${i * 60}ms, transform 0.4s ${i * 60}ms`,
-          }}>
-            {l.label}
-            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.52rem", letterSpacing: "0.25em", color: "var(--gold-dim)" }}>0{i + 1}</span>
-          </a>
-        ))}
-        <a href="tel:+919994388855" style={{ marginTop: 36, display: "inline-block", background: "var(--gold)", color: "var(--void)", fontFamily: "'DM Mono', monospace", fontSize: "0.72rem", fontWeight: 500, letterSpacing: "0.15em", textTransform: "uppercase", padding: "14px 28px", textDecoration: "none" }}>
-          Call Chambers Now
-        </a>
-      </div>
+      <style>{`@media(max-width:1024px){.mobile-menu-btn{display:inline-flex!important;}}`}</style>
+      {menuOpen && (
+        <div className="mobile-panel">
+          <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "70px" }}>
+            <span className="logo-mark">
+              <span className="logo-glyph">A</span>
+              AGD Law Associates
+            </span>
+            <button type="button" onClick={() => setMenuOpen(false)} style={{ width: "38px", height: "38px", border: "1px solid rgba(197,223,192,0.2)", borderRadius: "9px", background: "transparent", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+              <X size={17} />
+            </button>
+          </div>
+          <nav className="container" style={{ flex: 1, paddingTop: "16px" }}>
+            {navLinks.map((l, i) => (
+              <a
+                key={l.href} href={l.href} className="mobile-nav-item"
+                style={{ animationDelay: `${0.06 + i * 0.06}s` }}
+                onClick={() => setMenuOpen(false)}
+              >
+                <span>{l.label}</span>
+                <span className="mobile-num">0{i + 1}</span>
+              </a>
+            ))}
+            <a href="#contact" onClick={() => setMenuOpen(false)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginTop: "32px", padding: "16px", borderRadius: "14px", background: "#c5dfc0", color: "#0b0b0b", fontWeight: "700", fontSize: "0.88rem", letterSpacing: "0.06em", textDecoration: "none", textTransform: "uppercase" }}>
+              Schedule Consultation <ArrowRight size={14} />
+            </a>
+          </nav>
+          <div className="container" style={{ paddingBottom: "24px", paddingTop: "24px", borderTop: "1px solid rgba(197,223,192,0.08)" }}>
+            <p style={{ fontSize: "0.7rem", color: "rgba(197,223,192,0.3)", textTransform: "uppercase", letterSpacing: "0.12em" }}>© {new Date().getFullYear()} AGD Law Associates</p>
+          </div>
+        </div>
+      )}
     </>
   );
 }
 
-// ─── Hero / Opening Statement ──────────────────────────────────────────────────
+// ─── Hero ─────────────────────────────────────────────────────────────────────
 
 function Hero() {
   return (
-    <section style={{ paddingTop: 60 }}>
-      <div className="hero-wrap">
-        {/* Left column — advocate introduction */}
-        <div className="hero-left">
-          <div className="case-file-tab" />
-
-          <div>
-            <Fade>
-              <div style={{ marginBottom: 32 }}>
-                <div className="case-ref" style={{ marginBottom: 8 }}>Case No. AGD/2024/Chennai</div>
-                <div style={{ height: "0.5px", background: "var(--rule-med)" }} />
-              </div>
-            </Fade>
-            <Fade delay={80}>
-              <p className="mono" style={{ marginBottom: 20, color: "var(--gold-dim)" }}>Appearing before</p>
-              <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 40 }}>
-                {["Madras High Court", "District Courts", "Consumer Commissions", "Tribunals"].map(f => (
-                  <div key={f} style={{ display: "flex", alignItems: "center", gap: 14, padding: "8px 0", borderBottom: "0.5px solid var(--rule)" }}>
-                    <div style={{ width: 1, height: 16, background: "var(--crimson)", opacity: 0.6, flexShrink: 0 }} />
-                    <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.68rem", letterSpacing: "0.1em", color: "var(--parch)", fontWeight: 400 }}>{f}</span>
-                  </div>
-                ))}
-              </div>
-            </Fade>
+    <section className="hero" id="hero">
+      <div className="hero-ornament" aria-hidden="true" />
+      <div className="container">
+        <div className="hero-content">
+          <div className="hero-eyebrow">
+            <Scale size={11} />
+            Boutique Law Firm · Chennai · Est. 2016
           </div>
-
-          <Fade delay={200}>
-            <div>
-              <div style={{ width: 32, height: 1, background: "var(--gold)", marginBottom: 20, opacity: 0.6 }} />
-              <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "0.95rem", fontStyle: "italic", color: "var(--parch2)", lineHeight: 1.7, marginBottom: 28 }}>
-                "Precision-driven advocacy,<br />transparent communication,<br />timely resolution."
-              </div>
-              <div className="case-ref">
-                AGD Bala Kumar — Managing Counsel
-              </div>
-            </div>
-          </Fade>
-
-          <Fade delay={320}>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 36 }}>
-              <a href="#contact"
-                style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "var(--gold)", color: "var(--void)", fontFamily: "'DM Mono', monospace", fontSize: "0.62rem", fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", padding: "13px 22px", textDecoration: "none", border: "1px solid var(--gold)", transition: "all 0.25s" }}
-                onMouseEnter={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--gold)"; }}
-                onMouseLeave={e => { e.currentTarget.style.background = "var(--gold)"; e.currentTarget.style.color = "var(--void)"; }}>
-                ⚖ Present Your Case
-              </a>
-              <a href="tel:+919994388855"
-                style={{ display: "inline-flex", alignItems: "center", gap: 10, color: "var(--ink-dim)", fontFamily: "'DM Mono', monospace", fontSize: "0.62rem", fontWeight: 400, letterSpacing: "0.1em", padding: "10px 0", textDecoration: "none", borderBottom: "0.5px solid var(--rule)", width: "fit-content", transition: "color 0.2s, border-color 0.2s" }}
-                onMouseEnter={e => { e.currentTarget.style.color = "var(--gold)"; e.currentTarget.style.borderBottomColor = "var(--gold)"; }}
-                onMouseLeave={e => { e.currentTarget.style.color = "var(--ink-dim)"; e.currentTarget.style.borderBottomColor = "var(--rule)"; }}>
-                <Phone size={12} /> +91 99943 88855
-              </a>
-            </div>
-          </Fade>
-        </div>
-
-        {/* Right column — opening statement */}
-        <div className="hero-right">
-          <div className="hero-watermark" aria-hidden>LAW</div>
-          <div className="hero-right-margin" />
-
-          <div style={{ position: "relative", zIndex: 2 }}>
-            <Fade delay={100}>
-              <div style={{ display: "flex", alignItems: "center", gap: 20, marginBottom: 36 }}>
-                <span className="mono" style={{ color: "var(--gold-dim)" }}>Opening Statement</span>
-                <div style={{ flex: 1, maxWidth: 60, height: "0.5px", background: "var(--gold)", opacity: 0.4 }} />
-                <span className="case-ref">Boutique Litigation Practice · 12+ Yrs</span>
-              </div>
-            </Fade>
-
-            <div className="hero-h1">
-              <Fade delay={160} className="case-file-reveal">Your rights.</Fade>
-              <Fade delay={240}><em>Our fight.</em></Fade>
-              <Fade delay={320}>
-                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.85rem", fontStyle: "normal", color: "var(--ink-dim)", marginTop: 16, display: "block", letterSpacing: "0.06em", lineHeight: 1.5, fontWeight: 400 }}>
-                  Precision law across Tamil Nadu.
-                </div>
-              </Fade>
-            </div>
-
-            <Fade delay={440}>
-              <p className="hero-body" style={{ marginTop: 36, paddingTop: 36, borderTop: "0.5px solid var(--rule-med)" }}>
-                AGD Law Associates is a focused litigation and advisory practice led by Advocate AGD Bala Kumar — delivering rigorous legal representation across 9 practice areas with 12+ years of dedicated courtroom experience.
-              </p>
-            </Fade>
+          <h1 className="hero-title">
+            AGD<br /><em>Law</em>
+          </h1>
+          <p className="hero-firm-name">Associates</p>
+          <p className="hero-tagline">
+            Precision-driven litigation and advisory across criminal, civil, consumer,
+            constitutional, and commercial matters — Tamil Nadu &amp; beyond.
+          </p>
+          <div className="hero-actions">
+            <a href="#contact" className="btn-primary">
+              Request Consultation <ArrowRight size={14} />
+            </a>
+            <a href="tel:+919994388855" className="btn-ghost">
+              <Phone size={14} /> +91 99943 88855
+            </a>
           </div>
-
-          <Fade delay={560}>
-            <div style={{ display: "flex", gap: "clamp(24px,4vw,56px)", marginTop: 60, paddingTop: 28, borderTop: "0.5px solid var(--rule-med)" }}>
-              {[["12+", "Years"], ["500+", "Matters"], ["9", "Practice Areas"], ["6", "Cities"]].map(([v, l]) => (
-                <div key={l}>
-                  <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(1.4rem,3vw,2rem)", fontWeight: 400, lineHeight: 1, color: "var(--gold)", letterSpacing: "-0.02em" }}>{v}</div>
-                  <div className="case-ref" style={{ marginTop: 6 }}>{l}</div>
-                </div>
-              ))}
+          <div className="hero-stats-row">
+            <div className="hero-stat">
+              <div className="hero-stat-num">2016</div>
+              <div className="hero-stat-lbl">Established</div>
             </div>
-          </Fade>
+            <div className="hero-stat">
+              <div className="hero-stat-num">12+</div>
+              <div className="hero-stat-lbl">Years Practice</div>
+            </div>
+            <div className="hero-stat">
+              <div className="hero-stat-num">500+</div>
+              <div className="hero-stat-lbl">Cases Handled</div>
+            </div>
+            <div className="hero-stat">
+              <div className="hero-stat-num">9</div>
+              <div className="hero-stat-lbl">Practice Areas</div>
+            </div>
+          </div>
         </div>
+      </div>
+      <div className="hero-scroll-hint" aria-hidden="true">
+        <div className="hero-scroll-line" />
+        <span className="hero-scroll-lbl">Scroll</span>
       </div>
     </section>
   );
 }
 
-// ─── Legal Notice Strip ────────────────────────────────────────────────────────
+// ─── Ticker ───────────────────────────────────────────────────────────────────
 
-function NoticeStrip() {
-  const items = [...NOTICE_ITEMS, ...NOTICE_ITEMS];
+function Ticker() {
+  const items = ["Criminal Law", "Civil Litigation", "Constitutional Remedies", "Consumer Protection", "Property Law", "Family Law", "Arbitration & ADR", "Corporate Advisory", "MCOP & RCOP"];
+  const doubled = [...items, ...items];
   return (
-    <div className="notice-strip">
-      <div className="notice-track">
-        {items.map((t, i) => (
-          <span key={i} className="notice-item">
-            {t} <span className="notice-sep" />
+    <div className="ticker-wrap">
+      <div className="ticker-track">
+        {doubled.map((item, i) => (
+          <span key={i} className="ticker-item">
+            {item}<span className="ticker-sep"> ◆ </span>
           </span>
         ))}
       </div>
@@ -1227,531 +1195,554 @@ function NoticeStrip() {
   );
 }
 
-// ─── About / Counsel Dossier ──────────────────────────────────────────────────
+// ─── About ────────────────────────────────────────────────────────────────────
 
 function About() {
-  const [activeTab, setActiveTab] = useState(0);
-  const tabs = [
-    { label: "Profile", sub: "01" },
-    { label: "Experience", sub: "02" },
-    { label: "Jurisdiction", sub: "03" },
-  ];
-
-  const tabContent = [
-    <div key="profile" style={{ display: "contents" }}>
-      <div className="dossier-col">
-        <Fade>
-          <div className="portrait-frame">
-            <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?w=700&h=950&fit=crop&crop=faces" alt="AGD Bala Kumar" />
-            <div className="portrait-caption">
-              <div className="case-ref" style={{ color: "var(--gold)", marginBottom: 4 }}>Managing Counsel</div>
-              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "1rem", fontWeight: 400, color: "#fff" }}>AGD Bala Kumar</div>
-            </div>
-          </div>
-        </Fade>
-        <Fade delay={100} style={{ marginTop: 36 }}>
-          <div style={{ padding: "18px 20px", background: "rgba(196,154,60,0.06)", borderLeft: "1px solid var(--gold)", position: "relative" }}>
-            <div className="stamp" style={{ position: "absolute", top: 12, right: 12, fontSize: "0.42rem" }}>Verified</div>
-            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "0.95rem", fontStyle: "italic", color: "var(--parch2)", lineHeight: 1.75 }}>
-              "We are a boutique firm with personalized attention and no-file-left-with-junior guarantee."
-            </p>
-          </div>
-        </Fade>
-      </div>
-      <div className="dossier-col dossier-col-last">
-        <div>
-          <Fade>
-            <p className="mono" style={{ marginBottom: 16, color: "var(--gold-dim)" }}>The Firm</p>
-            <h2 style={{ fontSize: "clamp(1.8rem, 3vw, 2.8rem)", color: "var(--ivory)", marginBottom: 28, lineHeight: 1.1, maxWidth: 420 }}>
-              A practice built on <em style={{ color: "var(--gold)", fontStyle: "italic" }}>precision</em> and integrity.
+  const credentials = ["Integrity & Professionalism", "Confidentiality & Trust", "Client-Focused Service", "Excellence in Advocacy", "Timely Legal Solutions"];
+  return (
+    <section className="panel" id="about">
+      <div className="container">
+        <div className="about-inner">
+          <div className="about-left">
+            <span className="section-label">About Us</span>
+            <h2 className="about-pretitle">
+              Your legal matter<br />deserves <em>precision</em>
             </h2>
-          </Fade>
-          <Fade delay={100}>
-            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.05rem", lineHeight: 1.85, color: "var(--parch2)", marginBottom: 20, fontWeight: 300, maxWidth: 440 }}>
-              AGD Law Associates is a focused litigation and advisory practice based in Tamil Nadu, led by Advocate AGD Bala Kumar with over 12 years of courtroom experience spanning criminal, civil, constitutional, and corporate matters.
+            <p className="about-body">
+              Founded in 2016, AGD Law Associates is a boutique law firm delivering
+              high-quality litigation and advisory services across Tamil Nadu and beyond.
+              Led by AGD Bala Kumar with over 12 years of practice, our firm combines
+              courtroom strength with strategic advisory for complex, sensitive, and
+              high-impact legal matters.
             </p>
-            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.05rem", lineHeight: 1.85, color: "var(--parch2)", fontWeight: 300, maxWidth: 440 }}>
-              Our vision: to become a trusted boutique law firm recognized for excellence, integrity, and client satisfaction — through transparent communication and timely resolution.
+            <p className="about-body">
+              We believe every client deserves personalized attention, clear communication,
+              and a legal team genuinely invested in their outcome. From first consultation
+              to final resolution, we stand by you.
             </p>
-          </Fade>
-        </div>
-        <Fade delay={200} style={{ marginTop: 52, paddingTop: 36, borderTop: "0.5px solid var(--rule-med)" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {["Pan-Tamil Nadu + Inter-State Presence", "Direct Counsel Accessibility — Always", "Written Legal Opinions as Standard", "Transparent Fee Communication"].map((f, i) => (
-              <div key={f} style={{ display: "flex", alignItems: "center", gap: 14, padding: "10px 0", borderBottom: "0.5px solid var(--rule)" }}>
-                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.5rem", color: "var(--gold-dim)", letterSpacing: "0.2em", flexShrink: 0 }}>0{i + 1}</span>
-                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.68rem", color: "var(--parch)", fontWeight: 300, letterSpacing: "0.06em" }}>{f}</span>
-              </div>
-            ))}
-          </div>
-        </Fade>
-      </div>
-    </div>,
-
-    <div key="exp" style={{ display: "contents" }}>
-      <div className="dossier-col" style={{ gridColumn: "span 2" }}>
-        <Fade>
-          <p className="mono" style={{ marginBottom: 28, color: "var(--gold-dim)" }}>Professional Record</p>
-          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-            {[
-              { year: "2012–Present", role: "Managing Partner, AGD Law Associates", detail: "Pan-Tamil Nadu litigation across criminal, civil, constitutional and consumer matters." },
-              { year: "2009–2012", role: "Associate Counsel, Chambers of Sr. Advocate", detail: "Assisted in High Court matters — criminal appeals, writ petitions, and civil disputes." },
-              { year: "2008", role: "Enrolled — Bar Council of Tamil Nadu", detail: "Advocate on Record, Madras High Court." },
-            ].map((e, i) => (
-              <Fade key={e.year} delay={i * 80}>
-                <div style={{ display: "grid", gridTemplateColumns: "140px 1fr", gap: 32, padding: "28px 0", borderBottom: "0.5px solid var(--rule-med)" }}>
-                  <div className="case-ref" style={{ paddingTop: 4 }}>{e.year}</div>
-                  <div>
-                    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.1rem", color: "var(--ivory)", marginBottom: 8 }}>{e.role}</div>
-                    <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "0.95rem", color: "var(--parch2)", lineHeight: 1.7, fontStyle: "italic" }}>{e.detail}</div>
-                  </div>
+            <div className="about-stats">
+              {[{ num: "2016", lbl: "Established" }, { num: "10+", lbl: "Advocates" }, { num: "6", lbl: "Active Cities" }].map((s) => (
+                <div className="about-stat-box" key={s.lbl}>
+                  <div className="about-stat-num">{s.num}</div>
+                  <div className="about-stat-lbl">{s.lbl}</div>
                 </div>
-              </Fade>
-            ))}
-          </div>
-        </Fade>
-      </div>
-    </div>,
-
-    <div key="juris" style={{ display: "contents" }}>
-      <div className="dossier-col" style={{ gridColumn: "span 2" }}>
-        <Fade>
-          <p className="mono" style={{ marginBottom: 28, color: "var(--gold-dim)" }}>Active Jurisdictions</p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 1, background: "var(--rule-med)" }}>
-            {["Madras High Court", "District Court Chennai", "District Court Coimbatore", "District Court Tiruppur", "Family Courts, TN", "Consumer Commission, TN", "Motor Accidents Tribunal", "Labour Courts", "Arbitration Centers"].map((c, i) => (
-              <Fade key={c} delay={i * 40}>
-                <div style={{ padding: "24px 28px", background: "var(--bench)", transition: "background 0.2s" }}
-                  onMouseEnter={e => e.currentTarget.style.background = "var(--mahogany)"}
-                  onMouseLeave={e => e.currentTarget.style.background = "var(--bench)"}>
-                  <div className="case-ref" style={{ marginBottom: 8 }}>Court 0{i + 1}</div>
-                  <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "0.95rem", color: "var(--ivory)" }}>{c}</div>
-                </div>
-              </Fade>
-            ))}
-          </div>
-        </Fade>
-      </div>
-    </div>,
-  ];
-
-  return (
-    <section id="about" className="dossier-section">
-      {/* Stamped header */}
-      <div style={{ padding: "36px 52px 0", borderBottom: "0.5px solid var(--rule-med)", display: "flex", justifyContent: "space-between", alignItems: "flex-end", background: "var(--bench)" }}>
-        <Fade>
-          <div>
-            <div className="case-ref" style={{ marginBottom: 6 }}>01 — Counsel Profile</div>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(1.6rem,2.5vw,2.2rem)", color: "var(--ivory)", lineHeight: 1.1 }}>Case Dossier</h2>
-          </div>
-        </Fade>
-        <div className="stamp">Confidential</div>
-      </div>
-
-      {/* Tab dividers — like real file dividers */}
-      <div className="dossier-tabs">
-        {tabs.map((t, i) => (
-          <button key={t.label} className={`dossier-tab${activeTab === i ? " active" : ""}`} onClick={() => setActiveTab(i)}>
-            <span className="tab-num">Section {t.sub}</span>
-            {t.label}
-          </button>
-        ))}
-      </div>
-
-      <div className="dossier-body">
-        <div className="dossier-index" data-label={tabs[activeTab].label}>
-          <Fade>
-            <div>
-              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "6rem", fontWeight: 400, lineHeight: 1, color: "rgba(196,154,60,0.15)", letterSpacing: "-0.04em" }}>
-                {tabs[activeTab].sub}
-              </div>
-              <div style={{ marginTop: 12, height: "0.5px", background: "var(--rule-med)" }} />
+              ))}
             </div>
-          </Fade>
-          <Fade delay={100}>
-            <div>
-              <p className="mono" style={{ fontSize: "0.54rem", color: "var(--gold-dim)" }}>{tabs[activeTab].label}</p>
-              <div style={{ marginTop: 12, width: 1, height: 60, background: "var(--rule-med)" }} />
+            <div className="about-creds">
+              {credentials.map((c) => (
+                <span className="cred-tag" key={c}><CheckCircle size={12} />{c}</span>
+              ))}
             </div>
-          </Fade>
-        </div>
-        {tabContent[activeTab]}
-      </div>
-    </section>
-  );
-}
-
-// ─── Stats Band ────────────────────────────────────────────────────────────────
-
-function Stats() {
-  return (
-    <div className="stats-band">
-      {[["12+", "Years of Active Practice"], ["500+", "Matters Handled"], ["9", "Practice Areas"], ["6", "Cities of Presence"]].map(([v, l], i) => (
-        <Fade key={l} delay={i * 80}>
-          <div className="stat-cell">
-            <div className="stat-num">{v}</div>
-            <div className="stat-label">{l}</div>
-            <div className="stat-line" />
-          </div>
-        </Fade>
-      ))}
-    </div>
-  );
-}
-
-// ─── Trial Timeline / Process ──────────────────────────────────────────────────
-
-function Process() {
-  const [active, setActive] = useState(0);
-  const step = PROCESS_STEPS[active];
-
-  return (
-    <section id="process" className="timeline-section">
-      <div className="timeline-header">
-        <div className="timeline-header-left">
-          <Fade>
-            <div className="case-ref" style={{ marginBottom: 12 }}>02 — Our Approach</div>
-            <h2 style={{ fontSize: "clamp(1.6rem, 3vw, 2.6rem)", color: "var(--ivory)", lineHeight: 1.1, maxWidth: 380 }}>
-              Trial Timeline
-            </h2>
-          </Fade>
-        </div>
-        <div className="timeline-header-right">
-          <Fade>
-            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.05rem", lineHeight: 1.85, color: "var(--parch2)", fontWeight: 300, maxWidth: 400, fontStyle: "italic" }}>
-              Every matter follows a disciplined, transparent process — five distinct stages from first filing to final execution of judgment.
-            </p>
-          </Fade>
-        </div>
-      </div>
-
-      {/* Scrubber — like video editing timeline */}
-      <div className="timeline-scrubber">
-        {PROCESS_STEPS.map((s, i) => (
-          <div key={s.num} className={`scrubber-step${active === i ? " active" : ""}`} onClick={() => setActive(i)}>
-            <div className="scrubber-num">Stage {s.num} · {s.stage}</div>
-            <div className="scrubber-label">{s.title.split("&")[0].trim()}</div>
-          </div>
-        ))}
-      </div>
-
-      {/* Expanded panel */}
-      <div className="timeline-panel" key={active}>
-        <div className="timeline-panel-num">
-          <div className="timeline-big-num">{step.num}</div>
-        </div>
-        <div className="timeline-content">
-          <div className="case-ref" style={{ marginBottom: 12 }}>{step.stage} · Stage {step.num} of 05</div>
-          <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(1.8rem, 3vw, 2.6rem)", color: "var(--ivory)", marginBottom: 28, lineHeight: 1.1 }}>
-            {step.title}
-          </h3>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.1rem", lineHeight: 1.9, color: "var(--parch2)", fontWeight: 300, maxWidth: 560, fontStyle: "italic" }}>
-            {step.body}
-          </p>
-          <div style={{ marginTop: 48, display: "flex", gap: 16 }}>
-            {PROCESS_STEPS.map((_, i) => (
-              <div key={i}
-                style={{ width: i === active ? 32 : 8, height: 2, background: i === active ? "var(--gold)" : "var(--rule-str)", transition: "all 0.4s", cursor: "pointer", borderRadius: 0 }}
-                onClick={() => setActive(i)}
-              />
-            ))}
-          </div>
-        </div>
-        <div className="timeline-notes-bar">
-          <div className="archive-filter-head" style={{ marginBottom: 20 }}>Courtroom Notes</div>
-          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.58rem", lineHeight: 2, color: "var(--ink-fade)", letterSpacing: "0.08em" }}>
-            {["Client briefed", "Documents filed", "Counter affidavit", "Arguments scheduled", "Judgment reserved"].map((n, i) => (
-              <div key={n} style={{ display: "flex", alignItems: "center", gap: 10, padding: "6px 0", borderBottom: "0.5px solid var(--rule)", opacity: i <= active ? 1 : 0.3, transition: "opacity 0.4s" }}>
-                <div style={{ width: 6, height: 6, border: "0.5px solid var(--gold)", flexShrink: 0, background: i < active ? "var(--gold)" : "transparent", transition: "background 0.4s" }} />
-                {n}
-              </div>
-            ))}
-          </div>
-          <div style={{ marginTop: 32 }}>
-            <a href="#contact" style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "var(--gold)", fontFamily: "'DM Mono', monospace", fontSize: "0.58rem", fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", textDecoration: "none", paddingBottom: 6, borderBottom: "0.5px solid var(--gold)", transition: "opacity 0.2s" }}
-              onMouseEnter={e => e.currentTarget.style.opacity = "0.7"}
-              onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
-              Begin Matter <ArrowUpRight size={11} />
+            <a href="#contact" className="btn-primary" style={{ width: "fit-content" }}>
+              Schedule a Consultation <ArrowRight size={14} />
             </a>
           </div>
+          <div className="about-right">
+            <div style={{ position: "relative", paddingRight: "24px", paddingTop: "24px" }}>
+              <div className="about-img-accent">
+                <img
+                  src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=600&h=600&fit=crop"
+                  alt="Law office"
+                  loading="lazy"
+                />
+              </div>
+              <div className="about-img-wrap">
+                <img
+                  src="https://images.unsplash.com/photo-1556157382-97eda2d62296?w=800&h=1000&fit=crop&crop=faces"
+                  alt="AGD Law Associates counsel"
+                  loading="lazy"
+                />
+              </div>
+              <div className="about-img-badge">
+                <div className="about-badge-num">12+</div>
+                <div className="about-badge-lbl">Years of<br />Practice</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-// ─── Practice Areas Register / Services ───────────────────────────────────────
+// ─── Services ─────────────────────────────────────────────────────────────────
+
+const serviceTitleToSlug = {
+  "Criminal Law": "criminal-law",
+  "Civil Litigation": "civil-litigation",
+  "Writs & Constitutional": "writs-constitutional",
+  "Consumer Protection": "consumer-protection",
+  "Property & Real Estate": "property-real-estate",
+  "Family & Matrimonial": "family-matrimonial",
+  "Arbitration & ADR": "arbitration-adr",
+  "Corporate Advisory": "corporate-advisory",
+  "MCOP & Rent Control": "mcop-rent-control",
+};
 
 function Services() {
   return (
-    <section id="practice" className="register-section">
-      <div className="register-header">
-        <Fade>
-          <div style={{ position: "relative", zIndex: 1 }}>
-            <div className="case-ref" style={{ marginBottom: 12 }}>03 — Practice Register</div>
-            <h2 style={{ fontSize: "clamp(1.8rem, 3vw, 2.8rem)", color: "var(--ivory)", lineHeight: 1.1, maxWidth: 440 }}>
-              Court Registry Ledger
-            </h2>
+    <section className="panel-dark" id="services">
+      <div className="container">
+        <div className="services-inner">
+          <div className="services-head">
+            <div>
+              <span className="section-label-dark">Practice Areas</span>
+              <h2 className="services-title">Areas of <em>expertise</em></h2>
+            </div>
+            <a href="#contact" className="btn-primary" style={{ flexShrink: 0 }}>
+              Discuss Your Case <ArrowRight size={13} />
+            </a>
           </div>
-        </Fade>
-        <Fade delay={80}>
-          <div style={{ position: "relative", zIndex: 1 }}>
-            <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.02rem", lineHeight: 1.85, color: "var(--parch2)", fontWeight: 300, maxWidth: 360, fontStyle: "italic", marginBottom: 16 }}>
-              Nine disciplines across the full spectrum — from constitutional courts to consumer tribunals.
-            </p>
-            <div className="stamp stamp-green" style={{ transform: "rotate(1deg)" }}>9 Active Practices</div>
+          <div className="services-grid">
+            {services.map((s, i) => {
+              const Icon = s.icon;
+              const slug = serviceTitleToSlug[s.title];
+              return (
+                <Link href={slug ? `/services/${slug}` : "#"} className="service-card" key={s.title} style={{ textDecoration: "none", color: "inherit" }}>
+                  <span className="service-num">0{i + 1}</span>
+                  <div className="service-icon-wrap"><Icon size={17} /></div>
+                  <h3 className="service-name">{s.title}</h3>
+                  <p className="service-desc">{s.description}</p>
+                  <div className="service-arrow"><ArrowRight size={13} /></div>
+                </Link>
+              );
+            })}
           </div>
-        </Fade>
-      </div>
-
-      {/* Ledger table */}
-      <div className="register-ledger" style={{ background: "var(--void)" }}>
-        {/* Column headers */}
-        <div className="register-col-head">#</div>
-        <div className="register-col-head">Practice Area</div>
-        <div className="register-col-head">Scope of Representation</div>
-        <div className="register-col-head">Status</div>
-
-        {SERVICES.map((s, i) => (
-          <Fade key={s.title} delay={i * 30} style={{ display: "contents" }}>
-            <div className={`register-cell${s.urgent ? " register-urgent" : ""}`} style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "28px 20px" }}>
-              <div className="register-row-num">{s.num}</div>
-            </div>
-            <div className={`register-cell${s.urgent ? " register-urgent" : ""}`}>
-              <div className="register-title">{s.title}</div>
-              {s.urgent && <div className="stamp" style={{ marginTop: 8, display: "inline-block", fontSize: "0.44rem" }}>Urgent Matter</div>}
-            </div>
-            <div className={`register-cell${s.urgent ? " register-urgent" : ""}`}>
-              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "0.95rem", lineHeight: 1.75, color: "var(--parch2)", fontWeight: 300 }}>{s.desc}</p>
-            </div>
-            <div className={`register-cell${s.urgent ? " register-urgent" : ""}`}>
-              <div className="stamp-green stamp" style={{ transform: "rotate(-1.5deg)" }}>Active</div>
-            </div>
-          </Fade>
-        ))}
+        </div>
       </div>
     </section>
   );
 }
 
-// ─── Judgment Archive / Results ────────────────────────────────────────────────
+// ─── Team ─────────────────────────────────────────────────────────────────────
 
-function Results() {
-  const [yearFilter, setYearFilter] = useState("All");
-  const [typeFilter, setTypeFilter] = useState("All");
-  const years = ["All", "2024", "2023"];
-  const types = ["All", "Criminal", "Civil", "Consumer", "Family", "Writ", "MCOP"];
-
-  const filtered = RESULTS.filter(r =>
-    (yearFilter === "All" || r.year === yearFilter) &&
-    (typeFilter === "All" || r.type === typeFilter)
-  );
-
+function Team() {
   return (
-    <section id="results" className="archive-section">
-      <div className="archive-grid">
-        <div className="archive-sidebar">
-          <Fade>
+    <section className="panel" id="team">
+      <div className="container">
+        <div className="team-inner">
+          <div className="team-head">
             <div>
-              <div className="case-ref" style={{ marginBottom: 12 }}>04 — Judgment Archive</div>
-              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(1.6rem, 2.5vw, 2.2rem)", color: "var(--ivory)", lineHeight: 1.1, marginBottom: 20 }}>
-                Case Records
-              </h2>
-              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "0.95rem", lineHeight: 1.85, color: "var(--parch2)", fontWeight: 300, fontStyle: "italic" }}>
-                A selection of representative judgments from our litigation practice across Tamil Nadu.
-              </p>
+              <span className="section-label">Our Team</span>
+              <h2 className="team-title">The counsel behind<br />your <em>case</em></h2>
             </div>
-          </Fade>
-
-          <Fade delay={80}>
-            <div style={{ marginTop: 40 }}>
-              <div className="archive-filter-head">Filter by Year</div>
-              {years.map(y => (
-                <button key={y} className={`archive-filter-btn${yearFilter === y ? " active" : ""}`} onClick={() => setYearFilter(y)}>{y}</button>
-              ))}
-            </div>
-            <div style={{ marginTop: 28 }}>
-              <div className="archive-filter-head">Filter by Court</div>
-              {types.map(t => (
-                <button key={t} className={`archive-filter-btn${typeFilter === t ? " active" : ""}`} onClick={() => setTypeFilter(t)}>{t}</button>
-              ))}
-            </div>
-          </Fade>
-
-          <Fade delay={160}>
-            <div style={{ marginTop: 40, paddingTop: 24, borderTop: "0.5px solid var(--rule-med)" }}>
-              <div style={{ width: 32, height: 1, background: "var(--gold)", marginBottom: 14, opacity: 0.5 }} />
-              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "0.88rem", lineHeight: 1.8, color: "var(--ink-fade)", fontStyle: "italic" }}>
-                Each matter is handled with the same rigour — whether a ₹500 complaint or a High Court writ.
-              </p>
-            </div>
-          </Fade>
-        </div>
-
-        <div className="archive-list">
-          {filtered.map((r, i) => (
-            <Fade key={r.title} delay={i * 60}>
-              <div className="archive-row">
-                <div style={{ position: "relative" }}>
-                  <div className="archive-cat">{r.cat} · {r.year}</div>
-                  <h3 className="archive-title">{r.title}</h3>
-                  <div className="archive-court">{r.court}</div>
-                  {/* Simulated PDF preview on hover */}
-                  <div className="archive-preview">
-                    <div className="archive-preview-inner">
-                      {[...Array(12)].map((_, j) => <div key={j} className="archive-preview-line" style={{ width: `${60 + Math.random() * 35}%` }} />)}
-                      <div style={{ position: "absolute", bottom: 12, right: 12 }}><div className="stamp" style={{ fontSize: "0.4rem", transform: "rotate(-3deg)" }}>Judgment</div></div>
-                    </div>
+          </div>
+          <div className="team-grid">
+            {teamMembers.map((m) => (
+              <div className="team-card" key={m.name}>
+                <img src={m.img} alt={m.name} className="team-photo" loading="lazy" />
+                <div className="team-gradient" />
+                <div className="team-exp">{m.experience}</div>
+                <div className="team-body">
+                  <div className="team-spec">{m.specialization}</div>
+                  <div className="team-name">{m.name}</div>
+                  <div className="team-role">{m.role}</div>
+                  <div className="team-social">
+                    <a href="#" className="team-social-btn" aria-label={`${m.name} LinkedIn`}>
+                      <ExternalLink size={11} />
+                    </a>
                   </div>
                 </div>
-                <span className="archive-badge">{r.outcome}</span>
               </div>
-            </Fade>
-          ))}
-          {filtered.length === 0 && (
-            <div style={{ padding: "64px 52px", fontFamily: "'DM Mono', monospace", fontSize: "0.68rem", color: "var(--ink-fade)", letterSpacing: "0.12em" }}>
-              No records match the current filters.
-            </div>
-          )}
+            ))}
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-// ─── FAQ ──────────────────────────────────────────────────────────────────────
+// ─── Case Results ─────────────────────────────────────────────────────────────
 
-function FAQ() {
-  const [open, setOpen] = useState(null);
+function CaseResults() {
+  const stats = [
+    { num: "500+", lbl: "Cases Handled" },
+    { num: "92%", lbl: "Success Rate" },
+    { num: "6", lbl: "Active Cities" },
+    { num: "12+", lbl: "Years Practice" },
+  ];
   return (
-    <section className="faq-section">
-      <div className="faq-grid">
-        <div className="faq-left">
-          <Fade>
+    <section className="panel-tinted" id="cases">
+      <div className="container">
+        <div className="cases-inner">
+          <div className="cases-head">
             <div>
-              <div className="case-ref" style={{ marginBottom: 12 }}>05 — Frequently Asked</div>
-              <h2 style={{ fontSize: "clamp(1.6rem, 3vw, 2.6rem)", color: "var(--ivory)", lineHeight: 1.1, marginBottom: 20 }}>
-                Common questions,<br />clear answers.
-              </h2>
-              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "0.98rem", lineHeight: 1.85, color: "var(--parch2)", fontWeight: 300, fontStyle: "italic" }}>
-                Still have questions? Write to us or call directly — we respond within one business day.
-              </p>
+              <span className="section-label">Track Record</span>
+              <h2 className="cases-title">Results that <em>speak</em></h2>
             </div>
-          </Fade>
-          <Fade delay={100} style={{ marginTop: 48 }}>
-            <a href="#contact" style={{ display: "inline-flex", alignItems: "center", gap: 10, color: "var(--gold)", fontFamily: "'DM Mono', monospace", fontSize: "0.62rem", fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", textDecoration: "none", paddingBottom: 6, borderBottom: "0.5px solid var(--gold)", transition: "opacity 0.2s" }}
-              onMouseEnter={e => e.currentTarget.style.opacity = "0.7"}
-              onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
-              Ask Your Question <ArrowUpRight size={13} />
+            <a href="#contact" className="btn-primary" style={{ flexShrink: 0 }}>
+              Discuss Your Case <ArrowRight size={13} />
             </a>
-          </Fade>
-        </div>
-        <div className="faq-right">
-          {FAQS.map((f, i) => (
-            <Fade key={f.q} delay={i * 50}>
-              <div className="faq-item">
-                <button className="faq-trigger" onClick={() => setOpen(open === i ? null : i)}>
-                  <span className="faq-q">{f.q}</span>
-                  <span className={`faq-icon${open === i ? " open" : ""}`}>
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                      <path d="M6 1v10M1 6h10" stroke="currentColor" strokeWidth="1" />
-                    </svg>
-                  </span>
-                </button>
-                <div className={`faq-body${open === i ? " open" : ""}`}>{f.a}</div>
+          </div>
+          <div className="cases-stats">
+            {stats.map((s) => (
+              <div className="cstat-box" key={s.lbl}>
+                <div className="cstat-num">{s.num}</div>
+                <div className="cstat-lbl">{s.lbl}</div>
               </div>
-            </Fade>
-          ))}
+            ))}
+          </div>
+          <div className="cases-grid">
+            {caseResults.map((c, i) => (
+              <article className={`case-card${c.highlight ? " highlight" : ""}`} key={i}>
+                <div className="case-category">{c.category}</div>
+                <h3 className="case-title">{c.title}</h3>
+                <p className="case-desc">{c.description}</p>
+                <div className="case-footer">
+                  <div>
+                    <div className="case-court">{c.court}</div>
+                    <div className="case-year">{c.year}</div>
+                  </div>
+                  <div className="case-outcome"><CheckCircle size={10} />{c.outcome}</div>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-// ─── Contact / Petition Filing ─────────────────────────────────────────────────
+// ─── Why / Regions ────────────────────────────────────────────────────────────
 
-function Contact() {
-  const [form, setForm] = useState({ name: "", phone: "", matter: "", message: "" });
-  const chg = e => setForm(p => ({ ...p, [e.target.name]: e.target.value }));
-  const send = () => {
-    const t = `Hi AGD Law Associates,\nName: ${form.name}\nPhone: ${form.phone}\nMatter: ${form.matter}\n\n${form.message}`;
-    window.open(`https://wa.me/919994388855?text=${encodeURIComponent(t)}`, "_blank", "noopener");
-  };
-
+function Regions() {
+  const whyItems = [
+    { icon: Scale, title: "Boutique Attention", desc: "Every client receives direct partner-level attention — no file gets lost in a large firm structure." },
+    { icon: Shield, title: "Ethical Practice", desc: "Strict confidentiality, transparent communication, and unwavering integrity in every matter." },
+    { icon: Clock, title: "Timely Resolution", desc: "Structured case management designed to achieve efficient, timely outcomes without unnecessary delays." },
+    { icon: Award, title: "Proven Advocacy", desc: "12+ years of courtroom experience across criminal, civil, constitutional, and commercial matters." },
+  ];
   return (
-    <section id="contact" className="contact-section">
-      <div style={{ padding: "40px 52px 0", borderBottom: "0.5px solid var(--rule-med)", display: "flex", justifyContent: "space-between", alignItems: "flex-end", background: "var(--chamber)" }}>
-        <Fade>
-          <div>
-            <div className="case-ref" style={{ marginBottom: 6 }}>06 — Petition Filing</div>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(1.4rem,2.2vw,1.9rem)", color: "var(--ivory)", lineHeight: 1.1 }}>Present Your Case</h2>
+    <section className="panel-dark" id="why-me">
+      <div className="container">
+        <div className="regions-inner-content">
+          <div className="regions-head">
+            <span className="section-label-dark">Why Choose Us</span>
+            <h2 className="regions-title">Why <em>AGD</em> Law Associates</h2>
+            <p className="regions-sub">A trusted boutique firm serving clients across Tamil Nadu and beyond</p>
           </div>
-        </Fade>
-        <div className="stamp stamp-green" style={{ marginBottom: 8 }}>Open for Intake</div>
-      </div>
-      <div className="contact-grid">
-        <div className="contact-left">
-          <div style={{ position: "relative", zIndex: 1 }}>
-            <Fade>
-              <div style={{ fontSize: "0.0rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--gold-dim)", marginBottom: 20 }}></div>
-              <h2 style={{ fontSize: "clamp(1.8rem, 3.2vw, 2.8rem)", color: "var(--ivory)", lineHeight: 1.1, marginBottom: 28, fontFamily: "'Playfair Display', serif" }}>
-                Your first consultation<br />starts here.
-              </h2>
-              <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1rem", lineHeight: 1.85, color: "var(--parch2)", fontWeight: 300, maxWidth: 380, fontStyle: "italic" }}>
-                Reach out via phone, email, or WhatsApp. We respond within one business day and schedule consultations at your convenience.
-              </p>
-            </Fade>
+          <div className="why-cards">
+            {whyItems.map((w) => {
+              const Icon = w.icon;
+              return (
+                <div className="why-card" key={w.title}>
+                  <div className="why-icon"><Icon size={20} /></div>
+                  <div className="why-title">{w.title}</div>
+                  <div className="why-desc">{w.desc}</div>
+                </div>
+              );
+            })}
           </div>
-          <Fade delay={100}>
-            <div style={{ display: "flex", flexDirection: "column", position: "relative", zIndex: 1 }}>
+          <div className="regions-presence">
+            <div className="regions-presence-header">Our Practice Presence</div>
+            <div className="regions-grid">
               {[
-                { Icon: PhoneCall, label: "Phone", val: "+91 99943 88855", href: "tel:+919994388855" },
-                { Icon: Mail, label: "Email", val: "agdlawassociatesoffice@gmail.com", href: "mailto:agdlawassociatesoffice@gmail.com" },
-                { Icon: MapPin, label: "Chambers", val: "Chennai, Tamil Nadu — Pan-TN Presence", href: "#" },
-              ].map(({ Icon, label, val, href }) => (
-                <a key={label} href={href} className="contact-info-row">
-                  <div className="contact-info-icon"><Icon size={13} /></div>
+                { name: "Chennai & Suburbs", cities: "Chennai · Tambaram · Avadi" },
+                { name: "Western Tamil Nadu", cities: "Coimbatore · Tiruppur" },
+                { name: "Greater Karnataka", cities: "Bangalore & surrounding districts" },
+                { name: "Chengalpattu", cities: "Chengalpattu · Kancheepuram" },
+                { name: "Tiruvallur", cities: "Tiruvallur · Ponneri · Gummidipoondi" },
+                { name: "Dindigul", cities: "Dindigul · Natham · Palani" },
+              ].map((r) => (
+                <div className="region-item" key={r.name}>
+                  <div className="region-name">{r.name}</div>
+                  <div className="region-cities">{r.cities}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Testimonial / Leadership ──────────────────────────────────────────────────
+
+const testimonials = [
+  { name: "AGD Bala Kumar", role: "Advocate | Managing Counsel", feedback: "AGD Bala Kumar has over 12 years of experience in litigation and legal advisory, with focused practice across criminal law, civil disputes, constitutional remedies, consumer matters, property law, family law, arbitration, corporate advisory, MCOP, and RCOP matters.", img: "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=450&h=300&fit=crop" },
+  { name: "AGD Law Associates", role: "Our Vision", feedback: "To become a trusted and leading boutique law firm recognized for excellence, integrity, and client satisfaction through precision-driven advocacy, transparent communication, and timely legal solutions.", img: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=450&h=300&fit=crop" },
+];
+
+function Testimonial() {
+  const [current, setCurrent] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const total = testimonials.length;
+  const prev = () => setCurrent((c) => (c - 1 + total) % total);
+  const next = () => setCurrent((c) => (c + 1) % total);
+
+  useEffect(() => {
+    if (isPaused) return;
+    const t = setInterval(() => setCurrent((c) => (c + 1) % total), 7000);
+    return () => clearInterval(t);
+  }, [isPaused, total]);
+
+  const t = testimonials[current];
+  return (
+    <section className="panel" id="testimonial" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
+      <div className="container">
+        <div className="testi-section">
+          <div className="testi-inner">
+            <div className="testi-sidebar">
+              <span className="section-label">Leadership</span>
+              <h2 className="testi-sidebar-title">
+                Courtroom <em>precision</em><br />at every level
+              </h2>
+              <p className="testi-sidebar-body">
+                AGD Bala Kumar leads the firm with over 12 years of practice, combining
+                litigation strength with strategic advisory for complex matters.
+              </p>
+              <div className="testi-nav">
+                <button type="button" className="testi-nav-btn" onClick={prev} aria-label="Previous"><ArrowLeft size={15} /></button>
+                <button type="button" className="testi-nav-btn" onClick={next} aria-label="Next"><ArrowRight size={15} /></button>
+                <div className="testi-counter">{String(current + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</div>
+              </div>
+              <div className="testi-progress">
+                <div className="testi-bar" style={{ width: `${((current + 1) / total) * 100}%` }} />
+              </div>
+              <div className="testi-dots">
+                {testimonials.map((_, i) => (
+                  <button key={i} type="button" className="testi-dot" style={{ width: i === current ? "28px" : "8px", opacity: i === current ? 1 : 0.35 }} onClick={() => setCurrent(i)} aria-label={`Slide ${i + 1}`} />
+                ))}
+              </div>
+            </div>
+            <div>
+              <article key={`${t.name}-${current}`} className="testi-card">
+                <div className="testi-stars">{Array.from({ length: 5 }).map((_, i) => <span key={i}>★</span>)}</div>
+                <blockquote className="testi-quote">"{t.feedback}"</blockquote>
+                <div className="testi-author">
+                  <img src={t.img} alt={t.name} className="testi-avatar" loading="lazy" />
                   <div>
-                    <div className="case-ref" style={{ marginBottom: 3 }}>{label}</div>
-                    <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.75rem", color: "var(--parch)", fontWeight: 300, letterSpacing: "0.04em" }}>{val}</div>
+                    <div className="testi-name">{t.name}</div>
+                    <div className="testi-role">{t.role}</div>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Blog ─────────────────────────────────────────────────────────────────────
+
+function Blog() {
+  const featured = blogPosts.find((p) => p.featured);
+  const rest = blogPosts.filter((p) => !p.featured);
+  return (
+    <section className="panel-dark" id="blog">
+      <div className="container">
+        <div className="blog-inner">
+          <div className="blog-head">
+            <div>
+              <span className="section-label-dark">Legal Insights</span>
+              <h2 className="blog-title">From our <em>desk</em></h2>
+            </div>
+            <a href="#" className="btn-ghost" style={{ flexShrink: 0 }}>All Articles <ArrowRight size={13} /></a>
+          </div>
+          <div className="blog-layout">
+            {featured && (
+              <a href={`/blog/${featured.slug}`} className="blog-featured" style={{ textDecoration: "none" }}>
+                <img src={featured.img} alt={featured.title} className="blog-featured-img" loading="lazy" />
+                <div className="blog-featured-body">
+                  <div className="blog-cat">{featured.category}</div>
+                  <h3 className="blog-title-main">{featured.title}</h3>
+                  <p className="blog-excerpt">{featured.excerpt}</p>
+                  <div className="blog-meta">
+                    <span>{featured.author}</span>
+                    <span className="blog-meta-sep">·</span>
+                    <span>{featured.date}</span>
+                    <span className="blog-meta-sep">·</span>
+                    <span>{featured.readTime}</span>
+                  </div>
+                </div>
+              </a>
+            )}
+            <div className="blog-list">
+              {rest.map((p) => (
+                <a href={`/blog/${p.slug}`} key={p.slug} className="blog-item" style={{ textDecoration: "none" }}>
+                  <img src={p.img} alt={p.title} className="blog-item-img" loading="lazy" />
+                  <div className="blog-item-body">
+                    <div className="blog-item-cat">{p.category}</div>
+                    <div className="blog-item-title">{p.title}</div>
+                    <div className="blog-item-meta">{p.date} · {p.readTime}</div>
                   </div>
                 </a>
               ))}
-              <div style={{ marginTop: 32, fontFamily: "'DM Mono', monospace", fontSize: "0.6rem", color: "var(--ink-fade)", letterSpacing: "0.1em", lineHeight: 1.8 }}>
-                Mon–Fri 10AM–6:30PM · Sat 11AM–5PM<br />
-                2nd & Last Saturdays: Closed
-              </div>
             </div>
-          </Fade>
+          </div>
         </div>
+      </div>
+    </section>
+  );
+}
 
-        <div className="contact-right">
-          <Fade>
-            <div className="case-ref" style={{ marginBottom: 40 }}>File a Query</div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+// ─── FAQ ─────────────────────────────────────────────────────────────────────
+
+function FAQ() {
+  const [openIndex, setOpenIndex] = useState(null);
+  const toggle = (i) => setOpenIndex((prev) => (prev === i ? null : i));
+  return (
+    <section className="panel" id="faq">
+      <div className="container">
+        <div className="faq-inner">
+          <div className="faq-layout">
+            <div className="faq-sidebar">
+              <span className="section-label">FAQ</span>
+              <h2 className="faq-sidebar-title">Common <em>questions</em></h2>
+              <p className="faq-sidebar-body">
+                Everything you need to know about working with AGD Law Associates.
+                Can't find what you're looking for? Contact us directly.
+              </p>
+              <a href="#contact" className="btn-primary faq-cta">
+                Contact Us <ArrowRight size={13} />
+              </a>
+            </div>
+            <div className="faq-list">
+              {faqs.map((faq, i) => {
+                const isOpen = openIndex === i;
+                return (
+                  <div className="faq-item" key={i}>
+                    <button type="button" className="faq-question" onClick={() => toggle(i)} aria-expanded={isOpen}>
+                      <span>{faq.q}</span>
+                      <span className={`faq-toggle${isOpen ? " open" : ""}`}><X size={13} /></span>
+                    </button>
+                    <div className={`faq-answer${isOpen ? " open" : ""}`}>
+                      <div className="faq-answer-inner">
+                        <p className="faq-answer-text">{faq.a}</p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Contact ─────────────────────────────────────────────────────────────────
+
+function Contact() {
+  const [form, setForm] = useState({ your_name: "", your_email: "", service_type: "", budget: "", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitState, setSubmitState] = useState({ type: "", message: "" });
+
+  const selectPill = (field, value) => setForm((f) => ({ ...f, [field]: value }));
+  const handleChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.service_type || !form.budget) {
+      setSubmitState({ type: "error", message: "Please select a service and preferred timeline." });
+      return;
+    }
+    try {
+      setIsSubmitting(true);
+      setSubmitState({ type: "", message: "" });
+      const response = await fetch("/api/contact", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || "Failed to send message.");
+      setSubmitState({ type: "success", message: "Thanks! Your message was sent. We'll be in touch shortly." });
+      setForm({ your_name: "", your_email: "", service_type: "", budget: "", message: "" });
+    } catch (error) {
+      setSubmitState({ type: "error", message: error.message || "Something went wrong. Please try again." });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <section className="panel-dark" id="contact">
+      <div className="container">
+        <div className="contact-inner">
+          <div className="contact-grid">
+            <div className="contact-left">
+              <span className="section-label-dark">Get In Touch</span>
+              <h2 className="contact-title">Need legal<br /><em>support?</em><br />Let's connect.</h2>
+              <p className="contact-sub">Reach out directly or fill the form — we respond during office hours. Every matter is handled with strict confidentiality.</p>
               {[
-                { n: "name", l: "Petitioner Name", p: "Your full name" },
-                { n: "phone", l: "Contact Number", p: "+91 XXXXX XXXXX" },
-                { n: "matter", l: "Nature of Matter", p: "e.g. Criminal, Property, Family…" },
-              ].map(f => (
-                <div key={f.n}>
-                  <label className="field-label">{f.l}</label>
-                  <input name={f.n} value={form[f.n]} onChange={chg} placeholder={f.p} className="field-input" />
-                </div>
-              ))}
-              <div>
-                <label className="field-label">Brief Statement of Facts</label>
-                <textarea name="message" value={form.message} onChange={chg} placeholder="Describe your situation briefly…" rows={4} className="field-textarea" />
-              </div>
-              <div>
-                <button onClick={send} className="submit-btn">
-                  Submit via WhatsApp <Send size={12} />
-                </button>
-                <p style={{ marginTop: 16, fontFamily: "'DM Mono', monospace", fontSize: "0.58rem", color: "var(--ink-fade)", lineHeight: 1.8, letterSpacing: "0.06em" }}>
-                  Your query will open in WhatsApp for a direct conversation with our chambers.
-                </p>
+                { icon: PhoneCall, label: "Phone", value: "+91 99943 88855", href: "tel:+919994388855" },
+                { icon: Mail, label: "Email", value: "agdlawassociatesoffice@gmail.com", href: "mailto:agdlawassociatesoffice@gmail.com" },
+                { icon: MapPin, label: "Location", value: "Chennai, Tamil Nadu", href: "#" },
+              ].map((d) => {
+                const Icon = d.icon;
+                return (
+                  <a key={d.label} href={d.href} className="contact-detail" style={{ textDecoration: "none" }}>
+                    <div className="contact-detail-icon"><Icon size={15} /></div>
+                    <div>
+                      <div className="contact-detail-label">{d.label}</div>
+                      <div className="contact-detail-value">{d.value}</div>
+                    </div>
+                  </a>
+                );
+              })}
+              <div className="contact-hours">
+                <p className="contact-hours-title">Office Hours</p>
+                {[
+                  { day: "Monday – Friday", time: "10:00 AM – 6:30 PM" },
+                  { day: "Saturday", time: "11:00 AM – 5:00 PM" },
+                  { day: "2nd & Last Saturday", time: "Closed" },
+                ].map((h) => (
+                  <div className="hours-row" key={h.day}>
+                    <span className="hours-day">{h.day}</span>
+                    <span className="hours-time">{h.time}</span>
+                  </div>
+                ))}
               </div>
             </div>
-          </Fade>
+            <div className="contact-form-panel">
+              <h3 className="form-panel-title">Send a Message</h3>
+              <p className="form-panel-sub">We typically respond within 1 business day.</p>
+              <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "22px" }}>
+                <div>
+                  <p className="form-section-label">Select Service Area</p>
+                  <div className="chip-group">
+                    {serviceOptions.map((s) => (
+                      <button key={s.value} type="button" className={`chip${form.service_type === s.value ? " active" : ""}`} onClick={() => selectPill("service_type", s.value)} aria-pressed={form.service_type === s.value}>{s.label}</button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <p className="form-section-label">Preferred Timeline</p>
+                  <div className="chip-group">
+                    {budgetOptions.map((b) => (
+                      <button key={b.value} type="button" className={`chip${form.budget === b.value ? " active" : ""}`} onClick={() => selectPill("budget", b.value)} aria-pressed={form.budget === b.value}>{b.label}</button>
+                    ))}
+                  </div>
+                </div>
+                <div className="form-fields">
+                  <div className="form-field">
+                    <label htmlFor="your_name" className="form-label">Your Name</label>
+                    <input type="text" id="your_name" name="your_name" placeholder="John Doe" required value={form.your_name} onChange={handleChange} className="form-input" />
+                  </div>
+                  <div className="form-field">
+                    <label htmlFor="your_email" className="form-label">Email Address</label>
+                    <input type="email" id="your_email" name="your_email" placeholder="john@email.com" required value={form.your_email} onChange={handleChange} className="form-input" />
+                  </div>
+                  <div className="form-field full">
+                    <label htmlFor="message" className="form-label">Your Message</label>
+                    <textarea id="message" name="message" rows={4} placeholder="Briefly describe your legal matter..." value={form.message} onChange={handleChange} className="form-input" />
+                  </div>
+                </div>
+                {submitState.message && (
+                  <div className={`form-msg ${submitState.type}`}>{submitState.message}</div>
+                )}
+                <button type="submit" className="form-submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Sending..." : "Send Message"}
+                  {!isSubmitting && <Send size={15} />}
+                </button>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1761,91 +1752,121 @@ function Contact() {
 // ─── Footer ───────────────────────────────────────────────────────────────────
 
 function Footer() {
+  const quickLinks = [
+    { href: "#about", label: "About" },
+    { href: "#services", label: "Services" },
+    { href: "#team", label: "Our Team" },
+    { href: "#cases", label: "Case Results" },
+    { href: "#blog", label: "Legal Insights" },
+    { href: "#contact", label: "Contact" },
+  ];
+  const serviceLinks = ["Criminal Law", "Civil Litigation", "Writs & Constitutional", "Consumer Protection", "Property Law", "Family Law"];
+
   return (
-    <footer className="footer">
-      <div className="footer-main">
-        <div>
-          <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.05rem", fontWeight: 600, color: "var(--ivory)", marginBottom: 4 }}>AGD Law Associates</div>
-          <div className="case-ref" style={{ color: "var(--gold-dim)", marginBottom: 20 }}>Advocates & Legal Consultants</div>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "0.95rem", lineHeight: 1.85, color: "var(--parch2)", fontWeight: 300, maxWidth: 280, fontStyle: "italic" }}>
-            A boutique litigation and advisory practice serving clients across Tamil Nadu with precision, transparency, and integrity.
-          </p>
-          <div style={{ marginTop: 28 }}>
-            <a href="https://www.agdlawassociates.in" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.62rem", color: "var(--gold)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6, letterSpacing: "0.1em" }}>
-              www.agdlawassociates.in <ArrowUpRight size={11} />
-            </a>
+    <footer className="footer-section">
+      <div className="container">
+        <div className="footer-top">
+          <div className="footer-brand">
+            <div className="logo-mark">
+              <span className="logo-glyph">A</span>
+              AGD Law Associates
+            </div>
+            <p className="footer-tagline">Precision-driven litigation and advisory services across Tamil Nadu and beyond. Established 2016.</p>
+            <div className="footer-socials">
+              <a href="#" className="footer-social" aria-label="Facebook"><FacebookIcon /></a>
+              <a href="#" className="footer-social" aria-label="X (Twitter)"><XIcon /></a>
+            </div>
+          </div>
+          <div className="footer-col">
+            <div className="footer-col-title">Quick Links</div>
+            <div className="footer-links">
+              {quickLinks.map((l) => <a key={l.label} href={l.href} className="footer-link">{l.label}</a>)}
+            </div>
+          </div>
+          <div className="footer-col">
+            <div className="footer-col-title">Practice Areas</div>
+            <div className="footer-links">
+              {serviceLinks.map((s) => <span key={s} className="footer-link" style={{ cursor: "default" }}>{s}</span>)}
+            </div>
+          </div>
+          <div className="footer-col">
+            <div className="footer-col-title">Contact</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+              <a href="tel:+919994388855" className="footer-contact-item" style={{ textDecoration: "none" }}>
+                <PhoneCall size={13} className="footer-contact-icon" />
+                <span className="footer-contact-text">+91 99943 88855</span>
+              </a>
+              <a href="mailto:agdlawassociatesoffice@gmail.com" className="footer-contact-item" style={{ textDecoration: "none" }}>
+                <Mail size={13} className="footer-contact-icon" />
+                <span className="footer-contact-text">agdlawassociatesoffice@gmail.com</span>
+              </a>
+              <div className="footer-contact-item">
+                <MapPin size={13} className="footer-contact-icon" />
+                <span className="footer-contact-text">Chennai, Tamil Nadu, India</span>
+              </div>
+            </div>
           </div>
         </div>
-        {[
-          { head: "Navigate", links: [["Counsel Profile", "#about"], ["Trial Timeline", "#process"], ["Practice Register", "#practice"], ["Judgment Archive", "#results"], ["File a Petition", "#contact"]] },
-          { head: "Practice", links: [["Criminal Law", "#practice"], ["Civil Litigation", "#practice"], ["Property Law", "#practice"], ["Family Law", "#practice"], ["Arbitration", "#practice"]] },
-          { head: "Contact", links: [["+91 99943 88855", "tel:+919994388855"], ["agdlawassociatesoffice@gmail.com", "mailto:agdlawassociatesoffice@gmail.com"], ["Chennai, Tamil Nadu", "#"]] },
-        ].map(col => (
-          <div key={col.head}>
-            <div className="footer-nav-head">{col.head}</div>
-            {col.links.map(([l, h]) => <a key={l} href={h} className="footer-nav-a">{l}</a>)}
-          </div>
-        ))}
-      </div>
-      <div className="footer-base">
-        <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.58rem", color: "var(--ink-fade)", letterSpacing: "0.1em" }}>© {new Date().getFullYear()} AGD Law Associates. All rights reserved.</p>
-        <p style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.58rem", color: "var(--ink-fade)", letterSpacing: "0.1em" }}>Mon–Fri 10AM–6:30PM · Sat 11AM–5PM</p>
+        <div className="footer-bottom">
+          <p className="footer-copy">© {new Date().getFullYear()} AGD Law Associates. All rights reserved.</p>
+          <a href="https://www.agdlawassociates.in" target="_blank" rel="noopener noreferrer" className="footer-web">www.agdlawassociates.in</a>
+        </div>
       </div>
     </footer>
   );
 }
 
-// ─── WhatsApp ─────────────────────────────────────────────────────────────────
+// ─── WhatsApp Float ───────────────────────────────────────────────────────────
 
-function WhatsApp() {
+function WhatsAppFloatingChat() {
   const [open, setOpen] = useState(false);
-  const [msg, setMsg] = useState("");
-  const QUICK = ["Hi, I need a legal consultation.", "I want to discuss a criminal matter.", "I need help with a property dispute.", "Please schedule a consultation."];
-  const send = (t) => {
-    const text = (t || msg).trim(); if (!text) return;
-    window.open(`https://wa.me/919994388855?text=${encodeURIComponent(text)}`, "_blank", "noopener");
-    setMsg(""); setOpen(false);
+  const [message, setMessage] = useState("");
+  const phoneNumber = "919994388855";
+
+  const quickMessages = [
+    "Hi, I need a legal consultation.",
+    "I want to discuss a criminal law matter.",
+    "I need support in a property dispute.",
+    "Please schedule a consultation call.",
+  ];
+
+  const openWhatsApp = (textToSend) => {
+    const finalMessage = (textToSend || message).trim();
+    if (!finalMessage) return;
+    window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(finalMessage)}`, "_blank", "noopener,noreferrer");
+    setMessage("");
+    setOpen(false);
   };
 
   return (
-    <div className="wa-bubble">
-      <div className={`wa-panel${open ? " open" : " closed"}`}>
+    <div className="wa-fab">
+      <div className={`wa-panel ${open ? "open" : "closed"}`}>
         <div className="wa-header">
-          <div>
-            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "0.85rem", color: "var(--ivory)" }}>AGD Legal Desk</div>
-            <div className="case-ref" style={{ color: "var(--gold-dim)", marginTop: 2 }}>Replies during office hours</div>
+          <div className="wa-header-info">
+            <div className="wa-avatar"><MessageCircle size={14} /></div>
+            <div>
+              <div className="wa-name">AGD Legal Desk</div>
+              <div className="wa-status">Replies during office hours</div>
+            </div>
           </div>
-          <button onClick={() => setOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--ink-dim)" }}><X size={14} /></button>
+          <button type="button" className="wa-close" onClick={() => setOpen(false)} aria-label="Close"><X size={12} /></button>
         </div>
-        <div style={{ padding: 18 }}>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "0.92rem", lineHeight: 1.7, color: "var(--parch2)", marginBottom: 14, fontWeight: 300, fontStyle: "italic" }}>
-            Select a quick message or type your query below.
-          </p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 14 }}>
-            {QUICK.map(q => (
-              <button key={q} onClick={() => setMsg(q)} style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.6rem", padding: "6px 10px", background: "var(--mahogany)", border: "0.5px solid var(--rule-med)", color: "var(--ink-dim)", cursor: "pointer", textAlign: "left", transition: "all 0.2s", letterSpacing: "0.04em" }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--gold)"; e.currentTarget.style.color = "var(--gold)"; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--rule-med)"; e.currentTarget.style.color = "var(--ink-dim)"; }}>
-                {q}
-              </button>
+        <div className="wa-body">
+          <div className="wa-bubble">Hi! Thanks for reaching out to AGD Law Associates. Select a quick message or type your query below.</div>
+          <div className="wa-quick">
+            {quickMessages.map((m) => (
+              <button key={m} type="button" className={`wa-quick-btn${message === m ? " selected" : ""}`} onClick={() => setMessage(m)}>{m}</button>
             ))}
           </div>
-          <div style={{ display: "flex", gap: 8 }}>
-            <textarea value={msg} onChange={e => setMsg(e.target.value)} rows={2} placeholder="Type your message…"
-              style={{ flex: 1, resize: "none", background: "transparent", border: "0.5px solid var(--rule-str)", padding: "8px 10px", color: "var(--ivory)", fontFamily: "'DM Mono', monospace", fontSize: "0.78rem", outline: "none", transition: "border-color 0.2s" }}
-              onFocus={e => e.target.style.borderColor = "var(--gold)"}
-              onBlur={e => e.target.style.borderColor = "var(--rule-str)"}
-              onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }} />
-            <button onClick={() => send()} style={{ width: 36, background: "var(--gold)", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--void)", transition: "background 0.2s" }}
-              onMouseEnter={e => e.currentTarget.style.background = "var(--crimson)"}
-              onMouseLeave={e => e.currentTarget.style.background = "var(--gold)"}>
-              <Send size={12} />
-            </button>
+          <div className="wa-input-row">
+            <textarea rows={2} value={message} onChange={(e) => setMessage(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); openWhatsApp(); } }} placeholder="Type your message..." className="wa-textarea" aria-label="WhatsApp message" />
+            <button type="button" className="wa-send" onClick={() => openWhatsApp()} aria-label="Send"><Send size={14} /></button>
           </div>
         </div>
       </div>
-      <button className="wa-btn" onClick={() => setOpen(v => !v)}>
-        {open ? <X size={17} /> : <MessageCircle size={19} />}
+      {!open && <div className="wa-label">Chat with AGD</div>}
+      <button type="button" className={`wa-toggle ${open ? "open-state" : "closed"}`} onClick={() => setOpen((v) => !v)} aria-label={open ? "Close chat" : "Open chat"}>
+        {open ? <X size={19} /> : <MessageCircle size={21} />}
       </button>
     </div>
   );
@@ -1856,21 +1877,26 @@ function WhatsApp() {
 export default function Page() {
   return (
     <>
-      <style>{GLOBAL_CSS}</style>
-      <Header />
-      <main>
-        <Hero />
-        <NoticeStrip />
-        <About />
-        <Stats />
-        <Process />
-        <Services />
-        <Results />
-        <FAQ />
-        <Contact />
-      </main>
-      <Footer />
-      <WhatsApp />
+      <GlobalStyles />
+      <FixedBackground />
+      <div className="scroll-layer">
+        <Header />
+        <main>
+          <Hero />
+          <Ticker />
+          <About />
+          <Services />
+          <Team />
+          <CaseResults />
+          <Regions />
+          <Testimonial />
+          <Blog />
+          <FAQ />
+          <Contact />
+        </main>
+        <Footer />
+      </div>
+      <WhatsAppFloatingChat />
     </>
   );
 }

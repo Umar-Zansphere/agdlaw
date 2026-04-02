@@ -2,853 +2,1168 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Phone, Mail, MapPin, PhoneCall, Send, X, MessageCircle, ChevronRight } from "lucide-react";
+import {
+  ArrowRight,
+  Phone,
+  ArrowLeft,
+  MessageCircle,
+  MapPin,
+  Mail,
+  PhoneCall,
+  Send,
+  X,
+  ChevronDown,
+  Scale,
+  Shield,
+  Clock,
+  Award,
+  Users,
+  BookOpen,
+  Menu,
+  ExternalLink,
+  CheckCircle,
+} from "lucide-react";
 
 // ─── Global Styles ─────────────────────────────────────────────────────────────
 
-const GLOBAL_CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Instrument+Sans:wght@300;400;500;600&display=swap');
+const GlobalStyles = () => (
+  <style>{`
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
 
-  :root {
-    --linen:    #f6f1e9;
-    --parch:    #ede6d6;
-    --parch2:   #e4dccb;
-    --ink:      #1c1712;
-    --ink-mid:  #4a4035;
-    --ink-dim:  #8a7d6b;
-    --sage:     #7a9478;
-    --sage-lt:  #d6e5d4;
-    --gold:     #b07d3a;
-    --gold-lt:  #e8d5b0;
-    --rule:     rgba(28,23,18,0.12);
-    --rule-med: rgba(28,23,18,0.22);
-  }
+    :root {
+      --ink: #0b0b0b;
+      --paper: #ffffff;
+      --sage: #c5dfc0;
+      --sage-dark: #3a5c3d;
+      --sage-pale: #f0f7ee;
+      --muted: #6b7280;
+      --border: rgba(197,223,192,0.35);
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 32px;
+      --radius-xl: 48px;
+    }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; font-size: 16px; }
-  body {
-    background: var(--linen);
-    color: var(--ink);
-    font-family: 'Instrument Sans', system-ui, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-  }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 400;
+      line-height: 1.1;
+    }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: inherit; border: none; background: none; }
+    :focus-visible { outline: 2px solid var(--sage); outline-offset: 3px; }
+    ul { list-style: none; }
 
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: var(--parch); }
-  ::-webkit-scrollbar-thumb { background: var(--ink-dim); border-radius: 2px; }
+    /* ── Utility ── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; width: 100%; }
+    .section-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--sage-dark);
+      background: var(--sage-pale); border: 1px solid var(--border);
+      border-radius: 100px; padding: 6px 14px;
+    }
+    .section-label::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--sage);
+    }
 
-  h1, h2, h3, h4 {
-    font-family: 'Libre Baskerville', Georgia, serif;
-    font-weight: 400;
-    line-height: 1.08;
-    letter-spacing: -0.02em;
-  }
+    /* ── Header ── */
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+      transition: background 0.4s ease, box-shadow 0.4s ease, backdrop-filter 0.4s ease;
+    }
+    .header.scrolled {
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 1px 0 rgba(197,223,192,0.3), 0 4px 24px rgba(11,11,11,0.06);
+    }
+    .header-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 72px; gap: 24px;
+    }
+    .logo-mark {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.4rem; font-weight: 500; color: var(--ink);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .logo-glyph {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: var(--ink); color: var(--sage);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 1rem; font-weight: 600; flex-shrink: 0;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-link {
+      font-size: 0.82rem; font-weight: 500; color: var(--ink);
+      padding: 8px 14px; border-radius: 8px;
+      transition: background 0.2s, color 0.2s;
+      letter-spacing: 0.01em;
+    }
+    .nav-link:hover { background: var(--sage-pale); color: var(--sage-dark); }
+    .header-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--ink); color: var(--paper);
+      font-size: 0.8rem; font-weight: 600;
+      padding: 10px 20px; border-radius: 100px;
+      transition: background 0.25s, transform 0.2s;
+      letter-spacing: 0.03em; white-space: nowrap;
+    }
+    .header-cta:hover { background: var(--sage-dark); transform: translateY(-1px); }
 
-  /* Utility classes */
-  .label {
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 0.62rem;
-    font-weight: 600;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--gold);
-  }
-  .rule-h { width: 100%; height: 0.5px; background: var(--rule-med); }
-  .rule-v { width: 0.5px; background: var(--rule-med); }
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      background: var(--ink);
+      padding: 100px 0 60px;
+    }
+    .hero-bg-img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; opacity: 0.18; pointer-events: none;
+    }
+    .hero-noise {
+      position: absolute; inset: 0; pointer-events: none; opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+    .hero-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center; position: relative; z-index: 2;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--sage);
+      border: 1px solid rgba(197,223,192,0.3);
+      border-radius: 100px; padding: 6px 14px; margin-bottom: 28px;
+      width: fit-content;
+    }
+    .hero-title {
+      font-size: clamp(3rem, 5vw, 5.5rem);
+      color: var(--paper); line-height: 1.0;
+      margin-bottom: 24px; letter-spacing: -0.01em;
+    }
+    .hero-title em { color: var(--sage); font-style: italic; }
+    .hero-subtitle {
+      font-size: 1.05rem; color: rgba(255,255,255,0.6);
+      line-height: 1.75; max-width: 480px; margin-bottom: 40px;
+    }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--sage); color: var(--ink);
+      font-size: 0.88rem; font-weight: 600;
+      padding: 14px 26px; border-radius: 100px;
+      transition: all 0.25s; letter-spacing: 0.02em; white-space: nowrap;
+    }
+    .btn-primary:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 12px 30px rgba(197,223,192,0.4); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 10px;
+      color: rgba(255,255,255,0.75);
+      font-size: 0.88rem; font-weight: 500;
+      padding: 14px 26px; border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.15);
+      transition: all 0.25s; white-space: nowrap;
+    }
+    .btn-ghost:hover { border-color: var(--sage); color: var(--sage); }
+    .hero-stats {
+      display: flex; gap: 0;
+      border: 1px solid rgba(197,223,192,0.2); border-radius: 20px;
+      overflow: hidden; margin-top: 48px; width: fit-content;
+    }
+    .hero-stat {
+      padding: 20px 28px; border-right: 1px solid rgba(197,223,192,0.2);
+    }
+    .hero-stat:last-child { border-right: none; }
+    .hero-stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem; color: var(--sage); line-height: 1;
+    }
+    .hero-stat-lbl {
+      font-size: 0.7rem; color: rgba(255,255,255,0.45);
+      text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px;
+    }
+    .hero-visual {
+      position: relative; display: flex; flex-direction: column; gap: 16px;
+    }
+    .hero-img-main {
+      width: 100%; border-radius: 24px; aspect-ratio: 4/5;
+      object-fit: cover; object-position: top;
+      border: 1px solid rgba(197,223,192,0.15);
+    }
+    .hero-card-float {
+      position: absolute; background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(16px); border: 1px solid rgba(197,223,192,0.2);
+      border-radius: 16px; padding: 14px 18px;
+    }
+    .hero-card-float.top-left { top: 24px; left: -20px; }
+    .hero-card-float.bottom-right { bottom: 24px; right: -20px; }
+    .hero-float-label { font-size: 0.65rem; color: var(--sage); text-transform: uppercase; letter-spacing: 0.1em; }
+    .hero-float-value { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: #fff; line-height: 1.1; }
+    .hero-float-sub { font-size: 0.7rem; color: rgba(255,255,255,0.45); margin-top: 2px; }
 
-  /* Fade-in animation */
-  .fade-up {
-    opacity: 0;
-    transform: translateY(28px);
-    transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
-  }
-  .fade-up.visible { opacity: 1; transform: translateY(0); }
-  .fade-up.delay-1 { transition-delay: 100ms; }
-  .fade-up.delay-2 { transition-delay: 200ms; }
-  .fade-up.delay-3 { transition-delay: 320ms; }
-  .fade-up.delay-4 { transition-delay: 440ms; }
+    /* ── Ticker ── */
+    .ticker-wrap {
+      background: var(--sage); overflow: hidden; height: 40px;
+      display: flex; align-items: center;
+    }
+    .ticker-track {
+      display: flex; gap: 0; white-space: nowrap;
+      animation: tickerMove 30s linear infinite;
+    }
+    @keyframes tickerMove {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .ticker-item {
+      display: inline-flex; align-items: center; gap: 16px;
+      font-size: 0.72rem; font-weight: 600; color: var(--ink);
+      text-transform: uppercase; letter-spacing: 0.12em;
+      padding: 0 32px;
+    }
+    .ticker-sep { opacity: 0.4; font-size: 1.2rem; }
 
-  /* ── HEADER ── */
-  .hdr {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 900;
-    background: var(--linen);
-    border-bottom: 0.5px solid var(--rule-med);
-    transition: box-shadow 0.3s;
-  }
-  .hdr.shadow { box-shadow: 0 2px 32px rgba(28,23,18,0.08); }
-  .hdr-inner {
-    max-width: 1380px; margin: 0 auto;
-    padding: 0 40px;
-    height: 68px;
-    display: flex; align-items: center; justify-content: space-between; gap: 40px;
-  }
-  .logo-wordmark {
-    font-family: 'Libre Baskerville', serif;
-    font-size: 1rem; font-weight: 700;
-    color: var(--ink); letter-spacing: 0.01em;
-    text-decoration: none; flex-shrink: 0;
-  }
-  .logo-sub {
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 0.55rem; font-weight: 500;
-    letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--ink-dim); margin-top: 2px;
-  }
-  .nav-links { display: flex; gap: 36px; align-items: center; }
-  .nav-a {
-    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--ink-mid);
-    text-decoration: none; transition: color 0.2s;
-    position: relative; padding-bottom: 2px;
-  }
-  .nav-a::after {
-    content: ''; position: absolute; bottom: -2px; left: 0;
-    width: 0; height: 0.5px; background: var(--gold);
-    transition: width 0.3s ease;
-  }
-  .nav-a:hover { color: var(--ink); }
-  .nav-a:hover::after { width: 100%; }
-  .nav-cta {
-    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--linen);
-    background: var(--ink); padding: 10px 22px;
-    text-decoration: none; border-radius: 1px;
-    transition: background 0.25s, color 0.25s;
-  }
-  .nav-cta:hover { background: var(--gold); }
+    /* ── About ── */
+    .about-section {
+      padding: clamp(5rem, 8vw, 9rem) 0;
+      background: var(--paper);
+    }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: clamp(3rem, 5vw, 6rem); align-items: start;
+    }
+    .about-photo-stack {
+      position: relative; padding-bottom: 40px;
+    }
+    .about-photo-main {
+      width: 100%; aspect-ratio: 3/4; object-fit: cover;
+      object-position: top; border-radius: var(--radius-lg);
+      box-shadow: 0 32px 80px rgba(11,11,11,0.14);
+    }
+    .about-photo-accent {
+      position: absolute; bottom: 0; right: -24px;
+      width: 55%; aspect-ratio: 1;
+      object-fit: cover; border-radius: var(--radius-md);
+      border: 4px solid #fff;
+      box-shadow: 0 16px 48px rgba(11,11,11,0.12);
+    }
+    .about-badge-float {
+      position: absolute; top: 40px; left: -24px;
+      background: var(--ink); border-radius: var(--radius-md);
+      padding: 18px 22px; color: #fff;
+      box-shadow: 0 16px 48px rgba(11,11,11,0.2);
+      min-width: 140px;
+    }
+    .about-badge-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem; color: var(--sage); line-height: 1;
+    }
+    .about-badge-lbl {
+      font-size: 0.65rem; text-transform: uppercase;
+      letter-spacing: 0.1em; color: rgba(197,223,192,0.6); margin-top: 4px;
+    }
+    .about-content { display: flex; flex-direction: column; gap: 28px; }
+    .about-title {
+      font-size: clamp(2.4rem, 3.5vw, 3.8rem);
+      line-height: 1.08; letter-spacing: -0.01em;
+    }
+    .about-title em { color: var(--sage); font-style: italic; }
+    .about-body { font-size: 1rem; line-height: 1.82; color: #3a3a3a; }
+    .stats-row {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    }
+    .stat-box {
+      background: var(--sage-pale); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 20px;
+      position: relative; overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    }
+    .stat-box:hover {
+      border-color: var(--sage); transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(197,223,192,0.2);
+    }
+    .stat-box::before {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px; background: var(--sage);
+    }
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.6rem; color: var(--ink); line-height: 1; margin-bottom: 6px;
+    }
+    .stat-lbl { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+    .credentials { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cred-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.78rem; color: var(--sage-dark); font-weight: 500;
+      background: var(--sage-pale); border: 1px solid var(--border);
+      border-radius: 100px; padding: 5px 12px;
+    }
+    .cred-tag svg { color: var(--sage); flex-shrink: 0; }
 
-  /* ── HERO ── */
-  .hero-wrap {
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 2.2fr;
-    border-bottom: 0.5px solid var(--rule-med);
-    padding-top: 68px;
-  }
-  .hero-left {
-    border-right: 0.5px solid var(--rule-med);
-    display: flex; flex-direction: column;
-    padding: 80px 48px 60px;
-    justify-content: space-between;
-    background: var(--parch);
-  }
-  .hero-right {
-    display: flex; flex-direction: column;
-    justify-content: flex-end;
-    padding: 80px 72px 60px;
-    position: relative; overflow: hidden;
-  }
-  .hero-bg-text {
-    position: absolute; top: 40px; right: -20px;
-    font-family: 'Libre Baskerville', serif;
-    font-size: clamp(10rem, 20vw, 18rem);
-    font-weight: 700; line-height: 1;
-    color: transparent;
-    -webkit-text-stroke: 0.5px var(--rule);
-    user-select: none; pointer-events: none;
-    white-space: nowrap; letter-spacing: -0.04em;
-  }
-  .hero-number {
-    font-family: 'Libre Baskerville', serif;
-    font-size: 0.72rem; font-weight: 400;
-    color: var(--ink-dim); letter-spacing: 0.1em;
-  }
-  .hero-h1 {
-    font-size: clamp(3.2rem, 6vw, 6rem);
-    line-height: 1.0; color: var(--ink);
-    margin-bottom: 32px;
-  }
-  .hero-h1 em {
-    font-style: italic; color: var(--gold);
-  }
-  .hero-body {
-    font-size: 1rem; font-weight: 300; line-height: 1.75;
-    color: var(--ink-mid); max-width: 520px;
-  }
+    /* ── Services ── */
+    .services-section {
+      background: var(--ink); padding: clamp(4rem, 7vw, 8rem) 0;
+    }
+    .services-header {
+      display: flex; justify-content: space-between;
+      align-items: flex-end; margin-bottom: clamp(2rem, 4vw, 4rem);
+      gap: 24px;
+    }
+    .services-title-block { display: flex; flex-direction: column; gap: 16px; }
+    .services-title {
+      font-size: clamp(2.2rem, 3.5vw, 3.6rem);
+      color: #fff; letter-spacing: -0.01em;
+    }
+    .services-title em { color: var(--sage); font-style: italic; }
+    .services-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+      background: rgba(197,223,192,0.1); border: 1px solid rgba(197,223,192,0.1);
+      border-radius: var(--radius-lg); overflow: hidden;
+    }
+    .service-card {
+      background: rgba(255,255,255,0.03);
+      padding: 32px 28px; position: relative; overflow: hidden;
+      transition: background 0.35s;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .service-card::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(197,223,192,0.08), transparent);
+      opacity: 0; transition: opacity 0.35s;
+    }
+    .service-card:hover { background: rgba(197,223,192,0.06); }
+    .service-card:hover::after { opacity: 1; }
+    .service-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.9rem; color: rgba(197,223,192,0.4);
+      letter-spacing: 0.08em;
+    }
+    .service-icon-wrap {
+      width: 44px; height: 44px; border-radius: 12px;
+      border: 1px solid rgba(197,223,192,0.2); color: var(--sage);
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .service-card:hover .service-icon-wrap {
+      background: rgba(197,223,192,0.12); border-color: var(--sage);
+    }
+    .service-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; color: #fff; line-height: 1.2;
+    }
+    .service-desc { font-size: 0.83rem; color: rgba(255,255,255,0.48); line-height: 1.72; }
+    .service-arrow {
+      margin-top: auto; width: 32px; height: 32px; border-radius: 50%;
+      border: 1px solid rgba(197,223,192,0.2); color: var(--sage);
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: all 0.3s;
+    }
+    .service-card:hover .service-arrow { background: var(--sage); color: var(--ink); border-color: var(--sage); }
 
-  /* ── MARQUEE ── */
-  .marquee-wrap {
-    overflow: hidden;
-    border-bottom: 0.5px solid var(--rule-med);
-    background: var(--ink);
-    padding: 16px 0;
-  }
-  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-  .marquee-track {
-    display: flex; white-space: nowrap; width: max-content;
-    animation: marquee 28s linear infinite;
-  }
-  .marquee-item {
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 0.65rem; font-weight: 500;
-    letter-spacing: 0.25em; text-transform: uppercase;
-    color: var(--gold-lt); padding: 0 48px;
-    display: inline-flex; align-items: center; gap: 48px;
-  }
-  .marquee-dot {
-    width: 3px; height: 3px; border-radius: 50%;
-    background: var(--gold); flex-shrink: 0;
-  }
+    /* ── Team ── */
+    .team-section { padding: clamp(4rem, 7vw, 8rem) 0; background: var(--paper); }
+    .team-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+      margin-top: clamp(2rem, 4vw, 4rem);
+    }
+    .team-card {
+      border-radius: var(--radius-lg); overflow: hidden;
+      position: relative; aspect-ratio: 3/4; background: var(--ink);
+      transition: transform 0.45s cubic-bezier(0.22,1,0.36,1), box-shadow 0.45s ease;
+    }
+    .team-card:hover { transform: translateY(-8px); box-shadow: 0 32px 64px rgba(11,11,11,0.2); }
+    .team-photo {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; object-position: top;
+      transition: transform 0.6s cubic-bezier(0.22,1,0.36,1), filter 0.4s;
+    }
+    .team-card:hover .team-photo { transform: scale(1.06); filter: brightness(0.7); }
+    .team-gradient {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(11,11,11,0.95) 0%, rgba(11,11,11,0.5) 40%, transparent 70%);
+    }
+    .team-body {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 24px 20px; display: flex; flex-direction: column; gap: 4px;
+    }
+    .team-exp {
+      position: absolute; top: 16px; right: 16px;
+      background: rgba(11,11,11,0.7); backdrop-filter: blur(8px);
+      border: 1px solid rgba(197,223,192,0.3); border-radius: 100px;
+      padding: 5px 12px; font-size: 0.68rem; letter-spacing: 0.08em;
+      color: var(--sage); text-transform: uppercase; font-weight: 500;
+    }
+    .team-spec {
+      font-size: 0.65rem; color: var(--sage); text-transform: uppercase;
+      letter-spacing: 0.1em; margin-bottom: 4px;
+    }
+    .team-name { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: #fff; }
+    .team-role { font-size: 0.75rem; color: rgba(255,255,255,0.5); }
+    .team-social {
+      display: flex; gap: 8px; margin-top: 10px;
+      max-height: 0; overflow: hidden; opacity: 0;
+      transition: max-height 0.4s cubic-bezier(0.22,1,0.36,1), opacity 0.35s;
+    }
+    .team-card:hover .team-social { max-height: 40px; opacity: 1; }
+    .team-social-btn {
+      width: 30px; height: 30px; border-radius: 8px;
+      background: rgba(197,223,192,0.15); border: 1px solid rgba(197,223,192,0.25);
+      color: var(--sage); display: inline-flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .team-social-btn:hover { background: rgba(197,223,192,0.3); }
 
-  /* ── ABOUT / EDITORIAL ── */
-  .editorial-grid {
-    display: grid;
-    grid-template-columns: 160px 1fr 1fr;
-    min-height: 80vh;
-    border-bottom: 0.5px solid var(--rule-med);
-  }
-  .ed-index {
-    border-right: 0.5px solid var(--rule-med);
-    padding: 80px 32px;
-    display: flex; flex-direction: column; gap: 48px;
-    background: var(--parch);
-  }
-  .ed-index-num {
-    font-family: 'Libre Baskerville', serif;
-    font-size: 5rem; font-weight: 400; line-height: 1;
-    color: var(--rule); letter-spacing: -0.04em;
-  }
-  .ed-col {
-    padding: 80px 56px;
-    border-right: 0.5px solid var(--rule-med);
-    display: flex; flex-direction: column; justify-content: space-between;
-  }
-  .ed-col-last { border-right: none; }
-  .portrait-frame {
-    width: 100%; aspect-ratio: 3/4; overflow: hidden;
-    position: relative; background: var(--parch2);
-  }
-  .portrait-frame img {
-    width: 100%; height: 100%; object-fit: cover;
-    filter: sepia(15%) contrast(1.05);
-    transition: transform 0.7s ease;
-  }
-  .portrait-frame:hover img { transform: scale(1.03); }
-  .portrait-caption {
-    position: absolute; bottom: 0; left: 0; right: 0;
-    padding: 20px;
-    background: linear-gradient(transparent, rgba(28,23,18,0.7));
-  }
+    /* ── Case Results ── */
+    .cases-section { background: var(--ink); padding: clamp(4rem, 7vw, 8rem) 0; }
+    .cases-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: clamp(2.5rem, 4vw, 4rem); gap: 24px;
+    }
+    .cases-title { font-size: clamp(2.2rem, 3.5vw, 3.6rem); color: #fff; }
+    .cases-title em { color: var(--sage); font-style: italic; }
+    .cases-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .case-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(197,223,192,0.12);
+      border-radius: var(--radius-md); padding: 28px;
+      display: flex; flex-direction: column; gap: 12px;
+      transition: border-color 0.3s, background 0.3s, transform 0.3s;
+    }
+    .case-card:hover {
+      border-color: rgba(197,223,192,0.35); background: rgba(197,223,192,0.05);
+      transform: translateY(-4px);
+    }
+    .case-card.highlight { border-color: rgba(197,223,192,0.3); background: rgba(197,223,192,0.06); }
+    .case-category {
+      font-size: 0.65rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--sage);
+      background: rgba(197,223,192,0.1); border: 1px solid rgba(197,223,192,0.2);
+      border-radius: 100px; padding: 4px 12px; width: fit-content;
+    }
+    .case-title { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: #fff; line-height: 1.3; }
+    .case-desc { font-size: 0.83rem; color: rgba(255,255,255,0.5); line-height: 1.7; flex: 1; }
+    .case-footer {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      border-top: 1px solid rgba(197,223,192,0.1); padding-top: 16px;
+    }
+    .case-meta { display: flex; flex-direction: column; gap: 2px; }
+    .case-court { font-size: 0.68rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.08em; }
+    .case-year { font-size: 0.65rem; color: rgba(255,255,255,0.25); }
+    .case-outcome {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--sage); color: var(--ink);
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em;
+      border-radius: 100px; padding: 6px 12px;
+    }
+    .cases-stats {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 16px; margin-bottom: 36px;
+    }
+    .cstat-box {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(197,223,192,0.1);
+      border-radius: var(--radius-sm); padding: 20px;
+    }
+    .cstat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.4rem; color: var(--sage); line-height: 1; }
+    .cstat-lbl { font-size: 0.68rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
 
-  /* ── STATS BAND ── */
-  .stats-band {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    border-bottom: 0.5px solid var(--rule-med);
-  }
-  .stat-cell {
-    padding: 52px 40px;
-    border-right: 0.5px solid var(--rule-med);
-    position: relative; overflow: hidden;
-    transition: background 0.3s;
-  }
-  .stat-cell:last-child { border-right: none; }
-  .stat-cell:hover { background: var(--parch); }
-  .stat-num {
-    font-family: 'Libre Baskerville', serif;
-    font-size: clamp(3rem, 5vw, 4.5rem);
-    font-weight: 400; line-height: 1; color: var(--ink);
-    letter-spacing: -0.03em;
-  }
-  .stat-num sup {
-    font-size: 0.4em; vertical-align: super;
-    color: var(--gold);
-  }
-  .stat-label {
-    font-size: 0.72rem; font-weight: 400; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--ink-dim); margin-top: 10px;
-  }
-  .stat-line {
-    position: absolute; bottom: 0; left: 0;
-    height: 2px; background: var(--gold); width: 0;
-    transition: width 0.5s ease;
-  }
-  .stat-cell:hover .stat-line { width: 100%; }
+    /* ── Why / Regions ── */
+    .regions-section {
+      position: relative; overflow: hidden;
+      padding: clamp(4rem, 8vw, 9rem) 0;
+      background: var(--ink);
+    }
+    .regions-bg {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; opacity: 0.12; pointer-events: none;
+    }
+    .regions-inner { position: relative; z-index: 2; }
+    .regions-title {
+      font-size: clamp(2.4rem, 4vw, 4.5rem); color: #fff;
+      text-align: center; margin-bottom: 20px;
+    }
+    .regions-title em { color: var(--sage); font-style: italic; }
+    .regions-subtitle { text-align: center; color: rgba(255,255,255,0.5); font-size: 1rem; margin-bottom: 56px; }
+    .regions-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(197,223,192,0.12); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid rgba(197,223,192,0.12); }
+    .region-item {
+      background: rgba(255,255,255,0.02); padding: 36px 32px;
+      text-align: center; transition: background 0.3s;
+    }
+    .region-item:hover { background: rgba(197,223,192,0.07); }
+    .region-name { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.4rem, 2vw, 1.8rem); color: #fff; margin-bottom: 8px; }
+    .region-cities { font-size: 0.82rem; color: rgba(255,255,255,0.4); line-height: 1.8; }
+    .why-cards {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+      margin-top: 56px;
+    }
+    .why-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(197,223,192,0.12);
+      border-radius: var(--radius-md); padding: 24px;
+      display: flex; flex-direction: column; gap: 12px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .why-card:hover { border-color: rgba(197,223,192,0.35); background: rgba(197,223,192,0.06); }
+    .why-icon { color: var(--sage); }
+    .why-card-title { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: #fff; }
+    .why-card-desc { font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.7; }
 
-  /* ── PROCESS HORIZONTAL ── */
-  .process-section { border-bottom: 0.5px solid var(--rule-med); }
-  .process-header {
-    display: grid; grid-template-columns: 1fr 1fr;
-    border-bottom: 0.5px solid var(--rule-med);
-  }
-  .process-header-left {
-    padding: 64px 72px;
-    border-right: 0.5px solid var(--rule-med);
-    background: var(--parch);
-  }
-  .process-header-right { padding: 64px 72px; }
-  .h-scroll-wrap { overflow-x: auto; display: flex; }
-  .h-scroll-wrap::-webkit-scrollbar { height: 2px; }
-  .h-scroll-wrap::-webkit-scrollbar-track { background: var(--parch); }
-  .h-scroll-wrap::-webkit-scrollbar-thumb { background: var(--gold); }
-  .process-track { display: flex; min-width: max-content; }
-  .process-card {
-    width: 340px; flex-shrink: 0;
-    border-right: 0.5px solid var(--rule-med);
-    padding: 56px 48px;
-    display: flex; flex-direction: column; justify-content: space-between;
-    min-height: 420px;
-    transition: background 0.3s;
-    cursor: default;
-    position: relative; overflow: hidden;
-  }
-  .process-card:hover { background: var(--parch); }
-  .process-card-num {
-    font-family: 'Libre Baskerville', serif;
-    font-size: 6rem; font-weight: 400; line-height: 1;
-    color: var(--rule); letter-spacing: -0.04em;
-    transition: color 0.3s;
-  }
-  .process-card:hover .process-card-num { color: var(--gold-lt); }
-  .process-card-title {
-    font-family: 'Libre Baskerville', serif;
-    font-size: 1.6rem; color: var(--ink); margin-bottom: 16px;
-  }
-  .process-card-body {
-    font-size: 0.88rem; line-height: 1.75; color: var(--ink-mid);
-    font-weight: 300;
-  }
-  .process-corner {
-    position: absolute; bottom: 24px; right: 24px;
-    width: 28px; height: 28px;
-    border-right: 1px solid var(--gold);
-    border-bottom: 1px solid var(--gold);
-    opacity: 0; transition: opacity 0.3s;
-  }
-  .process-card:hover .process-corner { opacity: 1; }
+    /* ── Testimonial ── */
+    .testimonial-section { background: var(--paper); padding: clamp(4rem, 7vw, 8rem) 0; }
+    .testi-inner {
+      display: grid; grid-template-columns: 380px 1fr; gap: 56px; align-items: start;
+    }
+    .testi-sidebar { display: flex; flex-direction: column; gap: 24px; position: sticky; top: 88px; }
+    .testi-sidebar-title { font-size: clamp(2rem, 2.8vw, 2.8rem); line-height: 1.1; }
+    .testi-sidebar-title em { color: var(--sage-dark); font-style: italic; }
+    .testi-nav { display: flex; align-items: center; gap: 10px; }
+    .testi-nav-btn {
+      width: 44px; height: 44px; border-radius: 50%;
+      border: 1.5px solid var(--border); color: var(--ink);
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: all 0.25s;
+    }
+    .testi-nav-btn:hover { background: var(--sage); border-color: var(--sage); }
+    .testi-counter {
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.12em;
+      color: var(--ink); background: var(--sage-pale);
+      border: 1px solid var(--border); border-radius: 100px; padding: 8px 16px;
+    }
+    .testi-progress { height: 2px; background: var(--sage-pale); border-radius: 2px; overflow: hidden; }
+    .testi-bar { height: 100%; background: var(--sage-dark); border-radius: 2px; transition: width 0.5s ease; }
+    .testi-dots { display: flex; gap: 6px; align-items: center; }
+    .testi-dot {
+      height: 6px; border-radius: 3px; transition: all 0.3s;
+      background: var(--sage);
+    }
+    .testi-card {
+      background: #fff; border: 1px solid #e8f2e6;
+      border-radius: var(--radius-lg); padding: clamp(1.5rem, 3vw, 2.8rem);
+      box-shadow: 0 20px 60px rgba(11,11,11,0.06);
+      animation: cardIn 0.5s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes cardIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .testi-quote {
+      font-size: clamp(1.05rem, 1.5vw, 1.25rem); line-height: 1.85;
+      color: #2a2a2a; margin-top: 16px;
+    }
+    .testi-author { display: flex; align-items: center; gap: 16px; margin-top: 28px; padding-top: 24px; border-top: 1px solid #e8f2e6; }
+    .testi-avatar { width: 60px; height: 60px; border-radius: 16px; object-fit: cover; border: 3px solid var(--sage); }
+    .testi-name { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; color: var(--ink); }
+    .testi-role { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-top: 2px; }
+    .testi-stars { display: flex; gap: 3px; color: var(--sage); margin-bottom: 4px; }
 
-  /* ── SERVICES BENTO ── */
-  .services-section { border-bottom: 0.5px solid var(--rule-med); }
-  .services-header {
-    padding: 72px 72px 56px;
-    border-bottom: 0.5px solid var(--rule-med);
-    display: flex; align-items: flex-end; justify-content: space-between; gap: 40px;
-  }
-  .bento-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    grid-template-rows: auto auto;
-  }
-  .bento-cell {
-    padding: 44px 44px;
-    border-right: 0.5px solid var(--rule-med);
-    border-bottom: 0.5px solid var(--rule-med);
-    transition: background 0.25s;
-    cursor: default; position: relative;
-  }
-  .bento-cell:hover { background: var(--parch); }
-  .bento-cell.wide { grid-column: span 1; }
-  .bento-cell.featured {
-    background: var(--ink); color: var(--linen);
-    border-color: var(--ink);
-  }
-  .bento-cell.featured:hover { background: #2a2218; }
-  .bento-cell.no-right { border-right: none; }
-  .bento-cell.no-bottom { border-bottom: none; }
-  .bento-icon {
-    width: 36px; height: 36px;
-    border: 0.5px solid var(--rule-med);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 24px; font-size: 1rem; color: var(--gold);
-    flex-shrink: 0;
-  }
-  .bento-cell.featured .bento-icon { border-color: rgba(255,255,255,0.15); color: var(--gold-lt); }
-  .bento-title {
-    font-family: 'Libre Baskerville', serif;
-    font-size: 1.2rem; color: var(--ink); margin-bottom: 10px;
-  }
-  .bento-cell.featured .bento-title { color: var(--linen); }
-  .bento-body { font-size: 0.82rem; line-height: 1.7; color: var(--ink-mid); font-weight: 300; }
-  .bento-cell.featured .bento-body { color: rgba(246,241,233,0.65); }
-  .bento-arrow {
-    position: absolute; top: 24px; right: 24px;
-    opacity: 0; transform: translate(-4px, 4px);
-    transition: opacity 0.25s, transform 0.25s;
-    color: var(--gold);
-  }
-  .bento-cell:hover .bento-arrow { opacity: 1; transform: translate(0,0); }
-  .bento-cell.featured .bento-arrow { color: var(--gold-lt); }
+    /* ── Blog ── */
+    .blog-section { background: var(--paper); padding: clamp(4rem, 7vw, 8rem) 0; border-top: 1px solid #f0f7ee; }
+    .blog-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: clamp(2rem, 4vw, 4rem); gap: 24px;
+    }
+    .blog-view-all {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.8rem; font-weight: 600; color: var(--ink);
+      text-transform: uppercase; letter-spacing: 0.1em;
+      transition: color 0.2s;
+    }
+    .blog-view-all:hover { color: var(--sage-dark); }
+    .blog-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; }
+    .blog-featured {
+      border: 1px solid #e8f2e6; border-radius: var(--radius-lg);
+      overflow: hidden; display: flex; flex-direction: column;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    }
+    .blog-featured:hover { border-color: var(--sage); box-shadow: 0 24px 60px rgba(11,11,11,0.08); transform: translateY(-4px); }
+    .blog-feat-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; transition: transform 0.5s; }
+    .blog-featured:hover .blog-feat-img { transform: scale(1.03); }
+    .blog-feat-img-wrap { overflow: hidden; }
+    .blog-feat-body { padding: 28px; flex: 1; display: flex; flex-direction: column; gap: 12px; }
+    .blog-right { display: flex; flex-direction: column; gap: 16px; }
+    .blog-mini {
+      display: flex; gap: 16px; border: 1px solid #e8f2e6; border-radius: var(--radius-md);
+      overflow: hidden; transition: border-color 0.3s, box-shadow 0.3s; text-decoration: none; color: inherit;
+    }
+    .blog-mini:hover { border-color: var(--sage); box-shadow: 0 8px 24px rgba(11,11,11,0.06); }
+    .blog-mini-img { width: 100px; flex-shrink: 0; object-fit: cover; align-self: stretch; }
+    .blog-mini-body { padding: 16px 16px 16px 0; display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; justify-content: center; }
+    .blog-cat {
+      font-size: 0.63rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--sage-dark);
+      background: var(--sage-pale); border: 1px solid var(--border);
+      border-radius: 100px; padding: 3px 10px; width: fit-content;
+    }
+    .blog-title { font-family: 'Cormorant Garamond', serif; line-height: 1.3; color: var(--ink); }
+    .blog-meta { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+    .blog-excerpt { font-size: 0.88rem; color: #555; line-height: 1.72; flex: 1; }
+    .blog-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 16px; border-top: 1px solid #e8f2e6; }
+    .blog-read-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--sage); color: var(--ink);
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .blog-featured:hover .blog-read-btn, .blog-mini:hover .blog-read-btn { background: var(--ink); color: #fff; transform: translateX(2px); }
 
-  /* ── RESULTS ── */
-  .results-section { border-bottom: 0.5px solid var(--rule-med); }
-  .results-grid {
-    display: grid; grid-template-columns: 280px 1fr;
-  }
-  .results-sidebar {
-    border-right: 0.5px solid var(--rule-med);
-    padding: 80px 48px;
-    background: var(--parch);
-    display: flex; flex-direction: column; justify-content: space-between;
-    position: sticky; top: 68px; align-self: start;
-  }
-  .results-list { flex: 1; }
-  .result-row {
-    border-bottom: 0.5px solid var(--rule-med);
-    padding: 36px 48px;
-    display: grid; grid-template-columns: 1fr auto;
-    gap: 24px; align-items: start;
-    transition: background 0.25s;
-  }
-  .result-row:hover { background: var(--parch); }
-  .result-cat {
-    font-size: 0.6rem; font-weight: 600; letter-spacing: 0.22em;
-    text-transform: uppercase; color: var(--sage); margin-bottom: 8px;
-  }
-  .result-title {
-    font-family: 'Libre Baskerville', serif;
-    font-size: 1.3rem; color: var(--ink); margin-bottom: 8px;
-  }
-  .result-court { font-size: 0.78rem; color: var(--ink-dim); font-weight: 300; }
-  .result-badge {
-    background: var(--sage-lt); color: var(--sage);
-    font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em;
-    text-transform: uppercase; padding: 6px 14px;
-    border-radius: 1px; white-space: nowrap;
-    border: 0.5px solid rgba(122,148,120,0.3);
-  }
+    /* ── FAQ ── */
+    .faq-section { background: var(--sage-pale); padding: clamp(4rem, 7vw, 8rem) 0; }
+    .faq-grid { display: grid; grid-template-columns: 360px 1fr; gap: 56px; align-items: start; }
+    .faq-sidebar { display: flex; flex-direction: column; gap: 20px; position: sticky; top: 88px; }
+    .faq-sidebar-title { font-size: clamp(2rem, 2.8vw, 2.8rem); }
+    .faq-sidebar-title em { color: var(--sage-dark); font-style: italic; }
+    .faq-cta-box {
+      background: var(--ink); border-radius: var(--radius-md); padding: 24px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .faq-cta-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: #fff; }
+    .faq-cta-sub { font-size: 0.82rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+    .faq-cta-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--sage); color: var(--ink);
+      font-size: 0.82rem; font-weight: 600; letter-spacing: 0.04em;
+      padding: 12px 20px; border-radius: 100px;
+      width: fit-content; transition: background 0.2s;
+    }
+    .faq-cta-btn:hover { background: #fff; }
+    .faq-list { display: flex; flex-direction: column; }
+    .faq-item { border-bottom: 1px solid rgba(197,223,192,0.5); }
+    .faq-question {
+      width: 100%; display: flex; justify-content: space-between; align-items: center;
+      padding: 22px 0; gap: 20px; text-align: left; background: none; border: none;
+      cursor: pointer; font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.1rem, 1.8vw, 1.35rem); color: var(--ink);
+      transition: color 0.2s;
+    }
+    .faq-question:hover { color: var(--sage-dark); }
+    .faq-toggle {
+      width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+      border: 1.5px solid var(--border); color: var(--sage-dark);
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: all 0.3s;
+    }
+    .faq-toggle.open { background: var(--sage); border-color: var(--sage); transform: rotate(45deg); }
+    .faq-answer {
+      display: grid; grid-template-rows: 0fr;
+      transition: grid-template-rows 0.35s ease, opacity 0.3s;
+      opacity: 0;
+    }
+    .faq-answer.open { grid-template-rows: 1fr; opacity: 1; }
+    .faq-answer-inner { overflow: hidden; }
+    .faq-answer-text { padding-bottom: 20px; font-size: 0.92rem; line-height: 1.8; color: #444; }
 
-  /* ── FAQ ── */
-  .faq-section { border-bottom: 0.5px solid var(--rule-med); }
-  .faq-grid { display: grid; grid-template-columns: 1fr 1.4fr; min-height: 60vh; }
-  .faq-left {
-    border-right: 0.5px solid var(--rule-med);
-    padding: 80px 72px;
-    background: var(--parch);
-    display: flex; flex-direction: column; justify-content: flex-end;
-  }
-  .faq-right { padding: 0; }
-  .faq-item { border-bottom: 0.5px solid var(--rule-med); }
-  .faq-trigger {
-    width: 100%; display: flex; align-items: center; justify-content: space-between;
-    gap: 32px; padding: 32px 56px;
-    background: none; border: none; cursor: pointer; text-align: left;
-    transition: background 0.2s;
-  }
-  .faq-trigger:hover { background: var(--parch); }
-  .faq-q {
-    font-family: 'Libre Baskerville', serif;
-    font-size: 1.1rem; font-weight: 400; color: var(--ink); line-height: 1.35;
-  }
-  .faq-icon {
-    width: 30px; height: 30px; flex-shrink: 0;
-    border: 0.5px solid var(--rule-med); border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--gold); transition: transform 0.35s, border-color 0.25s;
-  }
-  .faq-icon.open { transform: rotate(45deg); border-color: var(--gold); }
-  .faq-body {
-    padding: 0 56px 32px;
-    font-size: 0.92rem; line-height: 1.8; color: var(--ink-mid);
-    font-weight: 300; max-height: 0; overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.16,1,0.3,1), padding 0.3s;
-  }
-  .faq-body.open { max-height: 400px; }
+    /* ── Contact ── */
+    .contact-section { background: var(--paper); padding: clamp(4rem, 7vw, 8rem) 0; }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 56px; align-items: start; }
+    .contact-info { display: flex; flex-direction: column; gap: 28px; }
+    .contact-title { font-size: clamp(2.4rem, 3.5vw, 3.8rem); line-height: 1.08; }
+    .contact-title em { color: var(--sage-dark); font-style: italic; }
+    .contact-detail {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 20px; background: var(--sage-pale);
+      border: 1px solid var(--border); border-radius: var(--radius-md);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .contact-detail:hover { border-color: var(--sage); box-shadow: 0 8px 24px rgba(197,223,192,0.2); }
+    .contact-detail-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: var(--sage); color: var(--ink);
+      display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .contact-detail-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 4px; }
+    .contact-detail-value { font-size: 0.92rem; color: var(--ink); font-weight: 500; }
+    .contact-form-panel {
+      background: var(--ink); border-radius: var(--radius-xl);
+      padding: clamp(2rem, 4vw, 3.5rem); display: flex; flex-direction: column; gap: 28px;
+    }
+    .form-section-label {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--sage); margin-bottom: 12px;
+    }
+    .chip-group { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      padding: 8px 16px; border-radius: 100px; border: 1px solid rgba(197,223,192,0.25);
+      background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.6);
+      font-size: 0.8rem; cursor: pointer; transition: all 0.2s;
+    }
+    .chip:hover { border-color: var(--sage); color: var(--sage); }
+    .chip.active { background: var(--sage); color: var(--ink); border-color: var(--sage); font-weight: 600; }
+    .form-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-field { display: flex; flex-direction: column; gap: 6px; }
+    .form-field.full { grid-column: 1 / -1; }
+    .form-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+    .form-input {
+      width: 100%; background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(197,223,192,0.2); border-radius: 12px;
+      padding: 13px 16px; color: #fff; font-size: 0.9rem; font-family: inherit;
+      transition: border-color 0.25s, background 0.25s;
+      resize: none;
+    }
+    .form-input::placeholder { color: rgba(255,255,255,0.28); }
+    .form-input:focus { outline: none; border-color: var(--sage); background: rgba(197,223,192,0.06); }
+    .form-submit {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; background: var(--sage); color: var(--ink);
+      font-size: 0.92rem; font-weight: 700; letter-spacing: 0.04em;
+      padding: 16px; border-radius: 14px; border: none; cursor: pointer;
+      transition: all 0.25s;
+    }
+    .form-submit:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 12px 30px rgba(197,223,192,0.3); }
+    .form-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .form-msg { padding: 12px 16px; border-radius: 10px; font-size: 0.85rem; font-weight: 500; }
+    .form-msg.success { background: rgba(197,223,192,0.15); color: var(--sage); border: 1px solid rgba(197,223,192,0.3); }
+    .form-msg.error { background: rgba(255,100,100,0.1); color: #ff8080; border: 1px solid rgba(255,100,100,0.2); }
+    .hours-box {
+      background: rgba(197,223,192,0.08); border: 1px solid rgba(197,223,192,0.15);
+      border-radius: var(--radius-md); padding: 20px;
+    }
+    .hours-row { display: flex; justify-content: space-between; font-size: 0.82rem; padding: 6px 0; }
+    .hours-row:not(:last-child) { border-bottom: 1px solid rgba(197,223,192,0.1); }
+    .hours-day { color: rgba(255,255,255,0.5); }
+    .hours-time { color: rgba(255,255,255,0.8); font-weight: 500; }
 
-  /* ── CONTACT ── */
-  .contact-section { border-bottom: 0.5px solid var(--rule-med); }
-  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; }
-  .contact-left {
-    border-right: 0.5px solid var(--rule-med);
-    padding: 80px 72px;
-    display: flex; flex-direction: column; justify-content: space-between;
-    background: var(--ink); color: var(--linen);
-  }
-  .contact-right { padding: 80px 72px; }
-  .contact-info-row {
-    padding: 24px 0; border-bottom: 0.5px solid rgba(246,241,233,0.1);
-    display: flex; gap: 20px; align-items: flex-start;
-    text-decoration: none; color: inherit;
-    transition: opacity 0.2s;
-  }
-  .contact-info-row:hover { opacity: 0.7; }
-  .contact-info-icon {
-    width: 32px; height: 32px; flex-shrink: 0;
-    border: 0.5px solid rgba(246,241,233,0.15); border-radius: 50%;
-    display: flex; align-items: center; justify-content: center; color: var(--gold-lt);
-  }
-  .field-label {
-    font-size: 0.58rem; font-weight: 600; letter-spacing: 0.22em;
-    text-transform: uppercase; color: var(--gold); margin-bottom: 6px; display: block;
-  }
-  .field-input {
-    width: 100%; background: transparent;
-    border: none; border-bottom: 0.5px solid var(--rule-med);
-    padding: 10px 0; font-size: 0.95rem;
-    font-family: 'Instrument Sans', sans-serif; color: var(--ink);
-    outline: none; transition: border-color 0.2s;
-  }
-  .field-input:focus { border-color: var(--gold); }
-  .field-input::placeholder { color: var(--ink-dim); }
-  .field-textarea {
-    width: 100%; background: transparent;
-    border: none; border-bottom: 0.5px solid var(--rule-med);
-    padding: 10px 0; font-size: 0.95rem; resize: none;
-    font-family: 'Instrument Sans', sans-serif; color: var(--ink);
-    outline: none; transition: border-color 0.2s;
-  }
-  .field-textarea:focus { border-color: var(--gold); }
-  .field-textarea::placeholder { color: var(--ink-dim); }
-  .submit-btn {
-    display: inline-flex; align-items: center; gap: 12px;
-    background: var(--ink); color: var(--linen);
-    font-family: 'Instrument Sans', sans-serif;
-    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.15em;
-    text-transform: uppercase; padding: 14px 28px;
-    border: none; cursor: pointer; transition: background 0.25s, color 0.25s;
-    border-radius: 1px;
-  }
-  .submit-btn:hover { background: var(--gold); }
+    /* ── Footer ── */
+    .footer-section { background: var(--ink); padding: clamp(3rem, 5vw, 5rem) 0 0; }
+    .footer-top {
+      display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px;
+      padding-bottom: clamp(2.5rem, 4vw, 4rem); border-bottom: 1px solid rgba(197,223,192,0.12);
+    }
+    .footer-brand { display: flex; flex-direction: column; gap: 16px; }
+    .footer-tagline { font-size: 0.85rem; color: rgba(255,255,255,0.45); line-height: 1.7; max-width: 260px; }
+    .footer-socials { display: flex; gap: 10px; }
+    .footer-social {
+      width: 36px; height: 36px; border-radius: 10px;
+      border: 1px solid rgba(197,223,192,0.2); color: rgba(255,255,255,0.5);
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .footer-social:hover { background: rgba(197,223,192,0.12); color: var(--sage); border-color: var(--sage); }
+    .footer-col { display: flex; flex-direction: column; gap: 16px; }
+    .footer-col-title {
+      font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.14em;
+      color: var(--sage); font-weight: 600;
+    }
+    .footer-links { display: flex; flex-direction: column; gap: 10px; }
+    .footer-link { font-size: 0.85rem; color: rgba(255,255,255,0.45); transition: color 0.2s; }
+    .footer-link:hover { color: rgba(255,255,255,0.85); }
+    .footer-contact-item { display: flex; align-items: flex-start; gap: 10px; }
+    .footer-contact-icon { color: var(--sage); flex-shrink: 0; margin-top: 1px; }
+    .footer-contact-text { font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.5; transition: color 0.2s; }
+    .footer-contact-item:hover .footer-contact-text { color: rgba(255,255,255,0.75); }
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 0; gap: 16px; flex-wrap: wrap;
+    }
+    .footer-copy { font-size: 0.78rem; color: rgba(255,255,255,0.3); }
+    .footer-web { font-size: 0.78rem; color: rgba(255,255,255,0.3); transition: color 0.2s; }
+    .footer-web:hover { color: var(--sage); }
 
-  /* ── FOOTER ── */
-  .footer {
-    padding: 64px 0 0;
-    background: var(--parch);
-  }
-  .footer-main {
-    display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
-    padding: 0 72px 64px;
-    gap: 64px;
-    border-bottom: 0.5px solid var(--rule-med);
-  }
-  .footer-nav-head {
-    font-size: 0.6rem; font-weight: 600; letter-spacing: 0.22em;
-    text-transform: uppercase; color: var(--gold); margin-bottom: 20px;
-  }
-  .footer-nav-a {
-    display: block; font-size: 0.85rem; color: var(--ink-mid);
-    text-decoration: none; padding: 6px 0;
-    transition: color 0.2s;
-  }
-  .footer-nav-a:hover { color: var(--ink); }
-  .footer-base {
-    padding: 24px 72px;
-    display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: wrap; gap: 16px;
-  }
+    /* ── WhatsApp Float ── */
+    .wa-fab {
+      position: fixed; bottom: 24px; right: 24px; z-index: 980;
+      display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
+    }
+    .wa-panel {
+      width: min(90vw, 360px); border-radius: 22px; overflow: hidden;
+      background: #fff; border: 1px solid var(--border);
+      box-shadow: 0 24px 64px rgba(11,11,11,0.18);
+      transition: all 0.35s cubic-bezier(0.22,1,0.36,1);
+      transform-origin: bottom right;
+    }
+    .wa-panel.closed { opacity: 0; transform: scale(0.92) translateY(16px); pointer-events: none; }
+    .wa-panel.open { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
+    .wa-header {
+      background: var(--ink); padding: 14px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .wa-header-info { display: flex; align-items: center; gap: 10px; }
+    .wa-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--sage); color: var(--ink);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .wa-name { font-size: 0.88rem; font-weight: 600; color: #fff; }
+    .wa-status { font-size: 0.7rem; color: var(--sage); }
+    .wa-close {
+      width: 30px; height: 30px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.6);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .wa-close:hover { border-color: var(--sage); color: var(--sage); }
+    .wa-body { padding: 16px; background: #f9fbf8; display: flex; flex-direction: column; gap: 12px; }
+    .wa-bubble {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 16px; border-top-left-radius: 4px;
+      padding: 12px 14px; font-size: 0.85rem; line-height: 1.6; color: var(--ink);
+      max-width: 90%; box-shadow: 0 2px 8px rgba(11,11,11,0.05);
+    }
+    .wa-quick { display: flex; flex-wrap: wrap; gap: 6px; }
+    .wa-quick-btn {
+      font-size: 0.75rem; padding: 7px 12px; border-radius: 100px;
+      border: 1px solid var(--border); background: #fff; color: var(--ink);
+      transition: all 0.2s; text-align: left;
+    }
+    .wa-quick-btn:hover, .wa-quick-btn.selected { background: var(--sage); border-color: var(--sage); }
+    .wa-input-row { display: flex; gap: 8px; align-items: flex-end; }
+    .wa-textarea {
+      flex: 1; resize: none; border: 1px solid var(--border);
+      border-radius: 14px; padding: 10px 14px; font-size: 0.85rem;
+      font-family: inherit; color: var(--ink); background: #fff;
+      transition: border-color 0.2s;
+    }
+    .wa-textarea:focus { outline: none; border-color: var(--sage); }
+    .wa-send {
+      width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+      background: var(--sage); color: var(--ink);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .wa-send:hover { background: var(--ink); color: var(--sage); }
+    .wa-label {
+      background: var(--ink); color: var(--sage);
+      font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em;
+      padding: 6px 14px; border-radius: 100px; font-weight: 600;
+    }
+    .wa-toggle {
+      width: 56px; height: 56px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 12px 32px rgba(11,11,11,0.3);
+      transition: all 0.3s; border: none;
+    }
+    .wa-toggle.closed { background: var(--sage); color: var(--ink); }
+    .wa-toggle.closed:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 18px 40px rgba(197,223,192,0.45); }
+    .wa-toggle.open-state { background: var(--ink); color: var(--sage); }
 
-  /* ── WHATSAPP ── */
-  .wa-bubble {
-    position: fixed; bottom: 28px; right: 28px; z-index: 980;
-    display: flex; flex-direction: column; align-items: flex-end;
-  }
-  .wa-panel {
-    margin-bottom: 12px; width: min(92vw, 340px);
-    background: var(--linen); border: 0.5px solid var(--rule-med);
-    box-shadow: 0 20px 60px rgba(28,23,18,0.15);
-    transition: opacity 0.3s, transform 0.3s; transform-origin: bottom right;
-  }
-  .wa-panel.closed { opacity: 0; transform: scale(0.92); pointer-events: none; }
-  .wa-panel.open   { opacity: 1; transform: scale(1); }
-  .wa-header {
-    padding: 14px 18px; background: var(--ink);
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .wa-btn {
-    width: 50px; height: 50px; border-radius: 50%;
-    background: var(--ink); border: none; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 8px 32px rgba(28,23,18,0.25);
-    transition: background 0.25s, transform 0.2s;
-    color: var(--linen);
-  }
-  .wa-btn:hover { background: var(--gold); transform: scale(1.05); }
+    /* ── Mobile menu ── */
+    .mobile-panel {
+      position: fixed; inset: 0; z-index: 800; background: var(--ink);
+      display: flex; flex-direction: column;
+    }
+    .mobile-nav-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 0; border-bottom: 1px solid rgba(197,223,192,0.1);
+      font-family: 'Cormorant Garamond', serif; font-size: 2rem;
+      color: rgba(255,255,255,0.8); transition: color 0.2s;
+      animation: mobileNavIn 0.4s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .mobile-nav-item:hover { color: var(--sage); }
+    @keyframes mobileNavIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .mobile-num { font-family: 'DM Sans', sans-serif; font-size: 0.7rem; color: rgba(197,223,192,0.4); letter-spacing: 0.1em; }
 
-  /* ── MOBILE ── */
-  @media (max-width: 1100px) {
-    .hero-wrap { grid-template-columns: 1fr; }
-    .hero-left { border-right: none; border-bottom: 0.5px solid var(--rule-med); min-height: unset; padding: 60px 32px 40px; }
-    .hero-right { padding: 48px 32px 60px; }
-    .hero-bg-text { display: none; }
-    .editorial-grid { grid-template-columns: 1fr; }
-    .ed-index { display: none; }
-    .ed-col { padding: 48px 32px; border-right: none; border-bottom: 0.5px solid var(--rule-med); }
-    .stats-band { grid-template-columns: repeat(2, 1fr); }
-    .stat-cell { border-bottom: 0.5px solid var(--rule-med); }
-    .process-header { grid-template-columns: 1fr; }
-    .process-header-left { border-right: none; border-bottom: 0.5px solid var(--rule-med); padding: 48px 32px; }
-    .process-header-right { padding: 40px 32px; }
-    .process-card { width: 280px; padding: 40px 32px; }
-    .services-header { padding: 48px 32px 40px; flex-direction: column; align-items: flex-start; }
-    .bento-grid { grid-template-columns: 1fr; }
-    .bento-cell { border-right: none !important; }
-    .results-grid { grid-template-columns: 1fr; }
-    .results-sidebar { position: static; border-right: none; border-bottom: 0.5px solid var(--rule-med); }
-    .result-row { padding: 28px 28px; }
-    .faq-grid { grid-template-columns: 1fr; }
-    .faq-left { border-right: none; border-bottom: 0.5px solid var(--rule-med); padding: 48px 32px; }
-    .faq-trigger { padding: 24px 28px; }
-    .faq-body { padding: 0 28px 24px; }
-    .contact-grid { grid-template-columns: 1fr; }
-    .contact-left { border-right: none; border-bottom: 0.5px solid var(--rule-med); padding: 60px 32px; }
-    .contact-right { padding: 60px 32px; }
-    .footer-main { grid-template-columns: 1fr 1fr; padding: 0 32px 48px; gap: 40px; }
-    .footer-base { padding: 24px 32px; }
-    .nav-links { display: none; }
-    .hdr-inner { padding: 0 24px; }
-  }
-
-  @media (max-width: 640px) {
-    .stats-band { grid-template-columns: 1fr 1fr; }
-    .footer-main { grid-template-columns: 1fr; }
-  }
-`;
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .about-grid { grid-template-columns: 1fr; }
+      .about-photo-stack { display: none; }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .team-grid { grid-template-columns: repeat(2, 1fr); }
+      .cases-grid { grid-template-columns: repeat(2, 1fr); }
+      .cases-stats { grid-template-columns: repeat(2, 1fr); }
+      .why-cards { grid-template-columns: repeat(2, 1fr); }
+      .regions-grid { grid-template-columns: 1fr 1fr; }
+      .testi-inner { grid-template-columns: 1fr; }
+      .testi-sidebar { position: static; }
+      .blog-layout { grid-template-columns: 1fr; }
+      .faq-grid { grid-template-columns: 1fr; }
+      .faq-sidebar { position: static; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .nav-links { display: none; }
+      .header-cta-desktop { display: none; }
+    }
+    @media (max-width: 640px) {
+      .services-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: 1fr 1fr; }
+      .cases-grid { grid-template-columns: 1fr; }
+      .cases-stats { grid-template-columns: repeat(2, 1fr); }
+      .why-cards { grid-template-columns: 1fr; }
+      .regions-grid { grid-template-columns: 1fr; }
+      .form-fields { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .hero-stats { flex-wrap: wrap; }
+    }
+  `}</style>
+);
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
-const SERVICES = [
-  { icon: "⚖", title: "Criminal Law", desc: "Bail, FIR quashing, white-collar crime defense, cybercrime & financial fraud litigation before High Court and Sessions Courts.", featured: false },
-  { icon: "🏛", title: "Civil Litigation", desc: "Property disputes, injunction suits, partition matters, contractual recovery & civil appeals.", featured: false },
-  { icon: "📜", title: "Writs & Constitutional", desc: "PIL matters, writ petitions, and challenges to governmental or statutory actions before constitutional courts.", featured: true },
-  { icon: "🏠", title: "Property & Real Estate", desc: "Title verification, due diligence, sale drafting & real estate dispute resolution.", featured: false },
-  { icon: "👨‍👩‍👧", title: "Family & Matrimonial", desc: "Divorce, child custody, guardianship, maintenance & domestic violence proceedings.", featured: false },
-  { icon: "📊", title: "Arbitration & ADR", desc: "Arbitration, mediation, commercial settlement & enforcement of arbitral awards.", featured: false },
-  { icon: "🏢", title: "Corporate Advisory", desc: "Contract drafting, compliance advisory, shareholder agreements & legal due diligence.", featured: false },
-  { icon: "🛡", title: "Consumer Protection", desc: "Consumer complaints, deficiency claims, product liability disputes and compensation recovery.", featured: false },
-  { icon: "🚗", title: "MCOP & Rent Control", desc: "Motor accident compensation claims, insurance disputes, eviction & fair rent proceedings.", featured: false },
+const services = [
+  { title: "Criminal Law", description: "Bail, criminal trials, FIR quashing, cheque dishonour, white-collar crime defense, and cybercrime litigation.", icon: Scale },
+  { title: "Civil Litigation", description: "Property disputes, partition matters, injunction suits, contractual disputes, execution proceedings, and civil appeals.", icon: BookOpen },
+  { title: "Writs & Constitutional", description: "Writ petitions, PIL matters, and challenges to governmental or statutory actions before constitutional courts.", icon: Shield },
+  { title: "Consumer Protection", description: "Consumer complaints, deficiency in service claims, product liability disputes, and consumer litigation.", icon: CheckCircle },
+  { title: "Property & Real Estate", description: "Title verification, due diligence, sale and lease drafting, registration support, and dispute resolution.", icon: MapPin },
+  { title: "Family & Matrimonial", description: "Divorce matters (mutual and contested), child custody, guardianship, maintenance, and domestic violence proceedings.", icon: Users },
+  { title: "Arbitration & ADR", description: "Arbitration, mediation, conciliation, commercial dispute settlement, and enforcement of arbitral awards.", icon: Award },
+  { title: "Corporate Advisory", description: "Contract drafting, compliance advisory, business dispute strategy, partnership agreements, and legal due diligence.", icon: BookOpen },
+  { title: "MCOP & Rent Control", description: "Motor accident compensation claims, insurance disputes, eviction proceedings, fair rent fixation, and rent control litigation.", icon: Clock },
 ];
 
-const RESULTS = [
-  { cat: "Criminal Law", title: "Anticipatory Bail Granted in 72 Hours", court: "Madras High Court · 2024", badge: "Bail Granted" },
-  { cat: "Property Dispute", title: "Multi-Acre Title Dispute — Clear Decree", court: "District Court, Coimbatore · 2023", badge: "Decree in Favour" },
-  { cat: "Consumer Protection", title: "₹18 Lakh Builder Compensation", court: "State Consumer Commission · 2024", badge: "₹18L Awarded" },
-  { cat: "Family Law", title: "Full Child Custody Secured", court: "Family Court, Chennai · 2023", badge: "Custody Secured" },
-  { cat: "Writ Petition", title: "Reinstatement of Wrongfully Terminated Employee", court: "Madras High Court · 2024", badge: "Reinstatement" },
-  { cat: "MCOP", title: "₹42 Lakh Motor Accident Compensation", court: "Motor Accidents Tribunal · 2023", badge: "₹42L Awarded" },
+const teamMembers = [
+  { name: "AGD Bala Kumar", role: "Managing Counsel", specialization: "Criminal & Civil Litigation", experience: "12+ Years", img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&h=800&fit=crop&crop=faces" },
+  { name: "Priya Sundaram", role: "Senior Associate", specialization: "Family & Matrimonial Law", experience: "8 Years", img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&h=800&fit=crop&crop=faces" },
+  { name: "Karthik Raj", role: "Associate Counsel", specialization: "Corporate & Commercial Advisory", experience: "5 Years", img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&h=800&fit=crop&crop=faces" },
+  { name: "Meena Lakshmi", role: "Associate Advocate", specialization: "Property & Real Estate Law", experience: "4 Years", img: "https://images.unsplash.com/photo-1580894732444-8ecded7900cd?w=600&h=800&fit=crop&crop=faces" },
 ];
 
-const PROCESS_STEPS = [
-  { num: "01", title: "Listen & Analyse", body: "Every matter begins with an undivided consultation. We map the full legal landscape before forming any opinion — no assumptions, no templates." },
-  { num: "02", title: "Advise & Plan", body: "A clear written legal opinion. Every option laid out with its risks, timeline, and cost. You decide — informed." },
-  { num: "03", title: "Prepare & File", body: "Precision drafting of every petition, brief and supporting document. Filed correctly, structured for the forum, argued from day one." },
-  { num: "04", title: "Advocate", body: "Focused courtroom advocacy. Every argument considered, every contingency prepared. Your case, our full attention." },
-  { num: "05", title: "Resolve & Report", body: "Timely, decisive outcomes. Whether a verdict, settlement or injunction — we close every matter clearly and keep you informed to the last step." },
+const caseResults = [
+  { category: "Criminal Law", title: "Anticipatory Bail Granted", description: "Secured anticipatory bail in a high-profile financial fraud matter at Madras High Court within 72 hours of filing.", outcome: "Bail Granted", court: "Madras High Court", year: "2024", highlight: true },
+  { category: "Property Dispute", title: "Title Dispute Resolved", description: "Successfully defended a multi-acre agricultural property title dispute spanning 3 generations, resulting in clear title decree.", outcome: "Decree in Favour", court: "District Court, Coimbatore", year: "2023", highlight: false },
+  { category: "Consumer Protection", title: "₹18 Lakh Compensation", description: "Obtained ₹18 lakh compensation for a client against a leading builder for deficiency in service and delayed possession.", outcome: "₹18L Awarded", court: "State Consumer Commission", year: "2024", highlight: false },
+  { category: "Family Law", title: "Child Custody Secured", description: "Represented a mother in a contested custody matter, securing full custody with defined visitation rights.", outcome: "Custody Secured", court: "Family Court, Chennai", year: "2023", highlight: true },
+  { category: "Writ Petition", title: "Service Matter Relief", description: "Succeeded in a writ petition challenging arbitrary termination of a government employee, securing reinstatement with back wages.", outcome: "Reinstatement Ordered", court: "Madras High Court", year: "2024", highlight: false },
+  { category: "MCOP", title: "Motor Accident Claim", description: "Achieved ₹42 lakh compensation for a family that lost their breadwinner in a road accident through MCOP proceedings.", outcome: "₹42L Awarded", court: "Motor Accidents Tribunal", year: "2023", highlight: false },
 ];
 
-const FAQS = [
-  { q: "What forums do you appear before?", a: "We regularly appear before the Madras High Court, District Courts, Metropolitan Courts, Tribunals, and Consumer Disputes Redressal Commissions across Tamil Nadu." },
-  { q: "Why choose AGD Law Associates?", a: "We are a boutique firm — which means personalized attention, direct access to counsel, and no file being handed to a junior without your knowledge. Ethical, transparent, and efficient." },
-  { q: "What is your approach to a new matter?", a: "Every matter begins with a detailed consultation. We provide a written legal opinion, a proposed timeline, and an honest assessment of outcomes before filing anything." },
-  { q: "What are your office hours?", a: "Monday to Friday: 10:00 AM – 6:30 PM. Saturday: 11:00 AM – 5:00 PM. Second and last Saturdays are holidays." },
-  { q: "Where do you have active presence?", a: "Chennai, Tambaram, Avadi, Coimbatore, Tiruppur, Bangalore, and districts including Chengalpattu, Tiruvallur, Kancheepuram, and Dindigul." },
+const blogPosts = [
+  { slug: "anticipatory-bail-guide-india", category: "Criminal Law", title: "Anticipatory Bail in India: What It Is and When You Need It", excerpt: "A pre-arrest bail can be the difference between freedom and custody. We break down Section 438 CrPC, who qualifies, and how the process works at the High Court.", author: "AGD Bala Kumar", date: "March 18, 2025", readTime: "6 min read", img: "https://images.unsplash.com/photo-1589994965851-a8f479c573a9?w=800&h=500&fit=crop", featured: true },
+  { slug: "property-due-diligence-checklist", category: "Property Law", title: "The Essential Due Diligence Checklist Before Buying Property in Tamil Nadu", excerpt: "Title verification, encumbrance certificates, patta, and chitta — exactly what to check before signing any property sale agreement.", author: "Meena Lakshmi", date: "Feb 28, 2025", readTime: "8 min read", img: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&h=500&fit=crop", featured: false },
+  { slug: "divorce-mutual-consent-process", category: "Family Law", title: "Mutual Consent Divorce in India: Timeline, Process & What to Expect", excerpt: "From the first motion to the final decree, a full walkthrough of the uncontested divorce process and cooling-off period.", author: "Priya Sundaram", date: "Feb 10, 2025", readTime: "7 min read", img: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&h=500&fit=crop", featured: false },
+  { slug: "consumer-court-how-to-file", category: "Consumer Protection", title: "How to File a Consumer Complaint: A Step-by-Step Guide", excerpt: "Defective goods, service failures, builder delays — find out which forum to approach and how to build a winning complaint.", author: "Karthik Raj", date: "Jan 22, 2025", readTime: "5 min read", img: "https://plus.unsplash.com/premium_photo-1661720120987-9723da4de350?w=800&h=500&fit=crop", featured: false },
 ];
 
-// ─── Hooks ─────────────────────────────────────────────────────────────────────
+const faqs = [
+  { q: "What forums do you represent clients before?", a: "We regularly appear before the Madras High Court, District Courts, Metropolitan Courts, Tribunals, and Consumer Disputes Redressal Commissions." },
+  { q: "Why choose AGD Law Associates?", a: "We are a boutique firm offering personalized attention, strong litigation and advisory expertise, ethical and transparent practice, efficient case management, and active Pan-Tamil Nadu plus inter-state presence." },
+  { q: "What is your legal approach?", a: "Our structured process includes detailed case analysis, clear legal opinion and roadmap, transparent communication, strong courtroom advocacy, and focus on timely resolution." },
+  { q: "What are your office hours?", a: "Monday to Friday: 10:00 AM to 6:30 PM. Saturday: 11:00 AM to 5:00 PM. Second and last Saturdays are holidays." },
+  { q: "Where do you have active practice presence?", a: "Our active litigation presence includes Chennai, Tambaram, Avadi, Coimbatore, Tiruppur, and Bangalore, along with districts such as Chengalpattu, Tiruvallur, Kancheepuram, and Dindigul." },
+];
 
-function useFade(threshold = 0.1) {
-  const ref = useRef(null);
-  const [vis, setVis] = useState(false);
-  useEffect(() => {
-    const el = ref.current; if (!el) return;
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVis(true); obs.disconnect(); } }, { threshold });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-  return [ref, vis];
-}
+const serviceOptions = [
+  { value: "criminal_law", label: "Criminal Law" },
+  { value: "civil_litigation", label: "Civil Litigation" },
+  { value: "writ_constitutional", label: "Writs & Constitutional" },
+  { value: "consumer_protection", label: "Consumer Protection" },
+  { value: "property_real_estate", label: "Property & Real Estate" },
+  { value: "family_matrimonial", label: "Family & Matrimonial" },
+  { value: "arbitration_adr", label: "Arbitration & ADR" },
+  { value: "corporate_advisory", label: "Corporate Advisory" },
+  { value: "mcop_rcop", label: "MCOP & Rent Control" },
+];
 
-function Fade({ children, className = "", delay = 0, style = {} }) {
-  const [ref, vis] = useFade(0.08);
-  return (
-    <div ref={ref} className={`fade-up${vis ? " visible" : ""} ${className}`}
-      style={{ ...style, transitionDelay: `${delay}ms` }}>
-      {children}
-    </div>
-  );
-}
+const budgetOptions = [
+  { value: "immediate", label: "Immediate Assistance" },
+  { value: "within_week", label: "Within This Week" },
+  { value: "scheduled", label: "Scheduled Consultation" },
+];
 
-// ─── Header ────────────────────────────────────────────────────────────────────
+// ─── SVG Icons ────────────────────────────────────────────────────────────────
+
+const FacebookIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.1 0 2.24.2 2.24.2v2.46H15.2c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12Z" />
+  </svg>
+);
+
+const XIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M18.9 2H22l-6.8 7.8L23 22h-6.2l-4.9-6.9L5.9 22H2.8l7.3-8.3L1 2h6.3l4.4 6.3L18.9 2Zm-1.1 18h1.7L6.4 3.9H4.6L17.8 20Z" />
+  </svg>
+);
+
+// ─── Header ───────────────────────────────────────────────────────────────────
 
 function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [mobOpen, setMobOpen] = useState(false);
 
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 30);
-    window.addEventListener("scroll", fn, { passive: true });
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = mobOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [mobOpen]);
-
-  const links = [
+  const navLinks = [
     { href: "#about", label: "About" },
-    { href: "#process", label: "Approach" },
-    { href: "#practice", label: "Practice" },
-    { href: "#results", label: "Results" },
+    { href: "#services", label: "Services" },
+    { href: "#team", label: "Team" },
+    { href: "#cases", label: "Case Results" },
+    { href: "#blog", label: "Insights" },
+    { href: "#faq", label: "FAQ" },
     { href: "#contact", label: "Contact" },
   ];
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <>
-      <header className={`hdr${scrolled ? " shadow" : ""}`}>
-        <div className="hdr-inner">
-          <Link href="/" style={{ textDecoration: "none" }}>
-            <div className="logo-wordmark">AGD Law Associates<br /><span className="logo-sub">Advocates & Legal Consultants</span></div>
-          </Link>
-          <nav className="nav-links">
-            {links.map(l => <a key={l.href} href={l.href} className="nav-a">{l.label}</a>)}
-            <a href="tel:+919994388855" className="nav-cta">+91 99943 88855</a>
-          </nav>
-          {/* Mobile toggle */}
-          <button onClick={() => setMobOpen(v => !v)}
-            style={{ display: "none", background: "none", border: "none", cursor: "pointer", padding: 6 }}
-            className="mob-hdr-btn">
-            <style>{`.mob-hdr-btn { display: flex !important; flex-direction: column; gap: 5px; } @media(min-width:1100px){.mob-hdr-btn{display:none !important;}}`}</style>
-            {mobOpen ? <X size={20} color="var(--ink)" /> : <>
-              <span style={{ width: 22, height: 1.5, background: "var(--ink)", display: "block" }} />
-              <span style={{ width: 14, height: 1.5, background: "var(--gold)", display: "block" }} />
-              <span style={{ width: 22, height: 1.5, background: "var(--ink)", display: "block" }} />
-            </>}
-          </button>
+      <header className={`header ${scrolled ? "scrolled" : ""}`}>
+        <div className="container">
+          <div className="header-inner">
+            <a href="#" className="logo-mark">
+              <span className="logo-glyph">A</span>
+              <span>AGD Law Associates</span>
+            </a>
+            <nav className="nav-links" aria-label="Main navigation">
+              {navLinks.map((l) => (
+                <a key={l.href} href={l.href} className="nav-link">{l.label}</a>
+              ))}
+            </nav>
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <a href="#contact" className="header-cta header-cta-desktop">
+                Consultation <ArrowRight size={14} />
+              </a>
+              <button
+                type="button"
+                aria-label="Toggle menu"
+                aria-expanded={menuOpen}
+                onClick={() => setMenuOpen((v) => !v)}
+                style={{ display: "none", alignItems: "center", justifyContent: "center", width: "40px", height: "40px", borderRadius: "10px", border: "1px solid #e8f2e6", background: "transparent", cursor: "pointer" }}
+                className="mobile-menu-btn"
+              >
+                {menuOpen ? <X size={18} /> : <Menu size={18} />}
+              </button>
+            </div>
+          </div>
         </div>
       </header>
-
-      {/* Mobile menu overlay */}
-      <div style={{
-        position: "fixed", inset: 0, zIndex: 850, background: "var(--linen)",
-        paddingTop: 100, padding: "100px 32px 40px",
-        display: "flex", flexDirection: "column",
-        opacity: mobOpen ? 1 : 0, pointerEvents: mobOpen ? "auto" : "none",
-        transform: mobOpen ? "translateX(0)" : "translateX(100%)",
-        transition: "opacity 0.35s ease, transform 0.35s ease",
-      }}>
-        {links.map((l, i) => (
-          <a key={l.href} href={l.href} onClick={() => setMobOpen(false)} style={{
-            fontFamily: "'Libre Baskerville', serif",
-            fontSize: "clamp(1.8rem, 6vw, 2.8rem)", fontWeight: 400,
-            color: "var(--ink)", textDecoration: "none",
-            padding: "18px 0", borderBottom: "0.5px solid var(--rule-med)",
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            opacity: mobOpen ? 1 : 0,
-            transform: mobOpen ? "translateX(0)" : "translateX(30px)",
-            transition: `opacity 0.4s ${i * 60}ms, transform 0.4s ${i * 60}ms`,
-          }}>
-            {l.label}
-            <span style={{ fontSize: "0.6rem", letterSpacing: "0.2em", color: "var(--gold)", fontFamily: "'Instrument Sans', sans-serif" }}>0{i + 1}</span>
-          </a>
-        ))}
-        <a href="tel:+919994388855" style={{ marginTop: 36, display: "inline-block", background: "var(--ink)", color: "var(--linen)", fontFamily: "'Instrument Sans',sans-serif", fontSize: "0.8rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", padding: "14px 28px", textDecoration: "none", borderRadius: 1 }}>
-          Call Now
-        </a>
-      </div>
+      <style>{`
+        @media (max-width: 1024px) {
+          .mobile-menu-btn { display: inline-flex !important; }
+        }
+      `}</style>
+      {menuOpen && (
+        <div className="mobile-panel">
+          <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "72px" }}>
+            <span className="logo-mark" style={{ color: "#fff" }}>
+              <span className="logo-glyph">A</span>
+              AGD Law Associates
+            </span>
+            <button type="button" onClick={() => setMenuOpen(false)} style={{ width: "40px", height: "40px", border: "1px solid rgba(197,223,192,0.2)", borderRadius: "10px", background: "transparent", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+              <X size={18} />
+            </button>
+          </div>
+          <nav className="container" style={{ flex: 1, paddingTop: "16px" }}>
+            {navLinks.map((l, i) => (
+              <a
+                key={l.href}
+                href={l.href}
+                className="mobile-nav-item"
+                style={{ animationDelay: `${0.06 + i * 0.06}s`, display: "flex", justifyContent: "space-between", alignItems: "center", textDecoration: "none" }}
+                onClick={() => setMenuOpen(false)}
+              >
+                <span>{l.label}</span>
+                <span className="mobile-num">0{i + 1}</span>
+              </a>
+            ))}
+            <a
+              href="#contact"
+              onClick={() => setMenuOpen(false)}
+              style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginTop: "32px", padding: "16px", borderRadius: "14px", background: "#c5dfc0", color: "#0b0b0b", fontWeight: "700", fontSize: "0.9rem", letterSpacing: "0.06em", textDecoration: "none", textTransform: "uppercase" }}
+            >
+              Schedule Consultation <ArrowRight size={15} />
+            </a>
+          </nav>
+          <div className="container" style={{ paddingBottom: "24px", paddingTop: "24px", borderTop: "1px solid rgba(197,223,192,0.1)" }}>
+            <p style={{ fontSize: "0.72rem", color: "rgba(197,223,192,0.4)", textTransform: "uppercase", letterSpacing: "0.12em" }}>© {new Date().getFullYear()} AGD Law Associates</p>
+          </div>
+        </div>
+      )}
     </>
   );
 }
 
-// ─── Hero ──────────────────────────────────────────────────────────────────────
+// ─── Hero ─────────────────────────────────────────────────────────────────────
 
 function Hero() {
   return (
-    <section style={{ paddingTop: 68 }}>
-      <div className="hero-wrap">
-        {/* Left column — identity panel */}
-        <div className="hero-left">
+    <section className="hero" id="hero">
+      <img
+        src="https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=1600&h=900&fit=crop"
+        alt=""
+        aria-hidden="true"
+        className="hero-bg-img"
+      />
+      <div className="hero-noise" aria-hidden="true" />
+
+      <div className="container">
+        <div className="hero-grid">
+          {/* Left */}
           <div>
-            <Fade>
-              <p className="label" style={{ marginBottom: 28 }}>Chennai · Tamil Nadu</p>
-            </Fade>
-            <Fade delay={80}>
-              <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 48 }}>
-                {["Madras High Court", "District Courts", "Consumer Commissions", "Tribunals"].map(f => (
-                  <div key={f} style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                    <div style={{ width: 4, height: 4, borderRadius: "50%", background: "var(--gold)", flexShrink: 0 }} />
-                    <span style={{ fontSize: "0.78rem", letterSpacing: "0.08em", color: "var(--ink-mid)", fontWeight: 400 }}>{f}</span>
-                  </div>
-                ))}
-              </div>
-            </Fade>
-          </div>
-
-          <Fade delay={200}>
-            <div>
-              <div style={{ width: 48, height: 0.5, background: "var(--gold)", marginBottom: 24, opacity: 0.7 }} />
-              <div style={{ fontFamily: "'Libre Baskerville', serif", fontSize: "0.85rem", fontStyle: "italic", color: "var(--ink-mid)", lineHeight: 1.6, marginBottom: 32 }}>
-                "Precision-driven advocacy,<br />transparent communication,<br />timely resolution."
-              </div>
-              <div style={{ fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--ink-dim)" }}>
-                AGD Bala Kumar — Managing Counsel
-              </div>
+            <div className="hero-badge">
+              <Scale size={12} />
+              Boutique Law Firm · Chennai · Est. 2016
             </div>
-          </Fade>
-
-          <Fade delay={320}>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 40 }}>
-              <a href="#contact" style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "var(--ink)", color: "var(--linen)", fontFamily: "'Instrument Sans',sans-serif", fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", padding: "13px 24px", textDecoration: "none", borderRadius: 1, transition: "background 0.25s" }}
-                onMouseEnter={e => e.currentTarget.style.background = "var(--gold)"}
-                onMouseLeave={e => e.currentTarget.style.background = "var(--ink)"}>
-                Book Consultation <ArrowUpRight size={14} />
-              </a>
-              <a href="tel:+919994388855" style={{ display: "inline-flex", alignItems: "center", gap: 10, color: "var(--ink-mid)", fontFamily: "'Instrument Sans',sans-serif", fontSize: "0.78rem", fontWeight: 400, letterSpacing: "0.06em", padding: "12px 0", textDecoration: "none", borderBottom: "0.5px solid var(--rule)", width: "fit-content", transition: "color 0.2s, border-color 0.2s" }}
-                onMouseEnter={e => { e.currentTarget.style.color = "var(--ink)"; e.currentTarget.style.borderBottomColor = "var(--gold)"; }}
-                onMouseLeave={e => { e.currentTarget.style.color = "var(--ink-mid)"; e.currentTarget.style.borderBottomColor = "var(--rule)"; }}>
-                <Phone size={13} /> +91 99943 88855
-              </a>
-            </div>
-          </Fade>
-        </div>
-
-        {/* Right column — hero statement */}
-        <div className="hero-right">
-          <div className="hero-bg-text" aria-hidden>LAW</div>
-
-          <div style={{ position: "relative", zIndex: 2 }}>
-            <Fade delay={100}>
-              <div style={{ display: "flex", alignItems: "center", gap: 20, marginBottom: 40 }}>
-                <span style={{ fontFamily: "'Instrument Sans', sans-serif", fontSize: "0.62rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--gold)" }}>Boutique Litigation Practice</span>
-                <div style={{ flex: 1, maxWidth: 60, height: 0.5, background: "var(--gold)", opacity: 0.5 }} />
-                <span style={{ fontSize: "0.62rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--ink-dim)" }}>Est. 12+ Years</span>
-              </div>
-            </Fade>
-
-            <h1 className="hero-h1">
-              <Fade delay={160} style={{ color: "var(--gold-lt)" }}>Your rights.</Fade>
-              <Fade delay={240}><em>Our fight.</em></Fade>
-              <Fade delay={320} style={{ fontSize: "0.5em", fontStyle: "normal", color: "var(--ink-dim)", marginTop: 8, display: "block", letterSpacing: "-0.01em" }}>
-                Precision law across Tamil Nadu.
-              </Fade>
+            <h1 className="hero-title">
+              AGD Law<br />
+              <em>Associates</em>
             </h1>
-
-            <Fade delay={440} style={{color: "var(--ink-mid)", fontSize: "0.95rem", lineHeight: 1.6, marginTop: 32, maxWidth: 480}}>
-              <p className="hero-body" style={{ marginTop: 40, paddingTop: 40, borderTop: "0.5px solid var(--gold-lt)" }}>
-                AGD Law Associates is a focused litigation and advisory practice led by Advocate AGD Bala Kumar — delivering rigorous legal representation across 9 practice areas with 12+ years of dedicated courtroom experience.
-              </p>
-            </Fade>
+            <p className="hero-subtitle">
+              Precision-driven litigation and advisory across criminal, civil, consumer,
+              constitutional, and commercial matters — across Tamil Nadu and beyond.
+            </p>
+            <div className="hero-actions">
+              <a href="#contact" className="btn-primary">
+                Request Consultation <ArrowRight size={15} />
+              </a>
+              <a href="tel:+919994388855" className="btn-ghost">
+                <Phone size={15} /> +91 99943 88855
+              </a>
+            </div>
+            <div className="hero-stats">
+              <div className="hero-stat">
+                <div className="hero-stat-num">2016</div>
+                <div className="hero-stat-lbl">Established</div>
+              </div>
+              <div className="hero-stat">
+                <div className="hero-stat-num">12+</div>
+                <div className="hero-stat-lbl">Years Practice</div>
+              </div>
+              <div className="hero-stat">
+                <div className="hero-stat-num">9</div>
+                <div className="hero-stat-lbl">Practice Areas</div>
+              </div>
+            </div>
           </div>
 
-          {/* Bottom stat row — pinned to bottom */}
-          <Fade delay={560}>
-            <div style={{ display: "flex", gap: "clamp(24px,4vw,64px)", marginTop: 64, paddingTop: 32, borderTop: "0.5px solid var(--rule)" }}>
-              {[["12+", "Years"], ["500+", "Matters"], ["9", "Practice Areas"], ["6", "Cities"]].map(([v, l]) => (
-                <div key={l}>
-                  <div style={{ fontFamily: "'Libre Baskerville', serif", fontSize: "clamp(1.6rem,3vw,2.2rem)", fontWeight: 400, lineHeight: 1, color: "var(--ink)", letterSpacing: "-0.02em" }}>{v}</div>
-                  <div style={{ fontSize: "0.62rem", fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--ink-dim)", marginTop: 6 }}>{l}</div>
-                </div>
-              ))}
+          {/* Right */}
+          <div className="hero-visual">
+            <div className="hero-card-float top-left">
+              <div className="hero-float-label">Established</div>
+              <div className="hero-float-value">2016</div>
+              <div className="hero-float-sub">Chennai, Tamil Nadu</div>
             </div>
-          </Fade>
+            <img
+              src="/image.webp"
+              alt="AGD Bala Kumar, Managing Counsel"
+              className="hero-img-main"
+            />
+            <div className="hero-card-float bottom-right">
+              <div className="hero-float-label">Lead Counsel</div>
+              <div className="hero-float-value">AGD</div>
+              <div className="hero-float-sub">Bala Kumar</div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-// ─── Marquee ──────────────────────────────────────────────────────────────────
+// ─── Ticker ───────────────────────────────────────────────────────────────────
 
-const MARQUEE_ITEMS = ["Criminal Law", "Civil Litigation", "Property Disputes", "Family Law", "Writ Petitions", "Arbitration", "Corporate Advisory", "Consumer Protection", "Motor Accidents", "High Court Advocacy", "Pan-Tamil Nadu"];
-
-function Marquee() {
-  const items = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS];
+function Ticker() {
+  const items = [
+    "Criminal Law", "Civil Litigation", "Constitutional Remedies", "Consumer Protection",
+    "Property Law", "Family Law", "Arbitration & ADR", "Corporate Advisory", "MCOP & RCOP",
+  ];
+  const doubled = [...items, ...items];
   return (
-    <div className="marquee-wrap">
-      <div className="marquee-track">
-        {items.map((t, i) => (
-          <span key={i} className="marquee-item">
-            {t} <span className="marquee-dot" />
+    <div className="ticker-wrap">
+      <div className="ticker-track">
+        {doubled.map((item, i) => (
+          <span key={i} className="ticker-item">
+            {item}
+            <span className="ticker-sep">◆</span>
           </span>
         ))}
       </div>
@@ -856,175 +1171,97 @@ function Marquee() {
   );
 }
 
-// ─── About ─────────────────────────────────────────────────────────────────────
+// ─── About ────────────────────────────────────────────────────────────────────
 
 function About() {
+  const sectionRef = useRef(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
+      { threshold: 0.1 }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const credentials = [
+    "Integrity & Professionalism",
+    "Confidentiality & Trust",
+    "Client-Focused Service",
+    "Excellence in Advocacy",
+    "Timely Legal Solutions",
+  ];
+
   return (
-    <section id="about">
-      <div className="editorial-grid">
-        {/* Index column */}
-        <div className="ed-index">
-          <Fade>
-            <div>
-              <div className="ed-index-num">01</div>
-              <div style={{ marginTop: 16, height: 0.5, background: "var(--rule-med)" }} />
+    <section className="about-section" id="about" ref={sectionRef}>
+      <div className="container">
+        <div className="about-grid">
+          {/* Photo Column */}
+          <div className="about-photo-stack">
+            <div className="about-badge-float">
+              <div className="about-badge-num">12+</div>
+              <div className="about-badge-lbl">Years of<br />Practice</div>
             </div>
-          </Fade>
-          <Fade delay={100}>
-            <div>
-              <p className="label">About</p>
-              <div style={{ marginTop: 16, width: 1, height: 80, background: "var(--rule-med)", marginLeft: 0 }} />
-            </div>
-          </Fade>
-        </div>
-
-        {/* Portrait column */}
-        <div className="ed-col">
-          <Fade>
-            <div className="portrait-frame">
-              <img
-                src="https://images.unsplash.com/photo-1556157382-97eda2d62296?w=700&h=950&fit=crop&crop=faces"
-                alt="AGD Bala Kumar — Managing Counsel"
-              />
-              <div className="portrait-caption">
-                <div style={{ fontSize: "0.6rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--gold-lt)", marginBottom: 4 }}>Managing Counsel</div>
-                <div style={{ fontFamily: "'Libre Baskerville', serif", fontSize: "1rem", fontWeight: 400, color: "#fff" }}>AGD Bala Kumar</div>
-              </div>
-            </div>
-          </Fade>
-          <Fade delay={100} style={{ marginTop: 40 }}>
-            <div style={{ padding: "20px", background: "var(--parch2)", borderLeft: "2px solid var(--gold)" }}>
-              <p style={{ fontSize: "0.82rem", fontStyle: "italic", fontFamily: "'Libre Baskerville', serif", color: "var(--ink-mid)", lineHeight: 1.7 }}>
-                "We are a boutique firm with personalized attention and no-file-left-with-junior guarantee."
-              </p>
-            </div>
-          </Fade>
-        </div>
-
-        {/* Text column */}
-        <div className="ed-col ed-col-last">
-          <div>
-            <Fade>
-              <p className="label" style={{ marginBottom: 20 }}>The Firm</p>
-              <h2 style={{ fontSize: "clamp(2rem, 3.2vw, 3rem)", color: "var(--gold-lt)", marginBottom: 32, lineHeight: 1.1, maxWidth: 420 }}>
-                A practice built on <em style={{ color: "var(--gold)", fontStyle: "italic" }}>precision</em> and integrity.
-              </h2>
-            </Fade>
-            <Fade delay={100}>
-              <p style={{ fontSize: "0.92rem", lineHeight: 1.8, color: "var(--ink-mid)", marginBottom: 24, fontWeight: 300, maxWidth: 440 }}>
-                AGD Law Associates is a focused litigation and advisory practice based in Tamil Nadu, led by Advocate AGD Bala Kumar with over 12 years of courtroom experience spanning criminal, civil, constitutional, and corporate matters.
-              </p>
-              <p style={{ fontSize: "0.92rem", lineHeight: 1.8, color: "var(--ink-mid)", fontWeight: 300, maxWidth: 440 }}>
-                Our vision: to become a trusted boutique law firm recognized for excellence, integrity, and client satisfaction — through transparent communication and timely resolution.
-              </p>
-            </Fade>
+            <img
+              src="https://images.unsplash.com/photo-1556157382-97eda2d62296?w=800&h=1000&fit=crop&crop=faces"
+              alt="AGD Law Associates counsel"
+              className="about-photo-main"
+              loading="lazy"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=600&h=600&fit=crop"
+              alt="Law office"
+              className="about-photo-accent"
+              loading="lazy"
+            />
           </div>
-          <Fade delay={200} style={{ marginTop: 56, paddingTop: 40, borderTop: "0.5px solid var(--rule-med)" }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              {["Pan-Tamil Nadu + Inter-State Presence", "Direct Counsel Accessibility — Always", "Written Legal Opinions as Standard", "Transparent Fee Communication"].map(f => (
-                <div key={f} style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <div style={{ width: 16, height: 0.5, background: "var(--gold)", flexShrink: 0 }} />
-                  <span style={{ fontSize: "0.82rem", color: "var(--ink-mid)", fontWeight: 300 }}>{f}</span>
-                </div>
-              ))}
-            </div>
-          </Fade>
-        </div>
-      </div>
-    </section>
-  );
-}
 
-// ─── Stats Band ────────────────────────────────────────────────────────────────
-
-function Stats() {
-  return (
-    <div className="stats-band">
-      {[["12+", "Years of Active Practice"],["500+","Matters Handled"],["9","Practice Areas"],["6","Cities of Presence"]].map(([v, l], i) => (
-        <Fade key={l} delay={i * 80}>
-          <div className="stat-cell">
-            <div className="stat-num">{v}</div>
-            <div className="stat-label">{l}</div>
-            <div className="stat-line" />
-          </div>
-        </Fade>
-      ))}
-    </div>
-  );
-}
-
-// ─── Process ──────────────────────────────────────────────────────────────────
-
-function Process() {
-  const trackRef = useRef(null);
-  const [canLeft, setCanLeft] = useState(false);
-  const [canRight, setCanRight] = useState(true);
-
-  const checkScroll = () => {
-    const t = trackRef.current; if (!t) return;
-    setCanLeft(t.scrollLeft > 10);
-    setCanRight(t.scrollLeft < t.scrollWidth - t.clientWidth - 10);
-  };
-
-  const scroll = (dir) => {
-    const t = trackRef.current; if (!t) return;
-    t.scrollBy({ left: dir * 340, behavior: "smooth" });
-  };
-
-  return (
-    <section id="process" className="process-section">
-      <div className="process-header">
-        <div className="process-header-left">
-          <Fade>
-            <p className="label" style={{ marginBottom: 16 }}>02 — Our Approach</p>
-            <h2 style={{ fontSize: "clamp(1.8rem, 3vw, 2.8rem)", color: "var(--ink)", lineHeight: 1.1, maxWidth: 380 }}>
-              How we take a matter from first call to final resolution.
+          {/* Content */}
+          <div className="about-content">
+            <span className="section-label">About Us</span>
+            <h2 className="about-title">
+              Your legal matter<br />
+              deserves <em>precision</em>
             </h2>
-          </Fade>
-        </div>
-        <div className="process-header-right">
-          <Fade>
-            <p style={{ fontSize: "0.9rem", lineHeight: 1.8, color: "var(--ink-mid)", fontWeight: 300, maxWidth: 400, marginBottom: 32 }}>
-              Every case follows a disciplined, transparent process. No surprises. No gaps in communication. Five clear stages — every time.
+            <p className="about-body">
+              Founded in 2016, AGD Law Associates is a boutique law firm delivering
+              high-quality litigation and advisory services across Tamil Nadu and beyond.
+              Led by AGD Bala Kumar with over 12 years of practice, our firm combines
+              courtroom strength with strategic advisory for complex, sensitive, and
+              high-impact legal matters.
             </p>
-            <div style={{ display: "flex", gap: 10 }}>
-              {[{ dir: -1, label: "←", active: canLeft }, { dir: 1, label: "→", active: canRight }].map(({ dir, label, active }) => (
-                <button key={label} onClick={() => scroll(dir)} style={{
-                  width: 40, height: 40, border: "0.5px solid var(--rule-med)", borderRadius: 1,
-                  background: active ? "var(--ink)" : "transparent",
-                  color: active ? "var(--linen)" : "var(--ink-dim)",
-                  cursor: active ? "pointer" : "default", fontSize: "1rem",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  transition: "all 0.2s",
-                }}>{label}</button>
+            <p className="about-body">
+              We believe every client deserves personalized attention, clear communication,
+              and a legal team that is genuinely invested in their outcome. From first
+              consultation to final resolution, we stand by you.
+            </p>
+
+            <div className="stats-row">
+              {[
+                { num: "2016", lbl: "Established" },
+                { num: "10+", lbl: "Advocates" },
+                { num: "6", lbl: "Active Cities" },
+              ].map((s) => (
+                <div className="stat-box" key={s.lbl}>
+                  <div className="stat-num">{s.num}</div>
+                  <div className="stat-lbl">{s.lbl}</div>
+                </div>
               ))}
             </div>
-          </Fade>
-        </div>
-      </div>
 
-      <div className="h-scroll-wrap" ref={trackRef} onScroll={checkScroll}>
-        <div className="process-track">
-          {PROCESS_STEPS.map((s, i) => (
-            <Fade key={s.num} delay={i * 60}>
-              <div className="process-card">
-                <div className="process-card-num">{s.num}</div>
-                <div>
-                  <p className="label" style={{ marginBottom: 12 }}>Stage {s.num}</p>
-                  <h3 className="process-card-title">{s.title}</h3>
-                  <p className="process-card-body">{s.body}</p>
-                </div>
-                <div className="process-corner" />
-              </div>
-            </Fade>
-          ))}
-          {/* End cap */}
-          <div style={{ width: 340, flexShrink: 0, borderRight: "0.5px solid var(--rule-med)", background: "var(--parch)", display: "flex", alignItems: "center", justifyContent: "center", minHeight: 420 }}>
-            <a href="#contact" style={{ display: "inline-flex", flexDirection: "column", alignItems: "center", gap: 16, textDecoration: "none" }}>
-              <div style={{ width: 52, height: 52, borderRadius: "50%", border: "0.5px solid var(--rule-med)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--gold)", transition: "all 0.25s" }}>
-                <ArrowUpRight size={20} />
-              </div>
-              <span style={{ fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--ink-mid)" }}>Begin Your Matter</span>
+            <div className="credentials">
+              {credentials.map((c) => (
+                <span className="cred-tag" key={c}>
+                  <CheckCircle size={12} />
+                  {c}
+                </span>
+              ))}
+            </div>
+
+            <a href="#contact" className="btn-primary" style={{ background: "#0b0b0b", color: "#c5dfc0", width: "fit-content" }}>
+              Schedule a Consultation <ArrowRight size={15} />
             </a>
           </div>
         </div>
@@ -1033,98 +1270,368 @@ function Process() {
   );
 }
 
-// ─── Services Bento ───────────────────────────────────────────────────────────
+// ─── Services ─────────────────────────────────────────────────────────────────
+
+
+
+// Map homepage service titles to slugs used in /services/[slug]
+const serviceTitleToSlug = {
+  "Criminal Law": "criminal-law",
+  "Civil Litigation": "civil-litigation",
+  "Writs & Constitutional": "writs-constitutional",
+  "Consumer Protection": "consumer-protection",
+  "Property & Real Estate": "property-real-estate",
+  "Family & Matrimonial": "family-matrimonial",
+  "Arbitration & ADR": "arbitration-adr",
+  "Corporate Advisory": "corporate-advisory",
+  "MCOP & Rent Control": "mcop-rent-control",
+};
 
 function Services() {
-  const bentoLayout = [
-    // row 1: featured (wide), normal, normal
-    { ...SERVICES[2], span: 1, noRight: false, noBottom: false, featuredOverride: true },  // Writs — featured
-    { ...SERVICES[0], span: 1, noRight: false, noBottom: false },
-    { ...SERVICES[1], span: 1, noRight: true, noBottom: false },
-    // row 2
-    { ...SERVICES[3], span: 1, noRight: false, noBottom: true },
-    { ...SERVICES[4], span: 1, noRight: false, noBottom: true },
-    { ...SERVICES[5], span: 1, noRight: true, noBottom: true },
-    // row 3
-    { ...SERVICES[6], span: 1, noRight: false, noBottom: true },
-    { ...SERVICES[7], span: 1, noRight: false, noBottom: true },
-    { ...SERVICES[8], span: 1, noRight: true, noBottom: true },
-  ];
-
   return (
-    <section id="practice" className="services-section">
-      <div className="services-header">
-        <Fade>
-          <div>
-            <p className="label" style={{ marginBottom: 16 }}>03 — Practice Areas</p>
-            <h2 style={{ fontSize: "clamp(2rem, 3.5vw, 3.2rem)", color: "var(--ink)", lineHeight: 1.1, maxWidth: 440 }}>
-              Nine disciplines.<br />One trusted firm.
+    <section className="services-section" id="services">
+      <div className="container">
+        <div className="services-header">
+          <div className="services-title-block">
+            <span className="section-label" style={{ color: "#c5dfc0", background: "rgba(197,223,192,0.08)", borderColor: "rgba(197,223,192,0.2)" }}>Practice Areas</span>
+            <h2 className="services-title">
+              Areas of <em>expertise</em>
             </h2>
           </div>
-        </Fade>
-        <Fade delay={80}>
-          <p style={{ fontSize: "0.9rem", lineHeight: 1.8, color: "var(--ink-mid)", fontWeight: 300, maxWidth: 380 }}>
-            Deep expertise across the full spectrum of legal practice — from constitutional courts to consumer tribunals.
-          </p>
-        </Fade>
-      </div>
-      <div className="bento-grid">
-        {bentoLayout.map((s, i) => (
-          <Fade key={s.title} delay={i * 40}>
-            <div className={`bento-cell${s.featuredOverride ? " featured" : ""}${s.noRight ? " no-right" : ""}${s.noBottom ? " no-bottom" : ""}`}>
-              <div className="bento-icon">{s.icon}</div>
-              <h3 className="bento-title">{s.title}</h3>
-              <p className="bento-body">{s.desc}</p>
-              <div className="bento-arrow"><ArrowUpRight size={16} /></div>
-            </div>
-          </Fade>
-        ))}
+          <a href="#contact" className="btn-primary" style={{ flexShrink: 0 }}>
+            Discuss Your Case <ArrowRight size={14} />
+          </a>
+        </div>
+        <div className="services-grid">
+          {services.map((s, i) => {
+            const Icon = s.icon;
+            const slug = serviceTitleToSlug[s.title];
+            return (
+              <Link
+                href={slug ? `/services/${slug}` : "#"}
+                className="service-card"
+                key={s.title}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <span className="service-num">0{i + 1}</span>
+                <div className="service-icon-wrap">
+                  <Icon size={18} />
+                </div>
+                <h3 className="service-name">{s.title}</h3>
+                <p className="service-desc">{s.description}</p>
+                <div className="service-arrow">
+                  <ArrowRight size={14} />
+                </div>
+              </Link>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
 }
 
-// ─── Results ──────────────────────────────────────────────────────────────────
+// ─── Team ─────────────────────────────────────────────────────────────────────
 
-function Results() {
+function Team() {
   return (
-    <section id="results" className="results-section">
-      <div className="results-grid">
-        <div className="results-sidebar">
-          <Fade>
-            <div>
-              <p className="label" style={{ marginBottom: 20 }}>04 — Case Results</p>
-              <h2 style={{ fontSize: "clamp(1.8rem, 2.8vw, 2.6rem)", color: "var(--ink)", lineHeight: 1.1, marginBottom: 24 }}>
-                Outcomes that speak.
-              </h2>
-              <p style={{ fontSize: "0.88rem", lineHeight: 1.75, color: "var(--ink-mid)", fontWeight: 300 }}>
-                A selection of representative outcomes from our litigation practice across Tamil Nadu.
-              </p>
+    <section className="team-section" id="team">
+      <div className="container">
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "16px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            <span className="section-label">Our Team</span>
+            <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(2.2rem, 3.5vw, 3.6rem)", lineHeight: "1.08" }}>
+              The counsel<br />behind your <em style={{ color: "#3a5c3d", fontStyle: "italic" }}>case</em>
+            </h2>
+          </div>
+        </div>
+        <div className="team-grid">
+          {teamMembers.map((m) => (
+            <div className="team-card" key={m.name}>
+              <img src={m.img} alt={m.name} className="team-photo" loading="lazy" />
+              <div className="team-gradient" />
+              <div className="team-exp">{m.experience}</div>
+              <div className="team-body">
+                <div className="team-spec">{m.specialization}</div>
+                <div className="team-name">{m.name}</div>
+                <div className="team-role">{m.role}</div>
+                <div className="team-social">
+                  <a href="#" className="team-social-btn" aria-label={`${m.name} LinkedIn`}>
+                    <ExternalLink size={12} />
+                  </a>
+                </div>
+              </div>
             </div>
-          </Fade>
-          <Fade delay={120}>
-            <div style={{ marginTop: 40 }}>
-              <div style={{ width: 48, height: 0.5, background: "var(--gold)", marginBottom: 16 }} />
-              <p style={{ fontSize: "0.72rem", lineHeight: 1.7, color: "var(--ink-dim)", fontStyle: "italic", fontFamily: "'Libre Baskerville', serif" }}>
-                Each matter is handled with the same rigour — whether a ₹500 complaint or a High Court writ.
-              </p>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Case Results ─────────────────────────────────────────────────────────────
+
+function CaseResults() {
+  const stats = [
+    { num: "500+", lbl: "Cases Handled" },
+    { num: "92%", lbl: "Success Rate" },
+    { num: "6", lbl: "Active Cities" },
+    { num: "12+", lbl: "Years Practice" },
+  ];
+
+  return (
+    <section className="cases-section" id="cases">
+      <div className="container">
+        <div className="cases-header">
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            <span className="section-label" style={{ color: "#c5dfc0", background: "rgba(197,223,192,0.08)", borderColor: "rgba(197,223,192,0.2)" }}>Track Record</span>
+            <h2 className="cases-title">
+              Results that<br /><em>speak</em>
+            </h2>
+          </div>
+          <a href="#contact" className="btn-primary" style={{ flexShrink: 0 }}>
+            Discuss Your Case <ArrowRight size={14} />
+          </a>
+        </div>
+        <div className="cases-stats">
+          {stats.map((s) => (
+            <div className="cstat-box" key={s.lbl}>
+              <div className="cstat-num">{s.num}</div>
+              <div className="cstat-lbl">{s.lbl}</div>
             </div>
-          </Fade>
+          ))}
+        </div>
+        <div className="cases-grid">
+          {caseResults.map((c, i) => (
+            <article className={`case-card${c.highlight ? " highlight" : ""}`} key={i}>
+              <div className="case-category">{c.category}</div>
+              <h3 className="case-title">{c.title}</h3>
+              <p className="case-desc">{c.description}</p>
+              <div className="case-footer">
+                <div className="case-meta">
+                  <div className="case-court">{c.court}</div>
+                  <div className="case-year">{c.year}</div>
+                </div>
+                <div className="case-outcome">
+                  <CheckCircle size={11} />
+                  {c.outcome}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Regions / Why ────────────────────────────────────────────────────────────
+
+function Regions() {
+  const whyItems = [
+    { icon: Scale, title: "Boutique Attention", desc: "Every client receives direct partner-level attention — no file gets lost in a large firm structure." },
+    { icon: Shield, title: "Ethical Practice", desc: "Strict confidentiality, transparent communication, and unwavering integrity in every matter." },
+    { icon: Clock, title: "Timely Resolution", desc: "Structured case management designed to achieve efficient, timely outcomes without unnecessary delays." },
+    { icon: Award, title: "Proven Advocacy", desc: "12+ years of courtroom experience across criminal, civil, constitutional, and commercial matters." },
+  ];
+
+  return (
+    <section className="regions-section" id="why-me">
+      <img
+        src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=1600&h=900&fit=crop"
+        alt=""
+        aria-hidden="true"
+        className="regions-bg"
+      />
+      <div className="container regions-inner">
+        <span className="section-label" style={{ margin: "0 auto 16px", display: "flex", color: "#c5dfc0", background: "rgba(197,223,192,0.08)", borderColor: "rgba(197,223,192,0.2)", width: "fit-content" }}>Why Choose Us</span>
+        <h2 className="regions-title">
+          Why <em>AGD</em> Law Associates
+        </h2>
+        <p className="regions-subtitle">A trusted boutique firm serving clients across Tamil Nadu and beyond</p>
+
+        <div className="why-cards">
+          {whyItems.map((w) => {
+            const Icon = w.icon;
+            return (
+              <div className="why-card" key={w.title}>
+                <div className="why-icon"><Icon size={20} /></div>
+                <div className="why-card-title">{w.title}</div>
+                <div className="why-card-desc">{w.desc}</div>
+              </div>
+            );
+          })}
         </div>
 
-        <div className="results-list">
-          {RESULTS.map((r, i) => (
-            <Fade key={r.title} delay={i * 60}>
-              <div className="result-row">
-                <div>
-                  <div className="result-cat">{r.cat}</div>
-                  <h3 className="result-title">{r.title}</h3>
-                  <div className="result-court">{r.court}</div>
-                </div>
-                <span className="result-badge">{r.badge}</span>
+        <div style={{ marginTop: "56px" }}>
+          <p style={{ textAlign: "center", fontSize: "0.75rem", color: "rgba(197,223,192,0.5)", textTransform: "uppercase", letterSpacing: "0.14em", marginBottom: "20px" }}>Our Practice Presence</p>
+          <div className="regions-grid">
+            {[
+              { name: "Chennai & Suburbs", cities: "Chennai · Tambaram · Avadi" },
+              { name: "Western Tamil Nadu", cities: "Coimbatore · Tiruppur" },
+              { name: "Greater Karnataka", cities: "Bangalore & surrounding districts" },
+              { name: "Chengalpattu", cities: "Chengalpattu · Kancheepuram" },
+              { name: "Tiruvallur", cities: "Tiruvallur · Ponneri · Gummidipoondi" },
+              { name: "Dindigul", cities: "Dindigul · Natham · Palani" },
+            ].map((r) => (
+              <div className="region-item" key={r.name}>
+                <div className="region-name">{r.name}</div>
+                <div className="region-cities">{r.cities}</div>
               </div>
-            </Fade>
-          ))}
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Testimonial ──────────────────────────────────────────────────────────────
+
+const testimonials = [
+  { name: "AGD Bala Kumar", role: "Advocate | Managing Counsel", feedback: "AGD Bala Kumar has over 12 years of experience in litigation and legal advisory, with focused practice across criminal law, civil disputes, constitutional remedies, consumer matters, property law, family law, arbitration, corporate advisory, MCOP, and RCOP matters.", img: "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=450&h=300&fit=crop" },
+  { name: "AGD Law Associates", role: "Our Vision", feedback: "To become a trusted and leading boutique law firm recognized for excellence, integrity, and client satisfaction through precision-driven advocacy, transparent communication, and timely legal solutions.", img: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=450&h=300&fit=crop" },
+];
+
+function Testimonial() {
+  const [current, setCurrent] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const total = testimonials.length;
+  const prev = () => setCurrent((c) => (c - 1 + total) % total);
+  const next = () => setCurrent((c) => (c + 1) % total);
+
+  useEffect(() => {
+    if (isPaused) return;
+    const t = setInterval(() => setCurrent((c) => (c + 1) % total), 7000);
+    return () => clearInterval(t);
+  }, [isPaused, total]);
+
+  const t = testimonials[current];
+
+  return (
+    <section className="testimonial-section" id="testimonial" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
+      <div className="container">
+        <div className="testi-inner">
+          <div className="testi-sidebar">
+            <span className="section-label">Leadership</span>
+            <h2 className="testi-sidebar-title">
+              Courtroom<br /><em>precision</em> at<br />every level
+            </h2>
+            <p style={{ fontSize: "0.9rem", lineHeight: "1.8", color: "#555" }}>
+              AGD Bala Kumar leads the firm with over 12 years of practice, combining
+              litigation strength with strategic advisory for complex and high-impact matters.
+            </p>
+            <div className="testi-nav">
+              <button type="button" className="testi-nav-btn" onClick={prev} aria-label="Previous">
+                <ArrowLeft size={16} />
+              </button>
+              <button type="button" className="testi-nav-btn" onClick={next} aria-label="Next">
+                <ArrowRight size={16} />
+              </button>
+              <div className="testi-counter">
+                {String(current + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+              </div>
+            </div>
+            <div className="testi-progress">
+              <div className="testi-bar" style={{ width: `${((current + 1) / total) * 100}%` }} />
+            </div>
+            <div className="testi-dots">
+              {testimonials.map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  className="testi-dot"
+                  style={{ width: i === current ? "28px" : "8px", opacity: i === current ? 1 : 0.35 }}
+                  onClick={() => setCurrent(i)}
+                  aria-label={`Slide ${i + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <article key={`${t.name}-${current}`} className="testi-card">
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                <div className="testi-stars">
+                  {Array.from({ length: 5 }).map((_, i) => <span key={i}>★</span>)}
+                </div>
+                <span style={{ fontSize: "4rem", fontFamily: "'Cormorant Garamond', Georgia, serif", color: "#c5dfc0", lineHeight: 0.8 }}>&ldquo;</span>
+              </div>
+              <blockquote className="testi-quote">{t.feedback}</blockquote>
+              <div className="testi-author">
+                <img src={t.img} alt={t.name} className="testi-avatar" loading="lazy" />
+                <div>
+                  <div className="testi-name">{t.name}</div>
+                  <div className="testi-role">{t.role}</div>
+                </div>
+                <button type="button" onClick={next} style={{ marginLeft: "auto", display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "0.78rem", fontWeight: 600, color: "#3a5c3d", background: "none", border: "1px solid #c5dfc0", borderRadius: "100px", padding: "8px 16px", cursor: "pointer", transition: "all 0.2s", whiteSpace: "nowrap" }}>
+                  View next <ArrowRight size={13} />
+                </button>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Blog ─────────────────────────────────────────────────────────────────────
+
+function Blog() {
+  const featured = blogPosts.find((p) => p.featured);
+  const rest = blogPosts.filter((p) => !p.featured).slice(0, 3);
+
+  return (
+    <section className="blog-section" id="blog">
+      <div className="container">
+        <div className="blog-header">
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            <span className="section-label">Legal Insights</span>
+            <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(2.2rem, 3.5vw, 3.6rem)", lineHeight: "1.08" }}>
+              From our desk<br />to <em style={{ color: "#3a5c3d", fontStyle: "italic" }}>yours</em>
+            </h2>
+          </div>
+          <a href="/blog" className="blog-view-all">
+            All Articles <ArrowRight size={13} strokeWidth={2.5} />
+          </a>
+        </div>
+
+        <div className="blog-layout">
+          {featured && (
+            <a href={`/blog/${featured.slug}`} className="blog-featured">
+              <div className="blog-feat-img-wrap">
+                <img src={featured.img} alt={featured.title} className="blog-feat-img" loading="lazy" />
+              </div>
+              <div className="blog-feat-body">
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <span className="blog-cat">{featured.category}</span>
+                  <span style={{ fontSize: "0.65rem", color: "#999", textTransform: "uppercase", letterSpacing: "0.08em" }}>Featured</span>
+                </div>
+                <h3 className="blog-title" style={{ fontSize: "clamp(1.3rem, 2vw, 1.8rem)", lineHeight: "1.25" }}>{featured.title}</h3>
+                <p className="blog-excerpt">{featured.excerpt}</p>
+                <div className="blog-footer">
+                  <div>
+                    <div style={{ fontSize: "0.88rem", color: "#0b0b0b", fontWeight: 500 }}>{featured.author}</div>
+                    <div className="blog-meta">{featured.date} · {featured.readTime}</div>
+                  </div>
+                  <span className="blog-read-btn"><ArrowRight size={14} /></span>
+                </div>
+              </div>
+            </a>
+          )}
+          <div className="blog-right">
+            {rest.map((p) => (
+              <a key={p.slug} href={`/blog/${p.slug}`} className="blog-mini">
+                <img src={p.img} alt={p.title} className="blog-mini-img" loading="lazy" />
+                <div className="blog-mini-body">
+                  <span className="blog-cat">{p.category}</span>
+                  <div className="blog-title" style={{ fontSize: "0.92rem" }}>{p.title}</div>
+                  <div className="blog-meta">{p.date} · {p.readTime}</div>
+                </div>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -1134,128 +1641,217 @@ function Results() {
 // ─── FAQ ──────────────────────────────────────────────────────────────────────
 
 function FAQ() {
-  const [open, setOpen] = useState(null);
+  const [openIndex, setOpenIndex] = useState(null);
+  const toggle = (i) => setOpenIndex(openIndex === i ? null : i);
+
   return (
-    <section className="faq-section">
-      <div className="faq-grid">
-        <div className="faq-left">
-          <Fade>
-            <div>
-              <p className="label" style={{ marginBottom: 20 }}>05 — FAQ</p>
-              <h2 style={{ fontSize: "clamp(1.8rem, 3vw, 2.8rem)", color: "var(--ink)", lineHeight: 1.1, marginBottom: 24 }}>
-                Common questions, clear answers.
-              </h2>
-              <p style={{ fontSize: "0.88rem", lineHeight: 1.75, color: "var(--ink-mid)", fontWeight: 300 }}>
-                Still have questions? Write to us or call directly — we respond within one business day.
-              </p>
+    <section className="faq-section" id="faq">
+      <div className="container">
+        <div className="faq-grid">
+          <div className="faq-sidebar">
+            <span className="section-label">FAQ</span>
+            <h2 className="faq-sidebar-title">
+              Common<br /><em>questions</em><br />answered
+            </h2>
+            <p style={{ fontSize: "0.9rem", lineHeight: "1.8", color: "#555" }}>
+              Have more questions? We're happy to address any concern before your consultation.
+            </p>
+            <div className="faq-cta-box">
+              <div className="faq-cta-title">Ready to get started?</div>
+              <div className="faq-cta-sub">Schedule a consultation and let us assess your matter with the attention it deserves.</div>
+              <a href="#contact" className="faq-cta-btn">
+                Book Consultation <ArrowRight size={13} />
+              </a>
             </div>
-          </Fade>
-          <Fade delay={100} style={{ marginTop: 48 }}>
-            <a href="#contact" style={{ display: "inline-flex", alignItems: "center", gap: 10, color: "var(--ink)", fontFamily: "'Instrument Sans',sans-serif", fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", textDecoration: "none", paddingBottom: 6, borderBottom: "0.5px solid var(--rule-med)", transition: "border-color 0.2s, color 0.2s" }}
-              onMouseEnter={e => { e.currentTarget.style.borderBottomColor = "var(--gold)"; e.currentTarget.style.color = "var(--gold)"; }}
-              onMouseLeave={e => { e.currentTarget.style.borderBottomColor = "var(--rule-med)"; e.currentTarget.style.color = "var(--ink)"; }}>
-              Ask Your Question <ArrowUpRight size={13} />
-            </a>
-          </Fade>
-        </div>
-        <div className="faq-right">
-          {FAQS.map((f, i) => (
-            <Fade key={f.q} delay={i * 50}>
-              <div className="faq-item">
-                <button className="faq-trigger" onClick={() => setOpen(open === i ? null : i)}>
-                  <span className="faq-q">{f.q}</span>
-                  <span className={`faq-icon${open === i ? " open" : ""}`}>
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                      <path d="M6 1v10M1 6h10" stroke="currentColor" strokeWidth="1.2" />
-                    </svg>
-                  </span>
-                </button>
-                <div className={`faq-body${open === i ? " open" : ""}`}>{f.a}</div>
-              </div>
-            </Fade>
-          ))}
+          </div>
+
+          <div className="faq-list">
+            {faqs.map((faq, i) => {
+              const isOpen = openIndex === i;
+              return (
+                <div className="faq-item" key={i}>
+                  <button
+                    type="button"
+                    className="faq-question"
+                    onClick={() => toggle(i)}
+                    aria-expanded={isOpen}
+                  >
+                    <span>{faq.q}</span>
+                    <span className={`faq-toggle${isOpen ? " open" : ""}`}>
+                      <X size={14} />
+                    </span>
+                  </button>
+                  <div className={`faq-answer${isOpen ? " open" : ""}`}>
+                    <div className="faq-answer-inner">
+                      <p className="faq-answer-text">{faq.a}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-// ─── Contact ──────────────────────────────────────────────────────────────────
+// ─── Contact ─────────────────────────────────────────────────────────────────
 
 function Contact() {
-  const [form, setForm] = useState({ name: "", phone: "", matter: "", message: "" });
-  const chg = e => setForm(p => ({ ...p, [e.target.name]: e.target.value }));
-  const send = () => {
-    const t = `Hi AGD Law Associates,\nName: ${form.name}\nPhone: ${form.phone}\nMatter: ${form.matter}\n\n${form.message}`;
-    window.open(`https://wa.me/919994388855?text=${encodeURIComponent(t)}`, "_blank", "noopener");
+  const [form, setForm] = useState({ your_name: "", your_email: "", service_type: "", budget: "", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitState, setSubmitState] = useState({ type: "", message: "" });
+
+  const selectPill = (field, value) => setForm((f) => ({ ...f, [field]: value }));
+  const handleChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.service_type || !form.budget) {
+      setSubmitState({ type: "error", message: "Please select a service and preferred timeline." });
+      return;
+    }
+    try {
+      setIsSubmitting(true);
+      setSubmitState({ type: "", message: "" });
+      const response = await fetch("/api/contact", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || "Failed to send message.");
+      setSubmitState({ type: "success", message: "Thanks! Your message was sent. We'll be in touch shortly." });
+      setForm({ your_name: "", your_email: "", service_type: "", budget: "", message: "" });
+    } catch (error) {
+      setSubmitState({ type: "error", message: error.message || "Something went wrong. Please try again." });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <section id="contact" className="contact-section">
-      <div className="contact-grid">
-        <div className="contact-left">
-          <div>
-            <Fade>
-              <p style={{ fontSize: "0.6rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--gold-lt)", marginBottom: 20 }}>06 — Contact</p>
-              <h2 style={{ fontSize: "clamp(2rem, 3.5vw, 3.2rem)", color: "var(--linen)", lineHeight: 1.1, marginBottom: 32 }}>
-                Your first consultation starts here.
-              </h2>
-              <p style={{ fontSize: "0.92rem", lineHeight: 1.8, color: "rgba(246,241,233,0.6)", fontWeight: 300, maxWidth: 380 }}>
-                Reach out via phone, email, or WhatsApp. We respond within one business day and schedule consultations at your convenience.
-              </p>
-            </Fade>
-          </div>
-          <Fade delay={100}>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              {[
-                { Icon: PhoneCall, label: "Phone", val: "+91 99943 88855", href: "tel:+919994388855" },
-                { Icon: Mail, label: "Email", val: "agdlawassociatesoffice@gmail.com", href: "mailto:agdlawassociatesoffice@gmail.com" },
-                { Icon: MapPin, label: "Base", val: "Chennai, Tamil Nadu — Pan-TN Presence", href: "#" },
-              ].map(({ Icon, label, val, href }) => (
-                <a key={label} href={href} className="contact-info-row">
-                  <div className="contact-info-icon"><Icon size={14} /></div>
+    <section className="contact-section" id="contact">
+      <div className="container">
+        <div className="contact-grid">
+          {/* Info side */}
+          <div className="contact-info">
+            <span className="section-label">Get In Touch</span>
+            <h2 className="contact-title">
+              Need legal<br /><em>support?</em><br />Let's connect.
+            </h2>
+            <p style={{ fontSize: "0.95rem", lineHeight: "1.8", color: "#555" }}>
+              Reach out to us directly or fill the form and we'll respond during office hours.
+              Every matter is handled with strict confidentiality.
+            </p>
+
+            {[
+              { icon: PhoneCall, label: "Phone", value: "+91 99943 88855", href: "tel:+919994388855" },
+              { icon: Mail, label: "Email", value: "agdlawassociatesoffice@gmail.com", href: "mailto:agdlawassociatesoffice@gmail.com" },
+              { icon: MapPin, label: "Location", value: "Chennai, Tamil Nadu", href: "#" },
+            ].map((d) => {
+              const Icon = d.icon;
+              return (
+                <a key={d.label} href={d.href} className="contact-detail" style={{ textDecoration: "none" }}>
+                  <div className="contact-detail-icon"><Icon size={16} /></div>
                   <div>
-                    <div style={{ fontSize: "0.58rem", fontWeight: 600, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--gold-lt)", opacity: 0.7, marginBottom: 3 }}>{label}</div>
-                    <div style={{ fontSize: "0.88rem", color: "var(--linen)", fontWeight: 300 }}>{val}</div>
+                    <div className="contact-detail-label">{d.label}</div>
+                    <div className="contact-detail-value">{d.value}</div>
                   </div>
                 </a>
-              ))}
-              <div style={{ marginTop: 36, fontSize: "0.72rem", color: "rgba(246,241,233,0.4)", letterSpacing: "0.08em", lineHeight: 1.7 }}>
-                Mon–Fri 10AM–6:30PM · Sat 11AM–5PM<br />
-                2nd & Last Saturdays: Closed
-              </div>
-            </div>
-          </Fade>
-        </div>
+              );
+            })}
 
-        <div className="contact-right">
-          <Fade>
-            <p className="label" style={{ marginBottom: 40 }}>Send a Query</p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 36 }}>
+            <div style={{ background: "#0b0b0b", borderRadius: "20px", padding: "24px", display: "flex", flexDirection: "column", gap: "12px" }}>
+              <p style={{ fontSize: "0.68rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(197,223,192,0.5)", fontWeight: 600 }}>Office Hours</p>
               {[
-                { n: "name", l: "Full Name", p: "Your name" },
-                { n: "phone", l: "Phone Number", p: "+91 XXXXX XXXXX" },
-                { n: "matter", l: "Matter Type", p: "e.g. Criminal, Property, Family…" },
-              ].map(f => (
-                <div key={f.n}>
-                  <label className="field-label">{f.l}</label>
-                  <input name={f.n} value={form[f.n]} onChange={chg} placeholder={f.p} className="field-input" />
+                { day: "Monday – Friday", time: "10:00 AM – 6:30 PM" },
+                { day: "Saturday", time: "11:00 AM – 5:00 PM" },
+                { day: "2nd & Last Saturday", time: "Closed" },
+              ].map((h) => (
+                <div className="hours-row" key={h.day}>
+                  <span className="hours-day">{h.day}</span>
+                  <span className="hours-time">{h.time}</span>
                 </div>
               ))}
-              <div>
-                <label className="field-label">Brief Description</label>
-                <textarea name="message" value={form.message} onChange={chg} placeholder="Describe your situation briefly…" rows={4} className="field-textarea" />
-              </div>
-              <div>
-                <button onClick={send} className="submit-btn">
-                  Send via WhatsApp <Send size={13} />
-                </button>
-                <p style={{ marginTop: 16, fontSize: "0.72rem", color: "var(--ink-dim)", lineHeight: 1.6 }}>
-                  Your query will open in WhatsApp for a direct conversation with our team.
-                </p>
-              </div>
             </div>
-          </Fade>
+          </div>
+
+          {/* Form */}
+          <div className="contact-form-panel">
+            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+              <div>
+                <p className="form-section-label">Select Service Area</p>
+                <div className="chip-group">
+                  {serviceOptions.map((s) => (
+                    <button
+                      key={s.value}
+                      type="button"
+                      className={`chip${form.service_type === s.value ? " active" : ""}`}
+                      onClick={() => selectPill("service_type", s.value)}
+                      aria-pressed={form.service_type === s.value}
+                    >
+                      {s.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <p className="form-section-label">Preferred Timeline</p>
+                <div className="chip-group">
+                  {budgetOptions.map((b) => (
+                    <button
+                      key={b.value}
+                      type="button"
+                      className={`chip${form.budget === b.value ? " active" : ""}`}
+                      onClick={() => selectPill("budget", b.value)}
+                      aria-pressed={form.budget === b.value}
+                    >
+                      {b.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="form-fields">
+                <div className="form-field">
+                  <label htmlFor="your_name" className="form-label">Your Name</label>
+                  <input
+                    type="text" id="your_name" name="your_name"
+                    placeholder="John Doe" required value={form.your_name}
+                    onChange={handleChange} className="form-input"
+                  />
+                </div>
+                <div className="form-field">
+                  <label htmlFor="your_email" className="form-label">Email Address</label>
+                  <input
+                    type="email" id="your_email" name="your_email"
+                    placeholder="john@email.com" required value={form.your_email}
+                    onChange={handleChange} className="form-input"
+                  />
+                </div>
+                <div className="form-field full">
+                  <label htmlFor="message" className="form-label">Your Message</label>
+                  <textarea
+                    id="message" name="message" rows={4}
+                    placeholder="Briefly describe your legal matter..."
+                    value={form.message} onChange={handleChange}
+                    className="form-input"
+                  />
+                </div>
+              </div>
+
+              {submitState.message && (
+                <div className={`form-msg ${submitState.type}`}>{submitState.message}</div>
+              )}
+
+              <button type="submit" className="form-submit" disabled={isSubmitting}>
+                {isSubmitting ? "Sending..." : "Send Message"}
+                {!isSubmitting && <Send size={16} />}
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </section>
@@ -1265,91 +1861,168 @@ function Contact() {
 // ─── Footer ───────────────────────────────────────────────────────────────────
 
 function Footer() {
+  const quickLinks = [
+    { href: "#about", label: "About" },
+    { href: "#services", label: "Services" },
+    { href: "#team", label: "Our Team" },
+    { href: "#cases", label: "Case Results" },
+    { href: "#blog", label: "Legal Insights" },
+    { href: "#contact", label: "Contact" },
+  ];
+
+  const serviceLinks = [
+    "Criminal Law", "Civil Litigation", "Writs & Constitutional",
+    "Consumer Protection", "Property Law", "Family Law",
+  ];
+
   return (
-    <footer className="footer">
-      <div className="footer-main">
-        <div>
-          <div style={{ fontFamily: "'Libre Baskerville', serif", fontSize: "1.1rem", fontWeight: 700, color: "var(--ink)", marginBottom: 4 }}>AGD Law Associates</div>
-          <div style={{ fontSize: "0.55rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--gold)", marginBottom: 20 }}>Advocates & Legal Consultants</div>
-          <p style={{ fontSize: "0.83rem", lineHeight: 1.75, color: "var(--ink-mid)", fontWeight: 300, maxWidth: 280 }}>
-            A boutique litigation and advisory practice serving clients across Tamil Nadu with precision, transparency, and integrity.
-          </p>
-          <div style={{ marginTop: 28 }}>
-            <a href="https://www.agdlawassociates.in" target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.75rem", color: "var(--gold)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6, letterSpacing: "0.06em" }}>
-              www.agdlawassociates.in <ArrowUpRight size={12} />
-            </a>
+    <footer className="footer-section">
+      <div className="container">
+        <div className="footer-top">
+          <div className="footer-brand">
+            <div className="logo-mark" style={{ color: "#fff" }}>
+              <span className="logo-glyph">A</span>
+              AGD Law Associates
+            </div>
+            <p className="footer-tagline">
+              Precision-driven litigation and advisory services across Tamil Nadu and beyond.
+              Established 2016.
+            </p>
+            <div className="footer-socials">
+              <a href="#" className="footer-social" aria-label="Facebook"><FacebookIcon /></a>
+              <a href="#" className="footer-social" aria-label="X (Twitter)"><XIcon /></a>
+            </div>
+          </div>
+
+          <div className="footer-col">
+            <div className="footer-col-title">Quick Links</div>
+            <div className="footer-links">
+              {quickLinks.map((l) => (
+                <a key={l.label} href={l.href} className="footer-link">{l.label}</a>
+              ))}
+            </div>
+          </div>
+
+          <div className="footer-col">
+            <div className="footer-col-title">Practice Areas</div>
+            <div className="footer-links">
+              {serviceLinks.map((s) => (
+                <span key={s} className="footer-link" style={{ cursor: "default" }}>{s}</span>
+              ))}
+            </div>
+          </div>
+
+          <div className="footer-col">
+            <div className="footer-col-title">Contact</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+              <a href="tel:+919994388855" className="footer-contact-item" style={{ textDecoration: "none" }}>
+                <PhoneCall size={14} className="footer-contact-icon" />
+                <span className="footer-contact-text">+91 99943 88855</span>
+              </a>
+              <a href="mailto:agdlawassociatesoffice@gmail.com" className="footer-contact-item" style={{ textDecoration: "none" }}>
+                <Mail size={14} className="footer-contact-icon" />
+                <span className="footer-contact-text">agdlawassociatesoffice@gmail.com</span>
+              </a>
+              <div className="footer-contact-item">
+                <MapPin size={14} className="footer-contact-icon" />
+                <span className="footer-contact-text">Chennai, Tamil Nadu, India</span>
+              </div>
+            </div>
           </div>
         </div>
-        {[
-          { head: "Navigate", links: [["About", "#about"], ["Approach", "#process"], ["Practice Areas", "#practice"], ["Results", "#results"], ["Contact", "#contact"]] },
-          { head: "Practice", links: [["Criminal Law", "#practice"], ["Civil Litigation", "#practice"], ["Property Law", "#practice"], ["Family Law", "#practice"], ["Arbitration", "#practice"]] },
-          { head: "Contact", links: [["+91 99943 88855", "tel:+919994388855"], ["agdlawassociatesoffice@gmail.com", "mailto:agdlawassociatesoffice@gmail.com"], ["Chennai, Tamil Nadu", "#"]] },
-        ].map(col => (
-          <div key={col.head}>
-            <div className="footer-nav-head">{col.head}</div>
-            {col.links.map(([l, h]) => <a key={l} href={h} className="footer-nav-a">{l}</a>)}
-          </div>
-        ))}
-      </div>
-      <div className="footer-base">
-        <p style={{ fontSize: "0.72rem", color: "var(--ink-dim)" }}>© {new Date().getFullYear()} AGD Law Associates. All rights reserved.</p>
-        <p style={{ fontSize: "0.72rem", color: "var(--ink-dim)" }}>Mon–Fri 10AM–6:30PM · Sat 11AM–5PM</p>
+
+        <div className="footer-bottom">
+          <p className="footer-copy">© {new Date().getFullYear()} AGD Law Associates. All rights reserved.</p>
+          <a href="https://www.agdlawassociates.in" target="_blank" rel="noopener noreferrer" className="footer-web">
+            www.agdlawassociates.in
+          </a>
+        </div>
       </div>
     </footer>
   );
 }
 
-// ─── WhatsApp ─────────────────────────────────────────────────────────────────
+// ─── WhatsApp Float ───────────────────────────────────────────────────────────
 
-function WhatsApp() {
+function WhatsAppFloatingChat() {
   const [open, setOpen] = useState(false);
-  const [msg, setMsg] = useState("");
-  const QUICK = ["Hi, I need a legal consultation.", "I want to discuss a criminal matter.", "I need help with a property dispute.", "Please schedule a consultation."];
-  const send = (t) => {
-    const text = (t || msg).trim(); if (!text) return;
-    window.open(`https://wa.me/919994388855?text=${encodeURIComponent(text)}`, "_blank", "noopener");
-    setMsg(""); setOpen(false);
+  const [message, setMessage] = useState("");
+  const phoneNumber = "919994388855";
+
+  const quickMessages = [
+    "Hi, I need a legal consultation.",
+    "I want to discuss a criminal law matter.",
+    "I need support in a property dispute.",
+    "Please schedule a consultation call.",
+  ];
+
+  const openWhatsApp = (textToSend) => {
+    const finalMessage = (textToSend || message).trim();
+    if (!finalMessage) return;
+    window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(finalMessage)}`, "_blank", "noopener,noreferrer");
+    setMessage("");
+    setOpen(false);
   };
 
   return (
-    <div className="wa-bubble">
-      <div className={`wa-panel${open ? " open" : " closed"}`}>
+    <div className="wa-fab">
+      <div className={`wa-panel ${open ? "open" : "closed"}`}>
         <div className="wa-header">
-          <div>
-            <div style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--linen)" }}>AGD Legal Desk</div>
-            <div style={{ fontSize: "0.62rem", color: "var(--gold-lt)", marginTop: 2 }}>Replies during office hours</div>
+          <div className="wa-header-info">
+            <div className="wa-avatar"><MessageCircle size={15} /></div>
+            <div>
+              <div className="wa-name">AGD Legal Desk</div>
+              <div className="wa-status">Replies during office hours</div>
+            </div>
           </div>
-          <button onClick={() => setOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--ink-dim)" }}><X size={15} /></button>
+          <button type="button" className="wa-close" onClick={() => setOpen(false)} aria-label="Close">
+            <X size={13} />
+          </button>
         </div>
-        <div style={{ padding: 18 }}>
-          <p style={{ fontSize: "0.82rem", lineHeight: 1.65, color: "var(--ink-mid)", marginBottom: 14, fontWeight: 300 }}>
-            Select a quick message or type your query below.
-          </p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
-            {QUICK.map(q => (
-              <button key={q} onClick={() => setMsg(q)} style={{ fontSize: "0.7rem", padding: "6px 12px", background: "var(--parch)", border: "0.5px solid var(--rule-med)", color: "var(--ink-mid)", borderRadius: 1, cursor: "pointer", textAlign: "left", transition: "all 0.2s" }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--gold)"; e.currentTarget.style.color = "var(--ink)"; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--rule-med)"; e.currentTarget.style.color = "var(--ink-mid)"; }}>
-                {q}
+        <div className="wa-body">
+          <div className="wa-bubble">
+            Hi! Thanks for reaching out to AGD Law Associates. Select a quick message or type your query below.
+          </div>
+          <div className="wa-quick">
+            {quickMessages.map((m) => (
+              <button
+                key={m}
+                type="button"
+                className={`wa-quick-btn${message === m ? " selected" : ""}`}
+                onClick={() => setMessage(m)}
+              >
+                {m}
               </button>
             ))}
           </div>
-          <div style={{ display: "flex", gap: 8 }}>
-            <textarea value={msg} onChange={e => setMsg(e.target.value)} rows={2} placeholder="Type your message…"
-              style={{ flex: 1, resize: "none", background: "transparent", border: "0.5px solid var(--rule-med)", padding: "8px 10px", color: "var(--ink)", fontSize: "0.85rem", fontFamily: "'Instrument Sans', sans-serif", outline: "none", transition: "border-color 0.2s" }}
-              onFocus={e => e.target.style.borderColor = "var(--gold)"}
-              onBlur={e => e.target.style.borderColor = "var(--rule-med)"}
-              onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }} />
-            <button onClick={() => send()} style={{ width: 38, background: "var(--ink)", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--linen)", borderRadius: 1, transition: "background 0.2s" }}
-              onMouseEnter={e => e.currentTarget.style.background = "var(--gold)"}
-              onMouseLeave={e => e.currentTarget.style.background = "var(--ink)"}>
-              <Send size={13} />
+          <div className="wa-input-row">
+            <textarea
+              rows={2}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); openWhatsApp(); } }}
+              placeholder="Type your message..."
+              className="wa-textarea"
+              aria-label="WhatsApp message"
+            />
+            <button type="button" className="wa-send" onClick={() => openWhatsApp()} aria-label="Send">
+              <Send size={15} />
             </button>
           </div>
         </div>
       </div>
-      <button className="wa-btn" onClick={() => setOpen(v => !v)}>
-        {open ? <X size={18} /> : <MessageCircle size={20} />}
+
+      {!open && (
+        <div className="wa-label">Chat with AGD</div>
+      )}
+
+      <button
+        type="button"
+        className={`wa-toggle ${open ? "open-state" : "closed"}`}
+        onClick={() => setOpen((v) => !v)}
+        aria-label={open ? "Close chat" : "Open chat"}
+      >
+        {open ? <X size={20} /> : <MessageCircle size={22} />}
       </button>
     </div>
   );
@@ -1360,21 +2033,23 @@ function WhatsApp() {
 export default function Page() {
   return (
     <>
-      <style>{GLOBAL_CSS}</style>
+      <GlobalStyles />
       <Header />
       <main>
         <Hero />
-        <Marquee />
+        <Ticker />
         <About />
-        <Stats />
-        <Process />
         <Services />
-        <Results />
+        <Team />
+        <CaseResults />
+        <Regions />
+        <Testimonial />
+        <Blog />
         <FAQ />
         <Contact />
       </main>
       <Footer />
-      <WhatsApp />
+      <WhatsAppFloatingChat />
     </>
   );
 }
