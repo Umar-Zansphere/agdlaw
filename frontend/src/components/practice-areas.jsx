@@ -1,5 +1,4 @@
 "use client";
-
 /**
  * AGD Law Associates — Practice Area Detail Pages
  * Usage (Next.js App Router): app/services/[slug]/page.jsx
@@ -7,6 +6,7 @@
  */
 
 import { useState, useEffect, useRef } from "react";
+import { AGDLogoImg } from "@/components/AGDLogoImg";
 import {
   ArrowRight, ArrowLeft, Phone, Mail, MessageCircle,
   ChevronDown, CheckCircle, Scale, Shield, Clock,
@@ -40,7 +40,7 @@ const GlobalStyles = () => (
     html { scroll-behavior: smooth; }
     body {
       font-family: 'DM Sans', system-ui, sans-serif;
-      background: var(--paper); color: var(--ink);
+      background: var(--ink); color: var(--ink);
       -webkit-font-smoothing: antialiased; overflow-x: hidden;
     }
     h1,h2,h3,h4 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 400; line-height: 1.1; }
@@ -50,14 +50,31 @@ const GlobalStyles = () => (
     :focus-visible { outline: 2px solid var(--sage); outline-offset: 3px; }
     ul { list-style: none; padding: 0; }
 
+    .fixed-bg {
+      position: fixed; inset: 0; z-index: 0;
+      background: var(--ink); overflow: hidden;
+    }
+    .fixed-bg-glow {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 900px; height: 900px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(197,223,192,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .fixed-bg-vignette {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(11,11,11,0.72) 100%);
+    }
+    .scroll-layer { position: relative; z-index: 10; }
+
     .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; width: 100%; }
 
     /* ── Section label ── */
     .section-label {
       display: inline-flex; align-items: center; gap: 8px;
-      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.18em;
-      text-transform: uppercase; color: var(--sage-dark);
-      background: var(--sage-pale); border: 1px solid var(--border);
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--sage);
+      background: rgba(197,223,192,0.1); border: 1px solid rgba(197,223,192,0.2);
       border-radius: 100px; padding: 5px 14px;
     }
     .section-label::before {
@@ -70,8 +87,8 @@ const GlobalStyles = () => (
       transition: background 0.4s, box-shadow 0.4s, backdrop-filter 0.4s;
     }
     .header.scrolled {
-      background: rgba(255,255,255,0.92); backdrop-filter: blur(16px);
-      box-shadow: 0 1px 0 rgba(197,223,192,0.3), 0 4px 24px rgba(11,11,11,0.06);
+      background: rgba(11,11,11,0.88); backdrop-filter: blur(20px);
+      box-shadow: 0 1px 0 rgba(197,223,192,0.1), 0 8px 32px rgba(0,0,0,0.3);
     }
     .header-inner {
       display: flex; align-items: center; justify-content: space-between;
@@ -79,30 +96,30 @@ const GlobalStyles = () => (
     }
     .logo-mark {
       font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.3rem; font-weight: 500; color: var(--ink);
+      font-size: 1.3rem; font-weight: 500; color: #fff;
       display: flex; align-items: center; gap: 10px;
     }
     .logo-glyph {
       width: 34px; height: 34px; border-radius: 9px;
-      background: var(--ink); color: var(--sage);
+      background: var(--sage); color: var(--ink);
       display: flex; align-items: center; justify-content: center;
       font-size: 0.95rem; font-weight: 600; flex-shrink: 0;
       font-family: 'Cormorant Garamond', serif;
     }
     .nav-links { display: flex; align-items: center; gap: 2px; }
     .nav-link {
-      font-size: 0.82rem; font-weight: 500; color: var(--ink);
+      font-size: 0.82rem; font-weight: 500; color: rgba(255,255,255,0.65);
       padding: 8px 12px; border-radius: 8px; transition: background 0.2s, color 0.2s;
     }
-    .nav-link:hover, .nav-link.active { background: var(--sage-pale); color: var(--sage-dark); }
+    .nav-link:hover, .nav-link.active { background: rgba(197,223,192,0.07); color: var(--sage); }
     .header-cta {
       display: inline-flex; align-items: center; gap: 8px;
-      background: var(--ink); color: var(--paper);
+      background: var(--sage); color: var(--ink);
       font-size: 0.8rem; font-weight: 600; padding: 10px 20px;
       border-radius: 100px; transition: background 0.25s, transform 0.2s;
       letter-spacing: 0.03em; white-space: nowrap;
     }
-    .header-cta:hover { background: var(--sage-dark); transform: translateY(-1px); }
+    .header-cta:hover { background: #fff; transform: translateY(-1px); }
 
     /* ── Hero (practice area specific) ── */
     .pa-hero {
@@ -187,15 +204,19 @@ const GlobalStyles = () => (
     .breadcrumb-sep { font-size: 0.6rem; opacity: 0.4; }
 
     /* ── Overview ── */
-    .overview-section { padding: clamp(4rem, 7vw, 8rem) 0; background: var(--paper); }
+    .overview-section {
+      padding: clamp(4rem, 7vw, 8rem) 0;
+      background: transparent;
+      border-top: 1px solid rgba(197,223,192,0.08);
+    }
     .overview-grid { display: grid; grid-template-columns: 1fr 380px; gap: 64px; align-items: start; }
     .overview-content { display: flex; flex-direction: column; gap: 24px; }
-    .overview-title { font-size: clamp(2rem, 3vw, 3rem); line-height: 1.1; }
-    .overview-title em { color: var(--sage-dark); font-style: italic; }
-    .overview-body { font-size: 1rem; line-height: 1.85; color: #3a3a3a; }
+    .overview-title { font-size: clamp(2rem, 3vw, 3rem); line-height: 1.1; color: #fff; }
+    .overview-title em { color: var(--sage); font-style: italic; }
+    .overview-body { font-size: 1rem; line-height: 1.85; color: rgba(255,255,255,0.58); }
     .overview-lead {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.2rem, 2vw, 1.55rem); color: var(--ink);
+      font-size: clamp(1.2rem, 2vw, 1.55rem); color: #fff;
       line-height: 1.65; border-left: 3px solid var(--sage);
       padding-left: 24px; font-style: italic;
     }
@@ -245,30 +266,34 @@ const GlobalStyles = () => (
     .sidebar-related-link:hover svg { opacity: 1; }
 
     /* ── Services Grid ── */
-    .services-section { padding: clamp(3rem, 5vw, 6rem) 0; background: var(--sage-pale); }
+    .services-section {
+      padding: clamp(3rem, 5vw, 6rem) 0;
+      background: transparent;
+    }
     .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: clamp(2rem, 4vw, 3.5rem); }
     .service-item {
-      background: #fff; border: 1px solid rgba(197,223,192,0.4);
+      background: rgba(255,255,255,0.04); backdrop-filter: blur(16px);
+      border: 1px solid rgba(197,223,192,0.14);
       border-radius: var(--radius-md); padding: 28px 24px;
       display: flex; flex-direction: column; gap: 12px;
       transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
     }
     .service-item:hover {
-      border-color: var(--sage); transform: translateY(-4px);
-      box-shadow: 0 16px 40px rgba(197,223,192,0.2);
+      border-color: rgba(197,223,192,0.3); transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.18);
     }
     .service-item-icon {
       width: 44px; height: 44px; border-radius: 12px;
-      background: var(--sage); color: var(--ink);
+      background: rgba(197,223,192,0.12); color: var(--sage);
       display: flex; align-items: center; justify-content: center;
-      transition: background 0.3s;
+      transition: background 0.3s, color 0.3s;
     }
-    .service-item:hover .service-item-icon { background: var(--ink); color: var(--sage); }
-    .service-item-title { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; color: var(--ink); line-height: 1.25; }
-    .service-item-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.72; flex: 1; }
+    .service-item:hover .service-item-icon { background: var(--sage); color: var(--ink); }
+    .service-item-title { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; color: #fff; line-height: 1.25; }
+    .service-item-desc { font-size: 0.83rem; color: rgba(255,255,255,0.48); line-height: 1.72; flex: 1; }
     .service-item-check {
       display: flex; align-items: center; gap: 6px;
-      font-size: 0.78rem; color: var(--sage-dark); font-weight: 500;
+      font-size: 0.78rem; color: var(--sage); font-weight: 500;
     }
 
     /* ── Process ── */
@@ -304,44 +329,45 @@ const GlobalStyles = () => (
     }
 
     /* ── Case Highlights ── */
-    .cases-section { padding: clamp(3rem, 5vw, 6rem) 0; background: var(--paper); }
+    .cases-section { padding: clamp(3rem, 5vw, 6rem) 0; background: transparent; }
     .cases-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: clamp(2rem, 3vw, 3rem); }
     .case-card {
-      border: 1px solid #e8f2e6; border-radius: var(--radius-md); padding: 28px;
+      background: rgba(255,255,255,0.05); backdrop-filter: blur(16px);
+      border: 1px solid rgba(197,223,192,0.14); border-radius: var(--radius-md); padding: 28px;
       display: flex; flex-direction: column; gap: 12px;
       transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
     }
-    .case-card:hover { border-color: var(--sage); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(197,223,192,0.15); }
+    .case-card:hover { border-color: rgba(197,223,192,0.3); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.2); }
     .case-outcome-badge {
       display: inline-flex; align-items: center; gap: 6px;
-      background: var(--sage); color: var(--ink);
+      background: rgba(197,223,192,0.12); color: var(--sage);
       font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em;
       border-radius: 100px; padding: 5px 12px; width: fit-content;
     }
-    .case-title { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--ink); line-height: 1.3; }
-    .case-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.72; flex: 1; }
-    .case-meta { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px solid #e8f2e6; }
-    .case-court { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: #aaa; }
-    .case-year { font-size: 0.68rem; color: #ccc; }
+    .case-title { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: #fff; line-height: 1.3; }
+    .case-desc { font-size: 0.83rem; color: rgba(255,255,255,0.5); line-height: 1.72; flex: 1; }
+    .case-meta { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px solid rgba(197,223,192,0.1); }
+    .case-court { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.38); }
+    .case-year { font-size: 0.68rem; color: rgba(255,255,255,0.28); }
 
     /* ── FAQs ── */
-    .faq-section { padding: clamp(3rem, 5vw, 6rem) 0; background: var(--sage-pale); }
+    .faq-section { padding: clamp(3rem, 5vw, 6rem) 0; background: transparent; }
     .faq-grid { display: grid; grid-template-columns: 360px 1fr; gap: 56px; align-items: start; }
     .faq-sidebar { display: flex; flex-direction: column; gap: 20px; position: sticky; top: 88px; }
-    .faq-sidebar-title { font-size: clamp(1.8rem, 2.5vw, 2.6rem); }
-    .faq-sidebar-title em { color: var(--sage-dark); font-style: italic; }
+    .faq-sidebar-title { font-size: clamp(1.8rem, 2.5vw, 2.6rem); color: #fff; }
+    .faq-sidebar-title em { color: var(--sage); font-style: italic; }
     .faq-list { display: flex; flex-direction: column; }
-    .faq-item { border-bottom: 1px solid rgba(197,223,192,0.5); }
+    .faq-item { border-bottom: 1px solid rgba(197,223,192,0.12); }
     .faq-question {
       width: 100%; display: flex; justify-content: space-between; align-items: center;
       padding: 20px 0; gap: 16px; text-align: left; background: none; border: none;
       cursor: pointer; font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.05rem, 1.6vw, 1.3rem); color: var(--ink); transition: color 0.2s;
+      font-size: clamp(1.05rem, 1.6vw, 1.3rem); color: #fff; transition: color 0.2s;
     }
-    .faq-question:hover { color: var(--sage-dark); }
+    .faq-question:hover { color: var(--sage); }
     .faq-toggle {
       width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
-      border: 1.5px solid var(--border); color: var(--sage-dark);
+      border: 1.5px solid rgba(197,223,192,0.22); color: var(--sage);
       display: flex; align-items: center; justify-content: center; transition: all 0.3s;
     }
     .faq-toggle.open { background: var(--sage); border-color: var(--sage); transform: rotate(45deg); }
@@ -351,7 +377,7 @@ const GlobalStyles = () => (
     }
     .faq-answer.open { grid-template-rows: 1fr; opacity: 1; }
     .faq-answer-inner { overflow: hidden; }
-    .faq-answer-text { padding-bottom: 20px; font-size: 0.9rem; line-height: 1.8; color: #444; }
+    .faq-answer-text { padding-bottom: 20px; font-size: 0.9rem; line-height: 1.8; color: rgba(255,255,255,0.55); }
 
     /* ── CTA Banner ── */
     .cta-banner {
@@ -371,20 +397,21 @@ const GlobalStyles = () => (
     .cta-banner-actions { display: flex; gap: 12px; flex-wrap: wrap; flex-shrink: 0; }
 
     /* ── Related Areas ── */
-    .related-section { padding: clamp(3rem, 5vw, 6rem) 0; background: var(--paper); border-top: 1px solid #f0f7ee; }
+    .related-section { padding: clamp(3rem, 5vw, 6rem) 0; background: transparent; border-top: 1px solid rgba(197,223,192,0.08); }
     .related-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: clamp(1.5rem, 3vw, 2.5rem); }
     .related-card {
-      border: 1px solid #e8f2e6; border-radius: var(--radius-md); padding: 24px 20px;
+      background: rgba(255,255,255,0.04); backdrop-filter: blur(16px);
+      border: 1px solid rgba(197,223,192,0.14); border-radius: var(--radius-md); padding: 24px 20px;
       display: flex; flex-direction: column; gap: 12px;
       transition: all 0.3s; cursor: pointer;
     }
-    .related-card:hover { border-color: var(--sage); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(197,223,192,0.15); }
+    .related-card:hover { border-color: rgba(197,223,192,0.3); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.2); }
     .related-icon { color: var(--sage); }
-    .related-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--ink); }
-    .related-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.65; }
+    .related-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: #fff; }
+    .related-desc { font-size: 0.78rem; color: rgba(255,255,255,0.48); line-height: 1.65; }
     .related-link {
       display: flex; align-items: center; gap: 5px; margin-top: auto;
-      font-size: 0.75rem; font-weight: 600; color: var(--sage-dark);
+      font-size: 0.75rem; font-weight: 600; color: var(--sage);
       text-transform: uppercase; letter-spacing: 0.06em;
     }
 
@@ -910,7 +937,7 @@ function SiteHeader({ currentSlug }) {
         <div className="container">
           <div className="header-inner">
             <a href="/" className="logo-mark">
-              <span className="logo-glyph">A</span>
+              <AGDLogoImg size={34} />
               AGD Law Associates
             </a>
             <nav className="nav-links" aria-label="Main navigation">
@@ -926,10 +953,10 @@ function SiteHeader({ currentSlug }) {
                 type="button"
                 aria-label="Menu"
                 onClick={() => setMenuOpen((v) => !v)}
-                style={{ display: "none", width: "38px", height: "38px", border: "1px solid #e8f2e6", borderRadius: "8px", background: "transparent", cursor: "pointer", alignItems: "center", justifyContent: "center" }}
+                style={{ display: "none", width: "38px", height: "38px", border: "1px solid rgba(197,223,192,0.2)", borderRadius: "8px", background: "transparent", cursor: "pointer", alignItems: "center", justifyContent: "center", color: "#c5dfc0" }}
                 className="mob-menu-btn"
               >
-                {menuOpen ? <X size={17} /> : <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><rect width="17" height="2" rx="1" fill="#0b0b0b"/><rect y="5" width="11" height="2" rx="1" fill="#0b0b0b"/><rect y="10" width="17" height="2" rx="1" fill="#0b0b0b"/></svg>}
+                {menuOpen ? <X size={17} /> : <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><rect width="17" height="2" rx="1" fill="#c5dfc0"/><rect y="5" width="11" height="2" rx="1" fill="#c5dfc0"/><rect y="10" width="17" height="2" rx="1" fill="#c5dfc0"/></svg>}
               </button>
             </div>
           </div>
@@ -940,7 +967,7 @@ function SiteHeader({ currentSlug }) {
         <div style={{ position: "fixed", inset: 0, zIndex: 800, background: "#0b0b0b", display: "flex", flexDirection: "column", padding: "0 24px 24px" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "72px" }}>
             <span style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "1.3rem", color: "#fff", display: "flex", alignItems: "center", gap: "10px" }}>
-              <span style={{ width: "34px", height: "34px", borderRadius: "9px", background: "#c5dfc0", color: "#0b0b0b", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.9rem", fontWeight: 600 }}>A</span>
+              <AGDLogoImg size={34} />
               AGD Law Associates
             </span>
             <button onClick={() => setMenuOpen(false)} style={{ width: "38px", height: "38px", border: "1px solid rgba(197,223,192,0.2)", borderRadius: "8px", background: "transparent", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
@@ -970,7 +997,7 @@ function SiteFooter() {
       <div className="container">
         <div className="footer-inner">
           <div className="footer-brand-mini">
-            <span style={{ width: "30px", height: "30px", borderRadius: "8px", background: "#c5dfc0", color: "#0b0b0b", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.85rem", fontWeight: 600 }}>A</span>
+            <AGDLogoImg size={30} />
             AGD Law Associates
           </div>
           <p className="footer-copy">© {new Date().getFullYear()} AGD Law Associates. All rights reserved.</p>
@@ -983,6 +1010,30 @@ function SiteFooter() {
         </div>
       </div>
     </footer>
+  );
+}
+
+function FixedBackground() {
+  return (
+    <div className="fixed-bg" aria-hidden="true">
+      <img
+        src="https://images.pexels.com/photos/9685285/pexels-photo-9685285.jpeg"
+        alt=""
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 1 }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          background: "rgba(0,0,0,0.68)",
+          zIndex: 2,
+        }}
+      />
+      <div className="fixed-bg-glow" style={{ zIndex: 3 }} />
+      <div className="fixed-bg-vignette" style={{ zIndex: 4 }} />
+    </div>
   );
 }
 
@@ -1178,8 +1229,8 @@ function ServicesSection({ area }) {
       <div className="container">
         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           <span className="section-label">What We Handle</span>
-          <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(2rem, 3vw, 3rem)", lineHeight: "1.1" }}>
-            Our {area.title.toLowerCase()} <em style={{ color: "#3a5c3d", fontStyle: "italic" }}>services</em>
+          <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(2rem, 3vw, 3rem)", lineHeight: "1.1", color: "#fff" }}>
+            Our {area.title.toLowerCase()} <em style={{ color: "#c5dfc0", fontStyle: "italic" }}>services</em>
           </h2>
         </div>
         <div className="services-grid">
@@ -1234,8 +1285,8 @@ function CasesSection({ area }) {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "16px" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             <span className="section-label">Case Highlights</span>
-            <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(2rem, 3vw, 3rem)", lineHeight: "1.1" }}>
-              Results that <em style={{ color: "#3a5c3d", fontStyle: "italic" }}>matter</em>
+            <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(2rem, 3vw, 3rem)", lineHeight: "1.1", color: "#fff" }}>
+              Results that <em style={{ color: "#c5dfc0", fontStyle: "italic" }}>matter</em>
             </h2>
           </div>
         </div>
@@ -1272,10 +1323,10 @@ function FAQSection({ area }) {
             <h2 className="faq-sidebar-title">
               Common<br /><em>questions</em><br />answered
             </h2>
-            <p style={{ fontSize: "0.88rem", lineHeight: "1.8", color: "#555" }}>
+            <p style={{ fontSize: "0.88rem", lineHeight: "1.8", color: "rgba(255,255,255,0.5)" }}>
               Have more specific questions about your situation? Contact us for a confidential consultation.
             </p>
-            <a href="/#contact" style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "#0b0b0b", color: "#c5dfc0", fontSize: "0.82rem", fontWeight: 600, padding: "12px 20px", borderRadius: "100px", width: "fit-content", transition: "background 0.2s" }}>
+            <a href="/#contact" style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "#c5dfc0", color: "#0b0b0b", fontSize: "0.82rem", fontWeight: 600, padding: "12px 20px", borderRadius: "100px", width: "fit-content", transition: "background 0.2s" }}>
               Ask Us Directly <ArrowRight size={13} />
             </a>
           </div>
@@ -1341,8 +1392,8 @@ function RelatedAreas({ area }) {
       <div className="container">
         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           <span className="section-label">Explore Further</span>
-          <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(1.8rem, 2.5vw, 2.6rem)" }}>
-            Related practice <em style={{ color: "#3a5c3d", fontStyle: "italic" }}>areas</em>
+          <h2 style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(1.8rem, 2.5vw, 2.6rem)", color: "#fff" }}>
+            Related practice <em style={{ color: "#c5dfc0", fontStyle: "italic" }}>areas</em>
           </h2>
         </div>
         <div className="related-grid">
@@ -1373,17 +1424,20 @@ export function PracticeAreaPageContent({ area, slug }) {
   return (
     <>
       <GlobalStyles />
-      <SiteHeader currentSlug={resolvedArea.slug} />
-      <PracticeAreaHero area={resolvedArea} />
-      <OverviewSection area={resolvedArea} />
-      <ServicesSection area={resolvedArea} />
-      <ProcessSection area={resolvedArea} />
-      <CasesSection area={resolvedArea} />
-      <FAQSection area={resolvedArea} />
-      <CTABanner area={resolvedArea} />
-      <RelatedAreas area={resolvedArea} />
-      <SiteFooter />
-      <WhatsAppChat />
+      <FixedBackground />
+      <div className="scroll-layer">
+        <SiteHeader currentSlug={resolvedArea.slug} />
+        <PracticeAreaHero area={resolvedArea} />
+        <OverviewSection area={resolvedArea} />
+        <ServicesSection area={resolvedArea} />
+        <ProcessSection area={resolvedArea} />
+        <CasesSection area={resolvedArea} />
+        <FAQSection area={resolvedArea} />
+        <CTABanner area={resolvedArea} />
+        <RelatedAreas area={resolvedArea} />
+        <SiteFooter />
+        <WhatsAppChat />
+      </div>
     </>
   );
 }
