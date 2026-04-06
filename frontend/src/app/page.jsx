@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { AGDLogoImg } from "@/components/AGDLogoImg";
 import Link from "next/link";
 import { blogPosts } from "@/data/blog-posts";
@@ -42,10 +42,11 @@ const GlobalStyles = () => (
       --radius-sm: 12px;
       --radius-md: 20px;
       --radius-lg: 32px;
+      --header-offset: 96px;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; font-size: 16px; }
+    html { scroll-behavior: smooth; font-size: 16px; scroll-padding-top: var(--header-offset); }
     body {
       font-family: 'DM Sans', system-ui, sans-serif;
       background: var(--ink);
@@ -71,6 +72,7 @@ const GlobalStyles = () => (
       z-index: 0;
       background: var(--ink);
       overflow: hidden;
+      pointer-events: none;
     }
     .fixed-bg-svg {
       position: absolute;
@@ -101,6 +103,8 @@ const GlobalStyles = () => (
       position: relative;
       z-index: 10;
     }
+    section[id] { scroll-margin-top: var(--header-offset); }
+    main { padding-bottom: clamp(120px, 18vh, 220px); }
 
     /* ── Container ── */
     .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; width: 100%; }
@@ -173,7 +177,7 @@ const GlobalStyles = () => (
 
     /* ── Hero ── */
     .hero {
-      min-height: 100vh;
+      min-height: 100svh;
       display: flex; align-items: flex-end;
       padding: 0 0 80px;
       position: relative;
@@ -267,6 +271,7 @@ const GlobalStyles = () => (
     .hero-scroll-hint {
       position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
       display: flex; flex-direction: column; align-items: center; gap: 8px;
+      pointer-events: none;
     }
     .hero-scroll-line {
       width: 1px; height: 40px;
@@ -691,7 +696,7 @@ const GlobalStyles = () => (
       display: flex; transition: border-color 0.3s;
     }
     .blog-item:hover { border-color: rgba(197,223,192,0.25); }
-    .blog-item-img { width: 110px; flex-shrink: 0; object-fit: cover; }
+    .blog-item-img { width: 110px; height: 110px; flex-shrink: 0; object-fit: cover; }
     .blog-item-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
     .blog-item-cat { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--sage); }
     .blog-item-title { font-family: 'Cormorant Garamond', serif; font-size: 1.08rem; color: #fff; line-height: 1.25; }
@@ -844,7 +849,7 @@ const GlobalStyles = () => (
     .footer-web:hover { color: var(--sage); }
 
     /* ── WhatsApp ── */
-    .wa-fab { position: fixed; bottom: 24px; right: 24px; z-index: 980; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+    .wa-fab { position: fixed; bottom: 24px; right: 24px; z-index: 980; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; pointer-events: none; }
     .wa-panel {
       width: min(90vw, 360px); border-radius: 20px; overflow: hidden;
       background: #fff; border: 1px solid var(--border);
@@ -871,14 +876,14 @@ const GlobalStyles = () => (
     .wa-textarea:focus { outline: none; border-color: var(--sage); }
     .wa-send { width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0; background: var(--sage); color: var(--ink); display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
     .wa-send:hover { background: var(--ink); color: var(--sage); }
-    .wa-label { background: var(--ink); color: var(--sage); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.1em; padding: 5px 13px; border-radius: 100px; font-weight: 700; }
-    .wa-toggle { width: 54px; height: 54px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 32px rgba(11,11,11,0.3); transition: all 0.3s; border: none; }
+    .wa-label { background: var(--ink); color: var(--sage); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.1em; padding: 5px 13px; border-radius: 100px; font-weight: 700; pointer-events: auto; }
+    .wa-toggle { width: 54px; height: 54px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 32px rgba(11,11,11,0.3); transition: all 0.3s; border: none; pointer-events: auto; }
     .wa-toggle.closed { background: var(--sage); color: var(--ink); }
     .wa-toggle.closed:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 18px 40px rgba(197,223,192,0.4); }
     .wa-toggle.open-state { background: var(--ink); color: var(--sage); }
 
     /* ── Mobile ── */
-    .mobile-panel { position: fixed; inset: 0; z-index: 800; background: var(--ink); display: flex; flex-direction: column; }
+    .mobile-panel { position: fixed; inset: 0; z-index: 800; background: var(--ink); display: flex; flex-direction: column; overflow-y: auto; }
     .mobile-nav-item {
       display: flex; justify-content: space-between; align-items: center;
       padding: 20px 0; border-bottom: 1px solid rgba(197,223,192,0.08);
@@ -896,7 +901,6 @@ const GlobalStyles = () => (
     /* ── Responsive ── */
     @media (max-width: 1024px) {
       .hero-stats-row { flex-wrap: wrap; }
-      // .hero-eyebrow {margin-top: 80px;}
       .about-inner { grid-template-columns: 1fr; }
       .about-right { display: none; }
       .services-grid { grid-template-columns: repeat(2, 1fr); }
@@ -926,6 +930,15 @@ const GlobalStyles = () => (
       .form-fields { grid-template-columns: 1fr; }
       .footer-top { grid-template-columns: 1fr; }
       .hero-title { font-size: clamp(3rem, 14vw, 5rem); }
+      .hero { padding-bottom: 64px; }
+      .hero-stats-row { width: 100%; }
+      .hero-stat { flex: 1 1 50%; text-align: center; }
+      .hero-stat-num { font-size: 1.7rem; }
+      .hero-tagline { margin-bottom: 32px; }
+      .blog-item-img { width: 96px; height: 96px; }
+    }
+    @media (min-width: 1025px) {
+      .mobile-panel { display: none; }
     }
   `}</style>
 );
@@ -938,7 +951,7 @@ function FixedBackground() {
       {/* Background image */}
       <img
         // https://images.pexels.com/photos/9685285/pexels-photo-9685285.jpeg
-        src="https://images.pexels.com/photos/9685285/pexels-photo-9685285.jpeg"
+        src="hero-bg.webp"
         alt="bg"
         style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 1 }}
         loading="eager"
@@ -1037,13 +1050,13 @@ function Header() {
   const [scrolled, setScrolled] = useState(false);
 
   const navLinks = [
-    { href: "#about", label: "About" },
-    { href: "#services", label: "Services" },
-    { href: "#team", label: "Team" },
-    { href: "#cases", label: "Case Results" },
-    { href: "#blog", label: "Insights" },
-    { href: "#faq", label: "FAQ" },
-    { href: "#contact", label: "Contact" },
+    { id: "about", label: "About" },
+    { id: "services", label: "Services" },
+    { id: "team", label: "Team" },
+    { id: "cases", label: "Case Results" },
+    { id: "blog", label: "Insights" },
+    { id: "faq", label: "FAQ" },
+    { id: "contact", label: "Contact" },
   ];
 
   useEffect(() => {
@@ -1051,6 +1064,25 @@ function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    const desktopQuery = window.matchMedia("(min-width: 1025px)");
+    const handleDesktopChange = (event) => {
+      if (event.matches) setMenuOpen(false);
+    };
+
+    desktopQuery.addEventListener("change", handleDesktopChange);
+
+    return () => desktopQuery.removeEventListener("change", handleDesktopChange);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
 
   return (
     <>
@@ -1063,11 +1095,20 @@ function Header() {
             </a>
             <nav className="nav-links" aria-label="Main navigation">
               {navLinks.map((l) => (
-                <a key={l.href} href={l.href} className="nav-link">{l.label}</a>
+                <a
+                  key={l.id}
+                  href={`#${l.id}`}
+                  className="nav-link"
+                >
+                  {l.label}
+                </a>
               ))}
             </nav>
             <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              <a href="#contact" className="header-cta header-cta-desktop">
+              <a
+                href="#contact"
+                className="header-cta header-cta-desktop"
+              >
                 Consultation <ArrowRight size={13} />
               </a>
               <button
@@ -1099,7 +1140,9 @@ function Header() {
           <nav className="container" style={{ flex: 1, paddingTop: "16px" }}>
             {navLinks.map((l, i) => (
               <a
-                key={l.href} href={l.href} className="mobile-nav-item"
+                key={l.id}
+                href={`#${l.id}`}
+                className="mobile-nav-item"
                 style={{ animationDelay: `${0.06 + i * 0.06}s` }}
                 onClick={() => setMenuOpen(false)}
               >
@@ -1107,7 +1150,11 @@ function Header() {
                 <span className="mobile-num">0{i + 1}</span>
               </a>
             ))}
-            <a href="#contact" onClick={() => setMenuOpen(false)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginTop: "32px", padding: "16px", borderRadius: "14px", background: "#c5dfc0", color: "#0b0b0b", fontWeight: "700", fontSize: "0.88rem", letterSpacing: "0.06em", textDecoration: "none", textTransform: "uppercase" }}>
+            <a
+              href="#contact"
+              onClick={() => setMenuOpen(false)}
+              style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginTop: "32px", padding: "16px", borderRadius: "14px", background: "#c5dfc0", color: "#0b0b0b", fontWeight: "700", fontSize: "0.88rem", letterSpacing: "0.06em", textDecoration: "none", textTransform: "uppercase" }}
+            >
               Schedule Consultation <ArrowRight size={14} />
             </a>
           </nav>
@@ -1874,6 +1921,60 @@ function WhatsAppFloatingChat() {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function Page() {
+  useEffect(() => {
+    const getHeaderOffset = () => {
+      const value = getComputedStyle(document.documentElement)
+        .getPropertyValue("--header-offset")
+        .trim();
+      const parsed = Number.parseFloat(value);
+      return Number.isNaN(parsed) ? 96 : parsed;
+    };
+
+    const scrollToHash = (hash, updateHistory = false) => {
+      if (!hash || hash === "#") return;
+
+      const target = document.querySelector(hash);
+      if (!target) return;
+
+      const top = target.getBoundingClientRect().top + window.scrollY - getHeaderOffset();
+      window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+
+      if (updateHistory && window.location.hash !== hash) {
+        window.history.pushState(null, "", hash);
+      }
+    };
+
+    const handleDocumentClick = (event) => {
+      if (!(event.target instanceof Element)) return;
+
+      const anchor = event.target.closest('a[href^="#"]');
+      if (!anchor) return;
+
+      const href = anchor.getAttribute("href");
+      if (!href || href === "#") return;
+      if (!document.querySelector(href)) return;
+
+      event.preventDefault();
+      scrollToHash(href, true);
+    };
+
+    const handleHashChange = () => {
+      scrollToHash(window.location.hash, false);
+    };
+
+    document.addEventListener("click", handleDocumentClick);
+    window.addEventListener("hashchange", handleHashChange);
+
+    if (window.location.hash) {
+      requestAnimationFrame(() => scrollToHash(window.location.hash, false));
+    }
+
+    return () => {
+      document.removeEventListener("click", handleDocumentClick);
+      window.removeEventListener("hashchange", handleHashChange);
+    };
+  }, []);
+
   return (
     <>
       <GlobalStyles />
