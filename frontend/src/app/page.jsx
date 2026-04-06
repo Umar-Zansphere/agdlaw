@@ -951,7 +951,7 @@ function FixedBackground() {
       {/* Background image */}
       <img
         // https://images.pexels.com/photos/9685285/pexels-photo-9685285.jpeg
-        src="hero-bg.webp"
+        src="https://images.pexels.com/photos/9685285/pexels-photo-9685285.jpeg"
         alt="bg"
         style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 1 }}
         loading="eager"
