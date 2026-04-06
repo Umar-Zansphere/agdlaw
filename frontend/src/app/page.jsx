@@ -25,6 +25,954 @@ import {
   CheckCircle,
 } from "lucide-react";
 
+// ─── Global Styles ─────────────────────────────────────────────────────────────
+
+const GlobalStyles = () => (
+  <style>{`
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+    :root {
+      --ink: #0b0b0b;
+      --paper: #ffffff;
+      --sage: #c5dfc0;
+      --sage-dark: #3a5c3d;
+      --sage-pale: #f0f7ee;
+      --muted: #6b7280;
+      --border: rgba(197,223,192,0.35);
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 32px;
+      --header-offset: 96px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; scroll-padding-top: var(--header-offset); }
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--ink);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 400;
+      line-height: 1.1;
+    }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: inherit; border: none; background: none; }
+    :focus-visible { outline: 2px solid var(--sage); outline-offset: 3px; }
+    ul { list-style: none; }
+
+    /* ── Fixed Background ── */
+    .fixed-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: var(--ink);
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .fixed-bg-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.07;
+    }
+    .fixed-bg-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 900px;
+      height: 900px;
+      background: radial-gradient(circle, rgba(197,223,192,0.12) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .fixed-bg-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(11,11,11,0.7) 100%);
+    }
+
+    /* ── Scrollable Layer ── */
+    .scroll-layer {
+      position: relative;
+      z-index: 10;
+    }
+    section[id] { scroll-margin-top: var(--header-offset); }
+    main { padding-bottom: clamp(120px, 18vh, 220px); }
+
+    /* ── Container ── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; width: 100%; }
+
+    .section-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--sage);
+      background: rgba(197,223,192,0.1); border: 1px solid rgba(197,223,192,0.2);
+      border-radius: 100px; padding: 5px 14px;
+    }
+    .section-label::before {
+      content: ''; width: 5px; height: 5px; border-radius: 50%;
+      background: var(--sage);
+    }
+    .section-label-dark {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--sage);
+      background: rgba(197,223,192,0.08); border: 1px solid rgba(197,223,192,0.2);
+      border-radius: 100px; padding: 5px 14px;
+    }
+    .section-label-dark::before {
+      content: ''; width: 5px; height: 5px; border-radius: 50%;
+      background: var(--sage);
+    }
+
+    /* ── Header ── */
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+      transition: background 0.4s, box-shadow 0.4s, backdrop-filter 0.4s;
+    }
+    .header.scrolled {
+      background: rgba(11,11,11,0.88);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 1px 0 rgba(197,223,192,0.1), 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .header-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 70px; gap: 24px;
+    }
+    .logo-mark {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.35rem; font-weight: 500; color: #fff;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .logo-glyph {
+      width: 34px; height: 34px; border-radius: 9px;
+      background: var(--sage); color: var(--ink);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 1rem; font-weight: 700; flex-shrink: 0;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .nav-links { display: flex; align-items: center; gap: 2px; }
+    .nav-link {
+      font-size: 0.8rem; font-weight: 500; color: rgba(255,255,255,0.65);
+      padding: 8px 13px; border-radius: 8px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-link:hover { color: var(--sage); background: rgba(197,223,192,0.07); }
+    .header-cta {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--sage); color: var(--ink);
+      font-size: 0.78rem; font-weight: 700;
+      padding: 9px 18px; border-radius: 100px;
+      transition: background 0.25s, transform 0.2s;
+      letter-spacing: 0.04em; white-space: nowrap;
+    }
+    .header-cta:hover { background: #fff; transform: translateY(-1px); }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100svh;
+      display: flex; align-items: flex-end;
+      padding: 0 0 80px;
+      position: relative;
+    }
+    .hero-ornament {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      border: 1px solid rgba(197,223,192,0.06);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero-ornament::after {
+      content: '';
+      position: absolute;
+      inset: 40px;
+      border: 1px solid rgba(197,223,192,0.04);
+      border-radius: 50%;
+    }
+    .hero-content {
+      text-align: center;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--sage);
+      border: 1px solid rgba(197,223,192,0.25);
+      border-radius: 100px; padding: 6px 16px; margin-bottom: 32px;
+      margin-top: 80px;
+    }
+    .hero-title {
+      font-size: clamp(4rem, 9vw, 9rem);
+      color: #fff; line-height: 0.92;
+      letter-spacing: -0.025em; margin-bottom: 12px;
+    }
+    .hero-title em { color: var(--sage); font-style: italic; }
+    .hero-firm-name {
+      font-size: clamp(1rem, 2vw, 1.5rem);
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.3em; text-transform: uppercase;
+      font-family: 'DM Sans', sans-serif; font-weight: 300;
+      margin-bottom: 36px;
+    }
+    .hero-tagline {
+      font-size: 1.05rem; color: rgba(255,255,255,0.5);
+      line-height: 1.75; max-width: 520px; margin: 0 auto 44px;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 9px;
+      background: var(--sage); color: var(--ink);
+      font-size: 0.85rem; font-weight: 700;
+      padding: 13px 24px; border-radius: 100px;
+      transition: all 0.25s; letter-spacing: 0.03em; white-space: nowrap;
+    }
+    .btn-primary:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 12px 32px rgba(197,223,192,0.3); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 9px;
+      color: rgba(255,255,255,0.6);
+      font-size: 0.85rem; font-weight: 500;
+      padding: 13px 24px; border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.15);
+      transition: all 0.25s; white-space: nowrap;
+    }
+    .btn-ghost:hover { border-color: var(--sage); color: var(--sage); }
+    .hero-stats-row {
+      display: flex; justify-content: center; gap: 0;
+      margin-top: 56px;
+      border: 1px solid rgba(197,223,192,0.12);
+      border-radius: 20px; overflow: hidden; width: fit-content;
+      margin-left: auto; margin-right: auto;
+    }
+    .hero-stat {
+      padding: 18px 32px; border-right: 1px solid rgba(197,223,192,0.12);
+    }
+    .hero-stat:last-child { border-right: none; }
+    .hero-stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; color: var(--sage); line-height: 1;
+    }
+    .hero-stat-lbl {
+      font-size: 0.65rem; color: rgba(255,255,255,0.35);
+      text-transform: uppercase; letter-spacing: 0.12em; margin-top: 4px;
+    }
+    .hero-scroll-hint {
+      position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      pointer-events: none;
+    }
+    .hero-scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, rgba(197,223,192,0.5), transparent);
+      animation: scrollHint 2s ease-in-out infinite;
+    }
+    @keyframes scrollHint {
+      0%, 100% { opacity: 0.4; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.2); }
+    }
+    .hero-scroll-lbl {
+      font-size: 0.6rem; color: rgba(197,223,192,0.35);
+      text-transform: uppercase; letter-spacing: 0.2em;
+    }
+
+    /* ── Ticker ── */
+    .ticker-wrap {
+      background: var(--sage); overflow: hidden; height: 38px;
+      display: flex; align-items: center;
+    }
+    .ticker-track {
+      display: flex; gap: 0; white-space: nowrap;
+      animation: tickerMove 30s linear infinite;
+    }
+    @keyframes tickerMove {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .ticker-item {
+      display: inline-flex; align-items: center; gap: 16px;
+      font-size: 0.7rem; font-weight: 700; color: var(--ink);
+      text-transform: uppercase; letter-spacing: 0.14em;
+      padding: 0 28px;
+    }
+    .ticker-sep { opacity: 0.35; }
+
+    /* ── All sections are transparent — fixed bg always shows through ── */
+    .panel, .panel-dark, .panel-tinted {
+      background: transparent;
+      position: relative;
+    }
+
+    /* ── About ── */
+    .about-inner {
+      display: grid; grid-template-columns: 1fr 1.1fr;
+      gap: clamp(3rem, 5vw, 6rem); align-items: center;
+      padding: clamp(5rem, 8vw, 9rem) 0;
+    }
+    .about-left { display: flex; flex-direction: column; gap: 28px; }
+    .about-pretitle {
+      font-size: clamp(2.6rem, 4vw, 4.2rem);
+      line-height: 1.05; letter-spacing: -0.015em; color: #fff;
+    }
+    .about-pretitle em { color: var(--sage); font-style: italic; }
+    .about-body { font-size: 0.97rem; line-height: 1.85; color: rgba(255,255,255,0.6); }
+    .about-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    }
+    .about-stat-box {
+      background: rgba(255,255,255,0.07); backdrop-filter: blur(12px);
+      border: 1px solid rgba(197,223,192,0.15); border-radius: 16px; padding: 20px 18px;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .about-stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem; color: var(--sage); line-height: 1;
+    }
+    .about-stat-lbl {
+      font-size: 0.65rem; color: rgba(255,255,255,0.4);
+      text-transform: uppercase; letter-spacing: 0.1em;
+    }
+    .about-creds { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cred-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.77rem; color: var(--sage); font-weight: 500;
+      background: rgba(197,223,192,0.1); border: 1px solid rgba(197,223,192,0.2);
+      border-radius: 100px; padding: 5px 12px;
+    }
+    .cred-tag svg { color: var(--sage); flex-shrink: 0; }
+    .about-right { position: relative; }
+    .about-img-wrap {
+      border-radius: 28px; overflow: hidden;
+      box-shadow: 0 40px 100px rgba(11,11,11,0.15);
+      aspect-ratio: 4/5;
+    }
+    .about-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover; object-position: top;
+    }
+    .about-img-badge {
+      position: absolute; bottom: -20px; left: -20px;
+      background: var(--ink); border-radius: 20px;
+      padding: 20px 24px; color: #fff;
+      box-shadow: 0 20px 56px rgba(11,11,11,0.3);
+    }
+    .about-badge-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.6rem; color: var(--sage); line-height: 1;
+    }
+    .about-badge-lbl {
+      font-size: 0.62rem; text-transform: uppercase;
+      letter-spacing: 0.1em; color: rgba(197,223,192,0.55); margin-top: 4px;
+    }
+    .about-img-accent {
+      position: absolute; top: -20px; right: -20px;
+      width: 48%; aspect-ratio: 1; border-radius: 20px;
+      overflow: hidden; border: 3px solid #fff;
+      box-shadow: 0 16px 48px rgba(11,11,11,0.15);
+    }
+    .about-img-accent img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ── Services ── */
+    .services-inner { padding: clamp(4rem, 7vw, 8rem) 0; }
+    .services-head {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: clamp(2.5rem, 4vw, 4rem); gap: 24px; flex-wrap: wrap;
+    }
+    .services-title {
+      font-size: clamp(2.2rem, 3.5vw, 3.6rem);
+      color: #fff; letter-spacing: -0.015em; margin-top: 14px;
+    }
+    .services-title em { color: var(--sage); font-style: italic; }
+    .services-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border: 1px solid rgba(197,223,192,0.1); border-radius: 28px;
+      overflow: hidden;
+    }
+    .service-card {
+      padding: 30px 26px; position: relative; overflow: hidden;
+      display: flex; flex-direction: column; gap: 12px;
+      border-right: 1px solid rgba(197,223,192,0.08);
+      border-bottom: 1px solid rgba(197,223,192,0.08);
+      transition: background 0.3s;
+      background: rgba(255,255,255,0.02);
+    }
+    .service-card:hover { background: rgba(197,223,192,0.05); }
+    .service-card:nth-child(3n) { border-right: none; }
+    .service-card:nth-child(7), .service-card:nth-child(8), .service-card:nth-child(9) { border-bottom: none; }
+    .service-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem; color: rgba(197,223,192,0.3);
+      letter-spacing: 0.08em;
+    }
+    .service-icon-wrap {
+      width: 42px; height: 42px; border-radius: 11px;
+      border: 1px solid rgba(197,223,192,0.18); color: var(--sage);
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .service-card:hover .service-icon-wrap {
+      background: rgba(197,223,192,0.1); border-color: var(--sage);
+    }
+    .service-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.28rem; color: #fff; line-height: 1.2;
+    }
+    .service-desc { font-size: 0.81rem; color: rgba(255,255,255,0.42); line-height: 1.72; }
+    .service-arrow {
+      margin-top: auto; width: 30px; height: 30px; border-radius: 50%;
+      border: 1px solid rgba(197,223,192,0.18); color: var(--sage);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.25s;
+    }
+    .service-card:hover .service-arrow {
+      background: var(--sage); color: var(--ink); border-color: var(--sage);
+    }
+
+    /* ── Team ── */
+    .team-inner { padding: clamp(4rem, 7vw, 8rem) 0; }
+    .team-head {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: clamp(2.5rem, 4vw, 4rem); gap: 24px; flex-wrap: wrap;
+    }
+    .team-title {
+      font-size: clamp(2.2rem, 3.5vw, 3.6rem);
+      color: #fff; letter-spacing: -0.015em; margin-top: 14px;
+    }
+    .team-title em { color: var(--sage); font-style: italic; }
+    .team-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+    }
+    .team-card {
+      border-radius: 28px; overflow: hidden; position: relative;
+      aspect-ratio: 3/4; background: var(--ink);
+      transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), box-shadow 0.4s;
+    }
+    .team-card:hover { transform: translateY(-8px); box-shadow: 0 32px 64px rgba(11,11,11,0.18); }
+    .team-photo {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; object-position: top;
+      transition: transform 0.6s cubic-bezier(0.22,1,0.36,1), filter 0.4s;
+    }
+    .team-card:hover .team-photo { transform: scale(1.05); filter: brightness(0.65); }
+    .team-gradient {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(11,11,11,0.95) 0%, rgba(11,11,11,0.45) 45%, transparent 70%);
+    }
+    .team-exp {
+      position: absolute; top: 16px; right: 16px;
+      font-size: 0.65rem; font-weight: 700; color: var(--ink);
+      background: var(--sage); border-radius: 100px;
+      padding: 4px 10px; text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .team-body {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 22px 18px; display: flex; flex-direction: column; gap: 3px;
+    }
+    .team-spec { font-size: 0.63rem; color: var(--sage); text-transform: uppercase; letter-spacing: 0.1em; }
+    .team-name { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: #fff; line-height: 1.1; }
+    .team-role { font-size: 0.72rem; color: rgba(255,255,255,0.45); }
+    .team-social { margin-top: 8px; }
+    .team-social-btn {
+      width: 28px; height: 28px; border-radius: 8px;
+      border: 1px solid rgba(197,223,192,0.25); color: var(--sage);
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .team-social-btn:hover { background: var(--sage); color: var(--ink); }
+
+    /* ── Cases ── */
+    .cases-inner { padding: clamp(4rem, 7vw, 8rem) 0; }
+    .cases-head {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: clamp(2rem, 4vw, 3.5rem); gap: 24px; flex-wrap: wrap;
+    }
+    .cases-title {
+      font-size: clamp(2.2rem, 3.5vw, 3.6rem);
+      color: #fff; letter-spacing: -0.015em; margin-top: 14px;
+    }
+    .cases-title em { color: var(--sage); font-style: italic; }
+    .cases-stats {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 12px; margin-bottom: 32px;
+    }
+    .cstat-box {
+      background: rgba(255,255,255,0.06); backdrop-filter: blur(12px);
+      border: 1px solid rgba(197,223,192,0.15);
+      border-radius: 18px; padding: 22px 20px;
+      text-align: center;
+    }
+    .cstat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem; color: var(--sage); line-height: 1;
+    }
+    .cstat-lbl { font-size: 0.67rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 5px; }
+    .cases-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    }
+    .case-card {
+      background: rgba(255,255,255,0.07); backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px; padding: 26px 24px;
+      display: flex; flex-direction: column; gap: 10px;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .case-card:hover { transform: translateY(-4px); border-color: rgba(197,223,192,0.3); }
+    .case-card.highlight {
+      background: rgba(197,223,192,0.1); border-color: rgba(197,223,192,0.25);
+    }
+    .case-category {
+      font-size: 0.63rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--sage);
+    }
+    .case-card.highlight .case-category { color: var(--sage); }
+    .case-title { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; color: #fff; }
+    .case-card.highlight .case-title { color: #fff; }
+    .case-desc { font-size: 0.82rem; color: rgba(255,255,255,0.5); line-height: 1.7; flex: 1; }
+    .case-card.highlight .case-desc { color: rgba(255,255,255,0.6); }
+    .case-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08); }
+    .case-card.highlight .case-footer { border-top-color: rgba(197,223,192,0.15); }
+    .case-court { font-size: 0.72rem; color: rgba(255,255,255,0.35); }
+    .case-card.highlight .case-court { color: rgba(255,255,255,0.45); }
+    .case-year { font-size: 0.7rem; color: rgba(255,255,255,0.25); margin-top: 2px; }
+    .case-card.highlight .case-year { color: rgba(255,255,255,0.35); }
+    .case-outcome {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 0.7rem; font-weight: 700; color: var(--sage);
+      background: rgba(197,223,192,0.12); border-radius: 100px;
+      padding: 4px 10px;
+    }
+    .case-card.highlight .case-outcome { background: rgba(197,223,192,0.15); color: var(--sage); }
+
+    /* ── Why / Regions ── */
+    .regions-inner-content { padding: clamp(4rem, 7vw, 8rem) 0; }
+    .regions-head { text-align: center; margin-bottom: clamp(2.5rem, 4vw, 4rem); }
+    .regions-title {
+      font-size: clamp(2.4rem, 4vw, 4rem);
+      color: #fff; letter-spacing: -0.015em; margin: 14px 0 12px;
+    }
+    .regions-title em { color: var(--sage); font-style: italic; }
+    .regions-sub { font-size: 0.95rem; color: rgba(255,255,255,0.45); }
+    .why-cards {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+      margin-bottom: 48px;
+    }
+    .why-card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(197,223,192,0.1);
+      border-radius: 20px; padding: 28px 22px;
+      display: flex; flex-direction: column; gap: 12px;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .why-card:hover { background: rgba(197,223,192,0.06); border-color: rgba(197,223,192,0.25); }
+    .why-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: rgba(197,223,192,0.1); color: var(--sage);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .why-title { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; color: #fff; }
+    .why-desc { font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.68; }
+    .regions-presence {
+      border: 1px solid rgba(197,223,192,0.1); border-radius: 20px; overflow: hidden;
+    }
+    .regions-presence-header {
+      padding: 14px 24px;
+      font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.16em;
+      color: rgba(197,223,192,0.4); background: rgba(197,223,192,0.04);
+      border-bottom: 1px solid rgba(197,223,192,0.1);
+    }
+    .regions-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+    }
+    .region-item {
+      padding: 20px 24px;
+      border-right: 1px solid rgba(197,223,192,0.08);
+      border-bottom: 1px solid rgba(197,223,192,0.08);
+    }
+    .region-item:nth-child(3n) { border-right: none; }
+    .region-item:nth-child(4), .region-item:nth-child(5), .region-item:nth-child(6) { border-bottom: none; }
+    .region-name { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: #fff; margin-bottom: 4px; }
+    .region-cities { font-size: 0.77rem; color: rgba(255,255,255,0.35); }
+
+    /* ── Testimonial / Leadership ── */
+    .testi-section { padding: clamp(4rem, 7vw, 8rem) 0; }
+    .testi-inner {
+      display: grid; grid-template-columns: 1fr 1.4fr; gap: 60px; align-items: start;
+    }
+    .testi-sidebar { position: sticky; top: 100px; display: flex; flex-direction: column; gap: 20px; }
+    .testi-sidebar-title {
+      font-size: clamp(2rem, 3.2vw, 3.2rem); color: #fff;
+      line-height: 1.08; margin-top: 12px;
+    }
+    .testi-sidebar-title em { color: var(--sage); font-style: italic; }
+    .testi-sidebar-body { font-size: 0.9rem; line-height: 1.8; color: rgba(255,255,255,0.5); }
+    .testi-nav { display: flex; align-items: center; gap: 10px; }
+    .testi-nav-btn {
+      width: 38px; height: 38px; border-radius: 50%;
+      border: 1px solid rgba(197,223,192,0.2); color: rgba(255,255,255,0.7);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .testi-nav-btn:hover { background: var(--sage); color: var(--ink); border-color: var(--sage); }
+    .testi-counter { font-size: 0.78rem; color: rgba(255,255,255,0.35); letter-spacing: 0.08em; }
+    .testi-progress {
+      height: 2px; background: rgba(197,223,192,0.15); border-radius: 100px; overflow: hidden;
+    }
+    .testi-bar { height: 100%; background: var(--sage); border-radius: 100px; transition: width 0.5s; }
+    .testi-dots { display: flex; gap: 6px; }
+    .testi-dot {
+      height: 6px; border-radius: 100px;
+      background: var(--sage); border: none; transition: width 0.3s;
+    }
+    .testi-card {
+      background: rgba(255,255,255,0.07); backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px; padding: 36px 32px;
+      animation: fadeSlide 0.45s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .testi-stars { color: var(--sage); font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 20px; }
+    .testi-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem; line-height: 1.55; color: #fff;
+      font-style: italic; margin-bottom: 24px;
+    }
+    .testi-author { display: flex; align-items: center; gap: 14px; }
+    .testi-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; object-position: top; }
+    .testi-name { font-weight: 600; font-size: 0.88rem; color: #fff; }
+    .testi-role { font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+    /* ── Blog ── */
+    .blog-inner { padding: clamp(4rem, 7vw, 8rem) 0; }
+    .blog-head {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: clamp(2rem, 4vw, 3.5rem); gap: 24px; flex-wrap: wrap;
+    }
+    .blog-title {
+      font-size: clamp(2.2rem, 3.5vw, 3.6rem);
+      color: #fff; letter-spacing: -0.015em; margin-top: 14px;
+    }
+    .blog-title em { color: var(--sage); font-style: italic; }
+    .blog-layout {
+      display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px;
+    }
+    .blog-featured {
+      border-radius: 24px; overflow: hidden; background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(197,223,192,0.1);
+      display: flex; flex-direction: column;
+      transition: border-color 0.3s;
+    }
+    .blog-featured:hover { border-color: rgba(197,223,192,0.3); }
+    .blog-featured-img {
+      width: 100%; aspect-ratio: 16/9; object-fit: cover;
+    }
+    .blog-featured-body { padding: 28px 26px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+    .blog-cat {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.14em; color: var(--sage);
+    }
+    .blog-title-main {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem; color: #fff; line-height: 1.2;
+    }
+    .blog-excerpt { font-size: 0.83rem; color: rgba(255,255,255,0.45); line-height: 1.7; }
+    .blog-meta { display: flex; align-items: center; gap: 12px; font-size: 0.72rem; color: rgba(255,255,255,0.3); margin-top: auto; }
+    .blog-meta-sep { opacity: 0.4; }
+    .blog-list { display: flex; flex-direction: column; gap: 12px; }
+    .blog-item {
+      border-radius: 18px; overflow: hidden; background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(197,223,192,0.1);
+      display: flex; transition: border-color 0.3s;
+    }
+    .blog-item:hover { border-color: rgba(197,223,192,0.25); }
+    .blog-item-img { width: 110px; height: 110px; flex-shrink: 0; object-fit: cover; }
+    .blog-item-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
+    .blog-item-cat { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--sage); }
+    .blog-item-title { font-family: 'Cormorant Garamond', serif; font-size: 1.08rem; color: #fff; line-height: 1.25; }
+    .blog-item-meta { font-size: 0.68rem; color: rgba(255,255,255,0.3); margin-top: auto; }
+
+    /* ── FAQ ── */
+    .faq-inner { padding: clamp(4rem, 7vw, 8rem) 0; }
+    .faq-layout { display: grid; grid-template-columns: 1fr 1.6fr; gap: 60px; align-items: start; }
+    .faq-sidebar { position: sticky; top: 100px; display: flex; flex-direction: column; gap: 20px; }
+    .faq-sidebar-title {
+      font-size: clamp(2rem, 3.2vw, 3.2rem); color: #fff;
+      line-height: 1.08; margin-top: 12px;
+    }
+    .faq-sidebar-title em { color: var(--sage); font-style: italic; }
+    .faq-sidebar-body { font-size: 0.9rem; color: rgba(255,255,255,0.5); line-height: 1.8; }
+    .faq-cta { width: fit-content; }
+    .faq-list { display: flex; flex-direction: column; gap: 0; border: 1px solid rgba(197,223,192,0.15); border-radius: 20px; overflow: hidden; }
+    .faq-item { border-bottom: 1px solid rgba(197,223,192,0.1); }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-question {
+      width: 100%; display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 24px; text-align: left; gap: 16px;
+      font-size: 0.93rem; font-weight: 500; color: rgba(255,255,255,0.85);
+      transition: color 0.2s; background: rgba(255,255,255,0.04);
+    }
+    .faq-question:hover { color: var(--sage); background: rgba(197,223,192,0.05); }
+    .faq-toggle {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      border: 1px solid rgba(197,223,192,0.2);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.4); transition: all 0.3s;
+    }
+    .faq-toggle.open { background: var(--sage); border-color: var(--sage); color: var(--ink); transform: rotate(45deg); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; background: rgba(255,255,255,0.03); }
+    .faq-answer.open { max-height: 220px; }
+    .faq-answer-inner { padding: 0 24px 20px; }
+    .faq-answer-text { font-size: 0.87rem; color: rgba(255,255,255,0.5); line-height: 1.8; }
+
+    /* ── Contact ── */
+    .contact-inner { padding: clamp(4rem, 7vw, 8rem) 0; }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1.35fr; gap: 60px; align-items: start; }
+    .contact-left { display: flex; flex-direction: column; gap: 24px; position: sticky; top: 100px; }
+    .contact-title {
+      font-size: clamp(2.4rem, 4vw, 4rem);
+      color: #fff; letter-spacing: -0.015em; margin-top: 14px; line-height: 1.05;
+    }
+    .contact-title em { color: var(--sage); font-style: italic; }
+    .contact-sub { font-size: 0.9rem; color: rgba(255,255,255,0.45); line-height: 1.8; }
+    .contact-detail {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 16px; border-radius: 14px;
+      border: 1px solid rgba(197,223,192,0.12);
+      background: rgba(255,255,255,0.04);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .contact-detail:hover { border-color: rgba(197,223,192,0.3); background: rgba(197,223,192,0.06); }
+    .contact-detail-icon {
+      width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+      background: rgba(197,223,192,0.1); color: var(--sage);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .contact-detail-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.35); }
+    .contact-detail-value { font-size: 0.88rem; color: rgba(255,255,255,0.8); margin-top: 2px; font-weight: 500; }
+    .contact-hours {
+      background: rgba(197,223,192,0.05); border: 1px solid rgba(197,223,192,0.1);
+      border-radius: 16px; padding: 20px;
+    }
+    .contact-hours-title {
+      font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.14em;
+      color: rgba(197,223,192,0.45); font-weight: 600; margin-bottom: 14px;
+    }
+    .hours-row { display: flex; justify-content: space-between; font-size: 0.82rem; padding: 7px 0; border-bottom: 1px solid rgba(197,223,192,0.08); }
+    .hours-row:last-child { border-bottom: none; }
+    .hours-day { color: rgba(255,255,255,0.45); }
+    .hours-time { color: rgba(255,255,255,0.75); font-weight: 500; }
+
+    /* ── Form ── */
+    .contact-form-panel {
+      background: rgba(255,255,255,0.08); backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 28px; padding: 36px 32px;
+    }
+    .form-panel-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: #fff; margin-bottom: 6px; }
+    .form-panel-sub { font-size: 0.82rem; color: rgba(255,255,255,0.4); margin-bottom: 28px; }
+    .form-section-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
+    .chip-group { display: flex; flex-wrap: wrap; gap: 7px; }
+    .chip {
+      font-size: 0.77rem; padding: 6px 13px; border-radius: 100px;
+      border: 1px solid rgba(197,223,192,0.2); background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.6); transition: all 0.2s; font-family: inherit;
+    }
+    .chip:hover { border-color: var(--sage); color: var(--sage); }
+    .chip.active { background: var(--sage); border-color: var(--sage); color: var(--ink); font-weight: 600; }
+    .form-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-field { display: flex; flex-direction: column; gap: 5px; }
+    .form-field.full { grid-column: 1 / -1; }
+    .form-label { font-size: 0.72rem; font-weight: 600; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.06em; }
+    .form-input {
+      border: 1px solid rgba(197,223,192,0.15); border-radius: 12px;
+      padding: 11px 14px; font-size: 0.88rem; font-family: inherit;
+      color: #fff; background: rgba(255,255,255,0.06);
+      transition: border-color 0.2s, box-shadow 0.2s; resize: vertical;
+    }
+    .form-input::placeholder { color: rgba(255,255,255,0.25); }
+    .form-input:focus { outline: none; border-color: var(--sage); box-shadow: 0 0 0 3px rgba(197,223,192,0.1); }
+    .form-msg { padding: 12px 16px; border-radius: 10px; font-size: 0.85rem; font-weight: 500; }
+    .form-msg.success { background: rgba(197,223,192,0.15); color: var(--sage); border: 1px solid rgba(197,223,192,0.25); }
+    .form-msg.error { background: rgba(255,100,100,0.1); color: #ff8080; border: 1px solid rgba(255,100,100,0.2); }
+    .form-submit {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      background: var(--sage); color: var(--ink);
+      font-size: 0.88rem; font-weight: 700; letter-spacing: 0.05em;
+      padding: 14px 28px; border-radius: 100px; width: 100%;
+      transition: background 0.25s, transform 0.2s;
+    }
+    .form-submit:hover:not(:disabled) { background: #fff; transform: translateY(-1px); }
+    .form-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ── Footer ── */
+    .footer-section { background: var(--ink); border-top: 1px solid rgba(197,223,192,0.08); padding: clamp(3rem, 5vw, 5rem) 0 0; }
+    .footer-top {
+      display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px;
+      padding-bottom: clamp(2.5rem, 4vw, 4rem);
+      border-bottom: 1px solid rgba(197,223,192,0.1);
+    }
+    .footer-brand { display: flex; flex-direction: column; gap: 16px; }
+    .footer-tagline { font-size: 0.84rem; color: rgba(255,255,255,0.4); line-height: 1.7; max-width: 260px; }
+    .footer-socials { display: flex; gap: 10px; }
+    .footer-social {
+      width: 34px; height: 34px; border-radius: 9px;
+      border: 1px solid rgba(197,223,192,0.18); color: rgba(255,255,255,0.45);
+      display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+    }
+    .footer-social:hover { background: rgba(197,223,192,0.1); color: var(--sage); border-color: var(--sage); }
+    .footer-col { display: flex; flex-direction: column; gap: 14px; }
+    .footer-col-title { font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--sage); font-weight: 700; }
+    .footer-links { display: flex; flex-direction: column; gap: 9px; }
+    .footer-link { font-size: 0.83rem; color: rgba(255,255,255,0.4); transition: color 0.2s; }
+    .footer-link:hover { color: rgba(255,255,255,0.8); }
+    .footer-contact-item { display: flex; align-items: flex-start; gap: 10px; }
+    .footer-contact-icon { color: var(--sage); flex-shrink: 0; margin-top: 1px; }
+    .footer-contact-text { font-size: 0.81rem; color: rgba(255,255,255,0.4); line-height: 1.5; transition: color 0.2s; }
+    .footer-contact-item:hover .footer-contact-text { color: rgba(255,255,255,0.7); }
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 0; gap: 16px; flex-wrap: wrap;
+    }
+    .footer-copy { font-size: 0.76rem; color: rgba(255,255,255,0.25); }
+    .footer-web { font-size: 0.76rem; color: rgba(255,255,255,0.25); transition: color 0.2s; }
+    .footer-web:hover { color: var(--sage); }
+
+    /* ── WhatsApp ── */
+    .wa-fab { position: fixed; bottom: 24px; right: 24px; z-index: 980; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; pointer-events: none; }
+    .wa-panel {
+      width: min(90vw, 360px); border-radius: 20px; overflow: hidden;
+      background: #fff; border: 1px solid var(--border);
+      box-shadow: 0 24px 64px rgba(11,11,11,0.18);
+      transition: all 0.35s cubic-bezier(0.22,1,0.36,1);
+      transform-origin: bottom right;
+    }
+    .wa-panel.closed { opacity: 0; transform: scale(0.9) translateY(16px); pointer-events: none; }
+    .wa-panel.open { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
+    .wa-header { background: var(--ink); padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; }
+    .wa-header-info { display: flex; align-items: center; gap: 10px; }
+    .wa-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--sage); color: var(--ink); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .wa-name { font-size: 0.86rem; font-weight: 600; color: #fff; }
+    .wa-status { font-size: 0.68rem; color: var(--sage); }
+    .wa-close { width: 28px; height: 28px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.55); display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .wa-close:hover { border-color: var(--sage); color: var(--sage); }
+    .wa-body { padding: 16px; background: #f8fbf7; display: flex; flex-direction: column; gap: 12px; }
+    .wa-bubble { background: #fff; border: 1px solid var(--border); border-radius: 16px; border-top-left-radius: 4px; padding: 12px 14px; font-size: 0.84rem; line-height: 1.6; color: var(--ink); max-width: 90%; box-shadow: 0 2px 8px rgba(11,11,11,0.05); }
+    .wa-quick { display: flex; flex-wrap: wrap; gap: 6px; }
+    .wa-quick-btn { font-size: 0.74rem; padding: 6px 11px; border-radius: 100px; border: 1px solid var(--border); background: #fff; color: var(--ink); transition: all 0.2s; text-align: left; }
+    .wa-quick-btn:hover, .wa-quick-btn.selected { background: var(--sage); border-color: var(--sage); }
+    .wa-input-row { display: flex; gap: 8px; align-items: flex-end; }
+    .wa-textarea { flex: 1; resize: none; border: 1px solid var(--border); border-radius: 12px; padding: 9px 13px; font-size: 0.84rem; font-family: inherit; color: var(--ink); background: #fff; transition: border-color 0.2s; }
+    .wa-textarea:focus { outline: none; border-color: var(--sage); }
+    .wa-send { width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0; background: var(--sage); color: var(--ink); display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .wa-send:hover { background: var(--ink); color: var(--sage); }
+    .wa-label { background: var(--ink); color: var(--sage); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.1em; padding: 5px 13px; border-radius: 100px; font-weight: 700; pointer-events: auto; }
+    .wa-toggle { width: 54px; height: 54px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 32px rgba(11,11,11,0.3); transition: all 0.3s; border: none; pointer-events: auto; }
+    .wa-toggle.closed { background: var(--sage); color: var(--ink); }
+    .wa-toggle.closed:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 18px 40px rgba(197,223,192,0.4); }
+    .wa-toggle.open-state { background: var(--ink); color: var(--sage); }
+
+    /* ── Mobile ── */
+    .mobile-panel { position: fixed; inset: 0; z-index: 800; background: var(--ink); display: flex; flex-direction: column; overflow-y: auto; }
+    .mobile-nav-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 0; border-bottom: 1px solid rgba(197,223,192,0.08);
+      font-family: 'Cormorant Garamond', serif; font-size: 2rem;
+      color: rgba(255,255,255,0.75); transition: color 0.2s; text-decoration: none;
+      animation: mobileNavIn 0.4s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .mobile-nav-item:hover { color: var(--sage); }
+    @keyframes mobileNavIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .mobile-num { font-family: 'DM Sans', sans-serif; font-size: 0.68rem; color: rgba(197,223,192,0.35); letter-spacing: 0.1em; }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .hero-stats-row { flex-wrap: wrap; }
+      .about-inner { grid-template-columns: 1fr; }
+      .about-right { display: none; }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .team-grid { grid-template-columns: repeat(2, 1fr); }
+      .cases-stats { grid-template-columns: repeat(2, 1fr); }
+      .cases-grid { grid-template-columns: repeat(2, 1fr); }
+      .why-cards { grid-template-columns: repeat(2, 1fr); }
+      .regions-grid { grid-template-columns: repeat(2, 1fr); }
+      .testi-inner { grid-template-columns: 1fr; }
+      .testi-sidebar { position: static; }
+      .blog-layout { grid-template-columns: 1fr; }
+      .faq-layout { grid-template-columns: 1fr; }
+      .faq-sidebar { position: static; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .contact-left { position: static; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .nav-links { display: none; }
+      .header-cta-desktop { display: none; }
+    }
+    @media (max-width: 640px) {
+      .services-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: 1fr 1fr; }
+      .cases-grid { grid-template-columns: 1fr; }
+      .cases-stats { grid-template-columns: repeat(2, 1fr); }
+      .why-cards { grid-template-columns: 1fr; }
+      .regions-grid { grid-template-columns: 1fr; }
+      .form-fields { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .hero-title { font-size: clamp(3rem, 14vw, 5rem); }
+      .hero { padding-bottom: 64px; }
+      .hero-stats-row { width: 100%; }
+      .hero-stat { flex: 1 1 50%; text-align: center; }
+      .hero-stat-num { font-size: 1.7rem; }
+      .hero-tagline { margin-bottom: 32px; }
+      .blog-item-img { width: 96px; height: 96px; }
+    }
+    @media (min-width: 1025px) {
+      .mobile-panel { display: none; }
+    }
+  `}</style>
+);
+
+// ─── Fixed Background (Law-themed SVG) ────────────────────────────────────────
+
+function FixedBackground() {
+  return (
+    <div className="fixed-bg" aria-hidden="true" style={{ position: "fixed", inset: 0, zIndex: 0, background: "#0b0b0b" }}>
+      {/* Background image */}
+      <img
+        // https://images.pexels.com/photos/9685285/pexels-photo-9685285.jpeg
+        src="hero-bg.webp"
+        alt="bg"
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 1 }}
+        loading="eager"
+      />
+      {/* Black overlay for readability */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          background: "rgba(0,0,0,0.68)",
+          zIndex: 2,
+        }}
+      />
+      <div className="fixed-bg-glow" style={{ zIndex: 3 }} />
+      <div className="fixed-bg-vignette" style={{ zIndex: 4 }} />
+    </div>
+  );
+}
+
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const services = [
@@ -81,23 +1029,6 @@ const budgetOptions = [
   { value: "scheduled", label: "Scheduled Consultation" },
 ];
 
-const testimonials = [
-  { name: "AGD Bala Kumar", role: "Advocate | Managing Counsel", feedback: "AGD Bala Kumar has over 12 years of experience in litigation and legal advisory, with focused practice across criminal law, civil disputes, constitutional remedies, consumer matters, property law, family law, arbitration, corporate advisory, MCOP, and RCOP matters.", img: "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=450&h=300&fit=crop" },
-  { name: "AGD Law Associates", role: "Our Vision", feedback: "To become a trusted and leading boutique law firm recognized for excellence, integrity, and client satisfaction through precision-driven advocacy, transparent communication, and timely legal solutions.", img: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=450&h=300&fit=crop" },
-];
-
-const serviceTitleToSlug = {
-  "Criminal Law": "criminal-law",
-  "Civil Litigation": "civil-litigation",
-  "Writs & Constitutional": "writs-constitutional",
-  "Consumer Protection": "consumer-protection",
-  "Property & Real Estate": "property-real-estate",
-  "Family & Matrimonial": "family-matrimonial",
-  "Arbitration & ADR": "arbitration-adr",
-  "Corporate Advisory": "corporate-advisory",
-  "MCOP & Rent Control": "mcop-rent-control",
-};
-
 // ─── SVG Icons ────────────────────────────────────────────────────────────────
 
 const FacebookIcon = () => (
@@ -111,53 +1042,6 @@ const XIcon = () => (
     <path d="M18.9 2H22l-6.8 7.8L23 22h-6.2l-4.9-6.9L5.9 22H2.8l7.3-8.3L1 2h6.3l4.4 6.3L18.9 2Zm-1.1 18h1.7L6.4 3.9H4.6L17.8 20Z" />
   </svg>
 );
-
-// ─── Reusable primitives ──────────────────────────────────────────────────────
-
-/** Sage pill label with a dot prefix */
-function SectionLabel({ dark = false, children }) {
-  return (
-    <span className={`inline-flex items-center gap-2 text-[0.68rem] font-semibold tracking-[0.18em] uppercase text-[#c5dfc0] rounded-full px-[14px] py-[5px] border ${dark ? "bg-[rgba(197,223,192,0.08)] border-[rgba(197,223,192,0.2)]" : "bg-[rgba(197,223,192,0.1)] border-[rgba(197,223,192,0.2)]"}`}>
-      <span className="w-[5px] h-[5px] rounded-full bg-[#c5dfc0] shrink-0" />
-      {children}
-    </span>
-  );
-}
-
-/** Sage filled CTA button */
-function BtnPrimary({ href, onClick, children, className = "" }) {
-  const base = `inline-flex items-center gap-[9px] bg-[#c5dfc0] text-[#0b0b0b] text-[0.85rem] font-bold px-6 py-[13px] rounded-full transition-all duration-200 tracking-[0.03em] whitespace-nowrap hover:bg-white hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(197,223,192,0.3)] ${className}`;
-  if (href) return <a href={href} className={base}>{children}</a>;
-  return <button type="button" onClick={onClick} className={base}>{children}</button>;
-}
-
-/** Ghost outline button */
-function BtnGhost({ href, children, className = "" }) {
-  const base = `inline-flex items-center gap-[9px] text-white/60 text-[0.85rem] font-medium px-6 py-[13px] rounded-full border border-white/15 transition-all duration-200 whitespace-nowrap hover:border-[#c5dfc0] hover:text-[#c5dfc0] ${className}`;
-  if (href) return <a href={href} className={base}>{children}</a>;
-  return <span className={base}>{children}</span>;
-}
-
-// ─── Fixed Background ─────────────────────────────────────────────────────────
-
-function FixedBackground() {
-  return (
-    <div aria-hidden="true" className="fixed inset-0 z-0 bg-[#0b0b0b]">
-      <img
-        src="hero-bg.webp"
-        alt="bg"
-        className="absolute inset-0 w-full h-full object-cover z-[1]"
-        loading="eager"
-      />
-      {/* dark overlay */}
-      <div className="absolute inset-0 w-full h-full bg-black/68 z-[2]" />
-      {/* center glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full bg-[radial-gradient(circle,rgba(197,223,192,0.12)_0%,transparent_70%)] pointer-events-none z-[3]" />
-      {/* vignette */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(11,11,11,0.7)_100%)] z-[4]" />
-    </div>
-  );
-}
 
 // ─── Header ───────────────────────────────────────────────────────────────────
 
@@ -182,49 +1066,58 @@ function Header() {
   }, []);
 
   useEffect(() => {
-    const mq = window.matchMedia("(min-width: 1025px)");
-    const handle = (e) => { if (e.matches) setMenuOpen(false); };
-    mq.addEventListener("change", handle);
-    return () => mq.removeEventListener("change", handle);
+    const desktopQuery = window.matchMedia("(min-width: 1025px)");
+    const handleDesktopChange = (event) => {
+      if (event.matches) setMenuOpen(false);
+    };
+
+    desktopQuery.addEventListener("change", handleDesktopChange);
+
+    return () => desktopQuery.removeEventListener("change", handleDesktopChange);
   }, []);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [menuOpen]);
 
   return (
     <>
-      <header className={`fixed top-0 left-0 right-0 z-[900] transition-all duration-300 ${scrolled ? "bg-[rgba(11,11,11,0.88)] backdrop-blur-xl shadow-[0_1px_0_rgba(197,223,192,0.1),0_8px_32px_rgba(0,0,0,0.3)]" : ""}`}>
-        <div className="max-w-[1200px] mx-auto px-6 w-full">
-          <div className="flex items-center justify-between h-[70px] gap-6">
-            {/* Logo */}
-            <a href="#" className="flex items-center gap-[10px] font-[Cormorant_Garamond,Georgia,serif] text-[1.35rem] font-medium text-white">
+      <header className={`header ${scrolled ? "scrolled" : ""}`}>
+        <div className="container">
+          <div className="header-inner">
+            <a href="#" className="logo-mark">
               <AGDLogoImg size={48} />
               <span>AGD Law Associates</span>
             </a>
-
-            {/* Desktop nav */}
-            <nav className="hidden lg:flex items-center gap-0.5" aria-label="Main navigation">
+            <nav className="nav-links" aria-label="Main navigation">
               {navLinks.map((l) => (
-                <a key={l.id} href={`#${l.id}`} className="text-[0.8rem] font-medium text-white/65 px-[13px] py-2 rounded-lg transition-all duration-200 hover:text-[#c5dfc0] hover:bg-[rgba(197,223,192,0.07)]">
+                <a
+                  key={l.id}
+                  href={`#${l.id}`}
+                  className="nav-link"
+                >
                   {l.label}
                 </a>
               ))}
             </nav>
-
-            <div className="flex items-center gap-3">
-              {/* Desktop CTA */}
-              <a href="#contact" className="hidden lg:inline-flex items-center gap-[7px] bg-[#c5dfc0] text-[#0b0b0b] text-[0.78rem] font-bold px-[18px] py-[9px] rounded-full tracking-[0.04em] whitespace-nowrap transition-all duration-200 hover:bg-white hover:-translate-y-px">
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <a
+                href="#contact"
+                className="header-cta header-cta-desktop"
+              >
                 Consultation <ArrowRight size={13} />
               </a>
-              {/* Mobile hamburger */}
               <button
                 type="button"
                 aria-label="Toggle menu"
                 aria-expanded={menuOpen}
                 onClick={() => setMenuOpen((v) => !v)}
-                className="lg:hidden inline-flex items-center justify-center w-[38px] h-[38px] rounded-[9px] border border-[rgba(197,223,192,0.2)] bg-transparent text-white cursor-pointer"
+                className="mobile-menu-btn"
+                style={{ display: "none", alignItems: "center", justifyContent: "center", width: "38px", height: "38px", borderRadius: "9px", border: "1px solid rgba(197,223,192,0.2)", background: "transparent", color: "#fff", cursor: "pointer" }}
               >
                 {menuOpen ? <X size={17} /> : <Menu size={17} />}
               </button>
@@ -232,41 +1125,41 @@ function Header() {
           </div>
         </div>
       </header>
-
-      {/* Mobile panel */}
+      <style>{`@media(max-width:1024px){.mobile-menu-btn{display:inline-flex!important;}}`}</style>
       {menuOpen && (
-        <div className="lg:hidden fixed inset-0 z-[800] bg-[#0b0b0b] flex flex-col overflow-y-auto">
-          <div className="max-w-[1200px] mx-auto px-6 w-full flex items-center justify-between h-[70px]">
-            <span className="flex items-center gap-[10px] font-[Cormorant_Garamond,Georgia,serif] text-[1.35rem] font-medium text-white">
+        <div className="mobile-panel">
+          <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "70px" }}>
+            <span className="logo-mark">
               <AGDLogoImg size={34} />
+              {/* AGD Law Associates */}
             </span>
-            <button type="button" onClick={() => setMenuOpen(false)} className="w-[38px] h-[38px] border border-[rgba(197,223,192,0.2)] rounded-[9px] bg-transparent text-white flex items-center justify-center cursor-pointer">
+            <button type="button" onClick={() => setMenuOpen(false)} style={{ width: "38px", height: "38px", border: "1px solid rgba(197,223,192,0.2)", borderRadius: "9px", background: "transparent", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
               <X size={17} />
             </button>
           </div>
-          <nav className="max-w-[1200px] mx-auto px-6 w-full flex-1 pt-4">
+          <nav className="container" style={{ flex: 1, paddingTop: "16px" }}>
             {navLinks.map((l, i) => (
               <a
                 key={l.id}
                 href={`#${l.id}`}
-                className="flex justify-between items-center py-5 border-b border-[rgba(197,223,192,0.08)] font-[Cormorant_Garamond,Georgia,serif] text-[2rem] text-white/75 transition-colors duration-200 no-underline hover:text-[#c5dfc0]"
+                className="mobile-nav-item"
                 style={{ animationDelay: `${0.06 + i * 0.06}s` }}
                 onClick={() => setMenuOpen(false)}
               >
                 <span>{l.label}</span>
-                <span className="font-[DM_Sans,sans-serif] text-[0.68rem] text-[rgba(197,223,192,0.35)] tracking-[0.1em]">0{i + 1}</span>
+                <span className="mobile-num">0{i + 1}</span>
               </a>
             ))}
             <a
               href="#contact"
               onClick={() => setMenuOpen(false)}
-              className="flex items-center justify-center gap-2 mt-8 p-4 rounded-[14px] bg-[#c5dfc0] text-[#0b0b0b] font-bold text-[0.88rem] tracking-[0.06em] no-underline uppercase"
+              style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginTop: "32px", padding: "16px", borderRadius: "14px", background: "#c5dfc0", color: "#0b0b0b", fontWeight: "700", fontSize: "0.88rem", letterSpacing: "0.06em", textDecoration: "none", textTransform: "uppercase" }}
             >
               Schedule Consultation <ArrowRight size={14} />
             </a>
           </nav>
-          <div className="max-w-[1200px] mx-auto px-6 w-full pb-6 pt-6 border-t border-[rgba(197,223,192,0.08)]">
-            <p className="text-[0.7rem] text-[rgba(197,223,192,0.3)] uppercase tracking-[0.12em]">© {new Date().getFullYear()} AGD Law Associates</p>
+          <div className="container" style={{ paddingBottom: "24px", paddingTop: "24px", borderTop: "1px solid rgba(197,223,192,0.08)" }}>
+            <p style={{ fontSize: "0.7rem", color: "rgba(197,223,192,0.3)", textTransform: "uppercase", letterSpacing: "0.12em" }}>© {new Date().getFullYear()} AGD Law Associates</p>
           </div>
         </div>
       )}
@@ -278,56 +1171,53 @@ function Header() {
 
 function Hero() {
   return (
-    <section id="hero" className="min-h-svh flex items-end pb-20 relative [scroll-margin-top:96px]">
-      {/* Decorative ring */}
-      <div aria-hidden="true" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-[rgba(197,223,192,0.06)] rounded-full pointer-events-none after:content-[''] after:absolute after:inset-10 after:border after:border-[rgba(197,223,192,0.04)] after:rounded-full" />
-
-      <div className="max-w-[1200px] mx-auto px-6 w-full">
-        <div className="text-center max-w-[820px] mx-auto">
-          {/* Eyebrow */}
-          <div className="inline-flex items-center gap-[10px] text-[0.68rem] font-semibold tracking-[0.22em] uppercase text-[#c5dfc0] border border-[rgba(197,223,192,0.25)] rounded-full px-4 py-[6px] mb-8 mt-20">
+    <section className="hero" id="hero">
+      <div className="hero-ornament" aria-hidden="true" />
+      <div className="container">
+        <div className="hero-content">
+          <div className="hero-eyebrow">
             <Scale size={11} />
             Boutique Law Firm · Chennai · Est. 2016
           </div>
-
-          {/* Title */}
-          <h1 className="font-[Cormorant_Garamond,Georgia,serif] font-normal text-[clamp(4rem,9vw,9rem)] text-white leading-[0.92] tracking-[-0.025em] mb-3">
-            AGD<br /><em className="text-[#c5dfc0] italic">Law</em>
+          <h1 className="hero-title">
+            AGD<br /><em>Law</em>
           </h1>
-          <p className="font-[Cormorant_Garamond,Georgia,serif] text-[clamp(1rem,2vw,1.5rem)] text-white/40 tracking-[0.3em] uppercase mb-9 font-light">
-            Associates
+          <p className="hero-firm-name">Associates</p>
+          <p className="hero-tagline">
+            Precision-driven litigation and advisory across criminal, civil, consumer,
+            constitutional, and commercial matters — Tamil Nadu &amp; beyond.
           </p>
-          <p className="text-[1.05rem] text-white/50 leading-[1.75] max-w-[520px] mx-auto mb-11">
-            Precision-driven litigation and advisory across criminal, civil, consumer, constitutional, and commercial matters — Tamil Nadu &amp; beyond.
-          </p>
-
-          {/* Actions */}
-          <div className="flex gap-[14px] justify-center flex-wrap">
-            <BtnPrimary href="#contact">Request Consultation <ArrowRight size={14} /></BtnPrimary>
-            <BtnGhost href="tel:+919994388855"><Phone size={14} /> +91 99943 88855</BtnGhost>
+          <div className="hero-actions">
+            <a href="#contact" className="btn-primary">
+              Request Consultation <ArrowRight size={14} />
+            </a>
+            <a href="tel:+919994388855" className="btn-ghost">
+              <Phone size={14} /> +91 99943 88855
+            </a>
           </div>
-
-          {/* Stats row */}
-          <div className="flex justify-center mt-14 border border-[rgba(197,223,192,0.12)] rounded-[20px] overflow-hidden w-fit mx-auto flex-wrap">
-            {[
-              { num: "2016", lbl: "Established" },
-              { num: "12+", lbl: "Years Practice" },
-              { num: "500+", lbl: "Cases Handled" },
-              { num: "9", lbl: "Practice Areas" },
-            ].map((s, i, arr) => (
-              <div key={s.lbl} className={`px-8 py-[18px] ${i < arr.length - 1 ? "border-r border-[rgba(197,223,192,0.12)]" : ""} max-sm:flex-[1_1_50%] max-sm:text-center`}>
-                <div className="font-[Cormorant_Garamond,Georgia,serif] text-[2rem] text-[#c5dfc0] leading-none max-sm:text-[1.7rem]">{s.num}</div>
-                <div className="text-[0.65rem] text-white/35 uppercase tracking-[0.12em] mt-1">{s.lbl}</div>
-              </div>
-            ))}
+          <div className="hero-stats-row">
+            <div className="hero-stat">
+              <div className="hero-stat-num">2016</div>
+              <div className="hero-stat-lbl">Established</div>
+            </div>
+            <div className="hero-stat">
+              <div className="hero-stat-num">12+</div>
+              <div className="hero-stat-lbl">Years Practice</div>
+            </div>
+            <div className="hero-stat">
+              <div className="hero-stat-num">500+</div>
+              <div className="hero-stat-lbl">Cases Handled</div>
+            </div>
+            <div className="hero-stat">
+              <div className="hero-stat-num">9</div>
+              <div className="hero-stat-lbl">Practice Areas</div>
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Scroll hint */}
-      <div aria-hidden="true" className="absolute bottom-7 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none">
-        <div className="w-px h-10 bg-gradient-to-b from-[rgba(197,223,192,0.5)] to-transparent animate-[scrollHint_2s_ease-in-out_infinite]" />
-        <span className="text-[0.6rem] text-[rgba(197,223,192,0.35)] uppercase tracking-[0.2em]">Scroll</span>
+      <div className="hero-scroll-hint" aria-hidden="true">
+        <div className="hero-scroll-line" />
+        <span className="hero-scroll-lbl">Scroll</span>
       </div>
     </section>
   );
@@ -339,11 +1229,11 @@ function Ticker() {
   const items = ["Criminal Law", "Civil Litigation", "Constitutional Remedies", "Consumer Protection", "Property Law", "Family Law", "Arbitration & ADR", "Corporate Advisory", "MCOP & RCOP"];
   const doubled = [...items, ...items];
   return (
-    <div className="bg-[#c5dfc0] overflow-hidden h-[38px] flex items-center">
-      <div className="flex whitespace-nowrap animate-[tickerMove_30s_linear_infinite]">
+    <div className="ticker-wrap">
+      <div className="ticker-track">
         {doubled.map((item, i) => (
-          <span key={i} className="inline-flex items-center gap-4 text-[0.7rem] font-bold text-[#0b0b0b] uppercase tracking-[0.14em] px-7">
-            {item}<span className="opacity-35"> ◆ </span>
+          <span key={i} className="ticker-item">
+            {item}<span className="ticker-sep"> ◆ </span>
           </span>
         ))}
       </div>
@@ -356,59 +1246,62 @@ function Ticker() {
 function About() {
   const credentials = ["Integrity & Professionalism", "Confidentiality & Trust", "Client-Focused Service", "Excellence in Advocacy", "Timely Legal Solutions"];
   return (
-    <section id="about" className="[scroll-margin-top:96px]">
-      <div className="max-w-[1200px] mx-auto px-6 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-[clamp(3rem,5vw,6rem)] items-center py-[clamp(5rem,8vw,9rem)]">
-          {/* Left */}
-          <div className="flex flex-col gap-7">
-            <SectionLabel>About Us</SectionLabel>
-            <h2 className="font-[Cormorant_Garamond,Georgia,serif] font-normal text-[clamp(2.6rem,4vw,4.2rem)] leading-[1.05] tracking-[-0.015em] text-white">
-              Your legal matter<br />deserves <em className="text-[#c5dfc0] italic">precision</em>
+    <section className="panel" id="about">
+      <div className="container">
+        <div className="about-inner">
+          <div className="about-left">
+            <span className="section-label">About Us</span>
+            <h2 className="about-pretitle">
+              Your legal matter<br />deserves <em>precision</em>
             </h2>
-            <p className="text-[0.97rem] leading-[1.85] text-white/60">
-              Founded in 2016, AGD Law Associates is a boutique law firm delivering high-quality litigation and advisory services across Tamil Nadu and beyond. Led by AGD Bala Kumar with over 12 years of practice, our firm combines courtroom strength with strategic advisory for complex, sensitive, and high-impact legal matters.
+            <p className="about-body">
+              Founded in 2016, AGD Law Associates is a boutique law firm delivering
+              high-quality litigation and advisory services across Tamil Nadu and beyond.
+              Led by AGD Bala Kumar with over 12 years of practice, our firm combines
+              courtroom strength with strategic advisory for complex, sensitive, and
+              high-impact legal matters.
             </p>
-            <p className="text-[0.97rem] leading-[1.85] text-white/60">
-              We believe every client deserves personalized attention, clear communication, and a legal team genuinely invested in their outcome. From first consultation to final resolution, we stand by you.
+            <p className="about-body">
+              We believe every client deserves personalized attention, clear communication,
+              and a legal team genuinely invested in their outcome. From first consultation
+              to final resolution, we stand by you.
             </p>
-
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-3">
+            <div className="about-stats">
               {[{ num: "2016", lbl: "Established" }, { num: "10+", lbl: "Advocates" }, { num: "6", lbl: "Active Cities" }].map((s) => (
-                <div key={s.lbl} className="bg-white/7 backdrop-blur-xl border border-[rgba(197,223,192,0.15)] rounded-2xl p-[18px_18px_20px] flex flex-col gap-1">
-                  <div className="font-[Cormorant_Garamond,Georgia,serif] text-[2.2rem] text-[#c5dfc0] leading-none">{s.num}</div>
-                  <div className="text-[0.65rem] text-white/40 uppercase tracking-[0.1em]">{s.lbl}</div>
+                <div className="about-stat-box" key={s.lbl}>
+                  <div className="about-stat-num">{s.num}</div>
+                  <div className="about-stat-lbl">{s.lbl}</div>
                 </div>
               ))}
             </div>
-
-            {/* Cred tags */}
-            <div className="flex flex-wrap gap-2">
+            <div className="about-creds">
               {credentials.map((c) => (
-                <span key={c} className="inline-flex items-center gap-1.5 text-[0.77rem] text-[#c5dfc0] font-medium bg-[rgba(197,223,192,0.1)] border border-[rgba(197,223,192,0.2)] rounded-full px-3 py-[5px]">
-                  <CheckCircle size={12} className="text-[#c5dfc0] shrink-0" />{c}
-                </span>
+                <span className="cred-tag" key={c}><CheckCircle size={12} />{c}</span>
               ))}
             </div>
-
-            <BtnPrimary href="#contact" className="w-fit">Schedule a Consultation <ArrowRight size={14} /></BtnPrimary>
+            <a href="#contact" className="btn-primary" style={{ width: "fit-content" }}>
+              Schedule a Consultation <ArrowRight size={14} />
+            </a>
           </div>
-
-          {/* Right — hidden on mobile */}
-          <div className="hidden lg:block relative">
-            <div className="relative pr-6 pt-6">
-              {/* Accent image */}
-              <div className="absolute top-[-20px] right-[-20px] w-[48%] aspect-square rounded-[20px] overflow-hidden border-[3px] border-white shadow-[0_16px_48px_rgba(11,11,11,0.15)]">
-                <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=600&h=600&fit=crop" alt="Law office" className="w-full h-full object-cover" loading="lazy" />
+          <div className="about-right">
+            <div style={{ position: "relative", paddingRight: "24px", paddingTop: "24px" }}>
+              <div className="about-img-accent">
+                <img
+                  src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=600&h=600&fit=crop"
+                  alt="Law office"
+                  loading="lazy"
+                />
               </div>
-              {/* Main image */}
-              <div className="rounded-[28px] overflow-hidden shadow-[0_40px_100px_rgba(11,11,11,0.15)] aspect-[4/5]">
-                <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?w=800&h=1000&fit=crop&crop=faces" alt="AGD Law Associates counsel" className="w-full h-full object-cover object-top" loading="lazy" />
+              <div className="about-img-wrap">
+                <img
+                  src="https://images.unsplash.com/photo-1556157382-97eda2d62296?w=800&h=1000&fit=crop&crop=faces"
+                  alt="AGD Law Associates counsel"
+                  loading="lazy"
+                />
               </div>
-              {/* Badge */}
-              <div className="absolute bottom-[-20px] left-[-20px] bg-[#0b0b0b] rounded-[20px] p-[20px_24px] text-white shadow-[0_20px_56px_rgba(11,11,11,0.3)]">
-                <div className="font-[Cormorant_Garamond,Georgia,serif] text-[2.6rem] text-[#c5dfc0] leading-none">12+</div>
-                <div className="text-[0.62rem] uppercase tracking-[0.1em] text-[rgba(197,223,192,0.55)] mt-1">Years of<br />Practice</div>
+              <div className="about-img-badge">
+                <div className="about-badge-num">12+</div>
+                <div className="about-badge-lbl">Years of<br />Practice</div>
               </div>
             </div>
           </div>
@@ -420,47 +1313,43 @@ function About() {
 
 // ─── Services ─────────────────────────────────────────────────────────────────
 
+const serviceTitleToSlug = {
+  "Criminal Law": "criminal-law",
+  "Civil Litigation": "civil-litigation",
+  "Writs & Constitutional": "writs-constitutional",
+  "Consumer Protection": "consumer-protection",
+  "Property & Real Estate": "property-real-estate",
+  "Family & Matrimonial": "family-matrimonial",
+  "Arbitration & ADR": "arbitration-adr",
+  "Corporate Advisory": "corporate-advisory",
+  "MCOP & Rent Control": "mcop-rent-control",
+};
+
 function Services() {
   return (
-    <section id="services" className="[scroll-margin-top:96px]">
-      <div className="max-w-[1200px] mx-auto px-6 w-full">
-        <div className="py-[clamp(4rem,7vw,8rem)]">
-          {/* Head */}
-          <div className="flex justify-between items-end mb-[clamp(2.5rem,4vw,4rem)] gap-6 flex-wrap">
+    <section className="panel-dark" id="services">
+      <div className="container">
+        <div className="services-inner">
+          <div className="services-head">
             <div>
-              <SectionLabel dark>Practice Areas</SectionLabel>
-              <h2 className="font-[Cormorant_Garamond,Georgia,serif] font-normal text-[clamp(2.2rem,3.5vw,3.6rem)] text-white tracking-[-0.015em] mt-[14px]">
-                Areas of <em className="text-[#c5dfc0] italic">expertise</em>
-              </h2>
+              <span className="section-label-dark">Practice Areas</span>
+              <h2 className="services-title">Areas of <em>expertise</em></h2>
             </div>
-            <BtnPrimary href="#contact" className="shrink-0">Discuss Your Case <ArrowRight size={13} /></BtnPrimary>
+            <a href="#contact" className="btn-primary" style={{ flexShrink: 0 }}>
+              Discuss Your Case <ArrowRight size={13} />
+            </a>
           </div>
-
-          {/* Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 border border-[rgba(197,223,192,0.1)] rounded-[28px] overflow-hidden">
+          <div className="services-grid">
             {services.map((s, i) => {
               const Icon = s.icon;
               const slug = serviceTitleToSlug[s.title];
-              const isLastRow = i >= 6; // bottom 3
-              const isRightEdge = (i + 1) % 3 === 0;
               return (
-                <Link
-                  href={slug ? `/services/${slug}` : "#"}
-                  key={s.title}
-                  className={`p-[30px_26px] relative overflow-hidden flex flex-col gap-3 bg-[rgba(255,255,255,0.02)] transition-colors duration-300 hover:bg-[rgba(197,223,192,0.05)] group no-underline text-inherit
-                    ${!isRightEdge ? "border-r border-r-[rgba(197,223,192,0.08)]" : ""}
-                    ${!isLastRow ? "border-b border-b-[rgba(197,223,192,0.08)]" : ""}
-                  `}
-                >
-                  <span className="font-[Cormorant_Garamond,Georgia,serif] text-[0.85rem] text-[rgba(197,223,192,0.3)] tracking-[0.08em]">0{i + 1}</span>
-                  <div className="w-[42px] h-[42px] rounded-[11px] border border-[rgba(197,223,192,0.18)] text-[#c5dfc0] flex items-center justify-center transition-all duration-300 group-hover:bg-[rgba(197,223,192,0.1)] group-hover:border-[#c5dfc0]">
-                    <Icon size={17} />
-                  </div>
-                  <h3 className="font-[Cormorant_Garamond,Georgia,serif] font-normal text-[1.28rem] text-white leading-[1.2]">{s.title}</h3>
-                  <p className="text-[0.81rem] text-white/42 leading-[1.72]">{s.description}</p>
-                  <div className="mt-auto w-[30px] h-[30px] rounded-full border border-[rgba(197,223,192,0.18)] text-[#c5dfc0] flex items-center justify-center transition-all duration-200 group-hover:bg-[#c5dfc0] group-hover:text-[#0b0b0b] group-hover:border-[#c5dfc0]">
-                    <ArrowRight size={13} />
-                  </div>
+                <Link href={slug ? `/services/${slug}` : "#"} className="service-card" key={s.title} style={{ textDecoration: "none", color: "inherit" }}>
+                  <span className="service-num">0{i + 1}</span>
+                  <div className="service-icon-wrap"><Icon size={17} /></div>
+                  <h3 className="service-name">{s.title}</h3>
+                  <p className="service-desc">{s.description}</p>
+                  <div className="service-arrow"><ArrowRight size={13} /></div>
                 </Link>
               );
             })}
@@ -475,35 +1364,27 @@ function Services() {
 
 function Team() {
   return (
-    <section id="team" className="[scroll-margin-top:96px]">
-      <div className="max-w-[1200px] mx-auto px-6 w-full">
-        <div className="py-[clamp(4rem,7vw,8rem)]">
-          <div className="flex justify-between items-end mb-[clamp(2.5rem,4vw,4rem)] gap-6 flex-wrap">
+    <section className="panel" id="team">
+      <div className="container">
+        <div className="team-inner">
+          <div className="team-head">
             <div>
-              <SectionLabel>Our Team</SectionLabel>
-              <h2 className="font-[Cormorant_Garamond,Georgia,serif] font-normal text-[clamp(2.2rem,3.5vw,3.6rem)] text-white tracking-[-0.015em] mt-[14px]">
-                The counsel behind<br />your <em className="text-[#c5dfc0] italic">case</em>
-              </h2>
+              <span className="section-label">Our Team</span>
+              <h2 className="team-title">The counsel behind<br />your <em>case</em></h2>
             </div>
           </div>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="team-grid">
             {teamMembers.map((m) => (
-              <div key={m.name} className="rounded-[28px] overflow-hidden relative aspect-[3/4] bg-[#0b0b0b] transition-all duration-[400ms] cubic-bezier-spring hover:-translate-y-2 hover:shadow-[0_32px_64px_rgba(11,11,11,0.18)] group">
-                <img src={m.img} alt={m.name} className="absolute inset-0 w-full h-full object-cover object-top transition-all duration-500 group-hover:scale-105 group-hover:brightness-[0.65]" loading="lazy" />
-                {/* Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[rgba(11,11,11,0.95)] via-[rgba(11,11,11,0.45)] to-transparent" />
-                {/* Experience badge */}
-                <div className="absolute top-4 right-4 text-[0.65rem] font-bold text-[#0b0b0b] bg-[#c5dfc0] rounded-full px-[10px] py-1 uppercase tracking-[0.08em]">
-                  {m.experience}
-                </div>
-                {/* Body */}
-                <div className="absolute bottom-0 left-0 right-0 p-[22px_18px] flex flex-col gap-[3px]">
-                  <div className="text-[0.63rem] text-[#c5dfc0] uppercase tracking-[0.1em]">{m.specialization}</div>
-                  <div className="font-[Cormorant_Garamond,Georgia,serif] text-[1.2rem] text-white leading-[1.1]">{m.name}</div>
-                  <div className="text-[0.72rem] text-white/45">{m.role}</div>
-                  <div className="mt-2">
-                    <a href="#" aria-label={`${m.name} LinkedIn`} className="w-7 h-7 rounded-lg border border-[rgba(197,223,192,0.25)] text-[#c5dfc0] inline-flex items-center justify-center transition-all duration-200 hover:bg-[#c5dfc0] hover:text-[#0b0b0b]">
+              <div className="team-card" key={m.name}>
+                <img src={m.img} alt={m.name} className="team-photo" loading="lazy" />
+                <div className="team-gradient" />
+                <div className="team-exp">{m.experience}</div>
+                <div className="team-body">
+                  <div className="team-spec">{m.specialization}</div>
+                  <div className="team-name">{m.name}</div>
+                  <div className="team-role">{m.role}</div>
+                  <div className="team-social">
+                    <a href="#" className="team-social-btn" aria-label={`${m.name} LinkedIn`}>
                       <ExternalLink size={11} />
                     </a>
                   </div>
@@ -527,47 +1408,38 @@ function CaseResults() {
     { num: "12+", lbl: "Years Practice" },
   ];
   return (
-    <section id="cases" className="[scroll-margin-top:96px]">
-      <div className="max-w-[1200px] mx-auto px-6 w-full">
-        <div className="py-[clamp(4rem,7vw,8rem)]">
-          <div className="flex justify-between items-end mb-[clamp(2rem,4vw,3.5rem)] gap-6 flex-wrap">
+    <section className="panel-tinted" id="cases">
+      <div className="container">
+        <div className="cases-inner">
+          <div className="cases-head">
             <div>
-              <SectionLabel>Track Record</SectionLabel>
-              <h2 className="font-[Cormorant_Garamond,Georgia,serif] font-normal text-[clamp(2.2rem,3.5vw,3.6rem)] text-white tracking-[-0.015em] mt-[14px]">
-                Results that <em className="text-[#c5dfc0] italic">speak</em>
-              </h2>
+              <span className="section-label">Track Record</span>
+              <h2 className="cases-title">Results that <em>speak</em></h2>
             </div>
-            <BtnPrimary href="#contact" className="shrink-0">Discuss Your Case <ArrowRight size={13} /></BtnPrimary>
+            <a href="#contact" className="btn-primary" style={{ flexShrink: 0 }}>
+              Discuss Your Case <ArrowRight size={13} />
+            </a>
           </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+          <div className="cases-stats">
             {stats.map((s) => (
-              <div key={s.lbl} className="bg-white/[0.06] backdrop-blur-xl border border-[rgba(197,223,192,0.15)] rounded-[18px] p-[22px_20px] text-center">
-                <div className="font-[Cormorant_Garamond,Georgia,serif] text-[2.4rem] text-[#c5dfc0] leading-none">{s.num}</div>
-                <div className="text-[0.67rem] text-white/35 uppercase tracking-[0.1em] mt-1">{s.lbl}</div>
+              <div className="cstat-box" key={s.lbl}>
+                <div className="cstat-num">{s.num}</div>
+                <div className="cstat-lbl">{s.lbl}</div>
               </div>
             ))}
           </div>
-
-          {/* Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="cases-grid">
             {caseResults.map((c, i) => (
-              <article
-                key={i}
-                className={`rounded-[20px] p-[26px_24px] flex flex-col gap-[10px] border transition-all duration-300 hover:-translate-y-1 ${c.highlight ? "bg-[rgba(197,223,192,0.1)] border-[rgba(197,223,192,0.25)]" : "bg-white/7 backdrop-blur-[16px] border-white/12 hover:border-[rgba(197,223,192,0.3)]"}`}
-              >
-                <div className="text-[0.63rem] font-bold uppercase tracking-[0.12em] text-[#c5dfc0]">{c.category}</div>
-                <h3 className="font-[Cormorant_Garamond,Georgia,serif] font-normal text-[1.25rem] text-white">{c.title}</h3>
-                <p className="text-[0.81rem] text-white/50 leading-[1.72]">{c.description}</p>
-                <div className="flex justify-between items-end mt-auto pt-2 border-t border-white/[0.06]">
+              <article className={`case-card${c.highlight ? " highlight" : ""}`} key={i}>
+                <div className="case-category">{c.category}</div>
+                <h3 className="case-title">{c.title}</h3>
+                <p className="case-desc">{c.description}</p>
+                <div className="case-footer">
                   <div>
-                    <div className="text-[0.72rem] text-white/45">{c.court}</div>
-                    <div className="text-[0.65rem] text-white/25 mt-0.5">{c.year}</div>
+                    <div className="case-court">{c.court}</div>
+                    <div className="case-year">{c.year}</div>
                   </div>
-                  <div className="inline-flex items-center gap-1.5 text-[0.67rem] font-semibold text-[#c5dfc0] bg-[rgba(197,223,192,0.12)] border border-[rgba(197,223,192,0.2)] rounded-full px-[10px] py-1">
-                    <CheckCircle size={10} />{c.outcome}
-                  </div>
+                  <div className="case-outcome"><CheckCircle size={10} />{c.outcome}</div>
                 </div>
               </article>
             ))}
@@ -588,39 +1460,29 @@ function Regions() {
     { icon: Award, title: "Proven Advocacy", desc: "12+ years of courtroom experience across criminal, civil, constitutional, and commercial matters." },
   ];
   return (
-    <section id="why-me" className="[scroll-margin-top:96px]">
-      <div className="max-w-[1200px] mx-auto px-6 w-full">
-        <div className="py-[clamp(4rem,7vw,8rem)]">
-          <div className="text-center mb-[clamp(2.5rem,4vw,4rem)]">
-            <SectionLabel dark>Why Choose Us</SectionLabel>
-            <h2 className="font-[Cormorant_Garamond,Georgia,serif] font-normal text-[clamp(2.2rem,3.5vw,3.6rem)] text-white tracking-[-0.015em] mt-[14px]">
-              Why <em className="text-[#c5dfc0] italic">AGD</em> Law Associates
-            </h2>
-            <p className="text-[0.9rem] text-white/45 mt-3">A trusted boutique firm serving clients across Tamil Nadu and beyond</p>
+    <section className="panel-dark" id="why-me">
+      <div className="container">
+        <div className="regions-inner-content">
+          <div className="regions-head">
+            <span className="section-label-dark">Why Choose Us</span>
+            <h2 className="regions-title">Why <em>AGD</em> Law Associates</h2>
+            <p className="regions-sub">A trusted boutique firm serving clients across Tamil Nadu and beyond</p>
           </div>
-
-          {/* Why cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+          <div className="why-cards">
             {whyItems.map((w) => {
               const Icon = w.icon;
               return (
-                <div key={w.title} className="bg-white/[0.04] backdrop-blur-xl border border-[rgba(197,223,192,0.12)] rounded-2xl p-[28px_24px] flex flex-col gap-4 transition-all duration-300 hover:border-[rgba(197,223,192,0.25)] hover:bg-white/[0.06]">
-                  <div className="w-10 h-10 rounded-[10px] bg-[rgba(197,223,192,0.1)] border border-[rgba(197,223,192,0.2)] text-[#c5dfc0] flex items-center justify-center">
-                    <Icon size={20} />
-                  </div>
-                  <div className="font-[Cormorant_Garamond,Georgia,serif] text-[1.2rem] text-white">{w.title}</div>
-                  <div className="text-[0.82rem] text-white/45 leading-[1.72]">{w.desc}</div>
+                <div className="why-card" key={w.title}>
+                  <div className="why-icon"><Icon size={20} /></div>
+                  <div className="why-title">{w.title}</div>
+                  <div className="why-desc">{w.desc}</div>
                 </div>
               );
             })}
           </div>
-
-          {/* Regions */}
-          <div className="border border-[rgba(197,223,192,0.12)] rounded-2xl overflow-hidden">
-            <div className="text-[0.65rem] uppercase tracking-[0.14em] font-semibold px-6 py-4 text-[rgba(197,223,192,0.4)] bg-[rgba(197,223,192,0.04)] border-b border-[rgba(197,223,192,0.1)]">
-              Our Practice Presence
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="regions-presence">
+            <div className="regions-presence-header">Our Practice Presence</div>
+            <div className="regions-grid">
               {[
                 { name: "Chennai & Suburbs", cities: "Chennai · Tambaram · Avadi" },
                 { name: "Western Tamil Nadu", cities: "Coimbatore · Tiruppur" },
@@ -628,19 +1490,12 @@ function Regions() {
                 { name: "Chengalpattu", cities: "Chengalpattu · Kancheepuram" },
                 { name: "Tiruvallur", cities: "Tiruvallur · Ponneri · Gummidipoondi" },
                 { name: "Dindigul", cities: "Dindigul · Natham · Palani" },
-              ].map((r, i, arr) => {
-                const isRightEdge = (i + 1) % 3 === 0;
-                const isBottom = i >= 3;
-                return (
-                  <div
-                    key={r.name}
-                    className={`p-[20px_24px] ${!isRightEdge ? "border-r border-r-[rgba(197,223,192,0.08)]" : ""} ${!isBottom ? "border-b border-b-[rgba(197,223,192,0.08)]" : ""}`}
-                  >
-                    <div className="font-[Cormorant_Garamond,Georgia,serif] text-[1.1rem] text-white mb-1">{r.name}</div>
-                    <div className="text-[0.77rem] text-white/35">{r.cities}</div>
-                  </div>
-                );
-              })}
+              ].map((r) => (
+                <div className="region-item" key={r.name}>
+                  <div className="region-name">{r.name}</div>
+                  <div className="region-cities">{r.cities}</div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -650,6 +1505,11 @@ function Regions() {
 }
 
 // ─── Testimonial / Leadership ──────────────────────────────────────────────────
+
+const testimonials = [
+  { name: "AGD Bala Kumar", role: "Advocate | Managing Counsel", feedback: "AGD Bala Kumar has over 12 years of experience in litigation and legal advisory, with focused practice across criminal law, civil disputes, constitutional remedies, consumer matters, property law, family law, arbitration, corporate advisory, MCOP, and RCOP matters.", img: "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=450&h=300&fit=crop" },
+  { name: "AGD Law Associates", role: "Our Vision", feedback: "To become a trusted and leading boutique law firm recognized for excellence, integrity, and client satisfaction through precision-driven advocacy, transparent communication, and timely legal solutions.", img: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=450&h=300&fit=crop" },
+];
 
 function Testimonial() {
   const [current, setCurrent] = useState(0);
@@ -666,54 +1526,42 @@ function Testimonial() {
 
   const t = testimonials[current];
   return (
-    <section id="testimonial" className="[scroll-margin-top:96px]" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
-      <div className="max-w-[1200px] mx-auto px-6 w-full">
-        <div className="py-[clamp(4rem,7vw,8rem)]">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-[60px] items-start">
-            {/* Sidebar */}
-            <div className="lg:sticky lg:top-[100px] flex flex-col gap-5">
-              <SectionLabel>Leadership</SectionLabel>
-              <h2 className="font-[Cormorant_Garamond,Georgia,serif] font-normal text-[clamp(2rem,3.2vw,3.2rem)] text-white leading-[1.08] mt-3">
-                Courtroom <em className="text-[#c5dfc0] italic">precision</em><br />at every level
+    <section className="panel" id="testimonial" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
+      <div className="container">
+        <div className="testi-section">
+          <div className="testi-inner">
+            <div className="testi-sidebar">
+              <span className="section-label">Leadership</span>
+              <h2 className="testi-sidebar-title">
+                Courtroom <em>precision</em><br />at every level
               </h2>
-              <p className="text-[0.9rem] leading-[1.8] text-white/50">
-                AGD Bala Kumar leads the firm with over 12 years of practice, combining litigation strength with strategic advisory for complex matters.
+              <p className="testi-sidebar-body">
+                AGD Bala Kumar leads the firm with over 12 years of practice, combining
+                litigation strength with strategic advisory for complex matters.
               </p>
-              {/* Nav */}
-              <div className="flex items-center gap-[10px]">
-                <button type="button" onClick={prev} aria-label="Previous" className="w-[38px] h-[38px] rounded-full border border-[rgba(197,223,192,0.2)] text-white/70 flex items-center justify-center transition-all duration-200 hover:bg-[#c5dfc0] hover:text-[#0b0b0b] hover:border-[#c5dfc0]">
-                  <ArrowLeft size={15} />
-                </button>
-                <button type="button" onClick={next} aria-label="Next" className="w-[38px] h-[38px] rounded-full border border-[rgba(197,223,192,0.2)] text-white/70 flex items-center justify-center transition-all duration-200 hover:bg-[#c5dfc0] hover:text-[#0b0b0b] hover:border-[#c5dfc0]">
-                  <ArrowRight size={15} />
-                </button>
-                <div className="text-[0.78rem] text-white/35 tracking-[0.08em]">{String(current + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</div>
+              <div className="testi-nav">
+                <button type="button" className="testi-nav-btn" onClick={prev} aria-label="Previous"><ArrowLeft size={15} /></button>
+                <button type="button" className="testi-nav-btn" onClick={next} aria-label="Next"><ArrowRight size={15} /></button>
+                <div className="testi-counter">{String(current + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</div>
               </div>
-              {/* Progress */}
-              <div className="h-[2px] bg-[rgba(197,223,192,0.15)] rounded-full overflow-hidden">
-                <div className="h-full bg-[#c5dfc0] rounded-full transition-all duration-500" style={{ width: `${((current + 1) / total) * 100}%` }} />
+              <div className="testi-progress">
+                <div className="testi-bar" style={{ width: `${((current + 1) / total) * 100}%` }} />
               </div>
-              {/* Dots */}
-              <div className="flex gap-1.5">
+              <div className="testi-dots">
                 {testimonials.map((_, i) => (
-                  <button key={i} type="button" onClick={() => setCurrent(i)} aria-label={`Slide ${i + 1}`}
-                    className="h-1.5 rounded-full bg-[#c5dfc0] border-none transition-all duration-300"
-                    style={{ width: i === current ? "28px" : "8px", opacity: i === current ? 1 : 0.35 }}
-                  />
+                  <button key={i} type="button" className="testi-dot" style={{ width: i === current ? "28px" : "8px", opacity: i === current ? 1 : 0.35 }} onClick={() => setCurrent(i)} aria-label={`Slide ${i + 1}`} />
                 ))}
               </div>
             </div>
-
-            {/* Card */}
             <div>
-              <article key={`${t.name}-${current}`} className="bg-white/7 backdrop-blur-xl border border-white/12 rounded-[24px] p-[36px_32px] animate-[fadeSlide_0.45s_cubic-bezier(0.22,1,0.36,1)_both]">
-                <div className="text-[#c5dfc0] text-[0.9rem] tracking-[2px] mb-5">★★★★★</div>
-                <blockquote className="font-[Cormorant_Garamond,Georgia,serif] text-[1.35rem] leading-[1.55] text-white italic mb-6">"{t.feedback}"</blockquote>
-                <div className="flex items-center gap-[14px]">
-                  <img src={t.img} alt={t.name} className="w-12 h-12 rounded-full object-cover object-top" loading="lazy" />
+              <article key={`${t.name}-${current}`} className="testi-card">
+                <div className="testi-stars">{Array.from({ length: 5 }).map((_, i) => <span key={i}>★</span>)}</div>
+                <blockquote className="testi-quote">"{t.feedback}"</blockquote>
+                <div className="testi-author">
+                  <img src={t.img} alt={t.name} className="testi-avatar" loading="lazy" />
                   <div>
-                    <div className="font-semibold text-[0.88rem] text-white">{t.name}</div>
-                    <div className="text-[0.75rem] text-white/40 mt-0.5">{t.role}</div>
+                    <div className="testi-name">{t.name}</div>
+                    <div className="testi-role">{t.role}</div>
                   </div>
                 </div>
               </article>
@@ -731,45 +1579,42 @@ function Blog() {
   const featured = blogPosts.find((p) => p.featured);
   const rest = blogPosts.filter((p) => !p.featured);
   return (
-    <section id="blog" className="[scroll-margin-top:96px]">
-      <div className="max-w-[1200px] mx-auto px-6 w-full">
-        <div className="py-[clamp(4rem,7vw,8rem)]">
-          <div className="flex justify-between items-end mb-[clamp(2rem,4vw,3.5rem)] gap-6 flex-wrap">
+    <section className="panel-dark" id="blog">
+      <div className="container">
+        <div className="blog-inner">
+          <div className="blog-head">
             <div>
-              <SectionLabel dark>Legal Insights</SectionLabel>
-              <h2 className="font-[Cormorant_Garamond,Georgia,serif] font-normal text-[clamp(2.2rem,3.5vw,3.6rem)] text-white tracking-[-0.015em] mt-[14px]">
-                From our <em className="text-[#c5dfc0] italic">desk</em>
-              </h2>
+              <span className="section-label-dark">Legal Insights</span>
+              <h2 className="blog-title">From our <em>desk</em></h2>
             </div>
-            <BtnGhost href="/blog" className="shrink-0">All Articles <ArrowRight size={13} /></BtnGhost>
+            <Link href="/blog" className="btn-ghost" style={{ flexShrink: 0 }}>All Articles <ArrowRight size={13} /></Link>
           </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-5">
+          <div className="blog-layout">
             {featured && (
-              <Link href={`/blog/${featured.slug}`} className="rounded-[24px] overflow-hidden bg-white/[0.03] border border-[rgba(197,223,192,0.1)] flex flex-col transition-colors duration-300 no-underline hover:border-[rgba(197,223,192,0.3)]">
-                <img src={featured.img} alt={featured.title} className="w-full aspect-video object-cover" loading="lazy" />
-                <div className="p-[28px_26px] flex flex-col gap-3 flex-1">
-                  <div className="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-[#c5dfc0]">{featured.category}</div>
-                  <h3 className="font-[Cormorant_Garamond,Georgia,serif] font-normal text-[1.6rem] text-white leading-[1.2]">{featured.title}</h3>
-                  <p className="text-[0.83rem] text-white/45 leading-[1.7]">{featured.excerpt}</p>
-                  <div className="flex items-center gap-3 text-[0.72rem] text-white/30 mt-auto">
+              <Link href={`/blog/${featured.slug}`} className="blog-featured" style={{ textDecoration: "none" }}>
+                <img src={featured.img} alt={featured.title} className="blog-featured-img" loading="lazy" />
+                <div className="blog-featured-body">
+                  <div className="blog-cat">{featured.category}</div>
+                  <h3 className="blog-title-main">{featured.title}</h3>
+                  <p className="blog-excerpt">{featured.excerpt}</p>
+                  <div className="blog-meta">
                     <span>{featured.author}</span>
-                    <span className="opacity-40">·</span>
+                    <span className="blog-meta-sep">·</span>
                     <span>{featured.date}</span>
-                    <span className="opacity-40">·</span>
+                    <span className="blog-meta-sep">·</span>
                     <span>{featured.readTime}</span>
                   </div>
                 </div>
               </Link>
             )}
-            <div className="flex flex-col gap-3">
+            <div className="blog-list">
               {rest.map((p) => (
-                <Link href={`/blog/${p.slug}`} key={p.slug} className="rounded-[18px] overflow-hidden bg-white/[0.03] border border-[rgba(197,223,192,0.1)] flex transition-colors duration-300 no-underline hover:border-[rgba(197,223,192,0.25)]">
-                  <img src={p.img} alt={p.title} className="w-[110px] h-[110px] max-sm:w-24 max-sm:h-24 shrink-0 object-cover" loading="lazy" />
-                  <div className="p-[16px_18px] flex flex-col gap-1.5">
-                    <div className="text-[0.62rem] font-bold uppercase tracking-[0.12em] text-[#c5dfc0]">{p.category}</div>
-                    <div className="font-[Cormorant_Garamond,Georgia,serif] text-[1.08rem] text-white leading-[1.25]">{p.title}</div>
-                    <div className="text-[0.68rem] text-white/30 mt-auto">{p.date} · {p.readTime}</div>
+                <Link href={`/blog/${p.slug}`} key={p.slug} className="blog-item" style={{ textDecoration: "none" }}>
+                  <img src={p.img} alt={p.title} className="blog-item-img" loading="lazy" />
+                  <div className="blog-item-body">
+                    <div className="blog-item-cat">{p.category}</div>
+                    <div className="blog-item-title">{p.title}</div>
+                    <div className="blog-item-meta">{p.date} · {p.readTime}</div>
                   </div>
                 </Link>
               ))}
@@ -787,42 +1632,33 @@ function FAQ() {
   const [openIndex, setOpenIndex] = useState(null);
   const toggle = (i) => setOpenIndex((prev) => (prev === i ? null : i));
   return (
-    <section id="faq" className="[scroll-margin-top:96px]">
-      <div className="max-w-[1200px] mx-auto px-6 w-full">
-        <div className="py-[clamp(4rem,7vw,8rem)]">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.6fr] gap-[60px] items-start">
-            {/* Sidebar */}
-            <div className="lg:sticky lg:top-[100px] flex flex-col gap-5">
-              <SectionLabel>FAQ</SectionLabel>
-              <h2 className="font-[Cormorant_Garamond,Georgia,serif] font-normal text-[clamp(2rem,3.2vw,3.2rem)] text-white leading-[1.08] mt-3">
-                Common <em className="text-[#c5dfc0] italic">questions</em>
-              </h2>
-              <p className="text-[0.9rem] text-white/50 leading-[1.8]">
-                Everything you need to know about working with AGD Law Associates. Can't find what you're looking for? Contact us directly.
+    <section className="panel" id="faq">
+      <div className="container">
+        <div className="faq-inner">
+          <div className="faq-layout">
+            <div className="faq-sidebar">
+              <span className="section-label">FAQ</span>
+              <h2 className="faq-sidebar-title">Common <em>questions</em></h2>
+              <p className="faq-sidebar-body">
+                Everything you need to know about working with AGD Law Associates.
+                Can't find what you're looking for? Contact us directly.
               </p>
-              <BtnPrimary href="#contact" className="w-fit">Contact Us <ArrowRight size={13} /></BtnPrimary>
+              <a href="#contact" className="btn-primary faq-cta">
+                Contact Us <ArrowRight size={13} />
+              </a>
             </div>
-
-            {/* List */}
-            <div className="flex flex-col border border-[rgba(197,223,192,0.15)] rounded-[20px] overflow-hidden">
+            <div className="faq-list">
               {faqs.map((faq, i) => {
                 const isOpen = openIndex === i;
                 return (
-                  <div key={i} className="border-b border-b-[rgba(197,223,192,0.1)] last:border-b-0">
-                    <button
-                      type="button"
-                      onClick={() => toggle(i)}
-                      aria-expanded={isOpen}
-                      className="w-full flex justify-between items-center px-6 py-5 text-left gap-4 text-[0.93rem] font-medium text-white/85 bg-white/[0.04] transition-colors duration-200 hover:text-[#c5dfc0] hover:bg-[rgba(197,223,192,0.05)]"
-                    >
+                  <div className="faq-item" key={i}>
+                    <button type="button" className="faq-question" onClick={() => toggle(i)} aria-expanded={isOpen}>
                       <span>{faq.q}</span>
-                      <span className={`w-7 h-7 rounded-full shrink-0 border border-[rgba(197,223,192,0.2)] flex items-center justify-center text-white/40 transition-all duration-300 ${isOpen ? "bg-[#c5dfc0] border-[#c5dfc0] text-[#0b0b0b] rotate-45" : ""}`}>
-                        <X size={13} />
-                      </span>
+                      <span className={`faq-toggle${isOpen ? " open" : ""}`}><X size={13} /></span>
                     </button>
-                    <div className={`overflow-hidden transition-[max-height] duration-300 ease-in-out bg-white/[0.03] ${isOpen ? "max-h-[220px]" : "max-h-0"}`}>
-                      <div className="px-6 pb-5">
-                        <p className="text-[0.87rem] text-white/50 leading-[1.8]">{faq.a}</p>
+                    <div className={`faq-answer${isOpen ? " open" : ""}`}>
+                      <div className="faq-answer-inner">
+                        <p className="faq-answer-text">{faq.a}</p>
                       </div>
                     </div>
                   </div>
@@ -870,24 +1706,15 @@ function Contact() {
     }
   };
 
-  const inputClass = "border border-[rgba(197,223,192,0.15)] rounded-xl px-[14px] py-[11px] text-[0.88rem] font-[inherit] text-white bg-white/[0.06] transition-all duration-200 resize-vertical placeholder:text-white/25 focus:outline-none focus:border-[#c5dfc0] focus:shadow-[0_0_0_3px_rgba(197,223,192,0.1)]";
-
   return (
-    <section id="contact" className="[scroll-margin-top:96px]">
-      <div className="max-w-[1200px] mx-auto px-6 w-full">
-        <div className="py-[clamp(4rem,7vw,8rem)]">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.35fr] gap-[60px] items-start">
-            {/* Left */}
-            <div className="flex flex-col gap-6 lg:sticky lg:top-[100px]">
-              <SectionLabel dark>Get In Touch</SectionLabel>
-              <h2 className="font-[Cormorant_Garamond,Georgia,serif] font-normal text-[clamp(2.4rem,4vw,4rem)] text-white tracking-[-0.015em] mt-[14px] leading-[1.05]">
-                Need legal<br /><em className="text-[#c5dfc0] italic">support?</em><br />Let's connect.
-              </h2>
-              <p className="text-[0.9rem] text-white/45 leading-[1.8]">
-                Reach out directly or fill the form — we respond during office hours. Every matter is handled with strict confidentiality.
-              </p>
-
-              {/* Contact details */}
+    <section className="panel-dark" id="contact">
+      <div className="container">
+        <div className="contact-inner">
+          <div className="contact-grid">
+            <div className="contact-left">
+              <span className="section-label-dark">Get In Touch</span>
+              <h2 className="contact-title">Need legal<br /><em>support?</em><br />Let's connect.</h2>
+              <p className="contact-sub">Reach out directly or fill the form — we respond during office hours. Every matter is handled with strict confidentiality.</p>
               {[
                 { icon: PhoneCall, label: "Phone", value: "+91 99943 88855", href: "tel:+919994388855" },
                 { icon: Mail, label: "Email", value: "agdlawassociatesoffice@gmail.com", href: "mailto:agdlawassociatesoffice@gmail.com" },
@@ -895,104 +1722,67 @@ function Contact() {
               ].map((d) => {
                 const Icon = d.icon;
                 return (
-                  <a key={d.label} href={d.href} className="flex items-start gap-[14px] p-4 rounded-[14px] border border-[rgba(197,223,192,0.12)] bg-white/[0.04] transition-all duration-200 no-underline hover:border-[rgba(197,223,192,0.3)] hover:bg-[rgba(197,223,192,0.06)]">
-                    <div className="w-9 h-9 rounded-[10px] shrink-0 bg-[rgba(197,223,192,0.1)] text-[#c5dfc0] flex items-center justify-center">
-                      <Icon size={15} />
-                    </div>
+                  <a key={d.label} href={d.href} className="contact-detail" style={{ textDecoration: "none" }}>
+                    <div className="contact-detail-icon"><Icon size={15} /></div>
                     <div>
-                      <div className="text-[0.65rem] uppercase tracking-[0.1em] text-white/35">{d.label}</div>
-                      <div className="text-[0.88rem] text-white/80 mt-0.5 font-medium">{d.value}</div>
+                      <div className="contact-detail-label">{d.label}</div>
+                      <div className="contact-detail-value">{d.value}</div>
                     </div>
                   </a>
                 );
               })}
-
-              {/* Hours */}
-              <div className="bg-[rgba(197,223,192,0.05)] border border-[rgba(197,223,192,0.1)] rounded-2xl p-5">
-                <p className="text-[0.65rem] uppercase tracking-[0.14em] text-[rgba(197,223,192,0.45)] font-semibold mb-[14px]">Office Hours</p>
+              <div className="contact-hours">
+                <p className="contact-hours-title">Office Hours</p>
                 {[
                   { day: "Monday – Friday", time: "10:00 AM – 6:30 PM" },
                   { day: "Saturday", time: "11:00 AM – 5:00 PM" },
                   { day: "2nd & Last Saturday", time: "Closed" },
                 ].map((h) => (
-                  <div key={h.day} className="flex justify-between text-[0.82rem] py-[7px] border-b border-b-[rgba(197,223,192,0.08)] last:border-b-0">
-                    <span className="text-white/45">{h.day}</span>
-                    <span className="text-white/75 font-medium">{h.time}</span>
+                  <div className="hours-row" key={h.day}>
+                    <span className="hours-day">{h.day}</span>
+                    <span className="hours-time">{h.time}</span>
                   </div>
                 ))}
               </div>
             </div>
-
-            {/* Form panel */}
-            <div className="bg-white/[0.08] backdrop-blur-[24px] border border-white/12 rounded-[28px] p-[36px_32px]">
-              <h3 className="font-[Cormorant_Garamond,Georgia,serif] font-normal text-[1.8rem] text-white mb-1.5">Send a Message</h3>
-              <p className="text-[0.82rem] text-white/40 mb-7">We typically respond within 1 business day.</p>
-
-              <form onSubmit={handleSubmit} className="flex flex-col gap-[22px]">
-                {/* Service chips */}
+            <div className="contact-form-panel">
+              <h3 className="form-panel-title">Send a Message</h3>
+              <p className="form-panel-sub">We typically respond within 1 business day.</p>
+              <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "22px" }}>
                 <div>
-                  <p className="text-[0.72rem] font-bold uppercase tracking-[0.1em] text-white/40 mb-2.5">Select Service Area</p>
-                  <div className="flex flex-wrap gap-[7px]">
+                  <p className="form-section-label">Select Service Area</p>
+                  <div className="chip-group">
                     {serviceOptions.map((s) => (
-                      <button
-                        key={s.value}
-                        type="button"
-                        aria-pressed={form.service_type === s.value}
-                        onClick={() => selectPill("service_type", s.value)}
-                        className={`text-[0.77rem] px-[13px] py-[6px] rounded-full border transition-all duration-200 font-[inherit] ${form.service_type === s.value ? "bg-[#c5dfc0] border-[#c5dfc0] text-[#0b0b0b] font-semibold" : "border-[rgba(197,223,192,0.2)] bg-white/[0.05] text-white/60 hover:border-[#c5dfc0] hover:text-[#c5dfc0]"}`}
-                      >
-                        {s.label}
-                      </button>
+                      <button key={s.value} type="button" className={`chip${form.service_type === s.value ? " active" : ""}`} onClick={() => selectPill("service_type", s.value)} aria-pressed={form.service_type === s.value}>{s.label}</button>
                     ))}
                   </div>
                 </div>
-
-                {/* Timeline chips */}
                 <div>
-                  <p className="text-[0.72rem] font-bold uppercase tracking-[0.1em] text-white/40 mb-2.5">Preferred Timeline</p>
-                  <div className="flex flex-wrap gap-[7px]">
+                  <p className="form-section-label">Preferred Timeline</p>
+                  <div className="chip-group">
                     {budgetOptions.map((b) => (
-                      <button
-                        key={b.value}
-                        type="button"
-                        aria-pressed={form.budget === b.value}
-                        onClick={() => selectPill("budget", b.value)}
-                        className={`text-[0.77rem] px-[13px] py-[6px] rounded-full border transition-all duration-200 font-[inherit] ${form.budget === b.value ? "bg-[#c5dfc0] border-[#c5dfc0] text-[#0b0b0b] font-semibold" : "border-[rgba(197,223,192,0.2)] bg-white/[0.05] text-white/60 hover:border-[#c5dfc0] hover:text-[#c5dfc0]"}`}
-                      >
-                        {b.label}
-                      </button>
+                      <button key={b.value} type="button" className={`chip${form.budget === b.value ? " active" : ""}`} onClick={() => selectPill("budget", b.value)} aria-pressed={form.budget === b.value}>{b.label}</button>
                     ))}
                   </div>
                 </div>
-
-                {/* Input fields */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-[14px]">
-                  <div className="flex flex-col gap-[5px]">
-                    <label htmlFor="your_name" className="text-[0.72rem] font-semibold text-white/45 uppercase tracking-[0.06em]">Your Name</label>
-                    <input type="text" id="your_name" name="your_name" placeholder="John Doe" required value={form.your_name} onChange={handleChange} className={inputClass} />
+                <div className="form-fields">
+                  <div className="form-field">
+                    <label htmlFor="your_name" className="form-label">Your Name</label>
+                    <input type="text" id="your_name" name="your_name" placeholder="John Doe" required value={form.your_name} onChange={handleChange} className="form-input" />
                   </div>
-                  <div className="flex flex-col gap-[5px]">
-                    <label htmlFor="your_email" className="text-[0.72rem] font-semibold text-white/45 uppercase tracking-[0.06em]">Email Address</label>
-                    <input type="email" id="your_email" name="your_email" placeholder="john@email.com" required value={form.your_email} onChange={handleChange} className={inputClass} />
+                  <div className="form-field">
+                    <label htmlFor="your_email" className="form-label">Email Address</label>
+                    <input type="email" id="your_email" name="your_email" placeholder="john@email.com" required value={form.your_email} onChange={handleChange} className="form-input" />
                   </div>
-                  <div className="flex flex-col gap-[5px] sm:col-span-2">
-                    <label htmlFor="message" className="text-[0.72rem] font-semibold text-white/45 uppercase tracking-[0.06em]">Your Message</label>
-                    <textarea id="message" name="message" rows={4} placeholder="Briefly describe your legal matter..." value={form.message} onChange={handleChange} className={inputClass} />
+                  <div className="form-field full">
+                    <label htmlFor="message" className="form-label">Your Message</label>
+                    <textarea id="message" name="message" rows={4} placeholder="Briefly describe your legal matter..." value={form.message} onChange={handleChange} className="form-input" />
                   </div>
                 </div>
-
-                {/* Feedback */}
                 {submitState.message && (
-                  <div className={`px-4 py-3 rounded-[10px] text-[0.85rem] font-medium ${submitState.type === "success" ? "bg-[rgba(197,223,192,0.15)] text-[#c5dfc0] border border-[rgba(197,223,192,0.25)]" : "bg-[rgba(255,100,100,0.1)] text-[#ff8080] border border-[rgba(255,100,100,0.2)]"}`}>
-                    {submitState.message}
-                  </div>
+                  <div className={`form-msg ${submitState.type}`}>{submitState.message}</div>
                 )}
-
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="inline-flex items-center justify-center gap-2 bg-[#c5dfc0] text-[#0b0b0b] text-[0.88rem] font-bold tracking-[0.05em] px-7 py-[14px] rounded-full w-full transition-all duration-200 hover:not-disabled:bg-white hover:not-disabled:-translate-y-px disabled:opacity-50 disabled:cursor-not-allowed"
-                >
+                <button type="submit" className="form-submit" disabled={isSubmitting}>
                   {isSubmitting ? "Sending..." : "Send Message"}
                   {!isSubmitting && <Send size={15} />}
                 </button>
@@ -1019,86 +1809,60 @@ function Footer() {
   const serviceLinks = ["Criminal Law", "Civil Litigation", "Writs & Constitutional", "Consumer Protection", "Property Law", "Family Law"];
 
   return (
-    <footer className="bg-[#0b0b0b] border-t border-[rgba(197,223,192,0.08)] pt-[clamp(3rem,5vw,5rem)]">
-      <div className="max-w-[1200px] mx-auto px-6 w-full">
-        {/* Top grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr] gap-12 pb-[clamp(2.5rem,4vw,4rem)] border-b border-[rgba(197,223,192,0.1)]">
-          {/* Brand */}
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-[10px] font-[Cormorant_Garamond,Georgia,serif] text-[1.35rem] font-medium text-white">
+    <footer className="footer-section">
+      <div className="container">
+        <div className="footer-top">
+          <div className="footer-brand">
+            <div className="logo-mark">
               <AGDLogoImg size={34} />
               AGD Law Associates
             </div>
-            <p className="text-[0.84rem] text-white/40 leading-[1.7] max-w-[260px]">
-              Precision-driven litigation and advisory services across Tamil Nadu and beyond. Established 2016.
-            </p>
-            <div className="flex gap-2.5">
-              {[{ icon: <FacebookIcon />, label: "Facebook" }, { icon: <XIcon />, label: "X (Twitter)" }].map((s) => (
-                <a key={s.label} href="#" aria-label={s.label} className="w-[34px] h-[34px] rounded-[9px] border border-[rgba(197,223,192,0.18)] text-white/45 flex items-center justify-center transition-all duration-200 hover:bg-[rgba(197,223,192,0.1)] hover:text-[#c5dfc0] hover:border-[#c5dfc0]">
-                  {s.icon}
-                </a>
-              ))}
+            <p className="footer-tagline">Precision-driven litigation and advisory services across Tamil Nadu and beyond. Established 2016.</p>
+            <div className="footer-socials">
+              <a href="#" className="footer-social" aria-label="Facebook"><FacebookIcon /></a>
+              <a href="#" className="footer-social" aria-label="X (Twitter)"><XIcon /></a>
             </div>
           </div>
-
-          {/* Quick links */}
-          <div className="flex flex-col gap-[14px]">
-            <div className="text-[0.66rem] uppercase tracking-[0.14em] text-[#c5dfc0] font-bold">Quick Links</div>
-            <div className="flex flex-col gap-[9px]">
-              {quickLinks.map((l) => (
-                <a key={l.label} href={l.href} className="text-[0.83rem] text-white/40 transition-colors duration-200 no-underline hover:text-white/80">{l.label}</a>
-              ))}
+          <div className="footer-col">
+            <div className="footer-col-title">Quick Links</div>
+            <div className="footer-links">
+              {quickLinks.map((l) => <a key={l.label} href={l.href} className="footer-link">{l.label}</a>)}
             </div>
           </div>
-
-          {/* Practice areas */}
-          <div className="flex flex-col gap-[14px]">
-            <div className="text-[0.66rem] uppercase tracking-[0.14em] text-[#c5dfc0] font-bold">Practice Areas</div>
-            <div className="flex flex-col gap-[9px]">
-              {serviceLinks.map((s) => (
-                <span key={s} className="text-[0.83rem] text-white/40">{s}</span>
-              ))}
+          <div className="footer-col">
+            <div className="footer-col-title">Practice Areas</div>
+            <div className="footer-links">
+              {serviceLinks.map((s) => <span key={s} className="footer-link" style={{ cursor: "default" }}>{s}</span>)}
             </div>
           </div>
-
-          {/* Contact */}
-          <div className="flex flex-col gap-[14px]">
-            <div className="text-[0.66rem] uppercase tracking-[0.14em] text-[#c5dfc0] font-bold">Contact</div>
-            <div className="flex flex-col gap-[14px]">
-              {[
-                { icon: <PhoneCall size={13} />, text: "+91 99943 88855", href: "tel:+919994388855" },
-                { icon: <Mail size={13} />, text: "agdlawassociatesoffice@gmail.com", href: "mailto:agdlawassociatesoffice@gmail.com" },
-                { icon: <MapPin size={13} />, text: "Chennai, Tamil Nadu, India", href: null },
-              ].map((item) => (
-                item.href ? (
-                  <a key={item.text} href={item.href} className="flex items-start gap-[10px] no-underline group">
-                    <span className="text-[#c5dfc0] shrink-0 mt-[1px]">{item.icon}</span>
-                    <span className="text-[0.81rem] text-white/40 leading-[1.5] transition-colors duration-200 group-hover:text-white/70">{item.text}</span>
-                  </a>
-                ) : (
-                  <div key={item.text} className="flex items-start gap-[10px]">
-                    <span className="text-[#c5dfc0] shrink-0 mt-[1px]">{item.icon}</span>
-                    <span className="text-[0.81rem] text-white/40 leading-[1.5]">{item.text}</span>
-                  </div>
-                )
-              ))}
+          <div className="footer-col">
+            <div className="footer-col-title">Contact</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+              <a href="tel:+919994388855" className="footer-contact-item" style={{ textDecoration: "none" }}>
+                <PhoneCall size={13} className="footer-contact-icon" />
+                <span className="footer-contact-text">+91 99943 88855</span>
+              </a>
+              <a href="mailto:agdlawassociatesoffice@gmail.com" className="footer-contact-item" style={{ textDecoration: "none" }}>
+                <Mail size={13} className="footer-contact-icon" />
+                <span className="footer-contact-text">agdlawassociatesoffice@gmail.com</span>
+              </a>
+              <div className="footer-contact-item">
+                <MapPin size={13} className="footer-contact-icon" />
+                <span className="footer-contact-text">Chennai, Tamil Nadu, India</span>
+              </div>
             </div>
           </div>
         </div>
-
-        {/* Bottom */}
-        <div className="flex justify-between items-center py-5 gap-4 flex-wrap">
-          <p className="text-[0.76rem] text-white/25">© {new Date().getFullYear()} AGD Law Associates. All rights reserved.</p>
-          <a href="https://www.agdlawassociates.in" target="_blank" rel="noopener noreferrer" className="text-[0.76rem] text-white/25 transition-colors duration-200 no-underline hover:text-[#c5dfc0]">
-            www.agdlawassociates.in
-          </a>
+        <div className="footer-bottom">
+          <p className="footer-copy">© {new Date().getFullYear()} AGD Law Associates. All rights reserved.</p>
+          <a href="https://www.agdlawassociates.in" target="_blank" rel="noopener noreferrer" className="footer-web">www.agdlawassociates.in</a>
         </div>
       </div>
     </footer>
   );
 }
 
-// ─── WhatsApp Floating Chat ───────────────────────────────────────────────────
+// ─── WhatsApp Float ───────────────────────────────────────────────────────────
 
 function WhatsAppFloatingChat() {
   const [open, setOpen] = useState(false);
@@ -1121,78 +1885,33 @@ function WhatsAppFloatingChat() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-[980] flex flex-col items-end gap-3">
-      {/* Chat panel */}
-      <div className={`w-[min(90vw,360px)] rounded-[20px] overflow-hidden bg-white border border-[rgba(197,223,192,0.35)] shadow-[0_24px_64px_rgba(11,11,11,0.18)] transition-all duration-[350ms] cubic-bezier-spring origin-bottom-right ${open ? "opacity-100 scale-100 translate-y-0 pointer-events-auto" : "opacity-0 scale-90 translate-y-4 pointer-events-none"}`}>
-        {/* Header */}
-        <div className="bg-[#0b0b0b] px-4 py-[14px] flex items-center justify-between">
-          <div className="flex items-center gap-[10px]">
-            <div className="w-8 h-8 rounded-full bg-[#c5dfc0] text-[#0b0b0b] flex items-center justify-center shrink-0">
-              <MessageCircle size={14} />
-            </div>
+    <div className="wa-fab">
+      <div className={`wa-panel ${open ? "open" : "closed"}`}>
+        <div className="wa-header">
+          <div className="wa-header-info">
+            <div className="wa-avatar"><MessageCircle size={14} /></div>
             <div>
-              <div className="text-[0.86rem] font-semibold text-white">AGD Legal Desk</div>
-              <div className="text-[0.68rem] text-[#c5dfc0]">Replies during office hours</div>
+              <div className="wa-name">AGD Legal Desk</div>
+              <div className="wa-status">Replies during office hours</div>
             </div>
           </div>
-          <button type="button" onClick={() => setOpen(false)} aria-label="Close" className="w-7 h-7 rounded-full border border-white/15 text-white/55 flex items-center justify-center transition-all duration-200 hover:border-[#c5dfc0] hover:text-[#c5dfc0]">
-            <X size={12} />
-          </button>
+          <button type="button" className="wa-close" onClick={() => setOpen(false)} aria-label="Close"><X size={12} /></button>
         </div>
-
-        {/* Body */}
-        <div className="p-4 bg-[#f8fbf7] flex flex-col gap-3">
-          <div className="bg-white border border-[rgba(197,223,192,0.35)] rounded-2xl rounded-tl-[4px] px-[14px] py-3 text-[0.84rem] leading-[1.6] text-[#0b0b0b] max-w-[90%] shadow-[0_2px_8px_rgba(11,11,11,0.05)]">
-            Hi! Thanks for reaching out to AGD Law Associates. Select a quick message or type your query below.
-          </div>
-          <div className="flex flex-wrap gap-1.5">
+        <div className="wa-body">
+          <div className="wa-bubble">Hi! Thanks for reaching out to AGD Law Associates. Select a quick message or type your query below.</div>
+          <div className="wa-quick">
             {quickMessages.map((m) => (
-              <button
-                key={m}
-                type="button"
-                onClick={() => setMessage(m)}
-                className={`text-[0.74rem] px-[11px] py-[6px] rounded-full border text-left transition-all duration-200 ${message === m ? "bg-[#c5dfc0] border-[#c5dfc0]" : "border-[rgba(197,223,192,0.35)] bg-white text-[#0b0b0b] hover:bg-[#c5dfc0] hover:border-[#c5dfc0]"}`}
-              >
-                {m}
-              </button>
+              <button key={m} type="button" className={`wa-quick-btn${message === m ? " selected" : ""}`} onClick={() => setMessage(m)}>{m}</button>
             ))}
           </div>
-          <div className="flex gap-2 items-end">
-            <textarea
-              rows={2}
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); openWhatsApp(); } }}
-              placeholder="Type your message..."
-              aria-label="WhatsApp message"
-              className="flex-1 resize-none border border-[rgba(197,223,192,0.35)] rounded-xl px-[13px] py-[9px] text-[0.84rem] font-[inherit] text-[#0b0b0b] bg-white transition-colors duration-200 focus:outline-none focus:border-[#c5dfc0]"
-            />
-            <button
-              type="button"
-              onClick={() => openWhatsApp()}
-              aria-label="Send"
-              className="w-[38px] h-[38px] rounded-full shrink-0 bg-[#c5dfc0] text-[#0b0b0b] flex items-center justify-center transition-all duration-200 hover:bg-[#0b0b0b] hover:text-[#c5dfc0]"
-            >
-              <Send size={14} />
-            </button>
+          <div className="wa-input-row">
+            <textarea rows={2} value={message} onChange={(e) => setMessage(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); openWhatsApp(); } }} placeholder="Type your message..." className="wa-textarea" aria-label="WhatsApp message" />
+            <button type="button" className="wa-send" onClick={() => openWhatsApp()} aria-label="Send"><Send size={14} /></button>
           </div>
         </div>
       </div>
-
-      {/* Label */}
-      {!open && (
-        <div className="bg-[#0b0b0b] text-[#c5dfc0] text-[0.66rem] uppercase tracking-[0.1em] px-[13px] py-[5px] rounded-full font-bold">
-          Chat with AGD
-        </div>
-      )}
-
-      {/* Toggle */}
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        aria-label={open ? "Close chat" : "Open chat"}
-        className={`w-[54px] h-[54px] rounded-full flex items-center justify-center shadow-[0_12px_32px_rgba(11,11,11,0.3)] transition-all duration-300 border-none ${open ? "bg-[#0b0b0b] text-[#c5dfc0]" : "bg-[#c5dfc0] text-[#0b0b0b] hover:-translate-y-[3px] hover:scale-105 hover:shadow-[0_18px_40px_rgba(197,223,192,0.4)]"}`}
-      >
+      {!open && <div className="wa-label">Chat with AGD</div>}
+      <button type="button" className={`wa-toggle ${open ? "open-state" : "closed"}`} onClick={() => setOpen((v) => !v)} aria-label={open ? "Close chat" : "Open chat"}>
         {open ? <X size={19} /> : <MessageCircle size={21} />}
       </button>
     </div>
@@ -1204,36 +1923,51 @@ function WhatsAppFloatingChat() {
 export default function Page() {
   useEffect(() => {
     const getHeaderOffset = () => {
-      const value = getComputedStyle(document.documentElement).getPropertyValue("--header-offset").trim();
+      const value = getComputedStyle(document.documentElement)
+        .getPropertyValue("--header-offset")
+        .trim();
       const parsed = Number.parseFloat(value);
       return Number.isNaN(parsed) ? 96 : parsed;
     };
 
     const scrollToHash = (hash, updateHistory = false) => {
       if (!hash || hash === "#") return;
+
       const target = document.querySelector(hash);
       if (!target) return;
+
       const top = target.getBoundingClientRect().top + window.scrollY - getHeaderOffset();
       window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
-      if (updateHistory && window.location.hash !== hash) window.history.pushState(null, "", hash);
+
+      if (updateHistory && window.location.hash !== hash) {
+        window.history.pushState(null, "", hash);
+      }
     };
 
     const handleDocumentClick = (event) => {
       if (!(event.target instanceof Element)) return;
+
       const anchor = event.target.closest('a[href^="#"]');
       if (!anchor) return;
+
       const href = anchor.getAttribute("href");
       if (!href || href === "#") return;
       if (!document.querySelector(href)) return;
+
       event.preventDefault();
       scrollToHash(href, true);
     };
 
-    const handleHashChange = () => scrollToHash(window.location.hash, false);
+    const handleHashChange = () => {
+      scrollToHash(window.location.hash, false);
+    };
 
     document.addEventListener("click", handleDocumentClick);
     window.addEventListener("hashchange", handleHashChange);
-    if (window.location.hash) requestAnimationFrame(() => scrollToHash(window.location.hash, false));
+
+    if (window.location.hash) {
+      requestAnimationFrame(() => scrollToHash(window.location.hash, false));
+    }
 
     return () => {
       document.removeEventListener("click", handleDocumentClick);
@@ -1243,19 +1977,11 @@ export default function Page() {
 
   return (
     <>
-      {/* Keyframe animations injected once — minimal global style */}
-      <style>{`
-        @keyframes tickerMove { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-        @keyframes scrollHint { 0%, 100% { opacity: 0.4; transform: scaleY(1); } 50% { opacity: 1; transform: scaleY(1.2); } }
-        @keyframes fadeSlide { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap');
-        html { scroll-padding-top: 96px; }
-      `}</style>
-
+      <GlobalStyles />
       <FixedBackground />
-      <div className="relative z-10">
+      <div className="scroll-layer">
         <Header />
-        <main className="pb-[clamp(120px,18vh,220px)]">
+        <main>
           <Hero />
           <Ticker />
           <About />
