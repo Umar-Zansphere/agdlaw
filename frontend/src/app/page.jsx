@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { AGDLogoImg } from "@/components/AGDLogoImg";
 import Link from "next/link";
+import Image from "next/image";
+import Script from "next/script";
 import { blogPosts } from "@/data/blog-posts";
 import { DM_Sans, Cormorant_Garamond } from "next/font/google";
 const dmSans = DM_Sans({
@@ -40,6 +42,10 @@ import {
   CheckCircle,
 } from "lucide-react";
 
+const SITE_URL = "https://www.agdlawassociates.in";
+const SITE_NAME = "AGD Law Associates";
+const SITE_DESCRIPTION =
+  "AGD Law Associates is a boutique law firm in Chennai delivering precision-driven litigation and advisory across criminal, civil, constitutional, consumer, property, family, arbitration, and corporate matters.";
 
 
 // ─── Global Styles ─────────────────────────────────────────────────────────────
@@ -964,12 +970,13 @@ function FixedBackground() {
   return (
     <div className="fixed-bg" aria-hidden="true" style={{ position: "fixed", inset: 0, zIndex: 0, background: "#0b0b0b" }}>
       {/* Background image */}
-      <img
-        // https://images.pexels.com/photos/9685285/pexels-photo-9685285.jpeg
+      <Image
         src="https://images.pexels.com/photos/9685285/pexels-photo-9685285.jpeg"
         alt="bg"
-        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 1 }}
-        loading="eager"
+        fill
+        priority
+        sizes="100vw"
+        style={{ objectFit: "cover", zIndex: 1 }}
       />
       {/* Black overlay for readability */}
       <div
@@ -1043,6 +1050,63 @@ const budgetOptions = [
   { value: "within_week", label: "Within This Week" },
   { value: "scheduled", label: "Scheduled Consultation" },
 ];
+
+const legalServiceSchema = {
+  "@context": "https://schema.org",
+  "@type": "LegalService",
+  "@id": `${SITE_URL}/#legal-service`,
+  name: SITE_NAME,
+  url: SITE_URL,
+  image: `${SITE_URL}/hero.png`,
+  logo: `${SITE_URL}/logo.png`,
+  description: SITE_DESCRIPTION,
+  telephone: "+91 99943 88855",
+  email: "agdlawassociatesoffice@gmail.com",
+  foundingDate: "2016",
+  founder: {
+    "@type": "Person",
+    name: "AGD Bala Kumar",
+  },
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Chennai",
+    addressRegion: "Tamil Nadu",
+    addressCountry: "IN",
+  },
+  areaServed: [
+    { "@type": "City", name: "Chennai" },
+    { "@type": "City", name: "Tambaram" },
+    { "@type": "City", name: "Avadi" },
+    { "@type": "City", name: "Coimbatore" },
+    { "@type": "City", name: "Tiruppur" },
+    { "@type": "City", name: "Bangalore" },
+    { "@type": "AdministrativeArea", name: "Tamil Nadu" },
+  ],
+  contactPoint: [
+    {
+      "@type": "ContactPoint",
+      contactType: "customer support",
+      telephone: "+91 99943 88855",
+      email: "agdlawassociatesoffice@gmail.com",
+      url: `${SITE_URL}/#contact`,
+      areaServed: "IN",
+    },
+  ],
+  knowsAbout: serviceOptions.map((service) => service.label),
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.a,
+    },
+  })),
+};
 
 // ─── SVG Icons ────────────────────────────────────────────────────────────────
 
@@ -1571,7 +1635,7 @@ function Testimonial() {
             <div>
               <article key={`${t.name}-${current}`} className="testi-card">
                 <div className="testi-stars">{Array.from({ length: 5 }).map((_, i) => <span key={i}>★</span>)}</div>
-                <blockquote className="testi-quote">"{t.feedback}"</blockquote>
+                <blockquote className="testi-quote">&ldquo;{t.feedback}&rdquo;</blockquote>
                 <div className="testi-author">
                   <img src={t.img} alt={t.name} className="testi-avatar" loading="lazy" />
                   <div>
@@ -1656,7 +1720,7 @@ function FAQ() {
               <h2 className="faq-sidebar-title">Common <em>questions</em></h2>
               <p className="faq-sidebar-body">
                 Everything you need to know about working with AGD Law Associates.
-                Can't find what you're looking for? Contact us directly.
+                Can&apos;t find what you&apos;re looking for? Contact us directly.
               </p>
               <a href="#contact" className="btn-primary faq-cta">
                 Contact Us <ArrowRight size={13} />
@@ -1728,7 +1792,7 @@ function Contact() {
           <div className="contact-grid">
             <div className="contact-left">
               <span className="section-label-dark">Get In Touch</span>
-              <h2 className="contact-title">Need legal<br /><em>support?</em><br />Let's connect.</h2>
+              <h2 className="contact-title">Need legal<br /><em>support?</em><br />Let&apos;s connect.</h2>
               <p className="contact-sub">Reach out directly or fill the form — we respond during office hours. Every matter is handled with strict confidentiality.</p>
               {[
                 { icon: PhoneCall, label: "Phone", value: "+91 99943 88855", href: "tel:+919994388855" },
@@ -1992,6 +2056,16 @@ export default function Page() {
 
   return (
     <div className={`${dmSans.variable} ${cormorant.variable}`}>
+      <Script
+        id="agd-law-legal-service-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(legalServiceSchema) }}
+      />
+      <Script
+        id="agd-law-faq-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <GlobalStyles />
       <FixedBackground />
       <div className="scroll-layer">

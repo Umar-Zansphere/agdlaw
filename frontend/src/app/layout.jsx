@@ -1,4 +1,91 @@
 import "./globals.css";
+import {
+  defaultDescription,
+  defaultTitle,
+  googleSiteVerification,
+  siteName,
+  siteUrl,
+} from "@/lib/site";
+
+export const metadata = {
+  metadataBase: new URL(siteUrl),
+  applicationName: siteName,
+  title: {
+    default: defaultTitle,
+    template: `%s | ${siteName}`,
+  },
+  description: defaultDescription,
+  keywords: [
+    "AGD Law Associates",
+    "law firm Chennai",
+    "boutique law firm Tamil Nadu",
+    "criminal lawyer Chennai",
+    "civil litigation Chennai",
+    "property lawyer Chennai",
+    "family lawyer Chennai",
+    "consumer dispute lawyer Chennai",
+    "arbitration lawyer Tamil Nadu",
+    "corporate legal advisory Chennai",
+  ],
+  authors: [{ name: siteName, url: siteUrl }],
+  creator: siteName,
+  publisher: siteName,
+  alternates: {
+    canonical: "/",
+  },
+  verification: {
+    google: googleSiteVerification,
+  },
+  category: "legal services",
+  manifest: "/site.webmanifest",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    url: "/",
+    siteName,
+    title: defaultTitle,
+    description: defaultDescription,
+    images: [
+      {
+        url: "/hero.png",
+        width: 1200,
+        height: 630,
+        alt: "AGD Law Associates",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: defaultTitle,
+    description: defaultDescription,
+    images: ["/hero.png"],
+  },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#0b0b0b",
+};
 
 export default function RootLayout({ children }) {
   return (

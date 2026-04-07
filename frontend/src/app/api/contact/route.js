@@ -11,17 +11,38 @@ function escapeHtml(value = "") {
     .replaceAll("'", "&#39;");
 }
 
+const SERVICE_MAP = {
+  criminal_law: "Criminal Law",
+  civil_litigation: "Civil Litigation",
+  writ_constitutional: "Writs & Constitutional",
+  consumer_protection: "Consumer Protection",
+  property_real_estate: "Property & Real Estate",
+  family_matrimonial: "Family & Matrimonial",
+  arbitration_adr: "Arbitration & ADR",
+  corporate_advisory: "Corporate Advisory",
+  mcop_rcop: "MCOP & Rent Control",
+};
+
+const TIMELINE_MAP = {
+  immediate: "Immediate Assistance",
+  within_week: "Within This Week",
+  scheduled: "Scheduled Consultation",
+};
+
 export async function POST(request) {
   try {
     const body = await request.json();
 
     const yourName = (body.your_name || "").trim();
     const yourEmail = (body.your_email || "").trim();
-    const serviceLabel = (body.service_label || body.service_type || "").trim();
-    const budgetLabel = (body.budget_label || body.budget || "").trim();
+    const rawService = (body.service_type || "").trim();
+    const rawTimeline = (body.budget || "").trim();
     const message = (body.message || "").trim();
 
-    if (!yourName || !yourEmail || !serviceLabel || !budgetLabel) {
+    const serviceLabel = SERVICE_MAP[rawService] || body.service_label || rawService;
+    const timelineLabel = TIMELINE_MAP[rawTimeline] || body.budget_label || rawTimeline;
+
+    if (!yourName || !yourEmail || !serviceLabel || !timelineLabel) {
       return NextResponse.json(
         { error: "Missing required fields." },
         { status: 400 }
@@ -47,7 +68,7 @@ export async function POST(request) {
         <p style="margin: 0 0 8px;"><strong>Name:</strong> ${escapeHtml(yourName)}</p>
         <p style="margin: 0 0 8px;"><strong>Email:</strong> ${escapeHtml(yourEmail)}</p>
         <p style="margin: 0 0 8px;"><strong>Service:</strong> ${escapeHtml(serviceLabel)}</p>
-        <p style="margin: 0 0 8px;"><strong>Budget:</strong> ${escapeHtml(budgetLabel)}</p>
+        <p style="margin: 0 0 8px;"><strong>Timeline:</strong> ${escapeHtml(timelineLabel)}</p>
         <p style="margin: 16px 0 8px;"><strong>Message:</strong></p>
         <p style="margin: 0; white-space: pre-wrap;">${escapeHtml(message || "(No additional details provided)")}</p>
       </div>
@@ -58,7 +79,7 @@ export async function POST(request) {
       `Name: ${yourName}`,
       `Email: ${yourEmail}`,
       `Service: ${serviceLabel}`,
-      `Budget: ${budgetLabel}`,
+      `Timeline: ${timelineLabel}`,
       `Message: ${message || "(No additional details provided)"}`,
     ].join("\n");
 
