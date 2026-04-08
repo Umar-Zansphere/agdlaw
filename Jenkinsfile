@@ -20,11 +20,10 @@ pipeline {
     stage('Install Dependencies') {
       steps {
         dir('frontend') {
-          script {
-              bat 'call pnpm install --frozen-lockfile'
-              bat 'call pnpm exec playwright install chromium'
-            
-          }
+          bat '''
+          npm install -g pnpm
+          pnpm install --frozen-lockfile
+          '''
         }
       }
     }
