@@ -42,10 +42,8 @@ pipeline {
     stage('Install Dependencies') {
       steps {
         dir('frontend') {
-           bat '''
-          npm install -g pnpm
-          pnpm install --frozen-lockfile
-          '''
+          bat 'npx pnpm --version'
+          bat 'npx pnpm install --frozen-lockfile'
         }
       }
     }
@@ -53,10 +51,8 @@ pipeline {
     stage('Run E2E Tests') {
       steps {
         dir('frontend') {
-          bat '''
-          npx playwright install chromium
-          pnpm test:e2e
-          '''
+          bat 'npx playwright install chromium'
+          bat 'npx pnpm test:e2e'
         }
       }
     }
