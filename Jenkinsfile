@@ -21,13 +21,29 @@ pipeline {
   }
 
   stages {
+    stage('Prepare Workspace') {
+      steps {
+        script {
+          if (fileExists('frontend/test-results')) {
+            dir('frontend/test-results') {
+              deleteDir()
+            }
+          }
+
+          if (fileExists('frontend/playwright-report')) {
+            dir('frontend/playwright-report') {
+              deleteDir()
+            }
+          }
+        }
+      }
+    }
+
     stage('Install Dependencies') {
       steps {
         dir('frontend') {
-          bat '''
-          npm install -g pnpm
-          pnpm install --frozen-lockfile
-          '''
+          bat 'npx pnpm --version'
+          bat 'npx pnpm install --frozen-lockfile'
         }
       }
     }
@@ -35,10 +51,8 @@ pipeline {
     stage('Run E2E Tests') {
       steps {
         dir('frontend') {
-          bat '''
-          npx playwright install chromium
-          pnpm test:e2e
-          '''
+          bat 'npx playwright install chromium'
+          bat 'npx pnpm test:e2e'
         }
       }
     }
@@ -52,6 +66,11 @@ pipeline {
         def hasJunit = fileExists(junitPath)
         def hasEmailReport = fileExists(emailReportPath)
         def hasPlaywrightReport = fileExists('frontend/playwright-report/index.html')
+
+        if (currentBuild.currentResult == 'SUCCESS' && !hasJunit && !hasEmailReport) {
+          currentBuild.result = 'FAILURE'
+          echo 'Marking build as FAILURE because no fresh Playwright reports were generated.'
+        }
 
         if (hasJunit) {
           junit testResults: junitPath

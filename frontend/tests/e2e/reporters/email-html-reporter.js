@@ -330,6 +330,7 @@ class EmailHtmlReporter {
 
       .steps-table {
         width: 100%;
+        min-width: 720px;
         border-collapse: collapse;
         margin-top: 20px;
         background-color: white;
@@ -375,55 +376,9 @@ class EmailHtmlReporter {
           grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         }
 
-        .steps-wrap {
-          overflow-x: visible;
-        }
-
-        .steps-table,
-        .steps-table tbody,
-        .steps-table tr,
-        .steps-table td {
-          display: block;
-          width: 100% !important;
-        }
-
         .steps-table {
-          margin-top: 16px !important;
-          box-shadow: none !important;
-          background: transparent !important;
-        }
-
-        .steps-table thead {
-          display: none;
-        }
-
-        .steps-table tr {
-          margin-bottom: 12px;
-          border: 1px solid #dee2e6;
-          border-radius: 8px;
-          overflow: hidden;
-          background: #ffffff;
-          box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-        }
-
-        .steps-table td {
-          padding: 10px 12px !important;
-          border-bottom: 1px solid #dee2e6 !important;
-        }
-
-        .steps-table td:last-child {
-          border-bottom: 0 !important;
-        }
-
-        .steps-table td::before {
-          content: attr(data-label);
-          display: block;
-          margin-bottom: 4px;
-          color: #6c757d;
-          font-size: 11px;
-          font-weight: 700;
-          letter-spacing: 0.04em;
-          text-transform: uppercase;
+          min-width: 640px;
+          font-size: 12px;
         }
 
         .failure-card {
@@ -442,6 +397,10 @@ class EmailHtmlReporter {
 
         .report-shell {
           padding: 16px !important;
+        }
+
+        .steps-table {
+          min-width: 560px;
         }
       }
     </style>
