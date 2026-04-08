@@ -1165,7 +1165,7 @@ function Header() {
 
   return (
     <>
-      <header className={`header ${scrolled ? "scrolled" : ""}`}>
+      <header className={`header ${scrolled ? "scrolled" : ""}`} style={{ display: menuOpen ? "none" : "block" }}>
         <div className="container">
           <div className="header-inner">
             <a href="#" className="logo-mark">
@@ -1209,8 +1209,8 @@ function Header() {
         <div className="mobile-panel">
           <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "70px" }}>
             <span className="logo-mark">
-              <AGDLogoImg size={34} />
-              {/* AGD Law Associates */}
+              <AGDLogoImg size={48} />
+              AGD Law Associates
             </span>
             <button type="button" onClick={() => setMenuOpen(false)} style={{ width: "38px", height: "38px", border: "1px solid rgba(197,223,192,0.2)", borderRadius: "9px", background: "transparent", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
               <X size={17} />

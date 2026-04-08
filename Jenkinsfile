@@ -17,7 +17,7 @@ pipeline {
 
   environment {
     CI = 'true'
-    PLAYWRIGHT_HTML_EMAIL_REPORT = 'test-results/e2e-email-report.html'
+    PLAYWRIGHT_HTML_EMAIL_REPORT = 'frontend/test-results/e2e-email-report.html'
   }
 
   stages {
@@ -46,18 +46,41 @@ pipeline {
 
   post {
     always {
-      junit allowEmptyResults: true, testResults: 'frontend/test-results/e2e-junit.xml'
-      archiveArtifacts allowEmptyArchive: true, artifacts: 'frontend/test-results/**,frontend/playwright-report/**'
       script {
-        def reportPath = "frontend/${env.PLAYWRIGHT_HTML_EMAIL_REPORT}"
-        def reportBody = fileExists(reportPath)
-          ? readFile(reportPath)
+        def junitPath = 'frontend/test-results/e2e-junit.xml'
+        def emailReportPath = "frontend/${env.PLAYWRIGHT_HTML_EMAIL_REPORT}"
+        def hasJunit = fileExists(junitPath)
+        def hasEmailReport = fileExists(emailReportPath)
+        def hasPlaywrightReport = fileExists('frontend/playwright-report/index.html')
+
+        if (hasJunit) {
+          junit testResults: junitPath
+        } else {
+          echo "JUnit report not found at ${junitPath}. Skipping test result publishing."
+        }
+
+        def artifactPatterns = []
+        if (hasJunit || hasEmailReport) {
+          artifactPatterns << 'frontend/test-results/**'
+        }
+        if (hasPlaywrightReport) {
+          artifactPatterns << 'frontend/playwright-report/**'
+        }
+
+        if (artifactPatterns) {
+          archiveArtifacts artifacts: artifactPatterns.join(',')
+        } else {
+          echo 'No Playwright artifacts were generated. Skipping artifact archiving.'
+        }
+
+        def reportBody = hasEmailReport
+          ? readFile(emailReportPath)
           : """
             <html>
               <body style="font-family: Arial, sans-serif;">
                 <h2>AGD Law E2E Test Report</h2>
                 <p>The Playwright run completed with status: <strong>${currentBuild.currentResult}</strong></p>
-                <p>No HTML email report was generated. Check archived artifacts and the Jenkins console log for details.</p>
+                <p>No HTML email report was generated. This usually means Playwright did not start cleanly or no report files were written.</p>
                 <p>Build URL: ${env.BUILD_URL ?: 'N/A'}</p>
               </body>
             </html>
