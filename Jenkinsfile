@@ -20,8 +20,11 @@ pipeline {
     stage('Install Dependencies') {
       steps {
         dir('frontend') {
-          sh 'pnpm install --frozen-lockfile'
-          sh 'pnpm exec playwright install chromium'
+          script {
+              bat 'call pnpm install --frozen-lockfile'
+              bat 'call pnpm exec playwright install chromium'
+            
+          }
         }
       }
     }
@@ -29,7 +32,10 @@ pipeline {
     stage('Run E2E Tests') {
       steps {
         dir('frontend') {
-          sh 'pnpm test:e2e'
+          script {
+              bat 'call pnpm test:e2e'
+            
+          }
         }
       }
     }
