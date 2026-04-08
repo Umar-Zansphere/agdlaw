@@ -17,7 +17,7 @@ pipeline {
 
   environment {
     CI = 'true'
-    PLAYWRIGHT_HTML_EMAIL_REPORT = 'frontend/test-results/e2e-email-report.html'
+    PLAYWRIGHT_HTML_EMAIL_REPORT = 'test-results/e2e-email-report.html'
   }
 
   stages {
