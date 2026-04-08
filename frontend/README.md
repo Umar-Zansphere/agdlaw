@@ -34,3 +34,25 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## E2E Reporting And Jenkins
+
+Run the Playwright suite with:
+
+```bash
+pnpm test:e2e
+```
+
+The suite now produces these CI-friendly artifacts:
+
+- `test-results/e2e-email-report.html` for Jenkins Extended Email notifications
+- `test-results/e2e-junit.xml` for Jenkins test result publishing
+- `playwright-report/` for the full Playwright HTML report
+
+The root `Jenkinsfile` is configured to:
+
+- run the e2e suite every day at `10:00` in the Jenkins server timezone
+- archive the Playwright and email report artifacts
+- send the generated HTML report through `emailext`
+
+Set `E2E_REPORT_RECIPIENTS` in Jenkins, or configure default recipients in the Extended Email plugin, so the scheduled job has a destination address.
