@@ -1,0 +1,24 @@
+<testsuites id="" name="" tests="9" failures="0" skipped="0" errors="0" time="13.675101">
+<testsuite name="homepage-contact.spec.js" timestamp="2026-04-08T03:19:24.976Z" hostname="chromium" tests="4" failures="0" skipped="0" time="21.458" errors="0">
+<testcase name="homepage contact form › renders core homepage content and the contact form" classname="homepage-contact.spec.js" time="4.026">
+</testcase>
+<testcase name="homepage contact form › blocks submission until service and timeline are selected" classname="homepage-contact.spec.js" time="6.61">
+</testcase>
+<testcase name="homepage contact form › submits successfully, sends the expected payload, and resets the form" classname="homepage-contact.spec.js" time="5.442">
+</testcase>
+<testcase name="homepage contact form › surfaces API errors without clearing the form" classname="homepage-contact.spec.js" time="5.38">
+</testcase>
+</testsuite>
+<testsuite name="homepage-ui.spec.js" timestamp="2026-04-08T03:19:24.976Z" hostname="chromium" tests="5" failures="0" skipped="0" time="28.476" errors="0">
+<testcase name="homepage UI regressions › renders the major homepage sections and supports anchor navigation" classname="homepage-ui.spec.js" time="5.156">
+</testcase>
+<testcase name="homepage UI regressions › navigates from homepage cards and buttons to service and blog pages" classname="homepage-ui.spec.js" time="8.384">
+</testcase>
+<testcase name="homepage UI regressions › toggles FAQ answers and testimonial slides" classname="homepage-ui.spec.js" time="5.1">
+</testcase>
+<testcase name="homepage UI regressions › supports the mobile menu and section navigation on small screens" classname="homepage-ui.spec.js" time="4.744">
+</testcase>
+<testcase name="homepage UI regressions › opens and sends the WhatsApp widget message through the expected URL" classname="homepage-ui.spec.js" time="5.092">
+</testcase>
+</testsuite>
+</testsuites>
