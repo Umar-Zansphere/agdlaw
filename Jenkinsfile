@@ -35,10 +35,10 @@ pipeline {
     stage('Run E2E Tests') {
       steps {
         dir('frontend') {
-          script {
-              bat 'call pnpm test:e2e'
-            
-          }
+          bat '''
+          npx playwright install chromium
+          pnpm test:e2e
+          '''
         }
       }
     }
