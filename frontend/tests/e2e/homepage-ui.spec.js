@@ -127,11 +127,14 @@ test.describe("homepage UI regressions", () => {
     await expect(toggleButton).toHaveAttribute("aria-expanded", "false");
 
     await toggleButton.click();
-    await expect(toggleButton).toHaveAttribute("aria-expanded", "true");
-    await expect(page.getByRole("link", { name: /services 02/i })).toBeVisible();
+    await expect(toggleButton).toBeHidden();
+    
+    const servicesLink = page.getByRole("link", { name: /services 02/i });
+    await expect(servicesLink).toBeVisible();
 
-    await page.getByRole("link", { name: /services 02/i }).click();
+    await servicesLink.click();
     await expect(page).toHaveURL(/#services$/);
+    await expect(toggleButton).toBeVisible();
     await expect(toggleButton).toHaveAttribute("aria-expanded", "false");
   });
 
