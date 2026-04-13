@@ -31,6 +31,7 @@ import {
   PhoneCall,
   Send,
   X,
+  Plus,
   Scale,
   Shield,
   Clock,
@@ -39,6 +40,8 @@ import {
   BookOpen,
   Menu,
   CheckCircle,
+  Building2,
+  TrendingUp,
 } from "lucide-react";
 
 const SITE_URL = "https://www.agdlawassociates.in";
@@ -362,79 +365,127 @@ const GlobalStyles = () => (
 
     /* ── About ── */
     .about-inner {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: clamp(2rem, 4vw, 4rem); align-items: stretch;
+      position: relative;
+      display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(340px, 0.9fr);
+      gap: clamp(3rem, 6vw, 7rem); align-items: start;
       padding: clamp(5rem, 8vw, 9rem) 0;
     }
     .about-left {
-      display: flex; flex-direction: column; gap: 26px;
-      justify-content: center;
+      display: flex; flex-direction: column; gap: 28px;
+      position: sticky; top: 100px;
+    }
+    .about-eyebrow-row {
+      display: flex; align-items: center; gap: 14px;
+    }
+    .about-eyebrow-line {
+      flex: 1; height: 1px;
+      background: linear-gradient(90deg, rgba(197,223,192,0.5), transparent);
     }
     .about-pretitle {
-      font-size: clamp(2.6rem, 4vw, 4.2rem);
-      line-height: 1.05; letter-spacing: -0.015em; color: #fff;
+      font-size: clamp(2.6rem, 4vw, 4.4rem);
+      line-height: 1.04; letter-spacing: -0.01em; color: #fff;
     }
     .about-pretitle em { color: var(--sage); font-style: italic; }
-    .about-body { font-size: 0.97rem; line-height: 1.85; color: var(--text-body); }
+    .about-body {
+      font-size: 0.96rem; line-height: 1.9; color: var(--text-body);
+      border-left: 2px solid rgba(197,223,192,0.3);
+      padding-left: 18px;
+    }
     .about-stats {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+      background: rgba(197,223,192,0.18);
+      border-radius: 16px; overflow: hidden;
     }
     .about-stat-box {
-      background: var(--surface-base); backdrop-filter: blur(14px);
-      border: 1px solid var(--surface-border); border-radius: 8px; padding: 20px 18px;
-      box-shadow: var(--surface-shadow);
-      display: flex; flex-direction: column; gap: 4px;
+      background: rgba(12,16,14,0.7);
+      padding: 22px 20px;
+      display: flex; flex-direction: column; gap: 5px;
+      transition: background 0.2s;
     }
+    .about-stat-box:hover { background: rgba(20,28,24,0.85); }
     .about-stat-num {
       font-family: var(--font-cormorant), serif;
-      font-size: 2.2rem; color: var(--sage); line-height: 1;
+      font-size: 2.4rem; color: var(--sage); line-height: 1;
     }
     .about-stat-lbl {
-      font-size: 0.65rem; color: var(--text-subtle);
-      text-transform: uppercase; letter-spacing: 0.1em;
+      font-size: 0.63rem; color: var(--text-subtle);
+      text-transform: uppercase; letter-spacing: 0.12em;
     }
-    .about-creds { display: flex; flex-wrap: wrap; gap: 8px; }
+    .about-creds { display: flex; flex-wrap: wrap; gap: 7px; }
     .cred-tag {
       display: inline-flex; align-items: center; gap: 6px;
-      font-size: 0.77rem; color: var(--sage); font-weight: 500;
-      background: rgba(197,223,192,0.1); border: 1px solid rgba(197,223,192,0.2);
+      font-size: 0.76rem; color: var(--sage); font-weight: 500;
+      background: rgba(197,223,192,0.08); border: 1px solid rgba(197,223,192,0.2);
       border-radius: 100px; padding: 5px 12px;
+      transition: background 0.2s;
     }
+    .cred-tag:hover { background: rgba(197,223,192,0.15); }
     .cred-tag svg { color: var(--sage); flex-shrink: 0; }
     .about-right {
-      display: grid; align-content: center; gap: 14px;
+      position: relative;
+      display: flex; flex-direction: column; gap: 0;
+    }
+    .about-right-header {
+      display: flex; align-items: center; gap: 12px;
+      padding-bottom: 20px;
+      margin-bottom: 2px;
+      border-bottom: 1px solid rgba(197,223,192,0.2);
+    }
+    .about-right-header-line {
+      flex: 1; height: 1px;
+      background: linear-gradient(90deg, rgba(197,223,192,0.4), transparent);
+    }
+    .about-right-kicker {
+      font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.16em; color: rgba(197,223,192,0.6);
     }
     .about-principle {
-      display: grid; grid-template-columns: auto 1fr; gap: 16px;
-      padding: 22px; border: 1px solid var(--surface-border);
-      border-radius: 8px; background: var(--surface-elevated);
-      box-shadow: var(--surface-shadow);
-      transition: transform 0.25s, border-color 0.25s, background 0.25s;
+      position: relative;
+      display: grid; grid-template-columns: auto 1fr; gap: 18px;
+      padding: 24px 20px;
+      border-bottom: 1px solid var(--surface-border);
+      border-radius: 0;
+      background: transparent;
+      transition: background 0.25s, padding-left 0.25s;
+      cursor: default;
     }
+    .about-principle:last-of-type { border-bottom: none; }
     .about-principle:hover {
-      transform: translateY(-3px);
-      border-color: var(--surface-border-strong);
-      background: var(--surface-tint);
+      background: rgba(197,223,192,0.04);
+      padding-left: 26px;
+    }
+    .about-principle-num {
+      font-family: var(--font-cormorant), serif;
+      font-size: 0.82rem; color: rgba(197,223,192,0.4);
+      padding-top: 3px; min-width: 20px;
+      letter-spacing: 0.06em;
     }
     .about-principle-icon {
-      width: 42px; height: 42px; border-radius: 8px;
+      width: 44px; height: 44px; border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
-      background: rgba(197,223,192,0.1); color: var(--sage);
-      border: 1px solid rgba(197,223,192,0.18);
+      background: rgba(197,223,192,0.08); color: var(--sage);
+      border: 1px solid rgba(197,223,192,0.16);
+      flex-shrink: 0;
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .about-principle:hover .about-principle-icon {
+      background: rgba(197,223,192,0.14);
+      border-color: rgba(197,223,192,0.3);
     }
     .about-principle-title {
       font-family: var(--font-cormorant), serif;
-      font-size: 1.28rem; color: #fff; margin-bottom: 6px;
+      font-size: 1.3rem; color: #fff; margin-bottom: 7px; line-height: 1.15;
     }
     .about-principle-text {
-      font-size: 0.84rem; line-height: 1.72; color: var(--text-muted);
+      font-size: 0.84rem; line-height: 1.75; color: var(--text-muted);
     }
     .about-note {
-      display: flex; align-items: flex-start; gap: 12px;
-      padding: 18px 20px; border-radius: 8px;
-      border: 1px solid rgba(197,223,192,0.24);
-      background: rgba(197,223,192,0.08);
-      color: var(--text-body); font-size: 0.86rem; line-height: 1.7;
+      display: flex; align-items: flex-start; gap: 13px;
+      padding: 16px 20px; border-radius: 12px;
+      border: 1px solid rgba(197,223,192,0.2);
+      background: rgba(197,223,192,0.04);
+      color: var(--text-body); font-size: 0.85rem; line-height: 1.7;
+      margin-top: 2px;
     }
     .about-note svg { color: var(--sage); flex-shrink: 0; margin-top: 3px; }
 
@@ -443,57 +494,124 @@ const GlobalStyles = () => (
     .services-head {
       display: flex; justify-content: space-between; align-items: flex-end;
       margin-bottom: clamp(2.5rem, 4vw, 4rem); gap: 24px; flex-wrap: wrap;
+      padding-bottom: clamp(2rem, 3vw, 3rem);
+      border-bottom: 1px solid rgba(197,223,192,0.18);
     }
     .services-title {
       font-size: clamp(2.2rem, 3.5vw, 3.6rem);
-      color: #fff; letter-spacing: -0.015em; margin-top: 14px;
+      color: #fff; letter-spacing: -0.01em; margin-top: 14px;
     }
     .services-title em { color: var(--sage); font-style: italic; }
-    .services-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      border: 1px solid var(--surface-border); border-radius: 28px;
-      background: var(--surface-base);
-      box-shadow: var(--surface-shadow);
-      overflow: hidden;
+    .services-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 1.8fr);
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: start;
+    }
+    .services-sidebar {
+      position: sticky; top: 100px;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    .services-sidebar-sub {
+      font-size: 0.88rem; color: var(--text-muted);
+      line-height: 1.8;
+    }
+    .services-meta-block {
+      background: rgba(12,16,14,0.7);
+      border: 1px solid var(--surface-border);
+      border-radius: 16px; padding: 22px 20px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .services-meta-item {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 0.83rem; color: var(--text-muted);
+    }
+    .services-meta-icon {
+      width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+      background: rgba(197,223,192,0.08); color: var(--sage);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .services-flow {
+      display: flex; flex-direction: column;
     }
     .service-card {
-      padding: 30px 26px; position: relative; overflow: hidden;
-      display: flex; flex-direction: column; gap: 12px;
-      border-right: 1px solid var(--surface-border);
-      border-bottom: 1px solid var(--surface-border);
-      transition: background 0.3s;
-      background: var(--surface-elevated);
+      position: relative; overflow: hidden;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      transition: padding-left 0.28s, background 0.28s;
     }
-    .service-card:hover { background: var(--surface-tint); }
-    .service-card:nth-child(3n) { border-right: none; }
-    .service-card:nth-child(7), .service-card:nth-child(8), .service-card:nth-child(9) { border-bottom: none; }
+    .service-card::after {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--sage);
+      opacity: 0;
+      transition: opacity 0.28s;
+    }
+    .service-card:hover {
+      padding-left: 12px;
+      background: rgba(197,223,192,0.03);
+    }
+    .service-card:hover::after { opacity: 1; }
+    .service-feature {
+      min-height: 120px;
+      padding: 28px 0;
+      display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center; gap: 20px;
+      border-bottom: 1px solid var(--surface-border);
+    }
+    .service-feature-left {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .services-list {
+      display: flex; flex-direction: column;
+    }
+    .service-row {
+      min-height: 88px;
+      padding: 20px 0;
+      display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center; gap: 16px;
+      border-bottom: 1px solid var(--surface-border);
+    }
+    .service-row:last-child { border-bottom: none; }
+    .service-row-left {
+      display: flex; align-items: center; gap: 16px;
+    }
     .service-num {
       font-family: var(--font-cormorant), serif;
-      font-size: 0.85rem; color: rgba(197,223,192,0.62);
-      letter-spacing: 0.08em;
+      min-width: 36px;
+      font-size: 1rem; color: rgba(197,223,192,0.45);
+      letter-spacing: 0.08em; flex-shrink: 0;
     }
     .service-icon-wrap {
-      width: 42px; height: 42px; border-radius: 11px;
-      border: 1px solid var(--surface-border-strong); color: var(--sage);
+      width: 40px; height: 40px; border-radius: 9px;
+      border: 1px solid rgba(197,223,192,0.16); color: var(--sage);
       display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
       transition: background 0.3s, border-color 0.3s;
     }
     .service-card:hover .service-icon-wrap {
-      background: rgba(197,223,192,0.1); border-color: var(--sage);
+      background: rgba(197,223,192,0.1); border-color: rgba(197,223,192,0.3);
     }
     .service-name {
       font-family: var(--font-cormorant), serif;
-      font-size: 1.28rem; color: #fff; line-height: 1.2;
+      font-size: 1.22rem; color: #fff; line-height: 1.2;
+      margin-bottom: 4px;
     }
-    .service-desc { font-size: 0.81rem; color: var(--text-muted); line-height: 1.72; }
+    .service-feature .service-name { font-size: 1.9rem; margin-bottom: 7px; }
+    .service-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.72; }
     .service-arrow {
-      margin-top: auto; width: 30px; height: 30px; border-radius: 50%;
-      border: 1px solid var(--surface-border-strong); color: var(--sage);
+      width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+      border: 1px solid var(--surface-border); color: rgba(197,223,192,0.5);
       display: flex; align-items: center; justify-content: center;
       transition: all 0.25s;
     }
     .service-card:hover .service-arrow {
       background: var(--sage); color: var(--ink); border-color: var(--sage);
+      transform: translateX(3px);
     }
 
     /* ── Team ── */
@@ -504,22 +622,43 @@ const GlobalStyles = () => (
     }
     .team-title {
       font-size: clamp(2.2rem, 3.5vw, 3.6rem);
-      color: #fff; letter-spacing: -0.015em; margin-top: 14px;
+      color: #fff; letter-spacing: 0; margin-top: 14px;
     }
     .team-title em { color: var(--sage); font-style: italic; }
-    .team-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+    .team-streams {
+      display: flex; flex-direction: column; gap: 14px;
+      overflow: hidden;
+      padding: 12px 0;
+      border-block: 1px solid rgba(197,223,192,0.22);
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    }
+    .team-stream {
+      overflow: hidden;
+    }
+    .team-track {
+      display: flex; width: max-content; gap: 12px;
+      animation: teamDrift 34s linear infinite;
+    }
+    .team-stream:nth-child(2) .team-track {
+      animation-direction: reverse;
+      animation-duration: 38s;
+    }
+    @keyframes teamDrift {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
     }
     .team-card {
-      min-height: 96px; padding: 22px;
+      position: relative;
+      min-height: 74px; padding: 14px 18px;
       border: 1px solid var(--surface-border);
-      border-radius: 8px; background: var(--surface-elevated);
-      box-shadow: var(--surface-shadow);
-      display: flex; align-items: center; gap: 16px;
+      border-radius: 8px; background: rgba(20,25,22,0.72);
+      box-shadow: none;
+      display: grid; grid-template-columns: auto minmax(220px, 1fr); align-items: center; gap: 14px;
       transition: transform 0.25s, border-color 0.25s, background 0.25s;
     }
     .team-card:hover {
-      transform: translateY(-3px);
+      transform: translateY(-2px);
       border-color: var(--surface-border-strong);
       background: var(--surface-tint);
     }
@@ -538,6 +677,13 @@ const GlobalStyles = () => (
       font-family: var(--font-cormorant), serif;
       font-size: clamp(1.2rem, 2vw, 1.5rem); color: #fff; line-height: 1.15;
       overflow-wrap: anywhere;
+    }
+    .team-role {
+      margin-top: 4px;
+      font-size: 0.68rem;
+      color: var(--text-subtle);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
 
     /* ── Cases ── */
@@ -614,7 +760,7 @@ const GlobalStyles = () => (
     }
     .regions-title {
       font-size: clamp(2.4rem, 4vw, 4rem);
-      color: #fff; letter-spacing: -0.015em; margin: 14px 0 12px;
+      color: #fff; letter-spacing: 0; margin: 14px 0 12px;
     }
     .regions-title em { color: var(--sage); font-style: italic; }
     .regions-sub { font-size: 0.95rem; color: rgba(255,255,255,0.55); line-height: 1.75; max-width: 560px; }
@@ -638,14 +784,27 @@ const GlobalStyles = () => (
     .why-title { font-family: var(--font-cormorant), serif; font-size: 1.25rem; color: #fff; }
     .why-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.68; }
     .regions-presence {
-      border: 1px solid var(--surface-border); border-radius: 8px; overflow: hidden;
-      background: var(--surface-base);
-      box-shadow: var(--surface-shadow);
+      position: relative;
+      border-block: 1px solid var(--surface-border); border-radius: 0; overflow: hidden;
+      background: linear-gradient(180deg, rgba(15,19,17,0.5), rgba(8,11,10,0.28));
+      box-shadow: none;
+    }
+    .regions-presence::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, transparent 0, transparent calc(100% - 1px), rgba(197,223,192,0.08) calc(100% - 1px)),
+        linear-gradient(180deg, rgba(197,223,192,0.05), transparent 38%);
+      background-size: 88px 88px, 100% 100%;
+      opacity: 0.28;
+      pointer-events: none;
     }
     .regions-presence-header {
-      padding: 18px 24px;
+      position: relative;
+      padding: 18px 0;
       display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;
-      background: rgba(197,223,192,0.1);
+      background: transparent;
       border-bottom: 1px solid var(--surface-border);
     }
     .regions-presence-kicker {
@@ -657,21 +816,68 @@ const GlobalStyles = () => (
       font-size: 0.8rem; color: var(--text-muted);
     }
     .regions-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
+      position: relative;
+      display: flex; flex-direction: column; gap: 12px;
+      padding: 24px 0;
     }
     .region-item {
-      padding: 24px;
-      border-right: 1px solid var(--surface-border);
-      border-bottom: 1px solid var(--surface-border);
-      background: var(--surface-elevated);
-      transition: background 0.25s, border-color 0.25s;
+      position: relative;
+      padding: 0;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      overflow: visible;
+      display: grid; grid-template-columns: minmax(220px, 0.34fr) minmax(0, 1fr);
+      transition: background 0.25s, border-color 0.25s, transform 0.25s;
     }
-    .region-item:nth-child(3n) { border-right: none; }
-    .region-item:hover { background: var(--surface-tint); border-color: var(--surface-border-strong); }
-    .region-name { font-family: var(--font-cormorant), serif; font-size: 1.35rem; color: #fff; margin-bottom: 16px; }
+    .region-item::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 22px;
+      bottom: -34px;
+      width: 1px;
+      background: linear-gradient(180deg, rgba(197,223,192,0.55), rgba(197,223,192,0.08));
+    }
+    .region-item:last-child::before { bottom: 22px; }
+    .region-item:hover {
+      background: rgba(197,223,192,0.04);
+      border-color: transparent;
+      transform: translateX(6px);
+    }
+    .region-heading {
+      position: relative;
+      padding: 18px 24px 18px 38px;
+      border-right: none;
+      background: transparent;
+      display: flex; flex-direction: column; justify-content: space-between; gap: 22px;
+    }
+    .region-heading::before {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 26px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--sage);
+      box-shadow: 0 0 0 8px rgba(197,223,192,0.07), 0 0 18px rgba(197,223,192,0.22);
+    }
+    .region-name { font-family: var(--font-cormorant), serif; font-size: 1.42rem; color: #fff; }
+    .region-count {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: rgba(197,223,192,0.74);
+      font-weight: 700;
+    }
     .court-list {
+      padding: 18px 0 18px 24px;
       display: flex; flex-wrap: wrap; gap: 8px;
+      align-content: center;
+      border-bottom: 1px solid var(--surface-border);
     }
+    .region-item:last-child .court-list { border-bottom: none; }
     .court-chip {
       display: inline-flex; align-items: center;
       min-height: 32px; padding: 7px 11px; border-radius: 8px;
@@ -680,17 +886,21 @@ const GlobalStyles = () => (
       color: var(--text-body); font-size: 0.78rem; line-height: 1.35;
     }
     .additional-courts {
-      display: grid; grid-template-columns: repeat(3, 1fr);
+      position: relative;
+      display: flex; flex-wrap: wrap; gap: 10px;
+      padding: 0 0 24px;
       border-top: 1px solid var(--surface-border);
-      background: rgba(9,12,11,0.46);
+      background: transparent;
     }
     .additional-court {
+      flex: 1 1 240px;
       display: flex; align-items: flex-start; gap: 11px;
-      padding: 18px 24px;
-      border-right: 1px solid var(--surface-border);
+      padding: 16px 18px;
+      border: 1px solid var(--surface-border);
+      border-radius: 8px;
+      background: rgba(9,12,11,0.46);
       color: var(--text-body); font-size: 0.86rem; line-height: 1.55;
     }
-    .additional-court:last-child { border-right: none; }
     .additional-court svg { color: var(--sage); flex-shrink: 0; margin-top: 3px; }
 
     /* ── Testimonial / Leadership ── */
@@ -828,10 +1038,10 @@ const GlobalStyles = () => (
       color: var(--text-subtle); transition: all 0.3s;
     }
     .faq-toggle.open { background: var(--sage); border-color: var(--sage); color: var(--ink); transform: rotate(45deg); }
-    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; background: rgba(9,12,11,0.72); }
-    .faq-answer.open { max-height: 220px; }
-    .faq-answer-inner { padding: 0 24px 20px; }
-    .faq-answer-text { font-size: 0.87rem; color: var(--text-muted); line-height: 1.8; }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); background: rgba(9,12,11,0.72); }
+    .faq-answer.open { max-height: 260px; }
+    .faq-answer-inner { padding: 4px 24px 22px; }
+    .faq-answer-text { font-size: 0.87rem; color: var(--text-muted); line-height: 1.85; }
 
     /* ── Contact ── */
     .contact-inner { padding: clamp(4rem, 7vw, 8rem) 0; }
@@ -1009,18 +1219,15 @@ const GlobalStyles = () => (
     @media (max-width: 1024px) {
       .hero-stats-row { flex-wrap: wrap; }
       .about-inner { grid-template-columns: 1fr; }
-      .about-right { display: grid; }
-      .services-grid { grid-template-columns: repeat(2, 1fr); }
-      .team-grid { grid-template-columns: repeat(2, 1fr); }
+      .about-left { position: static; }
+      .about-right { display: flex; padding-left: 0; }
       .cases-stats { grid-template-columns: repeat(2, 1fr); }
       .cases-grid { grid-template-columns: repeat(2, 1fr); }
       .why-cards { grid-template-columns: repeat(2, 1fr); }
-      .regions-grid { grid-template-columns: repeat(2, 1fr); }
-      .region-item:nth-child(3n) { border-right: 1px solid var(--surface-border); }
-      .region-item:nth-child(2n) { border-right: none; }
-      .additional-courts { grid-template-columns: 1fr; }
-      .additional-court { border-right: none; border-bottom: 1px solid var(--surface-border); }
-      .additional-court:last-child { border-bottom: none; }
+      .region-item { grid-template-columns: 1fr; }
+      .region-heading { border-right: none; border-bottom: 1px solid var(--surface-border); }
+      .additional-courts { flex-direction: column; }
+      .additional-court { flex-basis: auto; }
       .testi-inner { grid-template-columns: 1fr; }
       .testi-sidebar { position: static; }
       .blog-layout { grid-template-columns: 1fr; }
@@ -1031,17 +1238,31 @@ const GlobalStyles = () => (
       .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
       .nav-links { display: none; }
       .header-cta-desktop { display: none; }
+      .services-layout { grid-template-columns: 1fr; }
+      .services-sidebar { position: static; flex-direction: row; flex-wrap: wrap; align-items: flex-start; gap: 16px; }
+      .services-meta-block { flex: 1 1 260px; }
     }
     @media (max-width: 640px) {
-      .services-grid { grid-template-columns: 1fr; }
-      .team-grid { grid-template-columns: 1fr 1fr; }
+      .service-feature { padding: 20px 0; }
+      .service-row {
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: start;
+        gap: 12px;
+      }
+      .service-row-left .service-icon-wrap { display: none; }
+      .service-feature .service-name { font-size: 1.55rem; }
+      .team-card { grid-template-columns: auto minmax(0, 1fr); }
       .cases-grid { grid-template-columns: 1fr; }
       .cases-stats { grid-template-columns: repeat(2, 1fr); }
       .why-cards { grid-template-columns: 1fr; }
-      .regions-grid { grid-template-columns: 1fr; }
-      .region-item, .region-item:nth-child(2n), .region-item:nth-child(3n) { border-right: none; }
-      .about-stats { grid-template-columns: 1fr; }
-      .about-principle { grid-template-columns: 1fr; }
+      .regions-grid { padding: 14px; }
+      .region-item { transform: none; }
+      .region-item:hover { transform: none; }
+      .region-heading,
+      .court-list { padding: 18px; }
+      .additional-courts { padding: 0 14px 14px; }
+      .about-stats { grid-template-columns: 1fr 1fr 1fr; }
+      .about-principle .about-principle-num { display: none; }
       .form-fields { grid-template-columns: 1fr; }
       .footer-top { grid-template-columns: 1fr; }
       .hero-title { font-size: clamp(3rem, 14vw, 5rem); }
@@ -1051,6 +1272,7 @@ const GlobalStyles = () => (
       .hero-stat-num { font-size: 1.7rem; }
       .hero-tagline { margin-bottom: 32px; }
       .blog-item-img { width: 96px; height: 96px; }
+      .services-sidebar { flex-direction: column; }
     }
     @media (min-width: 1025px) {
       .mobile-panel { display: none; }
@@ -1469,18 +1691,27 @@ function About() {
   const principles = [
     {
       icon: Scale,
+      num: "01",
       title: "Litigation With Direction",
       text: "We assess facts early, define the strongest legal route, and keep each matter moving with practical next steps.",
     },
     {
       icon: Shield,
+      num: "02",
       title: "Confidential By Design",
       text: "Sensitive disputes are handled with discretion, clear boundaries, and careful communication from consultation onward.",
     },
     {
       icon: Clock,
+      num: "03",
       title: "Clear Case Management",
       text: "Clients receive timely updates, realistic expectations, and focused preparation for every hearing and filing.",
+    },
+    {
+      icon: TrendingUp,
+      num: "04",
+      title: "Outcome-Oriented Strategy",
+      text: "Every legal matter is guided by a clear strategy focused on achieving the best possible outcome for our client.",
     },
   ];
   return (
@@ -1488,21 +1719,23 @@ function About() {
       <div className="container">
         <div className="about-inner">
           <div className="about-left">
-            <span className="section-label">About Us</span>
+            <div className="about-eyebrow-row">
+              <span className="section-label">About Us</span>
+              <div className="about-eyebrow-line" />
+            </div>
             <h2 className="about-pretitle">
               Your legal matter<br />deserves <em>precision</em>
             </h2>
             <p className="about-body">
               Founded in 2016, AGD Law Associates is a boutique law firm delivering
-              high-quality litigation and advisory services across Tamil Nadu and beyond.
-              Led by AGD Bala Kumar with over 12 years of practice, our firm combines
-              courtroom strength with strategic advisory for complex, sensitive, and
-              high-impact legal matters.
+              precision-driven litigation and advisory across Tamil Nadu and beyond.
+              Led by AGD Bala Kumar with over 12 years of practice, our firm pairs
+              courtroom strength with strategic advisory for complex, high-impact matters.
             </p>
             <p className="about-body">
-              We believe every client deserves personalized attention, clear communication,
-              and a legal team genuinely invested in their outcome. From first consultation
-              to final resolution, we stand by you.
+              Every client deserves personalized attention, honest communication,
+              and a legal team genuinely invested in their outcome — from first
+              consultation to final resolution.
             </p>
             <div className="about-stats">
               {[{ num: "2016", lbl: "Established" }, { num: "10+", lbl: "Advocates" }, { num: "6", lbl: "Active Cities" }].map((s) => (
@@ -1514,7 +1747,7 @@ function About() {
             </div>
             <div className="about-creds">
               {credentials.map((c) => (
-                <span className="cred-tag" key={c}><CheckCircle size={12} />{c}</span>
+                <span className="cred-tag" key={c}><CheckCircle size={11} />{c}</span>
               ))}
             </div>
             <a href="#contact" className="btn-primary" style={{ width: "fit-content" }}>
@@ -1522,20 +1755,27 @@ function About() {
             </a>
           </div>
           <div className="about-right">
+            <div className="about-right-header">
+              <span className="about-right-kicker">Our guiding principles</span>
+              <div className="about-right-header-line" />
+            </div>
             {principles.map((item) => {
               const Icon = item.icon;
               return (
                 <article className="about-principle" key={item.title}>
-                  <div className="about-principle-icon"><Icon size={18} /></div>
-                  <div>
-                    <h3 className="about-principle-title">{item.title}</h3>
+                  <div className="about-principle-num">{item.num}</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                      <div className="about-principle-icon"><Icon size={17} /></div>
+                      <h3 className="about-principle-title" style={{ marginBottom: 0 }}>{item.title}</h3>
+                    </div>
                     <p className="about-principle-text">{item.text}</p>
                   </div>
                 </article>
               );
             })}
             <div className="about-note">
-              <CheckCircle size={16} />
+              <CheckCircle size={15} />
               <span>Every matter is reviewed on its facts, urgency, documents, and forum before we recommend the legal route.</span>
             </div>
           </div>
@@ -1560,6 +1800,9 @@ const serviceTitleToSlug = {
 };
 
 function Services() {
+  const [featuredService, ...supportingServices] = services;
+  const FeaturedIcon = featuredService.icon;
+
   return (
     <section className="panel-dark" id="services">
       <div className="container">
@@ -1573,20 +1816,61 @@ function Services() {
               Discuss Your Case <ArrowRight size={13} />
             </a>
           </div>
-          <div className="services-grid">
-            {services.map((s, i) => {
-              const Icon = s.icon;
-              const slug = serviceTitleToSlug[s.title];
-              return (
-                <Link href={slug ? `/services/${slug}` : "#"} className="service-card" key={s.title} style={{ textDecoration: "none", color: "inherit" }}>
-                  <span className="service-num">0{i + 1}</span>
-                  <div className="service-icon-wrap"><Icon size={17} /></div>
-                  <h3 className="service-name">{s.title}</h3>
-                  <p className="service-desc">{s.description}</p>
-                  <div className="service-arrow"><ArrowRight size={13} /></div>
-                </Link>
-              );
-            })}
+          <div className="services-layout">
+            <div className="services-sidebar">
+              <p className="services-sidebar-sub">
+                Nine focused practice areas — each handled with the depth and rigour your matter deserves.
+              </p>
+              <div className="services-meta-block">
+                <div className="services-meta-item">
+                  <div className="services-meta-icon"><Building2 size={14} /></div>
+                  <span>Madras HC &amp; District Courts</span>
+                </div>
+                <div className="services-meta-item">
+                  <div className="services-meta-icon"><Scale size={14} /></div>
+                  <span>9 Practice Areas</span>
+                </div>
+                <div className="services-meta-item">
+                  <div className="services-meta-icon"><TrendingUp size={14} /></div>
+                  <span>500+ Cases Handled</span>
+                </div>
+              </div>
+              <a href="/services" className="btn-ghost" style={{ width: "fit-content" }}>
+                All Services <ArrowRight size={13} />
+              </a>
+            </div>
+            <div className="services-flow">
+              <Link href={`/services/${serviceTitleToSlug[featuredService.title]}`} className="service-card service-feature" style={{ textDecoration: "none", color: "inherit" }}>
+                <div className="service-feature-left">
+                  <span className="service-num">01</span>
+                  <div className="service-icon-wrap"><FeaturedIcon size={17} /></div>
+                </div>
+                <div className="service-copy">
+                  <h3 className="service-name">{featuredService.title}</h3>
+                  <p className="service-desc">{featuredService.description}</p>
+                </div>
+                <div className="service-arrow"><ArrowRight size={13} /></div>
+              </Link>
+              <div className="services-list">
+                {supportingServices.map((s, i) => {
+                  const Icon = s.icon;
+                  const slug = serviceTitleToSlug[s.title];
+                  return (
+                    <Link href={slug ? `/services/${slug}` : "#"} className="service-card service-row" key={s.title} style={{ textDecoration: "none", color: "inherit" }}>
+                      <div className="service-row-left">
+                        <span className="service-num">0{i + 2}</span>
+                        <div className="service-icon-wrap"><Icon size={16} /></div>
+                      </div>
+                      <div className="service-copy">
+                        <h3 className="service-name">{s.title}</h3>
+                        <p className="service-desc">{s.description}</p>
+                      </div>
+                      <div className="service-arrow"><ArrowRight size={13} /></div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1597,6 +1881,11 @@ function Services() {
 // ─── Team ─────────────────────────────────────────────────────────────────────
 
 function Team() {
+  const rosterRows = [
+    teamMembers.slice(0, Math.ceil(teamMembers.length / 2)),
+    teamMembers.slice(Math.ceil(teamMembers.length / 2)),
+  ];
+
   return (
     <section className="panel" id="team">
       <div className="container">
@@ -1604,15 +1893,28 @@ function Team() {
           <div className="team-head">
             <div>
               <span className="section-label">Our Team</span>
-              <h2 className="team-title">List of <em>Advocates</em></h2>
+              <h2 className="team-title">Advocates in <em>practice</em></h2>
             </div>
           </div>
-          <div className="team-grid">
-            {teamMembers.map((name, index) => (
-              <div className="team-card" key={name}>
-                <span className="team-index">{String(index + 1).padStart(2, "0")}</span>
-                <div className="team-body">
-                  <div className="team-name">{name}</div>
+          <div className="team-streams">
+            {rosterRows.map((row, rowIndex) => (
+              <div className="team-stream" key={rowIndex}>
+                <div className="team-track">
+                  {[...row, ...row].map((name, duplicatedIndex) => {
+                    const sourceIndex = rowIndex * rosterRows[0].length + (duplicatedIndex % row.length);
+                    const isIntern = name.toLowerCase().startsWith("intern:");
+                    const displayName = isIntern ? name.replace(/^Intern:\s*/i, "") : name;
+
+                    return (
+                      <div className="team-card" key={`${name}-${duplicatedIndex}`}>
+                        <span className="team-index">{String(sourceIndex + 1).padStart(2, "0")}</span>
+                        <div className="team-body">
+                          <div className="team-name">{displayName}</div>
+                          <div className="team-role">{isIntern ? "Legal Intern" : "Advocate"}</div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             ))}
@@ -1623,57 +1925,6 @@ function Team() {
   );
 }
 
-// ─── Case Results ─────────────────────────────────────────────────────────────
-
-function CaseResults() {
-  const stats = [
-    { num: "500+", lbl: "Cases Handled" },
-    { num: "92%", lbl: "Success Rate" },
-    { num: "6", lbl: "Active Cities" },
-    { num: "12+", lbl: "Years Practice" },
-  ];
-  return (
-    <section className="panel-tinted" id="cases">
-      <div className="container">
-        <div className="cases-inner">
-          <div className="cases-head">
-            <div>
-              <span className="section-label">Track Record</span>
-              <h2 className="cases-title">Results that <em>speak</em></h2>
-            </div>
-            <a href="#contact" className="btn-primary" style={{ flexShrink: 0 }}>
-              Discuss Your Case <ArrowRight size={13} />
-            </a>
-          </div>
-          <div className="cases-stats">
-            {stats.map((s) => (
-              <div className="cstat-box" key={s.lbl}>
-                <div className="cstat-num">{s.num}</div>
-                <div className="cstat-lbl">{s.lbl}</div>
-              </div>
-            ))}
-          </div>
-          <div className="cases-grid">
-            {caseResults.map((c, i) => (
-              <article className={`case-card${c.highlight ? " highlight" : ""}`} key={i}>
-                <div className="case-category">{c.category}</div>
-                <h3 className="case-title">{c.title}</h3>
-                <p className="case-desc">{c.description}</p>
-                <div className="case-footer">
-                  <div>
-                    <div className="case-court">{c.court}</div>
-                    <div className="case-year">{c.year}</div>
-                  </div>
-                  <div className="case-outcome"><CheckCircle size={10} />{c.outcome}</div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 // ─── Why / Regions ────────────────────────────────────────────────────────────
 
@@ -1700,7 +1951,10 @@ function Regions() {
             <div className="regions-grid">
               {courtRegions.map((r) => (
                 <div className="region-item" key={r.name}>
-                  <div className="region-name">{r.name}</div>
+                  <div className="region-heading">
+                    <div className="region-name">{r.name}</div>
+                    <div className="region-count">{r.courts.length} forums</div>
+                  </div>
                   <div className="court-list">
                     {r.courts.map((court) => (
                       <span className="court-chip" key={court}>{court}</span>
@@ -1724,74 +1978,6 @@ function Regions() {
   );
 }
 
-// ─── Testimonial / Leadership ──────────────────────────────────────────────────
-
-const testimonials = [
-  { name: "AGD Bala Kumar", role: "Advocate | Managing Counsel", feedback: "AGD Bala Kumar has over 12 years of experience in litigation and legal advisory, with focused practice across criminal law, civil disputes, constitutional remedies, consumer matters, property law, family law, arbitration, corporate advisory, MCOP, and RCOP matters.", img: "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=450&h=300&fit=crop" },
-  { name: "AGD Law Associates", role: "Our Vision", feedback: "To become a trusted and leading boutique law firm recognized for excellence, integrity, and client satisfaction through precision-driven advocacy, transparent communication, and timely legal solutions.", img: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=450&h=300&fit=crop" },
-];
-
-function Testimonial() {
-  const [current, setCurrent] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const total = testimonials.length;
-  const prev = () => setCurrent((c) => (c - 1 + total) % total);
-  const next = () => setCurrent((c) => (c + 1) % total);
-
-  useEffect(() => {
-    if (isPaused) return;
-    const t = setInterval(() => setCurrent((c) => (c + 1) % total), 7000);
-    return () => clearInterval(t);
-  }, [isPaused, total]);
-
-  const t = testimonials[current];
-  return (
-    <section className="panel" id="testimonial" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
-      <div className="container">
-        <div className="testi-section">
-          <div className="testi-inner">
-            <div className="testi-sidebar">
-              <span className="section-label">Leadership</span>
-              <h2 className="testi-sidebar-title">
-                Courtroom <em>precision</em><br />at every level
-              </h2>
-              <p className="testi-sidebar-body">
-                AGD Bala Kumar leads the firm with over 12 years of practice, combining
-                litigation strength with strategic advisory for complex matters.
-              </p>
-              <div className="testi-nav">
-                <button type="button" className="testi-nav-btn" onClick={prev} aria-label="Previous"><ArrowLeft size={15} /></button>
-                <button type="button" className="testi-nav-btn" onClick={next} aria-label="Next"><ArrowRight size={15} /></button>
-                <div className="testi-counter">{String(current + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</div>
-              </div>
-              <div className="testi-progress">
-                <div className="testi-bar" style={{ width: `${((current + 1) / total) * 100}%` }} />
-              </div>
-              <div className="testi-dots">
-                {testimonials.map((_, i) => (
-                  <button key={i} type="button" className="testi-dot" style={{ width: i === current ? "28px" : "8px", opacity: i === current ? 1 : 0.35 }} onClick={() => setCurrent(i)} aria-label={`Slide ${i + 1}`} />
-                ))}
-              </div>
-            </div>
-            <div>
-              <article key={`${t.name}-${current}`} className="testi-card">
-                <div className="testi-stars">{Array.from({ length: 5 }).map((_, i) => <span key={i}>★</span>)}</div>
-                <blockquote className="testi-quote">&ldquo;{t.feedback}&rdquo;</blockquote>
-                <div className="testi-author">
-                  <img src={t.img} alt={t.name} className="testi-avatar" loading="lazy" />
-                  <div>
-                    <div className="testi-name">{t.name}</div>
-                    <div className="testi-role">{t.role}</div>
-                  </div>
-                </div>
-              </article>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 // ─── Blog ─────────────────────────────────────────────────────────────────────
 
@@ -1874,7 +2060,7 @@ function FAQ() {
                   <div className="faq-item" key={i}>
                     <button type="button" className="faq-question" onClick={() => toggle(i)} aria-expanded={isOpen}>
                       <span>{faq.q}</span>
-                      <span className={`faq-toggle${isOpen ? " open" : ""}`}><X size={13} /></span>
+                      <span className={`faq-toggle${isOpen ? " open" : ""}`}><Plus size={13} /></span>
                     </button>
                     <div className={`faq-answer${isOpen ? " open" : ""}`}>
                       <div className="faq-answer-inner">
@@ -2231,9 +2417,7 @@ export default function Page() {
           <About />
           <Services />
           <Team />
-          {/* <CaseResults /> */}
           <Regions />
-          {/* <Testimonial /> */}
           <Blog />
           <FAQ />
           <Contact />
