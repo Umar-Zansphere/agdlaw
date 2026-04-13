@@ -38,7 +38,6 @@ import {
   Users,
   BookOpen,
   Menu,
-  ExternalLink,
   CheckCircle,
 } from "lucide-react";
 
@@ -46,6 +45,13 @@ const SITE_URL = "https://www.agdlawassociates.in";
 const SITE_NAME = "AGD Law Associates";
 const SITE_DESCRIPTION =
   "AGD Law Associates is a boutique law firm in Chennai delivering precision-driven litigation and advisory across criminal, civil, constitutional, consumer, property, family, arbitration, and corporate matters.";
+
+const contactNumbers = [
+  { display: "+91 99943 88855", tel: "+919994388855" },
+  { display: "+91 89395 88855", tel: "+918939588855" },
+  { display: "+91 89396 88855", tel: "+918939688855" },
+];
+const primaryContactNumber = contactNumbers[0];
 
 
 // ─── Global Styles ─────────────────────────────────────────────────────────────
@@ -356,11 +362,14 @@ const GlobalStyles = () => (
 
     /* ── About ── */
     .about-inner {
-      display: grid; grid-template-columns: 1fr 1.1fr;
-      gap: clamp(3rem, 5vw, 6rem); align-items: center;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: clamp(2rem, 4vw, 4rem); align-items: stretch;
       padding: clamp(5rem, 8vw, 9rem) 0;
     }
-    .about-left { display: flex; flex-direction: column; gap: 28px; }
+    .about-left {
+      display: flex; flex-direction: column; gap: 26px;
+      justify-content: center;
+    }
     .about-pretitle {
       font-size: clamp(2.6rem, 4vw, 4.2rem);
       line-height: 1.05; letter-spacing: -0.015em; color: #fff;
@@ -372,7 +381,7 @@ const GlobalStyles = () => (
     }
     .about-stat-box {
       background: var(--surface-base); backdrop-filter: blur(14px);
-      border: 1px solid var(--surface-border); border-radius: 16px; padding: 20px 18px;
+      border: 1px solid var(--surface-border); border-radius: 8px; padding: 20px 18px;
       box-shadow: var(--surface-shadow);
       display: flex; flex-direction: column; gap: 4px;
     }
@@ -392,36 +401,42 @@ const GlobalStyles = () => (
       border-radius: 100px; padding: 5px 12px;
     }
     .cred-tag svg { color: var(--sage); flex-shrink: 0; }
-    .about-right { position: relative; }
-    .about-img-wrap {
-      border-radius: 28px; overflow: hidden;
-      box-shadow: 0 40px 100px rgba(11,11,11,0.15);
-      aspect-ratio: 4/5;
+    .about-right {
+      display: grid; align-content: center; gap: 14px;
     }
-    .about-img-wrap img {
-      width: 100%; height: 100%; object-fit: cover; object-position: top;
+    .about-principle {
+      display: grid; grid-template-columns: auto 1fr; gap: 16px;
+      padding: 22px; border: 1px solid var(--surface-border);
+      border-radius: 8px; background: var(--surface-elevated);
+      box-shadow: var(--surface-shadow);
+      transition: transform 0.25s, border-color 0.25s, background 0.25s;
     }
-    .about-img-badge {
-      position: absolute; bottom: -20px; left: -20px;
-      background: var(--ink); border-radius: 20px;
-      padding: 20px 24px; color: #fff;
-      box-shadow: 0 20px 56px rgba(11,11,11,0.3);
+    .about-principle:hover {
+      transform: translateY(-3px);
+      border-color: var(--surface-border-strong);
+      background: var(--surface-tint);
     }
-    .about-badge-num {
+    .about-principle-icon {
+      width: 42px; height: 42px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(197,223,192,0.1); color: var(--sage);
+      border: 1px solid rgba(197,223,192,0.18);
+    }
+    .about-principle-title {
       font-family: var(--font-cormorant), serif;
-      font-size: 2.6rem; color: var(--sage); line-height: 1;
+      font-size: 1.28rem; color: #fff; margin-bottom: 6px;
     }
-    .about-badge-lbl {
-      font-size: 0.62rem; text-transform: uppercase;
-      letter-spacing: 0.1em; color: rgba(197,223,192,0.55); margin-top: 4px;
+    .about-principle-text {
+      font-size: 0.84rem; line-height: 1.72; color: var(--text-muted);
     }
-    .about-img-accent {
-      position: absolute; top: -20px; right: -20px;
-      width: 48%; aspect-ratio: 1; border-radius: 20px;
-      overflow: hidden; border: 3px solid #fff;
-      box-shadow: 0 16px 48px rgba(11,11,11,0.15);
+    .about-note {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 18px 20px; border-radius: 8px;
+      border: 1px solid rgba(197,223,192,0.24);
+      background: rgba(197,223,192,0.08);
+      color: var(--text-body); font-size: 0.86rem; line-height: 1.7;
     }
-    .about-img-accent img { width: 100%; height: 100%; object-fit: cover; }
+    .about-note svg { color: var(--sage); flex-shrink: 0; margin-top: 3px; }
 
     /* ── Services ── */
     .services-inner { padding: clamp(4rem, 7vw, 8rem) 0; }
@@ -493,45 +508,37 @@ const GlobalStyles = () => (
     }
     .team-title em { color: var(--sage); font-style: italic; }
     .team-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
     }
     .team-card {
-      border-radius: 28px; overflow: hidden; position: relative;
-      aspect-ratio: 3/4; background: var(--ink);
-      transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), box-shadow 0.4s;
+      min-height: 96px; padding: 22px;
+      border: 1px solid var(--surface-border);
+      border-radius: 8px; background: var(--surface-elevated);
+      box-shadow: var(--surface-shadow);
+      display: flex; align-items: center; gap: 16px;
+      transition: transform 0.25s, border-color 0.25s, background 0.25s;
     }
-    .team-card:hover { transform: translateY(-8px); box-shadow: 0 32px 64px rgba(11,11,11,0.18); }
-    .team-photo {
-      position: absolute; inset: 0; width: 100%; height: 100%;
-      object-fit: cover; object-position: top;
-      transition: transform 0.6s cubic-bezier(0.22,1,0.36,1), filter 0.4s;
+    .team-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--surface-border-strong);
+      background: var(--surface-tint);
     }
-    .team-card:hover .team-photo { transform: scale(1.05); filter: brightness(0.65); }
-    .team-gradient {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(11,11,11,0.95) 0%, rgba(11,11,11,0.45) 45%, transparent 70%);
-    }
-    .team-exp {
-      position: absolute; top: 16px; right: 16px;
-      font-size: 0.65rem; font-weight: 700; color: var(--ink);
-      background: var(--sage); border-radius: 100px;
-      padding: 4px 10px; text-transform: uppercase; letter-spacing: 0.08em;
+    .team-index {
+      width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+      border: 1px solid rgba(197,223,192,0.22);
+      background: rgba(197,223,192,0.09);
+      display: inline-flex; align-items: center; justify-content: center;
+      color: var(--sage); font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.08em;
     }
     .team-body {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      padding: 22px 18px; display: flex; flex-direction: column; gap: 3px;
+      min-width: 0;
     }
-    .team-spec { font-size: 0.63rem; color: var(--sage); text-transform: uppercase; letter-spacing: 0.1em; }
-    .team-name { font-family: var(--font-cormorant), serif; font-size: 1.2rem; color: #fff; line-height: 1.1; }
-    .team-role { font-size: 0.72rem; color: rgba(255,255,255,0.45); }
-    .team-social { margin-top: 8px; }
-    .team-social-btn {
-      width: 28px; height: 28px; border-radius: 8px;
-      border: 1px solid rgba(197,223,192,0.25); color: var(--sage);
-      display: inline-flex; align-items: center; justify-content: center;
-      transition: all 0.2s;
+    .team-name {
+      font-family: var(--font-cormorant), serif;
+      font-size: clamp(1.2rem, 2vw, 1.5rem); color: #fff; line-height: 1.15;
+      overflow-wrap: anywhere;
     }
-    .team-social-btn:hover { background: var(--sage); color: var(--ink); }
 
     /* ── Cases ── */
     .cases-inner { padding: clamp(4rem, 7vw, 8rem) 0; }
@@ -600,13 +607,17 @@ const GlobalStyles = () => (
 
     /* ── Why / Regions ── */
     .regions-inner-content { padding: clamp(4rem, 7vw, 8rem) 0; }
-    .regions-head { text-align: center; margin-bottom: clamp(2.5rem, 4vw, 4rem); }
+    .regions-head {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      gap: 24px; flex-wrap: wrap;
+      margin-bottom: clamp(2.5rem, 4vw, 4rem);
+    }
     .regions-title {
       font-size: clamp(2.4rem, 4vw, 4rem);
       color: #fff; letter-spacing: -0.015em; margin: 14px 0 12px;
     }
     .regions-title em { color: var(--sage); font-style: italic; }
-    .regions-sub { font-size: 0.95rem; color: rgba(255,255,255,0.45); }
+    .regions-sub { font-size: 0.95rem; color: rgba(255,255,255,0.55); line-height: 1.75; max-width: 560px; }
     .why-cards {
       display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
       margin-bottom: 48px;
@@ -627,28 +638,60 @@ const GlobalStyles = () => (
     .why-title { font-family: var(--font-cormorant), serif; font-size: 1.25rem; color: #fff; }
     .why-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.68; }
     .regions-presence {
-      border: 1px solid var(--surface-border); border-radius: 20px; overflow: hidden;
+      border: 1px solid var(--surface-border); border-radius: 8px; overflow: hidden;
       background: var(--surface-base);
       box-shadow: var(--surface-shadow);
     }
     .regions-presence-header {
-      padding: 14px 24px;
-      font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.16em;
-      color: rgba(197,223,192,0.78); background: rgba(197,223,192,0.1);
+      padding: 18px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;
+      background: rgba(197,223,192,0.1);
       border-bottom: 1px solid var(--surface-border);
+    }
+    .regions-presence-kicker {
+      font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.16em;
+      color: rgba(197,223,192,0.78);
+      font-weight: 700;
+    }
+    .regions-presence-note {
+      font-size: 0.8rem; color: var(--text-muted);
     }
     .regions-grid {
       display: grid; grid-template-columns: repeat(3, 1fr);
     }
     .region-item {
-      padding: 20px 24px;
+      padding: 24px;
       border-right: 1px solid var(--surface-border);
       border-bottom: 1px solid var(--surface-border);
+      background: var(--surface-elevated);
+      transition: background 0.25s, border-color 0.25s;
     }
     .region-item:nth-child(3n) { border-right: none; }
-    .region-item:nth-child(4), .region-item:nth-child(5), .region-item:nth-child(6) { border-bottom: none; }
-    .region-name { font-family: var(--font-cormorant), serif; font-size: 1.1rem; color: #fff; margin-bottom: 4px; }
-    .region-cities { font-size: 0.77rem; color: var(--text-subtle); }
+    .region-item:hover { background: var(--surface-tint); border-color: var(--surface-border-strong); }
+    .region-name { font-family: var(--font-cormorant), serif; font-size: 1.35rem; color: #fff; margin-bottom: 16px; }
+    .court-list {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .court-chip {
+      display: inline-flex; align-items: center;
+      min-height: 32px; padding: 7px 11px; border-radius: 8px;
+      border: 1px solid rgba(197,223,192,0.18);
+      background: rgba(9,12,11,0.48);
+      color: var(--text-body); font-size: 0.78rem; line-height: 1.35;
+    }
+    .additional-courts {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--surface-border);
+      background: rgba(9,12,11,0.46);
+    }
+    .additional-court {
+      display: flex; align-items: flex-start; gap: 11px;
+      padding: 18px 24px;
+      border-right: 1px solid var(--surface-border);
+      color: var(--text-body); font-size: 0.86rem; line-height: 1.55;
+    }
+    .additional-court:last-child { border-right: none; }
+    .additional-court svg { color: var(--sage); flex-shrink: 0; margin-top: 3px; }
 
     /* ── Testimonial / Leadership ── */
     .testi-section { padding: clamp(4rem, 7vw, 8rem) 0; }
@@ -816,6 +859,12 @@ const GlobalStyles = () => (
     }
     .contact-detail-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-subtle); }
     .contact-detail-value { font-size: 0.88rem; color: var(--text-body); margin-top: 2px; font-weight: 500; }
+    .contact-number-list { display: flex; flex-direction: column; gap: 5px; margin-top: 4px; }
+    .contact-number-link {
+      font-size: 0.88rem; color: var(--text-body); font-weight: 500;
+      transition: color 0.2s;
+    }
+    .contact-number-link:hover { color: var(--sage); }
     .contact-hours {
       background: var(--surface-base); border: 1px solid var(--surface-border);
       border-radius: 16px; padding: 20px;
@@ -960,13 +1009,18 @@ const GlobalStyles = () => (
     @media (max-width: 1024px) {
       .hero-stats-row { flex-wrap: wrap; }
       .about-inner { grid-template-columns: 1fr; }
-      .about-right { display: none; }
+      .about-right { display: grid; }
       .services-grid { grid-template-columns: repeat(2, 1fr); }
       .team-grid { grid-template-columns: repeat(2, 1fr); }
       .cases-stats { grid-template-columns: repeat(2, 1fr); }
       .cases-grid { grid-template-columns: repeat(2, 1fr); }
       .why-cards { grid-template-columns: repeat(2, 1fr); }
       .regions-grid { grid-template-columns: repeat(2, 1fr); }
+      .region-item:nth-child(3n) { border-right: 1px solid var(--surface-border); }
+      .region-item:nth-child(2n) { border-right: none; }
+      .additional-courts { grid-template-columns: 1fr; }
+      .additional-court { border-right: none; border-bottom: 1px solid var(--surface-border); }
+      .additional-court:last-child { border-bottom: none; }
       .testi-inner { grid-template-columns: 1fr; }
       .testi-sidebar { position: static; }
       .blog-layout { grid-template-columns: 1fr; }
@@ -985,6 +1039,9 @@ const GlobalStyles = () => (
       .cases-stats { grid-template-columns: repeat(2, 1fr); }
       .why-cards { grid-template-columns: 1fr; }
       .regions-grid { grid-template-columns: 1fr; }
+      .region-item, .region-item:nth-child(2n), .region-item:nth-child(3n) { border-right: none; }
+      .about-stats { grid-template-columns: 1fr; }
+      .about-principle { grid-template-columns: 1fr; }
       .form-fields { grid-template-columns: 1fr; }
       .footer-top { grid-template-columns: 1fr; }
       .hero-title { font-size: clamp(3rem, 14vw, 5rem); }
@@ -1047,10 +1104,60 @@ const services = [
 ];
 
 const teamMembers = [
-  { name: "AGD Bala Kumar", role: "Managing Counsel", specialization: "Criminal & Civil Litigation", experience: "12+ Years", img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&h=800&fit=crop&crop=faces" },
-  { name: "Priya Sundaram", role: "Senior Associate", specialization: "Family & Matrimonial Law", experience: "8 Years", img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&h=800&fit=crop&crop=faces" },
-  { name: "Karthik Raj", role: "Associate Counsel", specialization: "Corporate & Commercial Advisory", experience: "5 Years", img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&h=800&fit=crop&crop=faces" },
-  { name: "Meena Lakshmi", role: "Associate Advocate", specialization: "Property & Real Estate Law", experience: "4 Years", img: "https://images.unsplash.com/photo-1580894732444-8ecded7900cd?w=600&h=800&fit=crop&crop=faces" },
+  "AGD Bala kumar",
+  "A. Yokesh Kumar",
+  "M.R. Vinoth Prabhu",
+  "A. Prabhakaran",
+  "D. Pradeep Kumar",
+  "K.Rajkumar",
+  "T.Ravi shankar",
+  "S.Sivadharshini",
+  "P.Srikanth subash",
+  "S. Faiz Hameed Raja",
+  "N.Oviya",
+  "Intern: V. Prabhakaran",
+];
+
+const courtRegions = [
+  {
+    name: "Chennai District",
+    courts: [
+      "Madras High Court",
+      "Chennai City Civil Court",
+      "George Town (GT) Court",
+      "Egmore and Allikulam Court",
+      "Saidapet Court",
+      "Court of Small Causes",
+    ],
+  },
+  {
+    name: "Chengalpattu District",
+    courts: [
+      "Chengalpattu",
+      "Maduranthakam",
+      "Thiruporur",
+      "Pallavaram",
+      "Tambaram",
+      "Alandur",
+      "Sholinganallur",
+    ],
+  },
+  {
+    name: "Tiruvallur District",
+    courts: [
+      "Tiruvallur",
+      "Poonamallee",
+      "Madhavaram",
+      "Ambattur",
+      "Thiruvottiyur",
+    ],
+  },
+];
+
+const additionalCourts = [
+  "Dindigul and Vedasandur Sub Court, Paramakudi Sub Court and Madurai District Courts",
+  "City Civil Court, Bangalore",
+  "City Civil Court, Mumbai",
 ];
 
 const caseResults = [
@@ -1067,7 +1174,7 @@ const faqs = [
   { q: "Why choose AGD Law Associates?", a: "We are a boutique firm offering personalized attention, strong litigation and advisory expertise, ethical and transparent practice, efficient case management, and active Pan-Tamil Nadu plus inter-state presence." },
   { q: "What is your legal approach?", a: "Our structured process includes detailed case analysis, clear legal opinion and roadmap, transparent communication, strong courtroom advocacy, and focus on timely resolution." },
   { q: "What are your office hours?", a: "Monday to Friday: 10:00 AM to 6:30 PM. Saturday: 11:00 AM to 5:00 PM. Second and last Saturdays are holidays." },
-  { q: "Where do you have active practice presence?", a: "Our active litigation presence includes Chennai, Tambaram, Avadi, Coimbatore, Tiruppur, and Bangalore, along with districts such as Chengalpattu, Tiruvallur, Kancheepuram, and Dindigul." },
+  { q: "Where do you have active practice presence?", a: "Our active litigation presence includes the Madras High Court, Chennai City Civil Court, George Town, Egmore and Allikulam, Saidapet, Court of Small Causes, Chengalpattu, Tiruvallur, Dindigul, Vedasandur, Paramakudi, Madurai, Bangalore City Civil Court, and Mumbai City Civil Court." },
 ];
 
 const serviceOptions = [
@@ -1097,7 +1204,7 @@ const legalServiceSchema = {
   image: `${SITE_URL}/hero.png`,
   logo: `${SITE_URL}/logo.png`,
   description: SITE_DESCRIPTION,
-  telephone: "+91 99943 88855",
+  telephone: contactNumbers.map((number) => number.display),
   email: "agdlawassociatesoffice@gmail.com",
   foundingDate: "2016",
   founder: {
@@ -1113,22 +1220,20 @@ const legalServiceSchema = {
   areaServed: [
     { "@type": "City", name: "Chennai" },
     { "@type": "City", name: "Tambaram" },
-    { "@type": "City", name: "Avadi" },
-    { "@type": "City", name: "Coimbatore" },
-    { "@type": "City", name: "Tiruppur" },
+    { "@type": "City", name: "Chengalpattu" },
+    { "@type": "City", name: "Tiruvallur" },
     { "@type": "City", name: "Bangalore" },
+    { "@type": "City", name: "Mumbai" },
     { "@type": "AdministrativeArea", name: "Tamil Nadu" },
   ],
-  contactPoint: [
-    {
-      "@type": "ContactPoint",
-      contactType: "customer support",
-      telephone: "+91 99943 88855",
-      email: "agdlawassociatesoffice@gmail.com",
-      url: `${SITE_URL}/#contact`,
-      areaServed: "IN",
-    },
-  ],
+  contactPoint: contactNumbers.map((number) => ({
+    "@type": "ContactPoint",
+    contactType: "customer support",
+    telephone: number.display,
+    email: "agdlawassociatesoffice@gmail.com",
+    url: `${SITE_URL}/#contact`,
+    areaServed: "IN",
+  })),
   knowsAbout: serviceOptions.map((service) => service.label),
 };
 
@@ -1307,8 +1412,8 @@ function Hero() {
             <a href="#contact" className="btn-primary">
               Request Consultation <ArrowRight size={14} />
             </a>
-            <a href="tel:+919994388855" className="btn-ghost">
-              <Phone size={14} /> +91 99943 88855
+            <a href={`tel:${primaryContactNumber.tel}`} className="btn-ghost">
+              <Phone size={14} /> {primaryContactNumber.display}
             </a>
           </div>
           <div className="hero-stats-row">
@@ -1361,6 +1466,23 @@ function Ticker() {
 
 function About() {
   const credentials = ["Integrity & Professionalism", "Confidentiality & Trust", "Client-Focused Service", "Excellence in Advocacy", "Timely Legal Solutions"];
+  const principles = [
+    {
+      icon: Scale,
+      title: "Litigation With Direction",
+      text: "We assess facts early, define the strongest legal route, and keep each matter moving with practical next steps.",
+    },
+    {
+      icon: Shield,
+      title: "Confidential By Design",
+      text: "Sensitive disputes are handled with discretion, clear boundaries, and careful communication from consultation onward.",
+    },
+    {
+      icon: Clock,
+      title: "Clear Case Management",
+      text: "Clients receive timely updates, realistic expectations, and focused preparation for every hearing and filing.",
+    },
+  ];
   return (
     <section className="panel" id="about">
       <div className="container">
@@ -1400,25 +1522,21 @@ function About() {
             </a>
           </div>
           <div className="about-right">
-            <div style={{ position: "relative", paddingRight: "24px", paddingTop: "24px" }}>
-              <div className="about-img-accent">
-                <img
-                  src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=600&h=600&fit=crop"
-                  alt="Law office"
-                  loading="lazy"
-                />
-              </div>
-              <div className="about-img-wrap">
-                <img
-                  src="https://images.unsplash.com/photo-1556157382-97eda2d62296?w=800&h=1000&fit=crop&crop=faces"
-                  alt="AGD Law Associates counsel"
-                  loading="lazy"
-                />
-              </div>
-              <div className="about-img-badge">
-                <div className="about-badge-num">12+</div>
-                <div className="about-badge-lbl">Years of<br />Practice</div>
-              </div>
+            {principles.map((item) => {
+              const Icon = item.icon;
+              return (
+                <article className="about-principle" key={item.title}>
+                  <div className="about-principle-icon"><Icon size={18} /></div>
+                  <div>
+                    <h3 className="about-principle-title">{item.title}</h3>
+                    <p className="about-principle-text">{item.text}</p>
+                  </div>
+                </article>
+              );
+            })}
+            <div className="about-note">
+              <CheckCircle size={16} />
+              <span>Every matter is reviewed on its facts, urgency, documents, and forum before we recommend the legal route.</span>
             </div>
           </div>
         </div>
@@ -1486,24 +1604,15 @@ function Team() {
           <div className="team-head">
             <div>
               <span className="section-label">Our Team</span>
-              <h2 className="team-title">The counsel behind<br />your <em>case</em></h2>
+              <h2 className="team-title">List of <em>Advocates</em></h2>
             </div>
           </div>
           <div className="team-grid">
-            {teamMembers.map((m) => (
-              <div className="team-card" key={m.name}>
-                <img src={m.img} alt={m.name} className="team-photo" loading="lazy" />
-                <div className="team-gradient" />
-                <div className="team-exp">{m.experience}</div>
+            {teamMembers.map((name, index) => (
+              <div className="team-card" key={name}>
+                <span className="team-index">{String(index + 1).padStart(2, "0")}</span>
                 <div className="team-body">
-                  <div className="team-spec">{m.specialization}</div>
-                  <div className="team-name">{m.name}</div>
-                  <div className="team-role">{m.role}</div>
-                  <div className="team-social">
-                    <a href="#" className="team-social-btn" aria-label={`${m.name} LinkedIn`}>
-                      <ExternalLink size={11} />
-                    </a>
-                  </div>
+                  <div className="team-name">{name}</div>
                 </div>
               </div>
             ))}
@@ -1569,47 +1678,42 @@ function CaseResults() {
 // ─── Why / Regions ────────────────────────────────────────────────────────────
 
 function Regions() {
-  const whyItems = [
-    { icon: Scale, title: "Boutique Attention", desc: "Every client receives direct partner-level attention — no file gets lost in a large firm structure." },
-    { icon: Shield, title: "Ethical Practice", desc: "Strict confidentiality, transparent communication, and unwavering integrity in every matter." },
-    { icon: Clock, title: "Timely Resolution", desc: "Structured case management designed to achieve efficient, timely outcomes without unnecessary delays." },
-    { icon: Award, title: "Proven Advocacy", desc: "12+ years of courtroom experience across criminal, civil, constitutional, and commercial matters." },
-  ];
   return (
     <section className="panel-dark" id="why-me">
       <div className="container">
         <div className="regions-inner-content">
           <div className="regions-head">
-            <span className="section-label-dark">Why Choose Us</span>
-            <h2 className="regions-title">Why <em>AGD</em> Law Associates</h2>
-            <p className="regions-sub">A trusted boutique firm serving clients across Tamil Nadu and beyond</p>
-          </div>
-          <div className="why-cards">
-            {whyItems.map((w) => {
-              const Icon = w.icon;
-              return (
-                <div className="why-card" key={w.title}>
-                  <div className="why-icon"><Icon size={20} /></div>
-                  <div className="why-title">{w.title}</div>
-                  <div className="why-desc">{w.desc}</div>
-                </div>
-              );
-            })}
+            <div>
+              <span className="section-label-dark">Court Presence</span>
+              <h2 className="regions-title">Area of practice in <em>specific courts</em></h2>
+            </div>
+            <p className="regions-sub">
+              Focused litigation support across Chennai, Chengalpattu, Tiruvallur,
+              key Tamil Nadu courts, and selected city civil courts outside the state.
+            </p>
           </div>
           <div className="regions-presence">
-            <div className="regions-presence-header">Our Practice Presence</div>
+            <div className="regions-presence-header">
+              <span className="regions-presence-kicker">Courts and districts</span>
+              <span className="regions-presence-note">Select the nearest forum for consultation and filing support.</span>
+            </div>
             <div className="regions-grid">
-              {[
-                { name: "Chennai & Suburbs", cities: "Chennai · Tambaram · Avadi" },
-                { name: "Western Tamil Nadu", cities: "Coimbatore · Tiruppur" },
-                { name: "Greater Karnataka", cities: "Bangalore & surrounding districts" },
-                { name: "Chengalpattu", cities: "Chengalpattu · Kancheepuram" },
-                { name: "Tiruvallur", cities: "Tiruvallur · Ponneri · Gummidipoondi" },
-                { name: "Dindigul", cities: "Dindigul · Natham · Palani" },
-              ].map((r) => (
+              {courtRegions.map((r) => (
                 <div className="region-item" key={r.name}>
                   <div className="region-name">{r.name}</div>
-                  <div className="region-cities">{r.cities}</div>
+                  <div className="court-list">
+                    {r.courts.map((court) => (
+                      <span className="court-chip" key={court}>{court}</span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="additional-courts">
+              {additionalCourts.map((court) => (
+                <div className="additional-court" key={court}>
+                  <MapPin size={14} />
+                  <span>{court}</span>
                 </div>
               ))}
             </div>
@@ -1831,8 +1935,20 @@ function Contact() {
               <span className="section-label-dark">Get In Touch</span>
               <h2 className="contact-title">Need legal<br /><em>support?</em><br />Let&apos;s connect.</h2>
               <p className="contact-sub">Reach out directly or fill the form — we respond during office hours. Every matter is handled with strict confidentiality.</p>
+              <div className="contact-detail">
+                <div className="contact-detail-icon"><PhoneCall size={15} /></div>
+                <div>
+                  <div className="contact-detail-label">Contact Numbers</div>
+                  <div className="contact-number-list">
+                    {contactNumbers.map((number) => (
+                      <a key={number.tel} href={`tel:${number.tel}`} className="contact-number-link">
+                        {number.display}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
               {[
-                { icon: PhoneCall, label: "Phone", value: "+91 99943 88855", href: "tel:+919994388855" },
                 { icon: Mail, label: "Email", value: "agdlawassociatesoffice@gmail.com", href: "mailto:agdlawassociatesoffice@gmail.com" },
                 { icon: MapPin, label: "Location", value: "Chennai, Tamil Nadu", href: "#" },
               ].map((d) => {
@@ -1954,10 +2070,12 @@ function Footer() {
           <div className="footer-col">
             <div className="footer-col-title">Contact</div>
             <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-              <a href="tel:+919994388855" className="footer-contact-item" style={{ textDecoration: "none" }}>
-                <PhoneCall size={13} className="footer-contact-icon" />
-                <span className="footer-contact-text">+91 99943 88855</span>
-              </a>
+              {contactNumbers.map((number) => (
+                <a key={number.tel} href={`tel:${number.tel}`} className="footer-contact-item" style={{ textDecoration: "none" }}>
+                  <PhoneCall size={13} className="footer-contact-icon" />
+                  <span className="footer-contact-text">{number.display}</span>
+                </a>
+              ))}
               <a href="mailto:agdlawassociatesoffice@gmail.com" className="footer-contact-item" style={{ textDecoration: "none" }}>
                 <Mail size={13} className="footer-contact-icon" />
                 <span className="footer-contact-text">agdlawassociatesoffice@gmail.com</span>
@@ -1983,7 +2101,7 @@ function Footer() {
 function WhatsAppFloatingChat() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const phoneNumber = "919994388855";
+  const phoneNumber = primaryContactNumber.tel.replace("+", "");
 
   const quickMessages = [
     "Hi, I need a legal consultation.",
@@ -2113,9 +2231,9 @@ export default function Page() {
           <About />
           <Services />
           <Team />
-          <CaseResults />
+          {/* <CaseResults /> */}
           <Regions />
-          <Testimonial />
+          {/* <Testimonial /> */}
           <Blog />
           <FAQ />
           <Contact />
