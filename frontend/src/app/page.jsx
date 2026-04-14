@@ -31,6 +31,7 @@ import {
   PhoneCall,
   Send,
   X,
+  Plus,
   Scale,
   Shield,
   Clock,
@@ -38,7 +39,6 @@ import {
   Users,
   BookOpen,
   Menu,
-  ExternalLink,
   CheckCircle,
 } from "lucide-react";
 
@@ -46,6 +46,13 @@ const SITE_URL = "https://www.agdlawassociates.in";
 const SITE_NAME = "AGD Law Associates";
 const SITE_DESCRIPTION =
   "AGD Law Associates is a boutique law firm in Chennai delivering precision-driven litigation and advisory across criminal, civil, constitutional, consumer, property, family, arbitration, and corporate matters.";
+
+const contactNumbers = [
+  { display: "+91 99943 88855", tel: "+919994388855" },
+  { display: "+91 89395 88855", tel: "+918939588855" },
+  { display: "+91 89396 88855", tel: "+918939688855" },
+];
+const primaryContactNumber = contactNumbers[0];
 
 
 // ─── Global Styles ─────────────────────────────────────────────────────────────
@@ -356,130 +363,368 @@ const GlobalStyles = () => (
 
     /* ── About ── */
     .about-inner {
-      display: grid; grid-template-columns: 1fr 1.1fr;
-      gap: clamp(3rem, 5vw, 6rem); align-items: center;
+      position: relative;
+      display: flex; flex-direction: column;
+      gap: clamp(2rem, 4vw, 3.75rem);
       padding: clamp(5rem, 8vw, 9rem) 0;
+      max-width: 980px; margin: 0 auto;
     }
-    .about-left { display: flex; flex-direction: column; gap: 28px; }
+    .about-content {
+      display: flex; flex-direction: column; gap: 28px;
+    }
+    .about-eyebrow-row {
+      display: flex; align-items: center; gap: 14px;
+    }
+    .about-eyebrow-line {
+      flex: 1; height: 1px;
+      background: linear-gradient(90deg, rgba(197,223,192,0.5), transparent);
+    }
     .about-pretitle {
-      font-size: clamp(2.6rem, 4vw, 4.2rem);
-      line-height: 1.05; letter-spacing: -0.015em; color: #fff;
+      font-size: clamp(2.8rem, 4.2vw, 4.8rem);
+      line-height: 1.02; letter-spacing: -0.015em; color: #fff;
+      max-width: 760px;
     }
     .about-pretitle em { color: var(--sage); font-style: italic; }
-    .about-body { font-size: 0.97rem; line-height: 1.85; color: var(--text-body); }
-    .about-stats {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    .about-copy {
+      display: flex; flex-direction: column; gap: 18px;
+      max-width: 820px;
+    }
+    .about-lead {
+      font-size: 1.05rem; line-height: 1.85; color: var(--text-body);
+      position: relative; padding-left: 20px;
+    }
+    .about-lead::before {
+      content: '';
+      position: absolute; left: 0; top: 6px; bottom: 6px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--sage), rgba(197,223,192,0.2));
+      border-radius: 2px;
+    }
+    .about-body {
+      font-size: 0.93rem; line-height: 1.9; color: var(--text-muted);
+    }
+    .about-proof-strip {
+      display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center; gap: 18px;
+      padding: 22px;
+      background: linear-gradient(135deg, rgba(197,223,192,0.08) 0%, rgba(12,16,14,0.72) 62%);
+      border: 1px solid rgba(197,223,192,0.22);
+      border-radius: 8px;
+    }
+    .about-founder-avatar {
+      width: 52px; height: 52px; border-radius: 8px; flex-shrink: 0;
+      background: rgba(197,223,192,0.13);
+      border: 1px solid rgba(197,223,192,0.3);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--sage);
+    }
+    .about-founder-name {
+      font-family: var(--font-cormorant), serif;
+      font-size: 1.35rem; color: #fff; line-height: 1.15;
+    }
+    .about-founder-role {
+      font-size: 0.68rem; color: var(--sage); text-transform: uppercase;
+      letter-spacing: 0.12em; margin-top: 4px;
+    }
+    .about-founder-exp {
+      text-align: right; flex-shrink: 0;
+      padding-left: 18px;
+      border-left: 1px solid rgba(197,223,192,0.18);
+    }
+    .about-founder-exp-num {
+      font-family: var(--font-cormorant), serif;
+      font-size: 2.05rem; color: var(--sage); line-height: 1;
+    }
+    .about-founder-exp-lbl {
+      font-size: 0.6rem; color: var(--text-subtle); text-transform: uppercase;
+      letter-spacing: 0.1em; margin-top: 2px;
+    }
+    .about-stats-row {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
     }
     .about-stat-box {
-      background: var(--surface-base); backdrop-filter: blur(14px);
-      border: 1px solid var(--surface-border); border-radius: 16px; padding: 20px 18px;
-      box-shadow: var(--surface-shadow);
-      display: flex; flex-direction: column; gap: 4px;
+      background: rgba(12,16,14,0.6);
+      border: 1px solid rgba(197,223,192,0.16);
+      padding: 20px 18px; border-radius: 8px;
+      display: flex; flex-direction: column; gap: 6px;
+      transition: background 0.25s, border-color 0.25s, transform 0.25s;
+    }
+    .about-stat-box:hover {
+      background: rgba(20,28,24,0.85);
+      border-color: rgba(197,223,192,0.3);
+      transform: translateY(-2px);
     }
     .about-stat-num {
       font-family: var(--font-cormorant), serif;
-      font-size: 2.2rem; color: var(--sage); line-height: 1;
-    }
-    .about-stat-lbl {
-      font-size: 0.65rem; color: var(--text-subtle);
-      text-transform: uppercase; letter-spacing: 0.1em;
-    }
-    .about-creds { display: flex; flex-wrap: wrap; gap: 8px; }
-    .cred-tag {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 0.77rem; color: var(--sage); font-weight: 500;
-      background: rgba(197,223,192,0.1); border: 1px solid rgba(197,223,192,0.2);
-      border-radius: 100px; padding: 5px 12px;
-    }
-    .cred-tag svg { color: var(--sage); flex-shrink: 0; }
-    .about-right { position: relative; }
-    .about-img-wrap {
-      border-radius: 28px; overflow: hidden;
-      box-shadow: 0 40px 100px rgba(11,11,11,0.15);
-      aspect-ratio: 4/5;
-    }
-    .about-img-wrap img {
-      width: 100%; height: 100%; object-fit: cover; object-position: top;
-    }
-    .about-img-badge {
-      position: absolute; bottom: -20px; left: -20px;
-      background: var(--ink); border-radius: 20px;
-      padding: 20px 24px; color: #fff;
-      box-shadow: 0 20px 56px rgba(11,11,11,0.3);
-    }
-    .about-badge-num {
-      font-family: var(--font-cormorant), serif;
       font-size: 2.6rem; color: var(--sage); line-height: 1;
     }
-    .about-badge-lbl {
-      font-size: 0.62rem; text-transform: uppercase;
-      letter-spacing: 0.1em; color: rgba(197,223,192,0.55); margin-top: 4px;
+    .about-stat-lbl {
+      font-size: 0.62rem; color: var(--text-subtle);
+      text-transform: uppercase; letter-spacing: 0.13em;
     }
-    .about-img-accent {
-      position: absolute; top: -20px; right: -20px;
-      width: 48%; aspect-ratio: 1; border-radius: 20px;
-      overflow: hidden; border: 3px solid #fff;
-      box-shadow: 0 16px 48px rgba(11,11,11,0.15);
+    .about-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+    .about-values-block {
+      display: flex; flex-direction: column; gap: 14px;
     }
-    .about-img-accent img { width: 100%; height: 100%; object-fit: cover; }
+    .about-values-header {
+      display: flex; align-items: center; gap: 12px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(197,223,192,0.18);
+    }
+    .about-values-header-line {
+      flex: 1; height: 1px;
+      background: linear-gradient(90deg, rgba(197,223,192,0.4), transparent);
+    }
+    .about-values-kicker {
+      font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.16em; color: rgba(197,223,192,0.6);
+    }
+    .about-values-list {
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .about-value-card {
+      background: rgba(12,16,14,0.55);
+      border: 1px solid rgba(197,223,192,0.13);
+      border-radius: 8px; padding: 18px;
+      display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: start; gap: 16px;
+      transition: background 0.25s, border-color 0.25s, transform 0.25s;
+      cursor: default;
+    }
+    .about-value-card:hover {
+      background: rgba(20,28,24,0.8);
+      border-color: rgba(197,223,192,0.28);
+      transform: translateY(-3px);
+    }
+    .about-value-icon {
+      width: 42px; height: 42px; border-radius: 8px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(197,223,192,0.09); color: var(--sage);
+      border: 1px solid rgba(197,223,192,0.18);
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .about-value-card:hover .about-value-icon {
+      background: rgba(197,223,192,0.16);
+      border-color: rgba(197,223,192,0.35);
+    }
+    .about-value-num {
+      font-family: var(--font-cormorant), serif;
+      font-size: 0.75rem; color: rgba(197,223,192,0.38);
+      letter-spacing: 0.08em;
+    }
+    .about-value-title {
+      font-family: var(--font-cormorant), serif;
+      font-size: 1.22rem; color: #fff; line-height: 1.15; margin-bottom: 5px;
+    }
+    .about-value-text {
+      font-size: 0.8rem; color: var(--text-muted); line-height: 1.7;
+    }
+    .about-creds { display: flex; flex-wrap: wrap; gap: 7px; }
+    .cred-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.76rem; color: var(--sage); font-weight: 500;
+      background: rgba(197,223,192,0.08); border: 1px solid rgba(197,223,192,0.2);
+      border-radius: 100px; padding: 5px 12px;
+      transition: background 0.2s;
+    }
+    .cred-tag:hover { background: rgba(197,223,192,0.15); }
+    .cred-tag svg { color: var(--sage); flex-shrink: 0; }
+    .about-note {
+      display: flex; align-items: flex-start; gap: 13px;
+      padding: 16px 18px; border-radius: 8px;
+      border: 1px solid rgba(197,223,192,0.2);
+      background: rgba(197,223,192,0.04);
+      color: var(--text-body); font-size: 0.85rem; line-height: 1.7;
+      margin-top: 2px;
+    }
+    .about-note svg { color: var(--sage); flex-shrink: 0; margin-top: 3px; }
 
     /* ── Services ── */
     .services-inner { padding: clamp(4rem, 7vw, 8rem) 0; }
     .services-head {
       display: flex; justify-content: space-between; align-items: flex-end;
       margin-bottom: clamp(2.5rem, 4vw, 4rem); gap: 24px; flex-wrap: wrap;
+      padding-bottom: clamp(2rem, 3vw, 3rem);
+      border-bottom: 1px solid rgba(197,223,192,0.18);
     }
     .services-title {
       font-size: clamp(2.2rem, 3.5vw, 3.6rem);
-      color: #fff; letter-spacing: -0.015em; margin-top: 14px;
+      color: #fff; letter-spacing: -0.01em; margin-top: 14px;
     }
     .services-title em { color: var(--sage); font-style: italic; }
-    .services-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      border: 1px solid var(--surface-border); border-radius: 28px;
-      background: var(--surface-base);
-      box-shadow: var(--surface-shadow);
-      overflow: hidden;
+    .services-intro-row {
+      display: flex; align-items: flex-start; gap: 32px;
+      margin-bottom: clamp(2rem, 3.5vw, 3.5rem); flex-wrap: wrap;
     }
-    .service-card {
-      padding: 30px 26px; position: relative; overflow: hidden;
-      display: flex; flex-direction: column; gap: 12px;
-      border-right: 1px solid var(--surface-border);
-      border-bottom: 1px solid var(--surface-border);
-      transition: background 0.3s;
-      background: var(--surface-elevated);
+    .services-intro-text {
+      flex: 1 1 ; max-width: 500px;
+      font-size: 0.94rem; line-height: 1.85; color: var(--text-muted);
     }
-    .service-card:hover { background: var(--surface-tint); }
-    .service-card:nth-child(3n) { border-right: none; }
-    .service-card:nth-child(7), .service-card:nth-child(8), .service-card:nth-child(9) { border-bottom: none; }
-    .service-num {
+    .services-intro-stats {
+      display: flex; gap: 24px; flex-wrap: wrap;
+    }
+    .services-intro-stat {
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .services-intro-stat-num {
       font-family: var(--font-cormorant), serif;
-      font-size: 0.85rem; color: rgba(197,223,192,0.62);
-      letter-spacing: 0.08em;
+      font-size: 2rem; color: var(--sage); line-height: 1;
     }
-    .service-icon-wrap {
-      width: 42px; height: 42px; border-radius: 11px;
-      border: 1px solid var(--surface-border-strong); color: var(--sage);
+    .services-intro-stat-lbl {
+      font-size: 0.6rem; color: var(--text-subtle);
+      text-transform: uppercase; letter-spacing: 0.12em;
+    }
+    /* Featured service card */
+    .service-featured-card {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, rgba(197,223,192,0.1) 0%, rgba(12,16,14,0.7) 55%, rgba(4,6,5,0.85) 100%);
+      border: 1px solid rgba(197,223,192,0.25);
+      border-radius: 24px; padding: 36px 32px;
+      display: grid; grid-template-columns: auto 1fr auto;
+      align-items: center; gap: 24px;
+      margin-bottom: 16px;
+      transition: border-color 0.3s, transform 0.3s, background 0.3s;
+      text-decoration: none; color: inherit;
+    }
+    .service-featured-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at top left, rgba(197,223,192,0.07) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .service-featured-card:hover {
+      border-color: rgba(197,223,192,0.42);
+      transform: translateY(-3px);
+      background: linear-gradient(135deg, rgba(197,223,192,0.14) 0%, rgba(16,22,18,0.78) 55%, rgba(6,9,7,0.9) 100%);
+    }
+    .service-featured-badge {
+      position: absolute; top: 20px; right: 20px;
+      font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.16em; color: var(--sage);
+      background: rgba(197,223,192,0.12); border: 1px solid rgba(197,223,192,0.2);
+      border-radius: 100px; padding: 4px 10px;
+    }
+    .service-featured-icon-wrap {
+      width: 56px; height: 56px; border-radius: 14px; flex-shrink: 0;
+      background: rgba(197,223,192,0.12); color: var(--sage);
+      border: 1px solid rgba(197,223,192,0.25);
       display: flex; align-items: center; justify-content: center;
       transition: background 0.3s, border-color 0.3s;
     }
-    .service-card:hover .service-icon-wrap {
-      background: rgba(197,223,192,0.1); border-color: var(--sage);
+    .service-featured-card:hover .service-featured-icon-wrap {
+      background: rgba(197,223,192,0.2); border-color: rgba(197,223,192,0.4);
     }
-    .service-name {
+    .service-featured-num {
+      position: absolute; top: 22px; left: 22px;
       font-family: var(--font-cormorant), serif;
-      font-size: 1.28rem; color: #fff; line-height: 1.2;
+      font-size: 0.78rem; color: rgba(197,223,192,0.3);
+      letter-spacing: 0.06em;
     }
-    .service-desc { font-size: 0.81rem; color: var(--text-muted); line-height: 1.72; }
-    .service-arrow {
-      margin-top: auto; width: 30px; height: 30px; border-radius: 50%;
-      border: 1px solid var(--surface-border-strong); color: var(--sage);
+    .service-featured-name {
+      font-family: var(--font-cormorant), serif;
+      font-size: clamp(1.7rem, 2.5vw, 2.4rem); color: #fff;
+      line-height: 1.1; margin-bottom: 10px;
+    }
+    .service-featured-desc {
+      font-size: 0.88rem; color: var(--text-muted); line-height: 1.75;
+      max-width: 560px;
+    }
+    .service-featured-arrow {
+      width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+      border: 1px solid rgba(197,223,192,0.25); color: rgba(197,223,192,0.6);
       display: flex; align-items: center; justify-content: center;
       transition: all 0.25s;
     }
-    .service-card:hover .service-arrow {
-      background: var(--sage); color: var(--ink); border-color: var(--sage);
+    .service-featured-card:hover .service-featured-arrow {
+      background: var(--sage); color: var(--ink);
+      border-color: var(--sage); transform: translateX(4px);
     }
+    /* Services grid */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .service-grid-card {
+      position: relative; overflow: hidden;
+      background: rgba(13,17,15,0.6);
+      border: 1px solid rgba(197,223,192,0.13);
+      border-radius: 18px; padding: 22px 20px;
+      display: flex; flex-direction: column; gap: 14px;
+      transition: background 0.3s, border-color 0.3s, transform 0.3s;
+      text-decoration: none; color: inherit;
+    }
+    .service-grid-card::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--sage), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .service-grid-card:hover {
+      background: rgba(20,28,24,0.8);
+      border-color: rgba(197,223,192,0.28);
+      transform: translateY(-4px);
+    }
+    .service-grid-card:hover::after { opacity: 1; }
+    .service-grid-num {
+      font-family: var(--font-cormorant), serif;
+      font-size: 0.72rem; color: rgba(197,223,192,0.35);
+      letter-spacing: 0.08em;
+    }
+    .service-grid-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: rgba(197,223,192,0.08); color: var(--sage);
+      border: 1px solid rgba(197,223,192,0.15);
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .service-grid-card:hover .service-grid-icon {
+      background: rgba(197,223,192,0.15);
+      border-color: rgba(197,223,192,0.3);
+    }
+    .service-grid-name {
+      font-family: var(--font-cormorant), serif;
+      font-size: 1.18rem; color: #fff; line-height: 1.2;
+      flex: 1;
+    }
+    .service-grid-desc {
+      font-size: 0.78rem; color: var(--text-muted); line-height: 1.72;
+    }
+    .service-grid-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: auto; padding-top: 12px;
+      border-top: 1px solid rgba(197,223,192,0.1);
+    }
+    .service-grid-arrow {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 1px solid rgba(197,223,192,0.2); color: rgba(197,223,192,0.45);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.25s;
+    }
+    .service-grid-card:hover .service-grid-arrow {
+      background: var(--sage); color: var(--ink);
+      border-color: var(--sage); transform: translateX(2px);
+    }
+    .service-grid-tag {
+      font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.1em; color: rgba(197,223,192,0.45);
+    }
+    /* Services CTA bar */
+    .services-cta-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 20px;
+      margin-top: 28px; padding: 24px 28px;
+      background: rgba(12,16,14,0.55);
+      border: 1px solid rgba(197,223,192,0.16);
+      border-radius: 18px;
+    }
+    .services-cta-bar-text {
+      font-size: 0.9rem; color: var(--text-muted);
+    }
+    .services-cta-bar-text strong { color: var(--text-body); font-weight: 500; }
 
     /* ── Team ── */
     .team-inner { padding: clamp(4rem, 7vw, 8rem) 0; }
@@ -489,49 +734,69 @@ const GlobalStyles = () => (
     }
     .team-title {
       font-size: clamp(2.2rem, 3.5vw, 3.6rem);
-      color: #fff; letter-spacing: -0.015em; margin-top: 14px;
+      color: #fff; letter-spacing: 0; margin-top: 14px;
     }
     .team-title em { color: var(--sage); font-style: italic; }
-    .team-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+    .team-streams {
+      display: flex; flex-direction: column; gap: 14px;
+      overflow: hidden;
+      padding: 12px 0;
+      border-block: 1px solid rgba(197,223,192,0.22);
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    }
+    .team-stream {
+      overflow: hidden;
+    }
+    .team-track {
+      display: flex; width: max-content; gap: 12px;
+      animation: teamDrift 34s linear infinite;
+    }
+    .team-stream:nth-child(2) .team-track {
+      animation-direction: reverse;
+      animation-duration: 38s;
+    }
+    @keyframes teamDrift {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
     }
     .team-card {
-      border-radius: 28px; overflow: hidden; position: relative;
-      aspect-ratio: 3/4; background: var(--ink);
-      transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), box-shadow 0.4s;
+      position: relative;
+      min-height: 74px; padding: 14px 18px;
+      border: 1px solid var(--surface-border);
+      border-radius: 8px; background: rgba(20,25,22,0.72);
+      box-shadow: none;
+      display: grid; grid-template-columns: auto minmax(220px, 1fr); align-items: center; gap: 14px;
+      transition: transform 0.25s, border-color 0.25s, background 0.25s;
     }
-    .team-card:hover { transform: translateY(-8px); box-shadow: 0 32px 64px rgba(11,11,11,0.18); }
-    .team-photo {
-      position: absolute; inset: 0; width: 100%; height: 100%;
-      object-fit: cover; object-position: top;
-      transition: transform 0.6s cubic-bezier(0.22,1,0.36,1), filter 0.4s;
+    .team-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--surface-border-strong);
+      background: var(--surface-tint);
     }
-    .team-card:hover .team-photo { transform: scale(1.05); filter: brightness(0.65); }
-    .team-gradient {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(11,11,11,0.95) 0%, rgba(11,11,11,0.45) 45%, transparent 70%);
-    }
-    .team-exp {
-      position: absolute; top: 16px; right: 16px;
-      font-size: 0.65rem; font-weight: 700; color: var(--ink);
-      background: var(--sage); border-radius: 100px;
-      padding: 4px 10px; text-transform: uppercase; letter-spacing: 0.08em;
+    .team-index {
+      width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+      border: 1px solid rgba(197,223,192,0.22);
+      background: rgba(197,223,192,0.09);
+      display: inline-flex; align-items: center; justify-content: center;
+      color: var(--sage); font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.08em;
     }
     .team-body {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      padding: 22px 18px; display: flex; flex-direction: column; gap: 3px;
+      min-width: 0;
     }
-    .team-spec { font-size: 0.63rem; color: var(--sage); text-transform: uppercase; letter-spacing: 0.1em; }
-    .team-name { font-family: var(--font-cormorant), serif; font-size: 1.2rem; color: #fff; line-height: 1.1; }
-    .team-role { font-size: 0.72rem; color: rgba(255,255,255,0.45); }
-    .team-social { margin-top: 8px; }
-    .team-social-btn {
-      width: 28px; height: 28px; border-radius: 8px;
-      border: 1px solid rgba(197,223,192,0.25); color: var(--sage);
-      display: inline-flex; align-items: center; justify-content: center;
-      transition: all 0.2s;
+    .team-name {
+      font-family: var(--font-cormorant), serif;
+      font-size: clamp(1.2rem, 2vw, 1.5rem); color: #fff; line-height: 1.15;
+      overflow-wrap: anywhere;
     }
-    .team-social-btn:hover { background: var(--sage); color: var(--ink); }
+    .team-role {
+      margin-top: 4px;
+      font-size: 0.68rem;
+      color: var(--text-subtle);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
 
     /* ── Cases ── */
     .cases-inner { padding: clamp(4rem, 7vw, 8rem) 0; }
@@ -600,13 +865,17 @@ const GlobalStyles = () => (
 
     /* ── Why / Regions ── */
     .regions-inner-content { padding: clamp(4rem, 7vw, 8rem) 0; }
-    .regions-head { text-align: center; margin-bottom: clamp(2.5rem, 4vw, 4rem); }
+    .regions-head {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      gap: 24px; flex-wrap: wrap;
+      margin-bottom: clamp(2.5rem, 4vw, 4rem);
+    }
     .regions-title {
       font-size: clamp(2.4rem, 4vw, 4rem);
-      color: #fff; letter-spacing: -0.015em; margin: 14px 0 12px;
+      color: #fff; letter-spacing: 0; margin: 14px 0 12px;
     }
     .regions-title em { color: var(--sage); font-style: italic; }
-    .regions-sub { font-size: 0.95rem; color: rgba(255,255,255,0.45); }
+    .regions-sub { font-size: 0.95rem; color: rgba(255,255,255,0.55); line-height: 1.75; max-width: 560px; }
     .why-cards {
       display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
       margin-bottom: 48px;
@@ -627,28 +896,124 @@ const GlobalStyles = () => (
     .why-title { font-family: var(--font-cormorant), serif; font-size: 1.25rem; color: #fff; }
     .why-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.68; }
     .regions-presence {
-      border: 1px solid var(--surface-border); border-radius: 20px; overflow: hidden;
-      background: var(--surface-base);
-      box-shadow: var(--surface-shadow);
+      position: relative;
+      border-block: 1px solid var(--surface-border); border-radius: 0; overflow: hidden;
+      background: linear-gradient(180deg, rgba(15,19,17,0.5), rgba(8,11,10,0.28));
+      box-shadow: none;
+    }
+    .regions-presence::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, transparent 0, transparent calc(100% - 1px), rgba(197,223,192,0.08) calc(100% - 1px)),
+        linear-gradient(180deg, rgba(197,223,192,0.05), transparent 38%);
+      background-size: 88px 88px, 100% 100%;
+      opacity: 0.28;
+      pointer-events: none;
     }
     .regions-presence-header {
-      padding: 14px 24px;
-      font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.16em;
-      color: rgba(197,223,192,0.78); background: rgba(197,223,192,0.1);
+      position: relative;
+      padding: 18px 0;
+      display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;
+      background: transparent;
       border-bottom: 1px solid var(--surface-border);
+    }
+    .regions-presence-kicker {
+      font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.16em;
+      color: rgba(197,223,192,0.78);
+      font-weight: 700;
+    }
+    .regions-presence-note {
+      font-size: 0.8rem; color: var(--text-muted);
     }
     .regions-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
+      position: relative;
+      display: flex; flex-direction: column; gap: 12px;
+      padding: 24px 0;
     }
     .region-item {
-      padding: 20px 24px;
-      border-right: 1px solid var(--surface-border);
+      position: relative;
+      padding: 0;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      overflow: visible;
+      display: grid; grid-template-columns: minmax(220px, 0.34fr) minmax(0, 1fr);
+      transition: background 0.25s, border-color 0.25s, transform 0.25s;
+    }
+    .region-item::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 22px;
+      bottom: -34px;
+      width: 1px;
+      background: linear-gradient(180deg, rgba(197,223,192,0.55), rgba(197,223,192,0.08));
+    }
+    .region-item:last-child::before { bottom: 22px; }
+    .region-item:hover {
+      background: rgba(197,223,192,0.04);
+      border-color: transparent;
+      transform: translateX(6px);
+    }
+    .region-heading {
+      position: relative;
+      padding: 18px 24px 18px 38px;
+      border-right: none;
+      background: transparent;
+      display: flex; flex-direction: column; justify-content: space-between; gap: 22px;
+    }
+    .region-heading::before {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 26px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--sage);
+      box-shadow: 0 0 0 8px rgba(197,223,192,0.07), 0 0 18px rgba(197,223,192,0.22);
+    }
+    .region-name { font-family: var(--font-cormorant), serif; font-size: 1.42rem; color: #fff; }
+    .region-count {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: rgba(197,223,192,0.74);
+      font-weight: 700;
+    }
+    .court-list {
+      padding: 18px 0 18px 24px;
+      display: flex; flex-wrap: wrap; gap: 8px;
+      align-content: center;
       border-bottom: 1px solid var(--surface-border);
     }
-    .region-item:nth-child(3n) { border-right: none; }
-    .region-item:nth-child(4), .region-item:nth-child(5), .region-item:nth-child(6) { border-bottom: none; }
-    .region-name { font-family: var(--font-cormorant), serif; font-size: 1.1rem; color: #fff; margin-bottom: 4px; }
-    .region-cities { font-size: 0.77rem; color: var(--text-subtle); }
+    .region-item:last-child .court-list { border-bottom: none; }
+    .court-chip {
+      display: inline-flex; align-items: center;
+      min-height: 32px; padding: 7px 11px; border-radius: 8px;
+      border: 1px solid rgba(197,223,192,0.18);
+      background: rgba(9,12,11,0.48);
+      color: var(--text-body); font-size: 0.78rem; line-height: 1.35;
+    }
+    .additional-courts {
+      position: relative;
+      display: flex; flex-wrap: wrap; gap: 10px;
+      padding: 0 0 24px;
+      border-top: 1px solid var(--surface-border);
+      background: transparent;
+    }
+    .additional-court {
+      flex: 1 1 240px;
+      display: flex; align-items: flex-start; gap: 11px;
+      padding: 16px 18px;
+      border: 1px solid var(--surface-border);
+      border-radius: 8px;
+      background: rgba(9,12,11,0.46);
+      color: var(--text-body); font-size: 0.86rem; line-height: 1.55;
+    }
+    .additional-court svg { color: var(--sage); flex-shrink: 0; margin-top: 3px; }
 
     /* ── Testimonial / Leadership ── */
     .testi-section { padding: clamp(4rem, 7vw, 8rem) 0; }
@@ -785,10 +1150,10 @@ const GlobalStyles = () => (
       color: var(--text-subtle); transition: all 0.3s;
     }
     .faq-toggle.open { background: var(--sage); border-color: var(--sage); color: var(--ink); transform: rotate(45deg); }
-    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; background: rgba(9,12,11,0.72); }
-    .faq-answer.open { max-height: 220px; }
-    .faq-answer-inner { padding: 0 24px 20px; }
-    .faq-answer-text { font-size: 0.87rem; color: var(--text-muted); line-height: 1.8; }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); background: rgba(9,12,11,0.72); }
+    .faq-answer.open { max-height: 260px; }
+    .faq-answer-inner { padding: 4px 24px 22px; }
+    .faq-answer-text { font-size: 0.87rem; color: var(--text-muted); line-height: 1.85; }
 
     /* ── Contact ── */
     .contact-inner { padding: clamp(4rem, 7vw, 8rem) 0; }
@@ -816,6 +1181,12 @@ const GlobalStyles = () => (
     }
     .contact-detail-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-subtle); }
     .contact-detail-value { font-size: 0.88rem; color: var(--text-body); margin-top: 2px; font-weight: 500; }
+    .contact-number-list { display: flex; flex-direction: column; gap: 5px; margin-top: 4px; }
+    .contact-number-link {
+      font-size: 0.88rem; color: var(--text-body); font-weight: 500;
+      transition: color 0.2s;
+    }
+    .contact-number-link:hover { color: var(--sage); }
     .contact-hours {
       background: var(--surface-base); border: 1px solid var(--surface-border);
       border-radius: 16px; padding: 20px;
@@ -957,16 +1328,18 @@ const GlobalStyles = () => (
     .mobile-num { font-family: var(--font-dm), sans-serif; font-size: 0.68rem; color: rgba(197,223,192,0.35); letter-spacing: 0.1em; }
 
     /* ── Responsive ── */
+    @media (max-width: 1200px) {
+      .services-grid { grid-template-columns: repeat(3, 1fr); }
+    }
     @media (max-width: 1024px) {
       .hero-stats-row { flex-wrap: wrap; }
-      .about-inner { grid-template-columns: 1fr; }
-      .about-right { display: none; }
-      .services-grid { grid-template-columns: repeat(2, 1fr); }
-      .team-grid { grid-template-columns: repeat(2, 1fr); }
       .cases-stats { grid-template-columns: repeat(2, 1fr); }
       .cases-grid { grid-template-columns: repeat(2, 1fr); }
       .why-cards { grid-template-columns: repeat(2, 1fr); }
-      .regions-grid { grid-template-columns: repeat(2, 1fr); }
+      .region-item { grid-template-columns: 1fr; }
+      .region-heading { border-right: none; border-bottom: 1px solid var(--surface-border); }
+      .additional-courts { flex-direction: column; }
+      .additional-court { flex-basis: auto; }
       .testi-inner { grid-template-columns: 1fr; }
       .testi-sidebar { position: static; }
       .blog-layout { grid-template-columns: 1fr; }
@@ -977,14 +1350,38 @@ const GlobalStyles = () => (
       .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
       .nav-links { display: none; }
       .header-cta-desktop { display: none; }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .service-featured-card { grid-template-columns: auto 1fr; }
+      .service-featured-arrow { display: none; }
+    }
+    @media (max-width: 768px) {
+      .about-proof-strip { grid-template-columns: auto minmax(0, 1fr); }
+      .about-founder-exp {
+        grid-column: 1 / -1; text-align: left;
+        padding-left: 0; padding-top: 14px;
+        border-left: none; border-top: 1px solid rgba(197,223,192,0.18);
+      }
+      .services-intro-row { flex-direction: column; }
+      .service-featured-card { grid-template-columns: 1fr; }
+      .service-featured-icon-wrap { display: none; }
     }
     @media (max-width: 640px) {
+      .about-stats-row { grid-template-columns: 1fr; }
+      .about-value-card { grid-template-columns: auto minmax(0, 1fr); }
+      .about-value-num { grid-column: 2; }
+      .about-ctas { flex-direction: column; }
       .services-grid { grid-template-columns: 1fr; }
-      .team-grid { grid-template-columns: 1fr 1fr; }
+      .services-intro-stats { gap: 20px; }
+      .team-card { grid-template-columns: auto minmax(0, 1fr); }
       .cases-grid { grid-template-columns: 1fr; }
       .cases-stats { grid-template-columns: repeat(2, 1fr); }
       .why-cards { grid-template-columns: 1fr; }
-      .regions-grid { grid-template-columns: 1fr; }
+      .regions-grid { padding: 14px; }
+      .region-item { transform: none; }
+      .region-item:hover { transform: none; }
+      .region-heading,
+      .court-list { padding: 18px; }
+      .additional-courts { padding: 0 14px 14px; }
       .form-fields { grid-template-columns: 1fr; }
       .footer-top { grid-template-columns: 1fr; }
       .hero-title { font-size: clamp(3rem, 14vw, 5rem); }
@@ -994,6 +1391,7 @@ const GlobalStyles = () => (
       .hero-stat-num { font-size: 1.7rem; }
       .hero-tagline { margin-bottom: 32px; }
       .blog-item-img { width: 96px; height: 96px; }
+      .services-cta-bar { flex-direction: column; align-items: flex-start; }
     }
     @media (min-width: 1025px) {
       .mobile-panel { display: none; }
@@ -1047,10 +1445,60 @@ const services = [
 ];
 
 const teamMembers = [
-  { name: "AGD Bala Kumar", role: "Managing Counsel", specialization: "Criminal & Civil Litigation", experience: "12+ Years", img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&h=800&fit=crop&crop=faces" },
-  { name: "Priya Sundaram", role: "Senior Associate", specialization: "Family & Matrimonial Law", experience: "8 Years", img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&h=800&fit=crop&crop=faces" },
-  { name: "Karthik Raj", role: "Associate Counsel", specialization: "Corporate & Commercial Advisory", experience: "5 Years", img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&h=800&fit=crop&crop=faces" },
-  { name: "Meena Lakshmi", role: "Associate Advocate", specialization: "Property & Real Estate Law", experience: "4 Years", img: "https://images.unsplash.com/photo-1580894732444-8ecded7900cd?w=600&h=800&fit=crop&crop=faces" },
+  "AGD Bala kumar",
+  "A. Yokesh Kumar",
+  "M.R. Vinoth Prabhu",
+  "A. Prabhakaran",
+  "D. Pradeep Kumar",
+  "K.Rajkumar",
+  "T.Ravi shankar",
+  "S.Sivadharshini",
+  "P.Srikanth subash",
+  "S. Faiz Hameed Raja",
+  "N.Oviya",
+  "Intern: V. Prabhakaran",
+];
+
+const courtRegions = [
+  {
+    name: "Chennai District",
+    courts: [
+      "Madras High Court",
+      "Chennai City Civil Court",
+      "George Town (GT) Court",
+      "Egmore and Allikulam Court",
+      "Saidapet Court",
+      "Court of Small Causes",
+    ],
+  },
+  {
+    name: "Chengalpattu District",
+    courts: [
+      "Chengalpattu",
+      "Maduranthakam",
+      "Thiruporur",
+      "Pallavaram",
+      "Tambaram",
+      "Alandur",
+      "Sholinganallur",
+    ],
+  },
+  {
+    name: "Tiruvallur District",
+    courts: [
+      "Tiruvallur",
+      "Poonamallee",
+      "Madhavaram",
+      "Ambattur",
+      "Thiruvottiyur",
+    ],
+  },
+];
+
+const additionalCourts = [
+  "Dindigul and Vedasandur Sub Court, Paramakudi Sub Court and Madurai District Courts",
+  "City Civil Court, Bangalore",
+  "City Civil Court, Mumbai",
 ];
 
 const caseResults = [
@@ -1067,7 +1515,7 @@ const faqs = [
   { q: "Why choose AGD Law Associates?", a: "We are a boutique firm offering personalized attention, strong litigation and advisory expertise, ethical and transparent practice, efficient case management, and active Pan-Tamil Nadu plus inter-state presence." },
   { q: "What is your legal approach?", a: "Our structured process includes detailed case analysis, clear legal opinion and roadmap, transparent communication, strong courtroom advocacy, and focus on timely resolution." },
   { q: "What are your office hours?", a: "Monday to Friday: 10:00 AM to 6:30 PM. Saturday: 11:00 AM to 5:00 PM. Second and last Saturdays are holidays." },
-  { q: "Where do you have active practice presence?", a: "Our active litigation presence includes Chennai, Tambaram, Avadi, Coimbatore, Tiruppur, and Bangalore, along with districts such as Chengalpattu, Tiruvallur, Kancheepuram, and Dindigul." },
+  { q: "Where do you have active practice presence?", a: "Our active litigation presence includes the Madras High Court, Chennai City Civil Court, George Town, Egmore and Allikulam, Saidapet, Court of Small Causes, Chengalpattu, Tiruvallur, Dindigul, Vedasandur, Paramakudi, Madurai, Bangalore City Civil Court, and Mumbai City Civil Court." },
 ];
 
 const serviceOptions = [
@@ -1097,7 +1545,7 @@ const legalServiceSchema = {
   image: `${SITE_URL}/hero.png`,
   logo: `${SITE_URL}/logo.png`,
   description: SITE_DESCRIPTION,
-  telephone: "+91 99943 88855",
+  telephone: contactNumbers.map((number) => number.display),
   email: "agdlawassociatesoffice@gmail.com",
   foundingDate: "2016",
   founder: {
@@ -1113,22 +1561,20 @@ const legalServiceSchema = {
   areaServed: [
     { "@type": "City", name: "Chennai" },
     { "@type": "City", name: "Tambaram" },
-    { "@type": "City", name: "Avadi" },
-    { "@type": "City", name: "Coimbatore" },
-    { "@type": "City", name: "Tiruppur" },
+    { "@type": "City", name: "Chengalpattu" },
+    { "@type": "City", name: "Tiruvallur" },
     { "@type": "City", name: "Bangalore" },
+    { "@type": "City", name: "Mumbai" },
     { "@type": "AdministrativeArea", name: "Tamil Nadu" },
   ],
-  contactPoint: [
-    {
-      "@type": "ContactPoint",
-      contactType: "customer support",
-      telephone: "+91 99943 88855",
-      email: "agdlawassociatesoffice@gmail.com",
-      url: `${SITE_URL}/#contact`,
-      areaServed: "IN",
-    },
-  ],
+  contactPoint: contactNumbers.map((number) => ({
+    "@type": "ContactPoint",
+    contactType: "customer support",
+    telephone: number.display,
+    email: "agdlawassociatesoffice@gmail.com",
+    url: `${SITE_URL}/#contact`,
+    areaServed: "IN",
+  })),
   knowsAbout: serviceOptions.map((service) => service.label),
 };
 
@@ -1169,7 +1615,6 @@ function Header() {
     { id: "about", label: "About" },
     { id: "services", label: "Services" },
     { id: "team", label: "Team" },
-    { id: "cases", label: "Case Results" },
     { id: "blog", label: "Insights" },
     { id: "faq", label: "FAQ" },
     { id: "contact", label: "Contact" },
@@ -1307,8 +1752,8 @@ function Hero() {
             <a href="#contact" className="btn-primary">
               Request Consultation <ArrowRight size={14} />
             </a>
-            <a href="tel:+919994388855" className="btn-ghost">
-              <Phone size={14} /> +91 99943 88855
+            <a href={`tel:${primaryContactNumber.tel}`} className="btn-ghost">
+              <Phone size={14} /> {primaryContactNumber.display}
             </a>
           </div>
           <div className="hero-stats-row">
@@ -1360,65 +1805,63 @@ function Ticker() {
 // ─── About ────────────────────────────────────────────────────────────────────
 
 function About() {
-  const credentials = ["Integrity & Professionalism", "Confidentiality & Trust", "Client-Focused Service", "Excellence in Advocacy", "Timely Legal Solutions"];
+  const values = [
+    { num: "01", icon: Shield, title: "Integrity First", text: "Every mandate is handled with full transparency, honest counsel, and unwavering ethical standards." },
+    { num: "02", icon: Users, title: "Client-Centred", text: "Personalised attention to every matter — no cookie-cutter solutions, only tailored strategies." },
+    { num: "03", icon: Scale, title: "Precision in Advocacy", text: "Meticulous research and sharp courtroom arguments built on deep legal knowledge." },
+    { num: "04", icon: Clock, title: "Timely Resolution", text: "Efficient case management that respects your time while never compromising thoroughness." },
+    { num: "05", icon: Award, title: "Proven Track Record", text: "500+ matters handled across criminal, civil, constitutional, and commercial forums since 2016." },
+  ];
+
   return (
     <section className="panel" id="about">
       <div className="container">
         <div className="about-inner">
-          <div className="about-left">
-            <span className="section-label">About Us</span>
+
+          <div className="about-content">
+            <div className="about-eyebrow-row">
+              <span className="section-label">About Us</span>
+              <div className="about-eyebrow-line" />
+            </div>
             <h2 className="about-pretitle">
               Your legal matter<br />deserves <em>precision</em>
             </h2>
-            <p className="about-body">
-              Founded in 2016, AGD Law Associates is a boutique law firm delivering
-              high-quality litigation and advisory services across Tamil Nadu and beyond.
-              Led by AGD Bala Kumar with over 12 years of practice, our firm combines
-              courtroom strength with strategic advisory for complex, sensitive, and
-              high-impact legal matters.
-            </p>
-            <p className="about-body">
-              We believe every client deserves personalized attention, clear communication,
-              and a legal team genuinely invested in their outcome. From first consultation
-              to final resolution, we stand by you.
-            </p>
-            <div className="about-stats">
-              {[{ num: "2016", lbl: "Established" }, { num: "10+", lbl: "Advocates" }, { num: "6", lbl: "Active Cities" }].map((s) => (
-                <div className="about-stat-box" key={s.lbl}>
-                  <div className="about-stat-num">{s.num}</div>
-                  <div className="about-stat-lbl">{s.lbl}</div>
-                </div>
-              ))}
+            <div className="about-copy">
+              <p className="about-lead">
+                Founded in 2016, AGD Law Associates is a boutique law firm delivering
+                precision-driven litigation and advisory across Tamil Nadu and beyond.
+                Led by AGD Bala Kumar with over 12 years of practice, we pair courtroom
+                strength with strategic advisory for complex, high-impact matters.
+              </p>
+              <p className="about-body">
+                Every client deserves personalised attention, honest communication, and a
+                legal team genuinely invested in their outcome — from first consultation
+                to final resolution. We believe the best legal service is measured not just
+                in outcomes, but in the trust built along the way.
+              </p>
             </div>
-            <div className="about-creds">
-              {credentials.map((c) => (
-                <span className="cred-tag" key={c}><CheckCircle size={12} />{c}</span>
-              ))}
+
+            <div className="about-proof-strip">
+              <div className="about-founder-avatar">
+                <Scale size={20} />
+              </div>
+              <div>
+                <div className="about-founder-name">AGD Bala Kumar</div>
+                <div className="about-founder-role">Founder &amp; Lead Advocate</div>
+              </div>
+              <div className="about-founder-exp">
+                <div className="about-founder-exp-num">12+</div>
+                <div className="about-founder-exp-lbl">Yrs Practice</div>
+              </div>
             </div>
-            <a href="#contact" className="btn-primary" style={{ width: "fit-content" }}>
-              Schedule a Consultation <ArrowRight size={14} />
-            </a>
-          </div>
-          <div className="about-right">
-            <div style={{ position: "relative", paddingRight: "24px", paddingTop: "24px" }}>
-              <div className="about-img-accent">
-                <img
-                  src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=600&h=600&fit=crop"
-                  alt="Law office"
-                  loading="lazy"
-                />
-              </div>
-              <div className="about-img-wrap">
-                <img
-                  src="https://images.unsplash.com/photo-1556157382-97eda2d62296?w=800&h=1000&fit=crop&crop=faces"
-                  alt="AGD Law Associates counsel"
-                  loading="lazy"
-                />
-              </div>
-              <div className="about-img-badge">
-                <div className="about-badge-num">12+</div>
-                <div className="about-badge-lbl">Years of<br />Practice</div>
-              </div>
+
+            <div className="about-ctas">
+              <a href="#contact" className="btn-primary">
+                Schedule a Consultation <ArrowRight size={14} />
+              </a>
+              <a href="#services" className="btn-ghost">
+                Our Services <ArrowRight size={14} />
+              </a>
             </div>
           </div>
         </div>
@@ -1442,10 +1885,15 @@ const serviceTitleToSlug = {
 };
 
 function Services() {
+  const [featuredService, ...restServices] = services;
+  const FeaturedIcon = featuredService.icon;
+
   return (
     <section className="panel-dark" id="services">
       <div className="container">
         <div className="services-inner">
+
+          {/* Header */}
           <div className="services-head">
             <div>
               <span className="section-label-dark">Practice Areas</span>
@@ -1455,21 +1903,82 @@ function Services() {
               Discuss Your Case <ArrowRight size={13} />
             </a>
           </div>
+
+          {/* Intro row */}
+          <div className="services-intro-row">
+            <p className="services-intro-text">
+              Nine focused practice areas — each handled with the depth, rigour, and
+              personalised attention your matter deserves. From bail applications to
+              corporate advisory, we handle the full spectrum of legal needs.
+            </p>
+            <div className="services-intro-stats">
+              {[
+                { num: "9", lbl: "Practice Areas" },
+                { num: "500+", lbl: "Cases Handled" },
+                { num: "12+", lbl: "Courts Active" },
+              ].map((s) => (
+                <div className="services-intro-stat" key={s.lbl}>
+                  <span className="services-intro-stat-num">{s.num}</span>
+                  <span className="services-intro-stat-lbl">{s.lbl}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Featured card */}
+          <Link
+            href={`/services/${serviceTitleToSlug[featuredService.title]}`}
+            className="service-featured-card"
+          >
+            <span className="service-featured-num">01</span>
+            <span className="service-featured-badge">Featured Practice</span>
+            <div className="service-featured-icon-wrap">
+              <FeaturedIcon size={22} />
+            </div>
+            <div>
+              <h3 className="service-featured-name">{featuredService.title}</h3>
+              <p className="service-featured-desc">{featuredService.description}</p>
+            </div>
+            <div className="service-featured-arrow"><ArrowRight size={16} /></div>
+          </Link>
+
+          {/* Grid of remaining services */}
           <div className="services-grid">
-            {services.map((s, i) => {
+            {restServices.map((s, i) => {
               const Icon = s.icon;
               const slug = serviceTitleToSlug[s.title];
               return (
-                <Link href={slug ? `/services/${slug}` : "#"} className="service-card" key={s.title} style={{ textDecoration: "none", color: "inherit" }}>
-                  <span className="service-num">0{i + 1}</span>
-                  <div className="service-icon-wrap"><Icon size={17} /></div>
-                  <h3 className="service-name">{s.title}</h3>
-                  <p className="service-desc">{s.description}</p>
-                  <div className="service-arrow"><ArrowRight size={13} /></div>
+                <Link
+                  key={s.title}
+                  href={slug ? `/services/${slug}` : "#"}
+                  className="service-grid-card"
+                >
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <div className="service-grid-icon"><Icon size={16} /></div>
+                    <span className="service-grid-num">0{i + 2}</span>
+                  </div>
+                  <h3 className="service-grid-name">{s.title}</h3>
+                  <p className="service-grid-desc">{s.description}</p>
+                  <div className="service-grid-footer">
+                    <span className="service-grid-tag">Learn more</span>
+                    <div className="service-grid-arrow"><ArrowRight size={12} /></div>
+                  </div>
                 </Link>
               );
             })}
           </div>
+
+          {/* CTA bar */}
+          <div className="services-cta-bar">
+            <p className="services-cta-bar-text">
+              <strong>Not sure which area applies to your matter?</strong>{" "}
+              Our team will help you identify the right course of action in a free initial call.
+            </p>
+            <a href="#contact" className="btn-primary" style={{ flexShrink: 0 }}>
+              Get Free Advice <ArrowRight size={13} />
+            </a>
+          </div>
+
         </div>
       </div>
     </section>
@@ -1479,6 +1988,11 @@ function Services() {
 // ─── Team ─────────────────────────────────────────────────────────────────────
 
 function Team() {
+  const rosterRows = [
+    teamMembers.slice(0, Math.ceil(teamMembers.length / 2)),
+    teamMembers.slice(Math.ceil(teamMembers.length / 2)),
+  ];
+
   return (
     <section className="panel" id="team">
       <div className="container">
@@ -1486,24 +2000,28 @@ function Team() {
           <div className="team-head">
             <div>
               <span className="section-label">Our Team</span>
-              <h2 className="team-title">The counsel behind<br />your <em>case</em></h2>
+              <h2 className="team-title">Advocates in <em>practice</em></h2>
             </div>
           </div>
-          <div className="team-grid">
-            {teamMembers.map((m) => (
-              <div className="team-card" key={m.name}>
-                <img src={m.img} alt={m.name} className="team-photo" loading="lazy" />
-                <div className="team-gradient" />
-                <div className="team-exp">{m.experience}</div>
-                <div className="team-body">
-                  <div className="team-spec">{m.specialization}</div>
-                  <div className="team-name">{m.name}</div>
-                  <div className="team-role">{m.role}</div>
-                  <div className="team-social">
-                    <a href="#" className="team-social-btn" aria-label={`${m.name} LinkedIn`}>
-                      <ExternalLink size={11} />
-                    </a>
-                  </div>
+          <div className="team-streams">
+            {rosterRows.map((row, rowIndex) => (
+              <div className="team-stream" key={rowIndex}>
+                <div className="team-track">
+                  {[...row, ...row].map((name, duplicatedIndex) => {
+                    const sourceIndex = rowIndex * rosterRows[0].length + (duplicatedIndex % row.length);
+                    const isIntern = name.toLowerCase().startsWith("intern:");
+                    const displayName = isIntern ? name.replace(/^Intern:\s*/i, "") : name;
+
+                    return (
+                      <div className="team-card" key={`${name}-${duplicatedIndex}`}>
+                        <span className="team-index">{String(sourceIndex + 1).padStart(2, "0")}</span>
+                        <div className="team-body">
+                          <div className="team-name">{displayName}</div>
+                          <div className="team-role">{isIntern ? "Legal Intern" : "Advocate"}</div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             ))}
@@ -1514,102 +2032,49 @@ function Team() {
   );
 }
 
-// ─── Case Results ─────────────────────────────────────────────────────────────
-
-function CaseResults() {
-  const stats = [
-    { num: "500+", lbl: "Cases Handled" },
-    { num: "92%", lbl: "Success Rate" },
-    { num: "6", lbl: "Active Cities" },
-    { num: "12+", lbl: "Years Practice" },
-  ];
-  return (
-    <section className="panel-tinted" id="cases">
-      <div className="container">
-        <div className="cases-inner">
-          <div className="cases-head">
-            <div>
-              <span className="section-label">Track Record</span>
-              <h2 className="cases-title">Results that <em>speak</em></h2>
-            </div>
-            <a href="#contact" className="btn-primary" style={{ flexShrink: 0 }}>
-              Discuss Your Case <ArrowRight size={13} />
-            </a>
-          </div>
-          <div className="cases-stats">
-            {stats.map((s) => (
-              <div className="cstat-box" key={s.lbl}>
-                <div className="cstat-num">{s.num}</div>
-                <div className="cstat-lbl">{s.lbl}</div>
-              </div>
-            ))}
-          </div>
-          <div className="cases-grid">
-            {caseResults.map((c, i) => (
-              <article className={`case-card${c.highlight ? " highlight" : ""}`} key={i}>
-                <div className="case-category">{c.category}</div>
-                <h3 className="case-title">{c.title}</h3>
-                <p className="case-desc">{c.description}</p>
-                <div className="case-footer">
-                  <div>
-                    <div className="case-court">{c.court}</div>
-                    <div className="case-year">{c.year}</div>
-                  </div>
-                  <div className="case-outcome"><CheckCircle size={10} />{c.outcome}</div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 // ─── Why / Regions ────────────────────────────────────────────────────────────
 
 function Regions() {
-  const whyItems = [
-    { icon: Scale, title: "Boutique Attention", desc: "Every client receives direct partner-level attention — no file gets lost in a large firm structure." },
-    { icon: Shield, title: "Ethical Practice", desc: "Strict confidentiality, transparent communication, and unwavering integrity in every matter." },
-    { icon: Clock, title: "Timely Resolution", desc: "Structured case management designed to achieve efficient, timely outcomes without unnecessary delays." },
-    { icon: Award, title: "Proven Advocacy", desc: "12+ years of courtroom experience across criminal, civil, constitutional, and commercial matters." },
-  ];
   return (
     <section className="panel-dark" id="why-me">
       <div className="container">
         <div className="regions-inner-content">
           <div className="regions-head">
-            <span className="section-label-dark">Why Choose Us</span>
-            <h2 className="regions-title">Why <em>AGD</em> Law Associates</h2>
-            <p className="regions-sub">A trusted boutique firm serving clients across Tamil Nadu and beyond</p>
-          </div>
-          <div className="why-cards">
-            {whyItems.map((w) => {
-              const Icon = w.icon;
-              return (
-                <div className="why-card" key={w.title}>
-                  <div className="why-icon"><Icon size={20} /></div>
-                  <div className="why-title">{w.title}</div>
-                  <div className="why-desc">{w.desc}</div>
-                </div>
-              );
-            })}
+            <div>
+              <span className="section-label-dark">Court Presence</span>
+              <h2 className="regions-title">Area of practice in <em>specific courts</em></h2>
+            </div>
+            <p className="regions-sub">
+              Focused litigation support across Chennai, Chengalpattu, Tiruvallur,
+              key Tamil Nadu courts, and selected city civil courts outside the state.
+            </p>
           </div>
           <div className="regions-presence">
-            <div className="regions-presence-header">Our Practice Presence</div>
+            <div className="regions-presence-header">
+              <span className="regions-presence-kicker">Courts and districts</span>
+              <span className="regions-presence-note">Select the nearest forum for consultation and filing support.</span>
+            </div>
             <div className="regions-grid">
-              {[
-                { name: "Chennai & Suburbs", cities: "Chennai · Tambaram · Avadi" },
-                { name: "Western Tamil Nadu", cities: "Coimbatore · Tiruppur" },
-                { name: "Greater Karnataka", cities: "Bangalore & surrounding districts" },
-                { name: "Chengalpattu", cities: "Chengalpattu · Kancheepuram" },
-                { name: "Tiruvallur", cities: "Tiruvallur · Ponneri · Gummidipoondi" },
-                { name: "Dindigul", cities: "Dindigul · Natham · Palani" },
-              ].map((r) => (
+              {courtRegions.map((r) => (
                 <div className="region-item" key={r.name}>
-                  <div className="region-name">{r.name}</div>
-                  <div className="region-cities">{r.cities}</div>
+                  <div className="region-heading">
+                    <div className="region-name">{r.name}</div>
+                    <div className="region-count">{r.courts.length} forums</div>
+                  </div>
+                  <div className="court-list">
+                    {r.courts.map((court) => (
+                      <span className="court-chip" key={court}>{court}</span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="additional-courts">
+              {additionalCourts.map((court) => (
+                <div className="additional-court" key={court}>
+                  <MapPin size={14} />
+                  <span>{court}</span>
                 </div>
               ))}
             </div>
@@ -1620,74 +2085,6 @@ function Regions() {
   );
 }
 
-// ─── Testimonial / Leadership ──────────────────────────────────────────────────
-
-const testimonials = [
-  { name: "AGD Bala Kumar", role: "Advocate | Managing Counsel", feedback: "AGD Bala Kumar has over 12 years of experience in litigation and legal advisory, with focused practice across criminal law, civil disputes, constitutional remedies, consumer matters, property law, family law, arbitration, corporate advisory, MCOP, and RCOP matters.", img: "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=450&h=300&fit=crop" },
-  { name: "AGD Law Associates", role: "Our Vision", feedback: "To become a trusted and leading boutique law firm recognized for excellence, integrity, and client satisfaction through precision-driven advocacy, transparent communication, and timely legal solutions.", img: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=450&h=300&fit=crop" },
-];
-
-function Testimonial() {
-  const [current, setCurrent] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const total = testimonials.length;
-  const prev = () => setCurrent((c) => (c - 1 + total) % total);
-  const next = () => setCurrent((c) => (c + 1) % total);
-
-  useEffect(() => {
-    if (isPaused) return;
-    const t = setInterval(() => setCurrent((c) => (c + 1) % total), 7000);
-    return () => clearInterval(t);
-  }, [isPaused, total]);
-
-  const t = testimonials[current];
-  return (
-    <section className="panel" id="testimonial" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
-      <div className="container">
-        <div className="testi-section">
-          <div className="testi-inner">
-            <div className="testi-sidebar">
-              <span className="section-label">Leadership</span>
-              <h2 className="testi-sidebar-title">
-                Courtroom <em>precision</em><br />at every level
-              </h2>
-              <p className="testi-sidebar-body">
-                AGD Bala Kumar leads the firm with over 12 years of practice, combining
-                litigation strength with strategic advisory for complex matters.
-              </p>
-              <div className="testi-nav">
-                <button type="button" className="testi-nav-btn" onClick={prev} aria-label="Previous"><ArrowLeft size={15} /></button>
-                <button type="button" className="testi-nav-btn" onClick={next} aria-label="Next"><ArrowRight size={15} /></button>
-                <div className="testi-counter">{String(current + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</div>
-              </div>
-              <div className="testi-progress">
-                <div className="testi-bar" style={{ width: `${((current + 1) / total) * 100}%` }} />
-              </div>
-              <div className="testi-dots">
-                {testimonials.map((_, i) => (
-                  <button key={i} type="button" className="testi-dot" style={{ width: i === current ? "28px" : "8px", opacity: i === current ? 1 : 0.35 }} onClick={() => setCurrent(i)} aria-label={`Slide ${i + 1}`} />
-                ))}
-              </div>
-            </div>
-            <div>
-              <article key={`${t.name}-${current}`} className="testi-card">
-                <div className="testi-stars">{Array.from({ length: 5 }).map((_, i) => <span key={i}>★</span>)}</div>
-                <blockquote className="testi-quote">&ldquo;{t.feedback}&rdquo;</blockquote>
-                <div className="testi-author">
-                  <img src={t.img} alt={t.name} className="testi-avatar" loading="lazy" />
-                  <div>
-                    <div className="testi-name">{t.name}</div>
-                    <div className="testi-role">{t.role}</div>
-                  </div>
-                </div>
-              </article>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 // ─── Blog ─────────────────────────────────────────────────────────────────────
 
@@ -1770,7 +2167,7 @@ function FAQ() {
                   <div className="faq-item" key={i}>
                     <button type="button" className="faq-question" onClick={() => toggle(i)} aria-expanded={isOpen}>
                       <span>{faq.q}</span>
-                      <span className={`faq-toggle${isOpen ? " open" : ""}`}><X size={13} /></span>
+                      <span className={`faq-toggle${isOpen ? " open" : ""}`}><Plus size={13} /></span>
                     </button>
                     <div className={`faq-answer${isOpen ? " open" : ""}`}>
                       <div className="faq-answer-inner">
@@ -1831,8 +2228,20 @@ function Contact() {
               <span className="section-label-dark">Get In Touch</span>
               <h2 className="contact-title">Need legal<br /><em>support?</em><br />Let&apos;s connect.</h2>
               <p className="contact-sub">Reach out directly or fill the form — we respond during office hours. Every matter is handled with strict confidentiality.</p>
+              <div className="contact-detail">
+                <div className="contact-detail-icon"><PhoneCall size={15} /></div>
+                <div>
+                  <div className="contact-detail-label">Contact Numbers</div>
+                  <div className="contact-number-list">
+                    {contactNumbers.map((number) => (
+                      <a key={number.tel} href={`tel:${number.tel}`} className="contact-number-link">
+                        {number.display}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
               {[
-                { icon: PhoneCall, label: "Phone", value: "+91 99943 88855", href: "tel:+919994388855" },
                 { icon: Mail, label: "Email", value: "agdlawassociatesoffice@gmail.com", href: "mailto:agdlawassociatesoffice@gmail.com" },
                 { icon: MapPin, label: "Location", value: "Chennai, Tamil Nadu", href: "#" },
               ].map((d) => {
@@ -1918,7 +2327,6 @@ function Footer() {
     { href: "#about", label: "About" },
     { href: "#services", label: "Services" },
     { href: "#team", label: "Our Team" },
-    { href: "#cases", label: "Case Results" },
     { href: "#blog", label: "Legal Insights" },
     { href: "#contact", label: "Contact" },
   ];
@@ -1954,10 +2362,12 @@ function Footer() {
           <div className="footer-col">
             <div className="footer-col-title">Contact</div>
             <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-              <a href="tel:+919994388855" className="footer-contact-item" style={{ textDecoration: "none" }}>
-                <PhoneCall size={13} className="footer-contact-icon" />
-                <span className="footer-contact-text">+91 99943 88855</span>
-              </a>
+              {contactNumbers.map((number) => (
+                <a key={number.tel} href={`tel:${number.tel}`} className="footer-contact-item" style={{ textDecoration: "none" }}>
+                  <PhoneCall size={13} className="footer-contact-icon" />
+                  <span className="footer-contact-text">{number.display}</span>
+                </a>
+              ))}
               <a href="mailto:agdlawassociatesoffice@gmail.com" className="footer-contact-item" style={{ textDecoration: "none" }}>
                 <Mail size={13} className="footer-contact-icon" />
                 <span className="footer-contact-text">agdlawassociatesoffice@gmail.com</span>
@@ -1983,7 +2393,7 @@ function Footer() {
 function WhatsAppFloatingChat() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const phoneNumber = "919994388855";
+  const phoneNumber = primaryContactNumber.tel.replace("+", "");
 
   const quickMessages = [
     "Hi, I need a legal consultation.",
@@ -2113,9 +2523,7 @@ export default function Page() {
           <About />
           <Services />
           <Team />
-          <CaseResults />
           <Regions />
-          <Testimonial />
           <Blog />
           <FAQ />
           <Contact />
