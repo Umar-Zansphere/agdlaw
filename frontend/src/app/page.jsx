@@ -1615,7 +1615,6 @@ function Header() {
     { id: "about", label: "About" },
     { id: "services", label: "Services" },
     { id: "team", label: "Team" },
-    { id: "cases", label: "Case Results" },
     { id: "blog", label: "Insights" },
     { id: "faq", label: "FAQ" },
     { id: "contact", label: "Contact" },
@@ -2328,7 +2327,6 @@ function Footer() {
     { href: "#about", label: "About" },
     { href: "#services", label: "Services" },
     { href: "#team", label: "Our Team" },
-    { href: "#cases", label: "Case Results" },
     { href: "#blog", label: "Legal Insights" },
     { href: "#contact", label: "Contact" },
   ];
