@@ -32,13 +32,15 @@ import {
   Send,
   X,
   Plus,
-  Scale,
   Shield,
   Clock,
   Award,
   Users,
   BookOpen,
   Menu,
+  Scale,
+  User,
+  Briefcase,
   CheckCircle,
 } from "lucide-react";
 
@@ -48,8 +50,8 @@ const SITE_DESCRIPTION =
   "AGD Law Associates is a boutique law firm in Chennai delivering precision-driven litigation and advisory across criminal, civil, constitutional, consumer, property, family, arbitration, and corporate matters.";
 
 const contactNumbers = [
-  { display: "+91 99943 88855", tel: "+919994388855" },
   { display: "+91 89395 88855", tel: "+918939588855" },
+  { display: "+91 99943 88855", tel: "+919994388855" },
   { display: "+91 89396 88855", tel: "+918939688855" },
 ];
 const primaryContactNumber = contactNumbers[0];
@@ -179,11 +181,11 @@ const GlobalStyles = () => (
     .header.scrolled {
       background: rgba(11,11,11,0.88);
       backdrop-filter: blur(20px);
-      box-shadow: 0 1px 0 rgba(197,223,192,0.1), 0 8px 32px rgba(0,0,0,0.3);
+      // box-shadow: 0 1px 0 rgba(197,223,192,0.1), 0 8px 32px rgba(0,0,0,0.3);
     }
     .header-inner {
       display: flex; align-items: center; justify-content: space-between;
-      height: 70px; gap: 24px;
+      height: 90px; gap: 24px;
     }
     .logo-mark {
       font-family: var(--font-cormorant), Georgia, serif;
@@ -253,7 +255,7 @@ const GlobalStyles = () => (
       margin-top: 80px;
     }
     .hero-title {
-      font-size: clamp(4rem, 9vw, 9rem);
+      font-size: clamp(2.5rem, 6vw, 6rem);
       color: #fff; line-height: 0.92;
       letter-spacing: -0.025em; margin-bottom: 12px;
     }
@@ -781,6 +783,21 @@ const GlobalStyles = () => (
       display: inline-flex; align-items: center; justify-content: center;
       color: var(--sage); font-size: 0.7rem; font-weight: 700;
       letter-spacing: 0.08em;
+    }
+    .team-card:hover .team-icon {
+      transform: scale(1.1);
+      background: rgba(255,255,255,0.15);
+    }
+    .team-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      flex-shrink: 0;
     }
     .team-body {
       min-width: 0;
@@ -1445,30 +1462,32 @@ const services = [
 ];
 
 const teamMembers = [
-  "AGD Bala kumar",
-  "A. Yokesh Kumar",
-  "M.R. Vinoth Prabhu",
-  "A. Prabhakaran",
-  "D. Pradeep Kumar",
-  "K.Rajkumar",
-  "T.Ravi shankar",
-  "S.Sivadharshini",
-  "P.Srikanth subash",
-  "S. Faiz Hameed Raja",
-  "N.Oviya",
-  "Intern: V. Prabhakaran",
+  { name: "AGD Bala kumar", role: "Lead Advocate" },
+  { name: "V. Velukumaran", role: "Sentinel Law Associate" },
+  { name: "A. Yokesh Kumar", role: "Advocate" },
+  { name: "M.R. Vinoth Prabhu", role: "Advocate" },
+  { name: "A. Prabhakaran", role: "Advocate" },
+  { name: "D. Pradeep Kumar", role: "Advocate" },
+  { name: "K. Rajkumar", role: "Advocate" },
+  { name: "T. Ravi shankar", role: "Advocate" },
+  { name: "S. Sivadharshini", role: "Advocate" },
+  { name: "P. Srikanth subash", role: "Advocate" },
+  { name: "S. Faiz Hameed Raja", role: "Advocate" },
+  { name: "Oviya N", role: "Advocate" },
+  { name: "G. Gana Rajan", role: "Advocate" },
+  { name: "V. Prabhakaran", role: "Intern" },
 ];
 
 const courtRegions = [
   {
     name: "Chennai District",
     courts: [
-      "Madras High Court",
-      "Chennai City Civil Court",
+      "High Court Madras",
+      "City Civil Court Chennai",
+      "Court of Small Causes",
       "George Town (GT) Court",
       "Egmore and Allikulam Court",
       "Saidapet Court",
-      "Court of Small Causes",
     ],
   },
   {
@@ -1496,9 +1515,8 @@ const courtRegions = [
 ];
 
 const additionalCourts = [
-  "Dindigul and Vedasandur Sub Court, Paramakudi Sub Court and Madurai District Courts",
-  "City Civil Court, Bangalore",
-  "City Civil Court, Mumbai",
+  "Paramakudi Sub Court, Coimbatore, Thiruppur, Dindigul, Vedasandur Sub Court and Madurai District Courts",
+  "City Civil Courts – Bengaluru & Mumbai",
 ];
 
 const caseResults = [
@@ -1536,6 +1554,12 @@ const budgetOptions = [
   { value: "scheduled", label: "Scheduled Consultation" },
 ];
 
+const getIcon = (role) => {
+  if (role.toLowerCase().includes("intern")) return <User size={16} />;
+  if (role.toLowerCase().includes("lead")) return <Briefcase size={16} />;
+  return <Scale size={16} />;
+};
+
 const legalServiceSchema = {
   "@context": "https://schema.org",
   "@type": "LegalService",
@@ -1543,7 +1567,7 @@ const legalServiceSchema = {
   name: SITE_NAME,
   url: SITE_URL,
   image: `${SITE_URL}/hero.png`,
-  logo: `${SITE_URL}/logo.png`,
+  logo: `${SITE_URL}/logo1.png`,
   description: SITE_DESCRIPTION,
   telephone: contactNumbers.map((number) => number.display),
   email: "agdlawassociatesoffice@gmail.com",
@@ -1651,7 +1675,7 @@ function Header() {
         <div className="container">
           <div className="header-inner">
             <a href="#" className="logo-mark">
-              <AGDLogoImg size={48} />
+              <AGDLogoImg size={72} />
               <span>AGD Law Associates</span>
             </a>
             <nav className="nav-links" aria-label="Main navigation">
@@ -1689,16 +1713,16 @@ function Header() {
       <style>{`@media(max-width:1024px){.mobile-menu-btn{display:inline-flex!important;}}`}</style>
       {menuOpen && (
         <div className="mobile-panel">
-          <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "70px" }}>
+          <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "90px" }}>
             <span className="logo-mark">
-              <AGDLogoImg size={48} />
+              <AGDLogoImg size={72} />
               AGD Law Associates
             </span>
             <button type="button" onClick={() => setMenuOpen(false)} style={{ width: "38px", height: "38px", border: "1px solid rgba(197,223,192,0.2)", borderRadius: "9px", background: "transparent", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
               <X size={17} />
             </button>
           </div>
-          <nav className="container" style={{ flex: 1, paddingTop: "16px" }}>
+          <nav className="container" style={{ flex: 1, paddingTop: "16px",}}>
             {navLinks.map((l, i) => (
               <a
                 key={l.id}
@@ -1741,9 +1765,8 @@ function Hero() {
             Boutique Law Firm · Chennai · Est. 2016
           </div>
           <h1 className="hero-title">
-            AGD<br /><em>Law</em>
+            AGD <em>Law</em> Associates
           </h1>
-          <p className="hero-firm-name">Associates</p>
           <p className="hero-tagline">
             Precision-driven litigation and advisory across criminal, civil, consumer,
             constitutional, and commercial matters — Tamil Nadu &amp; beyond.
@@ -1762,11 +1785,11 @@ function Hero() {
               <div className="hero-stat-lbl">Established</div>
             </div>
             <div className="hero-stat">
-              <div className="hero-stat-num">12+</div>
+              <div className="hero-stat-num">10+</div>
               <div className="hero-stat-lbl">Years Practice</div>
             </div>
             <div className="hero-stat">
-              <div className="hero-stat-num">500+</div>
+              <div className="hero-stat-num">1000+</div>
               <div className="hero-stat-lbl">Cases Handled</div>
             </div>
             <div className="hero-stat">
@@ -1914,8 +1937,8 @@ function Services() {
             <div className="services-intro-stats">
               {[
                 { num: "9", lbl: "Practice Areas" },
-                { num: "500+", lbl: "Cases Handled" },
-                { num: "12+", lbl: "Courts Active" },
+                { num: "1000+", lbl: "Cases Handled" },
+                { num: "10+", lbl: "Courts Active" },
               ].map((s) => (
                 <div className="services-intro-stat" key={s.lbl}>
                   <span className="services-intro-stat-num">{s.num}</span>
@@ -1988,9 +2011,11 @@ function Services() {
 // ─── Team ─────────────────────────────────────────────────────────────────────
 
 function Team() {
+  const midpoint = Math.ceil(teamMembers.length / 2);
+
   const rosterRows = [
-    teamMembers.slice(0, Math.ceil(teamMembers.length / 2)),
-    teamMembers.slice(Math.ceil(teamMembers.length / 2)),
+    teamMembers.slice(0, midpoint),
+    teamMembers.slice(midpoint),
   ];
 
   return (
@@ -2000,24 +2025,38 @@ function Team() {
           <div className="team-head">
             <div>
               <span className="section-label">Our Team</span>
-              <h2 className="team-title">Advocates in <em>practice</em></h2>
+              <h2 className="team-title">
+                Advocates in <em>practice</em>
+              </h2>
             </div>
           </div>
+
           <div className="team-streams">
             {rosterRows.map((row, rowIndex) => (
               <div className="team-stream" key={rowIndex}>
                 <div className="team-track">
-                  {[...row, ...row].map((name, duplicatedIndex) => {
-                    const sourceIndex = rowIndex * rosterRows[0].length + (duplicatedIndex % row.length);
-                    const isIntern = name.toLowerCase().startsWith("intern:");
-                    const displayName = isIntern ? name.replace(/^Intern:\s*/i, "") : name;
+                  {[...row, ...row].map((member, duplicatedIndex) => {
+                    const sourceIndex =
+                      rowIndex * midpoint +
+                      (duplicatedIndex % row.length);
 
                     return (
-                      <div className="team-card" key={`${name}-${duplicatedIndex}`}>
-                        <span className="team-index">{String(sourceIndex + 1).padStart(2, "0")}</span>
+                      <div
+                        className="team-card"
+                        key={`${member.name}-${duplicatedIndex}`}
+                      >
+                        <div className="team-icon">
+                          {getIcon(member.role)}
+                        </div>
+
                         <div className="team-body">
-                          <div className="team-name">{displayName}</div>
-                          <div className="team-role">{isIntern ? "Legal Intern" : "Advocate"}</div>
+                          <div className="team-name">
+                            {member.name}
+                          </div>
+
+                          <div className="team-role">
+                            {member.role}
+                          </div>
                         </div>
                       </div>
                     );

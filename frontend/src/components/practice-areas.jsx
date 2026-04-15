@@ -12,7 +12,7 @@ import {
   ChevronDown, CheckCircle, Scale, Shield, Clock,
   Award, Users, BookOpen, MapPin, X, Send,
   FileText, Gavel, Home, Building, Heart, Briefcase,
-  Car, ShieldCheck, AlertCircle
+  Car, ShieldCheck, AlertCircle, Plus
 } from "lucide-react";
 
 // ─── Global Styles ─────────────────────────────────────────────────────────────
@@ -92,7 +92,7 @@ const GlobalStyles = () => (
     }
     .header-inner {
       display: flex; align-items: center; justify-content: space-between;
-      height: 72px; gap: 24px;
+      height: 90px; gap: 24px;
     }
     .logo-mark {
       font-family: 'Cormorant Garamond', Georgia, serif;
@@ -370,7 +370,7 @@ const GlobalStyles = () => (
       border: 1.5px solid rgba(197,223,192,0.22); color: var(--sage);
       display: flex; align-items: center; justify-content: center; transition: all 0.3s;
     }
-    .faq-toggle.open { background: var(--sage); border-color: var(--sage); transform: rotate(45deg); }
+    .faq-toggle.open {  border-color: var(--sage); transform: rotate(45deg); }
     .faq-answer {
       display: grid; grid-template-rows: 0fr;
       transition: grid-template-rows 0.35s ease, opacity 0.3s; opacity: 0;
@@ -937,7 +937,7 @@ function SiteHeader({ currentSlug }) {
         <div className="container">
           <div className="header-inner">
             <a href="/" className="logo-mark">
-              <AGDLogoImg size={34} />
+              <AGDLogoImg size={72} />
               AGD Law Associates
             </a>
             <nav className="nav-links" aria-label="Main navigation">
@@ -956,7 +956,7 @@ function SiteHeader({ currentSlug }) {
                 style={{ display: "none", width: "38px", height: "38px", border: "1px solid rgba(197,223,192,0.2)", borderRadius: "8px", background: "transparent", cursor: "pointer", alignItems: "center", justifyContent: "center", color: "#c5dfc0" }}
                 className="mob-menu-btn"
               >
-                {menuOpen ? <X size={17} /> : <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><rect width="17" height="2" rx="1" fill="#c5dfc0"/><rect y="5" width="11" height="2" rx="1" fill="#c5dfc0"/><rect y="10" width="17" height="2" rx="1" fill="#c5dfc0"/></svg>}
+                {menuOpen ? <X size={17} /> : <svg width="17" height="12" viewBox="0 0 17 12" fill="none"><rect width="17" height="2" rx="1" fill="#c5dfc0" /><rect y="5" width="11" height="2" rx="1" fill="#c5dfc0" /><rect y="10" width="17" height="2" rx="1" fill="#c5dfc0" /></svg>}
               </button>
             </div>
           </div>
@@ -965,18 +965,9 @@ function SiteHeader({ currentSlug }) {
       <style>{`@media(max-width:1024px){.mob-menu-btn{display:inline-flex!important}}`}</style>
       {menuOpen && (
         <div style={{ position: "fixed", inset: 0, zIndex: 800, background: "#0b0b0b", display: "flex", flexDirection: "column", padding: "0 24px 24px" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "72px" }}>
-            <span style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "1.3rem", color: "#fff", display: "flex", alignItems: "center", gap: "10px" }}>
-              <AGDLogoImg size={34} />
-              AGD Law Associates
-            </span>
-            <button onClick={() => setMenuOpen(false)} style={{ width: "38px", height: "38px", border: "1px solid rgba(197,223,192,0.2)", borderRadius: "8px", background: "transparent", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-              <X size={17} />
-            </button>
-          </div>
           <nav style={{ flex: 1 }}>
             {navLinks.map((l, i) => (
-              <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 0", borderBottom: "1px solid rgba(197,223,192,0.1)", fontFamily: "'Cormorant Garamond',serif", fontSize: "1.8rem", color: "rgba(255,255,255,0.8)", textDecoration: "none", animation: `fadeUp 0.4s ${0.05 + i * 0.06}s both` }}>
+              <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "18px 0",marginTop: "80px", borderBottom: "1px solid rgba(197,223,192,0.1)", fontFamily: "'Cormorant Garamond',serif", fontSize: "1.8rem", color: "rgba(255,255,255,0.8)", textDecoration: "none", animation: `fadeUp 0.4s ${0.05 + i * 0.06}s both` }}>
                 {l.label}
                 <span style={{ fontSize: "0.65rem", color: "rgba(197,223,192,0.4)", letterSpacing: "0.1em" }}>0{i + 1}</span>
               </a>
@@ -1005,7 +996,7 @@ function SiteFooter() {
             <a href="/" className="footer-link-mini">Home</a>
             <a href="/#services" className="footer-link-mini">Services</a>
             <a href="/#contact" className="footer-link-mini">Contact</a>
-            <a href="tel:+919994388855" className="footer-link-mini">+91 99943 88855</a>
+            <a href="tel:+918939588855" className="footer-link-mini">+91 89395 88855</a>
           </div>
         </div>
       </div>
@@ -1040,7 +1031,7 @@ function FixedBackground() {
 function WhatsAppChat() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const phoneNumber = "919994388855";
+  const phoneNumber = "918939588855";
 
   const quickMessages = [
     "I need legal consultation.",
@@ -1123,7 +1114,7 @@ function PracticeAreaHero({ area }) {
                 <a href="/#contact" className="btn-sage">
                   Free Consultation <ArrowRight size={14} />
                 </a>
-                <a href="tel:+919994388855" className="btn-outline-white">
+                <a href="tel:+918939588855" className="btn-outline-white">
                   <Phone size={14} /> Call Now
                 </a>
               </div>
@@ -1139,7 +1130,7 @@ function PracticeAreaHero({ area }) {
               <div className="pa-hero-divider" />
               <div className="pa-hero-contact">
                 <Phone size={13} />
-                <span>+91 99943 88855</span>
+                <span>+91 89395 88855</span>
               </div>
               <div className="pa-hero-contact">
                 <Mail size={13} />
@@ -1180,11 +1171,11 @@ function OverviewSection({ area }) {
               <a href="/#contact" className="sidebar-btn primary">
                 <Mail size={14} /> Schedule Consultation
               </a>
-              <a href="tel:+919994388855" className="sidebar-btn secondary">
-                <Phone size={14} /> +91 99943 88855
+              <a href="tel:+918939588855" className="sidebar-btn secondary">
+                <Phone size={14} /> +91 89395 88855
               </a>
               <a
-                href={`https://wa.me/919994388855?text=${encodeURIComponent(`Hi, I need help with a ${area.title} matter.`)}`}
+                href={`https://wa.me/918939588855?text=${encodeURIComponent(`Hi, I need help with a ${area.title} matter.`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="sidebar-btn secondary"
@@ -1337,7 +1328,7 @@ function FAQSection({ area }) {
                 <div className="faq-item" key={i}>
                   <button type="button" className="faq-question" onClick={() => toggle(i)} aria-expanded={isOpen}>
                     <span>{faq.q}</span>
-                    <span className={`faq-toggle${isOpen ? " open" : ""}`}><X size={13} /></span>
+                    <span className={`faq-toggle${isOpen ? " open" : ""}`}><Plus size={13} /></span>
                   </button>
                   <div className={`faq-answer${isOpen ? " open" : ""}`}>
                     <div className="faq-answer-inner">
@@ -1372,7 +1363,7 @@ function CTABanner({ area }) {
             <a href="/#contact" className="btn-sage">
               Book a Consultation <ArrowRight size={14} />
             </a>
-            <a href="tel:+919994388855" className="btn-outline-white">
+            <a href="tel:+918939588855" className="btn-outline-white">
               <Phone size={14} /> Call Us Now
             </a>
           </div>
@@ -1529,7 +1520,7 @@ function AllAreasIndex({ onSelect }) {
           </div>
           <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", flexShrink: 0 }}>
             <a href="/#contact" className="btn-sage">Book a Consultation <ArrowRight size={14} /></a>
-            <a href="tel:+919994388855" className="btn-outline-white"><Phone size={14} /> Call Now</a>
+            <a href="tel:+918939588855" className="btn-outline-white"><Phone size={14} /> Call Now</a>
           </div>
         </div>
       </section>

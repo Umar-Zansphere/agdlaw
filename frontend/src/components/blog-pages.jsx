@@ -465,11 +465,10 @@ function TableOfContents({ blocks }) {
           key={heading.text}
           type="button"
           onClick={() => handleSelect(index, heading.text)}
-          className={`text-left text-[0.82rem] leading-[1.5] py-1.5 px-3 rounded-lg transition-all ${
-            active === index
+          className={`text-left text-[0.82rem] leading-[1.5] py-1.5 px-3 rounded-lg transition-all ${active === index
               ? "bg-[rgba(197,223,192,0.12)] text-[#c5dfc0] font-medium"
               : "text-white/50 hover:text-white hover:bg-[rgba(197,223,192,0.08)]"
-          }`}
+            }`}
         >
           {heading.text}
         </button>
@@ -514,11 +513,11 @@ function BlogFooter() {
             agdlawassociatesoffice@gmail.com
           </a>
           <a
-            href="tel:+919994388855"
+            href="tel:+918939588855"
             className="inline-flex items-center gap-2 text-white/60 hover:text-[#c5dfc0] transition-colors text-[0.82rem]"
           >
             <PhoneCall size={14} />
-            +91 99943 88855
+            +91 89395 88855
           </a>
         </div>
         <p className="text-white/35 text-[0.72rem]">
@@ -532,7 +531,7 @@ function BlogFooter() {
 function WhatsAppFloatingChat() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const phoneNumber = "919994388855";
+  const phoneNumber = "918939588855";
 
   const quickMessages = [
     "Hi, I need a legal consultation with AGD Law Associates.",
@@ -554,11 +553,10 @@ function WhatsAppFloatingChat() {
   return (
     <div className="fixed bottom-5 right-5 z-[980] flex flex-col items-end">
       <div
-        className={`mb-3 w-[min(92vw,360px)] rounded-[22px] overflow-hidden border border-[#c5dfc0] bg-white shadow-[0_22px_60px_rgba(11,11,11,0.2)] transition-all duration-300 origin-bottom-right ${
-          open
+        className={`mb-3 w-[min(92vw,360px)] rounded-[22px] overflow-hidden border border-[#c5dfc0] bg-white shadow-[0_22px_60px_rgba(11,11,11,0.2)] transition-all duration-300 origin-bottom-right ${open
             ? "opacity-100 translate-y-0 scale-100 pointer-events-auto"
             : "opacity-0 translate-y-4 scale-95 pointer-events-none"
-        }`}
+          }`}
       >
         <div className="px-4 py-3 bg-[#0b0b0b] text-[#ffffff] flex items-center justify-between">
           <div className="flex items-center gap-2.5">
@@ -631,11 +629,10 @@ function WhatsAppFloatingChat() {
         type="button"
         onClick={() => setOpen((value) => !value)}
         aria-label={open ? "Close" : "Open WhatsApp chat"}
-        className={`group w-14 h-14 rounded-full shadow-[0_14px_35px_rgba(11,11,11,0.35)] inline-flex items-center justify-center transition-all duration-300 ${
-          open
+        className={`group w-14 h-14 rounded-full shadow-[0_14px_35px_rgba(11,11,11,0.35)] inline-flex items-center justify-center transition-all duration-300 ${open
             ? "bg-[#0b0b0b] text-[#c5dfc0]"
             : "bg-[#c5dfc0] text-[#0b0b0b] hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(197,223,192,0.45)]"
-        }`}
+          }`}
       >
         {open ? <X size={20} /> : <MessageCircle size={22} />}
       </button>
@@ -762,7 +759,7 @@ export function BlogIndexPageContent() {
                 ))}
               </div>
 
-              <div className="consult-strip mt-14">
+              {/* <div className="consult-strip mt-14">
                 <div className="flex flex-col gap-2">
                   <span className="text-[0.68rem] uppercase tracking-[0.16em] text-[#c5dfc0]/70 font-semibold">
                     Need Legal Help?
@@ -784,7 +781,7 @@ export function BlogIndexPageContent() {
                   Schedule Consultation
                   <ArrowRight size={14} strokeWidth={2.5} />
                 </Link>
-              </div>
+              </div> */}
             </div>
           </section>
         </main>
@@ -950,11 +947,11 @@ export function BlogArticlePageContent({ slug }) {
                       Our team is available Monday-Friday 10am-6:30pm and Saturday 11am-5pm.
                     </p>
                     <a
-                      href="tel:+919994388855"
+                      href="tel:+918939588855"
                       className="inline-flex items-center gap-2 text-[0.8rem] font-semibold text-[#c5dfc0] hover:text-white transition-colors"
                     >
                       <PhoneCall size={14} />
-                      +91 99943 88855
+                      +91 89395 88855
                     </a>
                     <Link
                       href="/#contact"
