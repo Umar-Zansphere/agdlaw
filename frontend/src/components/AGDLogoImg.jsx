@@ -1,9 +1,9 @@
 import Image from "next/image";
 
-export function AGDLogoImg({ size = 48, style = {}, ...props }) {
+export function AGDLogoImg({ size = 56, style = {}, ...props }) {
   return (
     <Image
-      src="/logo.svg"
+      src="/logo1.png"
       alt="AGD Law Associates Logo"
       width={size}
       height={size}

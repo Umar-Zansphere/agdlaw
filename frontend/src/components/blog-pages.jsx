@@ -14,12 +14,14 @@ import {
   Calendar,
   BookOpen,
   ChevronRight,
+  Menu,
 } from "lucide-react";
 import {
   blogPosts,
   getBlogPostBySlug,
   getRelatedBlogPosts,
 } from "@/data/blog-posts";
+import { AGDLogoImg } from "@/components/AGDLogoImg";
 
 const XBrandIcon = ({ size = 16 }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
@@ -123,6 +125,14 @@ function BlogStyles() {
         font-family: 'Inter', sans-serif;
         font-weight: 500;
         padding-top: 2px;
+      }
+      .blog-mobile-panel {
+        background: rgba(11,11,11,0.97);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(197,223,192,0.12);
+        border-bottom: 1px solid rgba(197,223,192,0.12);
+        animation: headerSlideDown 0.35s cubic-bezier(0.22,1,0.36,1) both;
       }
 
       .article-body h2 { margin-top: 2.5rem; margin-bottom: 1rem; }
@@ -251,6 +261,7 @@ function FixedBackground() {
 
 function BlogHeader({ backHref = "/blog", backLabel = "All Articles" }) {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 40);
@@ -258,32 +269,41 @@ function BlogHeader({ backHref = "/blog", backLabel = "All Articles" }) {
     return () => window.removeEventListener("scroll", fn);
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
+
   return (
     <>
       <header className="blog-header fixed top-0 left-0 right-0 z-[900] transition-all duration-500">
         <div className={`transition-all duration-500 ${scrolled ? "scrolled-blog-header" : ""}`}>
-          <div className="max-w-[1200px] mx-auto px-6">
-            <nav className="flex items-center justify-between h-[72px] gap-4">
+          <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
+            <nav className="flex items-center justify-between h-[90px] gap-3 sm:gap-4">
               <Link
                 href="/"
-                className="flex flex-col no-underline group"
+                className="flex min-w-0 items-center gap-2.5 sm:gap-3 no-underline group"
                 aria-label="AGD Law Associates - Home"
+                onClick={() => setMenuOpen(false)}
               >
+                <AGDLogoImg size={72} />
                 <span
-                  className="text-white leading-none transition-opacity group-hover:opacity-80"
+                  className="truncate text-white leading-none transition-opacity group-hover:opacity-80"
                   style={{
                     fontFamily: "'Playfair Display', Georgia, serif",
-                    fontSize: "clamp(1rem,4vw,1.45rem)",
+                    fontSize: "clamp(0.95rem, 2vw, 1.45rem)",
                     fontWeight: 400,
                     letterSpacing: "0.02em",
                   }}
                 >
                   AGD LAW ASSOCIATES
                 </span>
-                <span className="logo-badge">Boutique Law Firm - Est. 2016</span>
+                {/* <span className="logo-badge">Boutique Law Firm - Est. 2016</span> */}
               </Link>
 
-              <div className="flex items-center gap-3 sm:gap-5">
+              <div className="hidden sm:flex items-center gap-3 sm:gap-5">
                 <Link
                   href={backHref}
                   className="hidden sm:inline-flex items-center gap-1.5 text-[0.75rem] uppercase tracking-[0.1em] font-medium text-white/70 hover:text-[#c5dfc0] transition-colors"
@@ -298,11 +318,55 @@ function BlogHeader({ backHref = "/blog", backLabel = "All Articles" }) {
                   Consult Us
                 </Link>
               </div>
+
+              <button
+                type="button"
+                className="sm:hidden inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/12 text-white/78 transition-colors hover:border-[#c5dfc0]/40 hover:text-[#c5dfc0]"
+                aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+                aria-expanded={menuOpen}
+                onClick={() => setMenuOpen((open) => !open)}
+              >
+                {menuOpen ? <X size={18} /> : <Menu size={18} />}
+              </button>
             </nav>
           </div>
+
+          {menuOpen ? (
+            <div className="blog-mobile-panel sm:hidden">
+              <div className="max-w-[1200px] mx-auto px-4 py-4 flex flex-col gap-3">
+                <Link
+                  href={backHref}
+                  className="inline-flex items-center justify-between rounded-2xl border border-white/10 px-4 py-3 text-[0.82rem] uppercase tracking-[0.12em] font-medium text-white/75 hover:border-[#c5dfc0]/30 hover:text-[#c5dfc0] transition-colors"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <span className="inline-flex items-center gap-2">
+                    <ArrowLeft size={14} strokeWidth={2.2} />
+                    {backLabel}
+                  </span>
+                  
+                </Link>
+                <Link
+                  href="/blog"
+                  className="inline-flex items-center justify-between rounded-2xl border border-white/10 px-4 py-3 text-[0.82rem] uppercase tracking-[0.12em] font-medium text-white/75 hover:border-[#c5dfc0]/30 hover:text-[#c5dfc0] transition-colors"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <span>All Blogs</span>
+                  <ArrowRight size={14} strokeWidth={2.2} />
+                </Link>
+                <Link
+                  href="/#contact"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#c5dfc0] px-4 py-3 text-[0.8rem] font-semibold uppercase tracking-[0.1em] text-[#0b0b0b] transition-colors hover:bg-white"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Consult Us
+                  <ArrowRight size={14} strokeWidth={2.2} />
+                </Link>
+              </div>
+            </div>
+          ) : null}
         </div>
       </header>
-      <div className="h-[72px]" />
+      <div className="h-[78px] sm:h-[90px]" />
     </>
   );
 }
@@ -465,11 +529,10 @@ function TableOfContents({ blocks }) {
           key={heading.text}
           type="button"
           onClick={() => handleSelect(index, heading.text)}
-          className={`text-left text-[0.82rem] leading-[1.5] py-1.5 px-3 rounded-lg transition-all ${
-            active === index
+          className={`text-left text-[0.82rem] leading-[1.5] py-1.5 px-3 rounded-lg transition-all ${active === index
               ? "bg-[rgba(197,223,192,0.12)] text-[#c5dfc0] font-medium"
               : "text-white/50 hover:text-white hover:bg-[rgba(197,223,192,0.08)]"
-          }`}
+            }`}
         >
           {heading.text}
         </button>
@@ -482,24 +545,17 @@ function BlogFooter() {
   return (
     <footer className="bg-[#0b0b0b] border-t border-[rgba(197,223,192,0.08)] py-10">
       <div className="max-w-[1200px] mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex flex-col items-center sm:items-start gap-1">
+        <div className="flex items-center  gap-1">
+          <AGDLogoImg size={72} />
           <span
             className="text-white text-lg"
             style={{ fontFamily: "Georgia, serif", letterSpacing: "0.02em" }}
           >
             AGD LAW ASSOCIATES
           </span>
-          <span className="text-[#c5dfc0]/60 text-[0.65rem] uppercase tracking-[0.16em]">
-            Boutique Law Firm - Est. 2016
-          </span>
         </div>
         <div className="flex flex-wrap items-center gap-4 text-sm">
-          <Link
-            href="/blog"
-            className="text-white/60 hover:text-[#c5dfc0] transition-colors text-[0.82rem]"
-          >
-            Blog
-          </Link>
+
           <Link
             href="/#contact"
             className="text-white/60 hover:text-[#c5dfc0] transition-colors text-[0.82rem]"
@@ -514,11 +570,11 @@ function BlogFooter() {
             agdlawassociatesoffice@gmail.com
           </a>
           <a
-            href="tel:+919994388855"
+            href="tel:+918939588855"
             className="inline-flex items-center gap-2 text-white/60 hover:text-[#c5dfc0] transition-colors text-[0.82rem]"
           >
             <PhoneCall size={14} />
-            +91 99943 88855
+            +91 89395 88855
           </a>
         </div>
         <p className="text-white/35 text-[0.72rem]">
@@ -532,7 +588,7 @@ function BlogFooter() {
 function WhatsAppFloatingChat() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const phoneNumber = "919994388855";
+  const phoneNumber = "918939588855";
 
   const quickMessages = [
     "Hi, I need a legal consultation with AGD Law Associates.",
@@ -554,11 +610,10 @@ function WhatsAppFloatingChat() {
   return (
     <div className="fixed bottom-5 right-5 z-[980] flex flex-col items-end">
       <div
-        className={`mb-3 w-[min(92vw,360px)] rounded-[22px] overflow-hidden border border-[#c5dfc0] bg-white shadow-[0_22px_60px_rgba(11,11,11,0.2)] transition-all duration-300 origin-bottom-right ${
-          open
+        className={`mb-3 w-[min(92vw,360px)] rounded-[22px] overflow-hidden border border-[#c5dfc0] bg-white shadow-[0_22px_60px_rgba(11,11,11,0.2)] transition-all duration-300 origin-bottom-right ${open
             ? "opacity-100 translate-y-0 scale-100 pointer-events-auto"
             : "opacity-0 translate-y-4 scale-95 pointer-events-none"
-        }`}
+          }`}
       >
         <div className="px-4 py-3 bg-[#0b0b0b] text-[#ffffff] flex items-center justify-between">
           <div className="flex items-center gap-2.5">
@@ -631,11 +686,10 @@ function WhatsAppFloatingChat() {
         type="button"
         onClick={() => setOpen((value) => !value)}
         aria-label={open ? "Close" : "Open WhatsApp chat"}
-        className={`group w-14 h-14 rounded-full shadow-[0_14px_35px_rgba(11,11,11,0.35)] inline-flex items-center justify-center transition-all duration-300 ${
-          open
+        className={`group w-14 h-14 rounded-full shadow-[0_14px_35px_rgba(11,11,11,0.35)] inline-flex items-center justify-center transition-all duration-300 ${open
             ? "bg-[#0b0b0b] text-[#c5dfc0]"
             : "bg-[#c5dfc0] text-[#0b0b0b] hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(197,223,192,0.45)]"
-        }`}
+          }`}
       >
         {open ? <X size={20} /> : <MessageCircle size={22} />}
       </button>
@@ -762,7 +816,7 @@ export function BlogIndexPageContent() {
                 ))}
               </div>
 
-              <div className="consult-strip mt-14">
+              {/* <div className="consult-strip mt-14">
                 <div className="flex flex-col gap-2">
                   <span className="text-[0.68rem] uppercase tracking-[0.16em] text-[#c5dfc0]/70 font-semibold">
                     Need Legal Help?
@@ -784,7 +838,7 @@ export function BlogIndexPageContent() {
                   Schedule Consultation
                   <ArrowRight size={14} strokeWidth={2.5} />
                 </Link>
-              </div>
+              </div> */}
             </div>
           </section>
         </main>
@@ -950,11 +1004,11 @@ export function BlogArticlePageContent({ slug }) {
                       Our team is available Monday-Friday 10am-6:30pm and Saturday 11am-5pm.
                     </p>
                     <a
-                      href="tel:+919994388855"
+                      href="tel:+918939588855"
                       className="inline-flex items-center gap-2 text-[0.8rem] font-semibold text-[#c5dfc0] hover:text-white transition-colors"
                     >
                       <PhoneCall size={14} />
-                      +91 99943 88855
+                      +91 89395 88855
                     </a>
                     <Link
                       href="/#contact"
