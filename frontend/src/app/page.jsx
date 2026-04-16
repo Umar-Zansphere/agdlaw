@@ -1193,7 +1193,7 @@ const GlobalStyles = () => (
     .contact-grid { display: grid; grid-template-columns: 1fr 1.35fr; gap: 60px; align-items: start; }
     .contact-left { display: flex; flex-direction: column; gap: 24px; position: sticky; top: 100px; }
     .contact-title {
-      font-size: clamp(2.4rem, 4vw, 4rem);
+      font-size: clamp(2.4rem, 4vw, 3rem);
       color: #fff; letter-spacing: -0.015em; margin-top: 14px; line-height: 1.05;
     }
     .contact-title em { color: var(--sage); font-style: italic; }
@@ -2248,7 +2248,7 @@ function FAQ() {
 // ─── Contact ─────────────────────────────────────────────────────────────────
 
 function Contact() {
-  const [form, setForm] = useState({ your_name: "", your_email: "", service_type: "", budget: "", message: "" });
+  const [form, setForm] = useState({ your_name: "", your_email: "", your_phone: "", service_type: "", budget: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitState, setSubmitState] = useState({ type: "", message: "" });
 
@@ -2271,7 +2271,7 @@ function Contact() {
       const result = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(result.error || "Failed to send message.");
       setSubmitState({ type: "success", message: "Thanks! Your message was sent. We'll be in touch shortly." });
-      setForm({ your_name: "", your_email: "", service_type: "", budget: "", message: "" });
+      setForm({ your_name: "", your_email: "", your_phone: "", service_type: "", budget: "", message: "" });
     } catch (error) {
       setSubmitState({ type: "error", message: error.message || "Something went wrong. Please try again." });
     } finally {
@@ -2286,7 +2286,7 @@ function Contact() {
           <div className="contact-grid">
             <div className="contact-left">
               <span className="section-label-dark">Get In Touch</span>
-              <h2 className="contact-title">Need legal<br /><em>support?</em><br />Let&apos;s connect.</h2>
+              <h2 className="contact-title">Need legal <em>support? </em> Let&apos;s connect.</h2>
               <p className="contact-sub">Reach out directly or fill the form — we respond during office hours. Every matter is handled with strict confidentiality.</p>
               <div className="contact-detail">
                 <div className="contact-detail-icon"><PhoneCall size={15} /></div>
@@ -2358,6 +2358,10 @@ function Contact() {
                   <div className="form-field">
                     <label htmlFor="your_email" className="form-label">Email Address</label>
                     <input type="email" id="your_email" name="your_email" placeholder="john@email.com" required value={form.your_email} onChange={handleChange} className="form-input" />
+                  </div>
+                  <div className="form-field">
+                    <label htmlFor="your_phone" className="form-label">Phone Number</label>
+                    <input type="tel" id="your_phone" name="your_phone" placeholder="+91 98765 43210" value={form.your_phone} onChange={handleChange} className="form-input" />
                   </div>
                   <div className="form-field full">
                     <label htmlFor="message" className="form-label">Your Message</label>
