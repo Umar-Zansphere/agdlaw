@@ -35,6 +35,7 @@ export async function POST(request) {
 
     const yourName = (body.your_name || "").trim();
     const yourEmail = (body.your_email || "").trim();
+    const yourPhone = (body.your_phone || "").trim();
     const rawService = (body.service_type || "").trim();
     const rawTimeline = (body.budget || "").trim();
     const message = (body.message || "").trim();
@@ -118,6 +119,9 @@ export async function POST(request) {
                                   <a href="mailto:${escapeHtml(yourEmail)}" style="font-size: 15px; line-height: 1.6; color: #315446; text-decoration: none;">
                                     ${escapeHtml(yourEmail)}
                                   </a>
+                                  <p style="margin: 4px 0 0; font-size: 15px; line-height: 1.6; color: #42554b;">
+                                    ${escapeHtml(yourPhone || "Phone not provided")}
+                                  </p>
                                 </td>
                               </tr>
                             </table>
@@ -211,6 +215,7 @@ export async function POST(request) {
       `Submitted: ${submittedAt} (UTC)`,
       `Name: ${yourName}`,
       `Email: ${yourEmail}`,
+      `Phone: ${yourPhone || "(Not provided)"}`,
       `Service: ${serviceLabel}`,
       `Timeline: ${timelineLabel}`,
       `Message: ${message || "(No additional details provided)"}`,
