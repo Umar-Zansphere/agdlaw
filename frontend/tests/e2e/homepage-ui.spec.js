@@ -184,7 +184,7 @@ test.describe("homepage UI regressions", () => {
 
     const openCalls = await page.evaluate(() => window.__openCalls);
     expect(openCalls).toHaveLength(1);
-    expect(openCalls[0][0]).toContain("https://wa.me/918939588855?text=");
+    expect(openCalls[0][0]).toContain("https://wa.me/918939688855?text=");
     expect(openCalls[0][0]).toContain(
       encodeURIComponent("I need support in a property dispute.")
     );

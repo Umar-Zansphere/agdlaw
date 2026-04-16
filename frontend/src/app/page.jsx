@@ -50,9 +50,9 @@ const SITE_DESCRIPTION =
   "AGD Law Associates is a boutique law firm in Chennai delivering precision-driven litigation and advisory across criminal, civil, constitutional, consumer, property, family, arbitration, and corporate matters.";
 
 const contactNumbers = [
+  { display: "+91 89396 88855", tel: "+918939688855" },
   { display: "+91 89395 88855", tel: "+918939588855" },
   { display: "+91 99943 88855", tel: "+919994388855" },
-  { display: "+91 89396 88855", tel: "+918939688855" },
 ];
 const primaryContactNumber = contactNumbers[0];
 
@@ -1481,7 +1481,6 @@ const services = [
 
 const teamMembers = [
   { name: "AGD Bala kumar", role: "Lead Advocate" },
-  { name: "V. Velukumaran", role: "Sentinel Law Associate" },
   { name: "A. Yokesh Kumar", role: "Advocate" },
   { name: "M.R. Vinoth Prabhu", role: "Advocate" },
   { name: "A. Prabhakaran", role: "Advocate" },
@@ -1492,8 +1491,9 @@ const teamMembers = [
   { name: "P. Srikanth subash", role: "Advocate" },
   { name: "S. Faiz Hameed Raja", role: "Advocate" },
   { name: "Oviya N", role: "Advocate" },
-  { name: "G. Gana Rajan", role: "Advocate" },
+  { name: "G. JanaRajan", role: "Advocate" },
   { name: "V. Prabhakaran", role: "Intern" },
+  { name: "V. Velukumaran", role: "Sentinel Law Associate" },
 ];
 
 const courtRegions = [
