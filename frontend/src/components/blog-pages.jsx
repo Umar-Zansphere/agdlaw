@@ -570,11 +570,11 @@ function BlogFooter() {
             agdlawassociatesoffice@gmail.com
           </a>
           <a
-            href="tel:+918939588855"
+            href="tel:+918939688855"
             className="inline-flex items-center gap-2 text-white/60 hover:text-[#c5dfc0] transition-colors text-[0.82rem]"
           >
             <PhoneCall size={14} />
-            +91 89395 88855
+            +91 89396 88855
           </a>
         </div>
         <p className="text-white/35 text-[0.72rem]">
@@ -588,7 +588,7 @@ function BlogFooter() {
 function WhatsAppFloatingChat() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const phoneNumber = "918939588855";
+  const phoneNumber = "918939688855";
 
   const quickMessages = [
     "Hi, I need a legal consultation with AGD Law Associates.",
@@ -1004,11 +1004,11 @@ export function BlogArticlePageContent({ slug }) {
                       Our team is available Monday-Friday 10am-6:30pm and Saturday 11am-5pm.
                     </p>
                     <a
-                      href="tel:+918939588855"
+                      href="tel:+918939688855"
                       className="inline-flex items-center gap-2 text-[0.8rem] font-semibold text-[#c5dfc0] hover:text-white transition-colors"
                     >
                       <PhoneCall size={14} />
-                      +91 89395 88855
+                      +91 89396 88855
                     </a>
                     <Link
                       href="/#contact"

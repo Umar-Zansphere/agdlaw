@@ -996,7 +996,7 @@ function SiteFooter() {
             <a href="/" className="footer-link-mini">Home</a>
             <a href="/#services" className="footer-link-mini">Services</a>
             <a href="/#contact" className="footer-link-mini">Contact</a>
-            <a href="tel:+918939588855" className="footer-link-mini">+91 89395 88855</a>
+            <a href="tel:+918939688855" className="footer-link-mini">+91 89396 88855</a>
           </div>
         </div>
       </div>
@@ -1031,7 +1031,7 @@ function FixedBackground() {
 function WhatsAppChat() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const phoneNumber = "918939588855";
+  const phoneNumber = "918939688855";
 
   const quickMessages = [
     "I need legal consultation.",
@@ -1114,7 +1114,7 @@ function PracticeAreaHero({ area }) {
                 <a href="/#contact" className="btn-sage">
                   Free Consultation <ArrowRight size={14} />
                 </a>
-                <a href="tel:+918939588855" className="btn-outline-white">
+                <a href="tel:+918939688855" className="btn-outline-white">
                   <Phone size={14} /> Call Now
                 </a>
               </div>
@@ -1130,7 +1130,7 @@ function PracticeAreaHero({ area }) {
               <div className="pa-hero-divider" />
               <div className="pa-hero-contact">
                 <Phone size={13} />
-                <span>+91 89395 88855</span>
+                <span>+91 89396 88855</span>
               </div>
               <div className="pa-hero-contact">
                 <Mail size={13} />
@@ -1171,11 +1171,11 @@ function OverviewSection({ area }) {
               <a href="/#contact" className="sidebar-btn primary">
                 <Mail size={14} /> Schedule Consultation
               </a>
-              <a href="tel:+918939588855" className="sidebar-btn secondary">
-                <Phone size={14} /> +91 89395 88855
+              <a href="tel:+918939688855" className="sidebar-btn secondary">
+                <Phone size={14} /> +91 89396 88855
               </a>
               <a
-                href={`https://wa.me/918939588855?text=${encodeURIComponent(`Hi, I need help with a ${area.title} matter.`)}`}
+                href={`https://wa.me/918939688855?text=${encodeURIComponent(`Hi, I need help with a ${area.title} matter.`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="sidebar-btn secondary"
@@ -1363,7 +1363,7 @@ function CTABanner({ area }) {
             <a href="/#contact" className="btn-sage">
               Book a Consultation <ArrowRight size={14} />
             </a>
-            <a href="tel:+918939588855" className="btn-outline-white">
+            <a href="tel:+918939688855" className="btn-outline-white">
               <Phone size={14} /> Call Us Now
             </a>
           </div>
@@ -1520,7 +1520,7 @@ function AllAreasIndex({ onSelect }) {
           </div>
           <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", flexShrink: 0 }}>
             <a href="/#contact" className="btn-sage">Book a Consultation <ArrowRight size={14} /></a>
-            <a href="tel:+918939588855" className="btn-outline-white"><Phone size={14} /> Call Now</a>
+            <a href="tel:+918939688855" className="btn-outline-white"><Phone size={14} /> Call Now</a>
           </div>
         </div>
       </section>
