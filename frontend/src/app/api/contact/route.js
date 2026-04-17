@@ -62,10 +62,10 @@ export async function POST(request) {
     }
 
     const subject = `New Consultation Request - ${yourName}`;
-    const submittedAt = new Intl.DateTimeFormat("en-US", {
+    const submittedAt = new Intl.DateTimeFormat("en-IN", {
       dateStyle: "long",
       timeStyle: "short",
-      timeZone: "UTC",
+      timeZone: "Asia/Kolkata",
     }).format(new Date());
 
     const html = `
@@ -185,7 +185,7 @@ export async function POST(request) {
                               Submitted
                             </p>
                             <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #42554b;">
-                              ${escapeHtml(submittedAt)} (UTC)
+                              ${escapeHtml(submittedAt)} (IST)
                             </p>
                           </td>
                         </tr>
@@ -212,7 +212,7 @@ export async function POST(request) {
 
     const text = [
       "New Contact Form Submission",
-      `Submitted: ${submittedAt} (UTC)`,
+      `Submitted: ${submittedAt} (IST)`,
       `Name: ${yourName}`,
       `Email: ${yourEmail}`,
       `Phone: ${yourPhone || "(Not provided)"}`,
