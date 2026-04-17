@@ -19,6 +19,9 @@ async function fillContactForm(page) {
     .getByLabel("Email Address")
     .fill("jane.client@example.com");
   await contactSection
+    .getByLabel("Phone Number")
+    .fill("+91 98765 43210");
+  await contactSection
     .getByLabel("Your Message")
     .fill("I need help reviewing a property dispute.");
 
@@ -109,6 +112,7 @@ test.describe("homepage contact form", () => {
     expect(payload).toEqual({
       your_name: "Jane Client",
       your_email: "jane.client@example.com",
+      your_phone: "+91 98765 43210",
       service_type: "civil_litigation",
       budget: "within_week",
       message: "I need help reviewing a property dispute.",
@@ -116,6 +120,7 @@ test.describe("homepage contact form", () => {
 
     await expect(contactSection.getByLabel("Your Name")).toHaveValue("");
     await expect(contactSection.getByLabel("Email Address")).toHaveValue("");
+    await expect(contactSection.getByLabel("Phone Number")).toHaveValue("");
     await expect(contactSection.getByLabel("Your Message")).toHaveValue("");
     await expect(
       contactSection.getByRole("button", { name: "Civil Litigation" })
@@ -147,6 +152,12 @@ test.describe("homepage contact form", () => {
     );
     await expect(contactSection.getByLabel("Email Address")).toHaveValue(
       "jane.client@example.com"
+    );
+    await expect(contactSection.getByLabel("Phone Number")).toHaveValue(
+      "+91 98765 43210"
+    );
+    await expect(contactSection.getByLabel("Your Message")).toHaveValue(
+      "I need help reviewing a property dispute."
     );
   });
 });
