@@ -53,6 +53,26 @@ const contactNumbers = [
   { display: "+91 89396 88855", tel: "+918939688855" },
   { display: "+91 89395 88855", tel: "+918939588855" },
   { display: "+91 99943 88855", tel: "+919994388855" },
+  { display: "+91 88395 88855", tel: "+918839588855" },
+  { display: "+91 79049 37891", tel: "+917904937891" },
+  { display: "+91 96000 90066", tel: "+919600090066" },
+  { display: "+91 63808 91286", tel: "+916380891286" },
+  { display: "+91 98840 77779", tel: "+919884077779" },
+];
+const contactEmail = "agdlawassociatesoffice@gmail.com";
+const branchLocations = [
+  {
+    label: "Chennai Office",
+    city: "Chennai",
+    address:
+      "No. 5C, 5th Floor, Sri Venkatesh Bhavan, No. 71/35, Armenian Street, Chennai, Tamil Nadu, India, 600001",
+  },
+  {
+    label: "Chengalpattu Branch",
+    city: "Chengalpattu",
+    address:
+      "No. 8, Shyla Mahal, First Floor, Near New Bus Stand, Chengalpattu - 603001",
+  },
 ];
 const primaryContactNumber = contactNumbers[0];
 
@@ -975,6 +995,7 @@ const GlobalStyles = () => (
       display: grid; grid-template-columns: minmax(220px, 0.34fr) minmax(0, 1fr);
       transition: background 0.25s, border-color 0.25s, transform 0.25s;
     }
+    .region-item-single { grid-template-columns: 1fr; }
     .region-item::before {
       content: '';
       position: absolute;
@@ -1009,20 +1030,18 @@ const GlobalStyles = () => (
       box-shadow: 0 0 0 8px rgba(197,223,192,0.07), 0 0 18px rgba(197,223,192,0.22);
     }
     .region-name { font-family: var(--font-cormorant), serif; font-size: 1.42rem; color: #fff; }
-    .region-count {
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: rgba(197,223,192,0.74);
-      font-weight: 700;
-    }
     .court-list {
       padding: 18px 0 18px 24px;
       display: flex; flex-wrap: wrap; gap: 8px;
       align-content: center;
       border-bottom: 1px solid var(--surface-border);
     }
+    .region-item-single .region-heading {
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--surface-border);
+    }
     .region-item:last-child .court-list { border-bottom: none; }
+    .region-item:last-child.region-item-single .region-heading { border-bottom: none; }
     .court-chip {
       display: inline-flex; align-items: center;
       min-height: 32px; padding: 7px 11px; border-radius: 8px;
@@ -1190,55 +1209,350 @@ const GlobalStyles = () => (
 
     /* ── Contact ── */
     .contact-inner { padding: clamp(4rem, 7vw, 8rem) 0; }
-    .contact-grid { display: grid; grid-template-columns: 1fr 1.35fr; gap: 60px; align-items: start; }
-    .contact-left { display: flex; flex-direction: column; gap: 24px; position: sticky; top: 100px; }
+    .contact-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      padding: clamp(1rem, 2vw, 1.4rem);
+      border-radius: 34px;
+      border: 1px solid rgba(197,223,192,0.16);
+      background:
+        radial-gradient(circle at top left, rgba(197,223,192,0.1), transparent 34%),
+        linear-gradient(180deg, rgba(11,14,13,0.9) 0%, rgba(5,7,6,0.94) 100%);
+      box-shadow: 0 28px 80px rgba(0,0,0,0.28);
+    }
+    .contact-topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+    .contact-intro-panel,
+    .contact-badges-panel,
+    .contact-directory-panel,
+    .contact-offices-panel {
+      border: 1px solid rgba(197,223,192,0.16);
+      background: rgba(12,16,14,0.72);
+      box-shadow: var(--surface-shadow);
+    }
+    .contact-intro-panel {
+      padding: 30px 30px 28px;
+      border-radius: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-intro-panel::after {
+      content: "";
+      position: absolute;
+      inset: auto -10% -35% auto;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(197,223,192,0.14) 0%, transparent 68%);
+      pointer-events: none;
+    }
     .contact-title {
-      font-size: clamp(2.4rem, 4vw, 3rem);
-      color: #fff; letter-spacing: -0.015em; margin-top: 14px; line-height: 1.05;
+      font-size: clamp(2.7rem, 4.5vw, 4.25rem);
+      color: #fff;
+      letter-spacing: -0.03em;
+      margin-top: 16px;
+      line-height: 0.95;
+      max-width: 720px;
+      position: relative;
+      z-index: 1;
     }
     .contact-title em { color: var(--sage); font-style: italic; }
-    .contact-sub { font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; }
-    .contact-detail {
-      display: flex; align-items: flex-start; gap: 14px;
-      padding: 16px; border-radius: 14px;
-      border: 1px solid var(--surface-border);
-      background: var(--surface-base);
-      transition: border-color 0.2s, background 0.2s;
-      box-shadow: var(--surface-shadow);
+    .contact-sub {
+      position: relative;
+      z-index: 1;
+      margin-top: 18px;
+      max-width: 640px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.9;
     }
-    .contact-detail:hover { border-color: var(--surface-border-strong); background: var(--surface-tint); }
-    .contact-detail-icon {
-      width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
-      background: rgba(197,223,192,0.1); color: var(--sage);
-      display: flex; align-items: center; justify-content: center;
+    .contact-intro-note {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 22px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(197,223,192,0.18);
+      background: rgba(197,223,192,0.06);
+      font-size: 0.76rem;
+      color: var(--text-body);
     }
-    .contact-detail-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-subtle); }
-    .contact-detail-value { font-size: 0.88rem; color: var(--text-body); margin-top: 2px; font-weight: 500; }
-    .contact-number-list { display: flex; flex-direction: column; gap: 5px; margin-top: 4px; }
+    .contact-badges-panel {
+      padding: 18px;
+      border-radius: 30px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .contact-badge {
+      padding: 16px 16px 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(197,223,192,0.14);
+      background: rgba(7,10,9,0.56);
+    }
+    .contact-badge-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--sage);
+      background: rgba(197,223,192,0.12);
+      border: 1px solid rgba(197,223,192,0.16);
+      margin-bottom: 18px;
+    }
+    .contact-badge-label {
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-subtle);
+    }
+    .contact-badge-value {
+      margin-top: 8px;
+      font-family: var(--font-cormorant), serif;
+      font-size: 1.55rem;
+      line-height: 1;
+      color: #fff;
+    }
+    .contact-badge-copy {
+      margin-top: 8px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+    .contact-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.16fr) minmax(290px, 0.84fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .contact-directory-panel {
+      padding: 24px;
+      border-radius: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .contact-panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+    }
+    .contact-panel-kicker {
+      font-size: 0.66rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: rgba(197,223,192,0.72);
+      font-weight: 600;
+    }
+    .contact-panel-title {
+      font-family: var(--font-cormorant), serif;
+      font-size: clamp(1.9rem, 3vw, 2.4rem);
+      color: #fff;
+      line-height: 1.02;
+      margin-top: 8px;
+    }
+    .contact-panel-copy {
+      max-width: 520px;
+      margin-top: 10px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+    .contact-directory-tag {
+      flex-shrink: 0;
+      padding: 10px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(197,223,192,0.18);
+      background: rgba(197,223,192,0.06);
+      font-size: 0.72rem;
+      color: var(--text-body);
+      line-height: 1.6;
+      text-align: right;
+    }
+    .contact-number-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
     .contact-number-link {
-      font-size: 0.88rem; color: var(--text-body); font-weight: 500;
-      transition: color 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 16px 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(197,223,192,0.14);
+      background: linear-gradient(180deg, rgba(7,10,9,0.6) 0%, rgba(7,10,9,0.42) 100%);
+      transition: border-color 0.2s, transform 0.2s, background 0.2s;
     }
-    .contact-number-link:hover { color: var(--sage); }
-    .contact-hours {
-      background: var(--surface-base); border: 1px solid var(--surface-border);
-      border-radius: 16px; padding: 20px;
-      box-shadow: var(--surface-shadow);
+    .contact-number-link:hover {
+      border-color: rgba(197,223,192,0.34);
+      background: rgba(18,24,21,0.88);
+      transform: translateY(-2px);
+    }
+    .contact-number-index {
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-subtle);
+    }
+    .contact-number-value {
+      font-size: 1.02rem;
+      color: #fff;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+    .contact-quick-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(197,223,192,0.14);
+      background: rgba(7,10,9,0.52);
+      transition: border-color 0.2s, background 0.2s;
+      text-decoration: none;
+    }
+    .contact-detail:hover {
+      border-color: rgba(197,223,192,0.32);
+      background: rgba(18,24,21,0.82);
+    }
+    .contact-detail-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      flex-shrink: 0;
+      background: rgba(197,223,192,0.12);
+      color: var(--sage);
+      border: 1px solid rgba(197,223,192,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .contact-detail-label {
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-subtle);
+    }
+    .contact-detail-value {
+      margin-top: 7px;
+      font-size: 0.98rem;
+      line-height: 1.45;
+      color: #fff;
+      font-weight: 600;
+    }
+    .contact-detail-copy {
+      margin-top: 8px;
+      font-size: 0.8rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+    .contact-offices-panel {
+      padding: 24px;
+      border-radius: 30px;
+    }
+    .contact-offices-grid {
+      display: grid;
+      grid-template-columns: 300px repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      align-items: stretch;
+    }
+    .contact-hours-card,
+    .contact-office-card {
+      border: 1px solid rgba(197,223,192,0.14);
+      background: rgba(7,10,9,0.54);
+      border-radius: 22px;
+      padding: 20px;
+      min-height: 100%;
+    }
+    .contact-hours-card {
+      display: flex;
+      flex-direction: column;
+    }
+    .contact-hours-head,
+    .contact-office-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 18px;
     }
     .contact-hours-title {
-      font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.14em;
-      color: rgba(197,223,192,0.78); font-weight: 600; margin-bottom: 14px;
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: rgba(197,223,192,0.72);
+      font-weight: 600;
     }
-    .hours-row { display: flex; justify-content: space-between; font-size: 0.82rem; padding: 7px 0; border-bottom: 1px solid var(--surface-border); }
+    .contact-hours-sub {
+      margin-top: 7px;
+      font-family: var(--font-cormorant), serif;
+      font-size: 1.45rem;
+      line-height: 1.05;
+      color: #fff;
+    }
+    .hours-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.82rem;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(197,223,192,0.1);
+    }
     .hours-row:last-child { border-bottom: none; }
     .hours-day { color: var(--text-subtle); }
-    .hours-time { color: var(--text-body); font-weight: 500; }
+    .hours-time { color: var(--text-body); font-weight: 600; text-align: right; }
+    .contact-office-city {
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: rgba(197,223,192,0.72);
+      font-weight: 600;
+    }
+    .contact-office-label {
+      margin-top: 7px;
+      font-family: var(--font-cormorant), serif;
+      font-size: 1.45rem;
+      line-height: 1.05;
+      color: #fff;
+    }
+    .contact-office-address {
+      font-size: 0.88rem;
+      line-height: 1.82;
+      color: var(--text-body);
+    }
+    .contact-office-foot {
+      margin-top: 18px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(197,223,192,0.1);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-subtle);
+    }
 
     /* ── Form ── */
     .contact-form-panel {
-      background: var(--surface-elevated-strong); backdrop-filter: blur(24px);
-      border: 1px solid var(--surface-border-strong);
-      border-radius: 28px; padding: 36px 32px;
+      background:
+        radial-gradient(circle at top, rgba(197,223,192,0.08), transparent 44%),
+        rgba(18,23,20,0.94);
+      border: 1px solid rgba(197,223,192,0.18);
+      border-radius: 30px; padding: 34px 30px;
       box-shadow: var(--surface-shadow);
     }
     .form-panel-title { font-family: var(--font-cormorant), serif; font-size: 1.8rem; color: #fff; margin-bottom: 6px; }
@@ -1378,8 +1692,10 @@ const GlobalStyles = () => (
       .blog-layout { grid-template-columns: 1fr; }
       .faq-layout { grid-template-columns: 1fr; }
       .faq-sidebar { position: static; }
-      .contact-grid { grid-template-columns: 1fr; }
-      .contact-left { position: static; }
+      .contact-topbar { grid-template-columns: 1fr; }
+      .contact-main { grid-template-columns: 1fr; }
+      .contact-offices-grid { grid-template-columns: 1fr; }
+      .contact-directory-tag { text-align: left; }
       .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
       .nav-links { display: none; }
       .header-cta-desktop { display: none; }
@@ -1397,6 +1713,9 @@ const GlobalStyles = () => (
       .services-intro-row { flex-direction: column; }
       .service-featured-card { grid-template-columns: 1fr; }
       .service-featured-icon-wrap { display: none; }
+      .contact-panel-head { flex-direction: column; }
+      .contact-number-grid,
+      .contact-quick-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 640px) {
       .about-stats-row { grid-template-columns: 1fr; }
@@ -1427,6 +1746,13 @@ const GlobalStyles = () => (
       .hero-actions { margin-top: 28px; }
       .blog-item-img { width: 96px; height: 96px; }
       .services-cta-bar { flex-direction: column; align-items: flex-start; }
+      .contact-wrap { padding: 14px; border-radius: 24px; }
+      .contact-intro-panel,
+      .contact-badges-panel,
+      .contact-directory-panel,
+      .contact-form-panel,
+      .contact-offices-panel { padding: 20px; border-radius: 24px; }
+      .contact-title { font-size: clamp(2.4rem, 12vw, 3.2rem); }
     }
     @media (min-width: 1025px) {
       .mobile-panel { display: none; }
@@ -1441,12 +1767,12 @@ function FixedBackground() {
     <div className="fixed-bg" aria-hidden="true" style={{ position: "fixed", inset: 0, zIndex: 0, background: "#0b0b0b" }}>
       {/* Background image */}
       <Image
-        src="https://images.pexels.com/photos/9685285/pexels-photo-9685285.jpeg"
+        src="/logo1.png"
         alt="bg"
         fill
         priority
         sizes="100vw"
-        style={{ objectFit: "cover", zIndex: 1 }}
+        style={{ objectFit: "contain", zIndex: 1 }}
       />
       {/* Black overlay for readability */}
       <div
@@ -1455,7 +1781,7 @@ function FixedBackground() {
           inset: 0,
           width: "100%",
           height: "100%",
-          background: "rgba(0,0,0,0.76)",
+          background: "rgba(0,0,0,0.9)",
           zIndex: 2,
         }}
       />
@@ -1493,12 +1819,14 @@ const teamMembers = [
   { name: "Oviya N", role: "Advocate" },
   { name: "G. JanaRajan", role: "Advocate" },
   { name: "V. Prabhakaran", role: "Intern" },
-  { name: "V. Velukumaran", role: "Sentinel Law Associate" },
+  { name: "V. Vel kumaran", role: "Sentinel Law Associate" },
+  { name: "S. Mohan Raj", role: "Advocate" },
+  { name: "K. Sharmila", role: "Advocate" },
 ];
 
 const courtRegions = [
   {
-    name: "Chennai District",
+    name: "Chennai District Courts ",
     courts: [
       "High Court Madras",
       "City Civil Court Chennai",
@@ -1509,7 +1837,7 @@ const courtRegions = [
     ],
   },
   {
-    name: "Chengalpattu District",
+    name: "Chengalpattu District Courts ",
     courts: [
       "Chengalpattu",
       "Maduranthakam",
@@ -1521,7 +1849,7 @@ const courtRegions = [
     ],
   },
   {
-    name: "Tiruvallur District",
+    name: "Thiruvallur District Courts ",
     courts: [
       "Tiruvallur",
       "Poonamallee",
@@ -1530,11 +1858,46 @@ const courtRegions = [
       "Thiruvottiyur",
     ],
   },
-];
-
-const additionalCourts = [
-  "Paramakudi Sub Court, Coimbatore, Thiruppur, Dindigul, Vedasandur Sub Court and Madurai District Courts",
-  "City Civil Courts – Bengaluru & Mumbai",
+  {
+    name: "Ramnad District Court ",
+    courts: ["Paramakudi court"],
+  },
+  {
+    name: "Coimbatore District Court campus only",
+    courts: [],
+  },
+  {
+    name: "Tirupur District court campus only",
+    courts: [],
+  },
+  {
+    name: "Dindugal District Courts ",
+    courts: ["Dindigul", "Vedasandur Sub Court"],
+  },
+  {
+    name: "Madurai District Courts & Madurai Bench of Madras High Court",
+    courts: [],
+  },
+  {
+    name: "Kanchipuram District Courts",
+    courts: [],
+  },
+  {
+    name: "Villupuram District Courts ",
+    courts: ["Tindivanam"],
+  },
+  {
+    name: "Tiruvannamalai District Courts ",
+    courts: ["Tiruvannamalai court", "Senji"],
+  },
+  {
+    name: "Kallakurichi District courts ",
+    courts: ["Kallakurichi", "Sankarapuram", "Tirukkoyilur"],
+  },
+  {
+    name: "City Civil Courts ",
+    courts: ["Bengaluru", "Mumbai"],
+  },
 ];
 
 const caseResults = [
@@ -2117,24 +2480,20 @@ function Regions() {
             </div>
             <div className="regions-grid">
               {courtRegions.map((r) => (
-                <div className="region-item" key={r.name}>
+                <div
+                  className={`region-item${r.courts.length === 0 ? " region-item-single" : ""}`}
+                  key={r.name}
+                >
                   <div className="region-heading">
                     <div className="region-name">{r.name}</div>
-                    <div className="region-count">{r.courts.length} forums</div>
                   </div>
-                  <div className="court-list">
-                    {r.courts.map((court) => (
-                      <span className="court-chip" key={court}>{court}</span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="additional-courts">
-              {additionalCourts.map((court) => (
-                <div className="additional-court" key={court}>
-                  <MapPin size={14} />
-                  <span>{court}</span>
+                  {r.courts.length > 0 ? (
+                    <div className="court-list">
+                      {r.courts.map((court) => (
+                        <span className="court-chip" key={court}>{court}</span>
+                      ))}
+                    </div>
+                  ) : null}
                 </div>
               ))}
             </div>
@@ -2283,99 +2642,180 @@ function Contact() {
     <section className="panel-dark" id="contact">
       <div className="container">
         <div className="contact-inner">
-          <div className="contact-grid">
-            <div className="contact-left">
-              <span className="section-label-dark">Get In Touch</span>
-              <h2 className="contact-title">Need legal <em>support? </em> Let&apos;s connect.</h2>
-              <p className="contact-sub">Reach out directly or fill the form — we respond during office hours. Every matter is handled with strict confidentiality.</p>
-              <div className="contact-detail">
-                <div className="contact-detail-icon"><PhoneCall size={15} /></div>
-                <div>
-                  <div className="contact-detail-label">Contact Numbers</div>
-                  <div className="contact-number-list">
-                    {contactNumbers.map((number) => (
-                      <a key={number.tel} href={`tel:${number.tel}`} className="contact-number-link">
-                        {number.display}
-                      </a>
-                    ))}
-                  </div>
+          <div className="contact-wrap">
+            <div className="contact-topbar">
+              <div className="contact-intro-panel">
+                <span className="section-label-dark">Get In Touch</span>
+                <h2 className="contact-title">Speak to the <em>right team</em> without digging through the page.</h2>
+                <p className="contact-sub">This contact section is built around the actions clients actually take: call a direct line, send a message, or choose the branch closest to them. The goal is speed, clarity, and a calmer first impression.</p>
+                <div className="contact-intro-note">
+                  <Shield size={14} />
+                  Every enquiry is handled with confidentiality and routed to the appropriate office.
                 </div>
               </div>
-              {[
-                { icon: Mail, label: "Email", value: "agdlawassociatesoffice@gmail.com", href: "mailto:agdlawassociatesoffice@gmail.com" },
-                { icon: MapPin, label: "Location", value: "No. 5c, 5th floor, Sri Venkatesh bhavan, No. 71/35, Armenian street, Chennai, Tamil Nadu, India, 600001", href: "#" },
-              ].map((d) => {
-                const Icon = d.icon;
-                return (
-                  <a key={d.label} href={d.href} className="contact-detail" style={{ textDecoration: "none" }}>
-                    <div className="contact-detail-icon"><Icon size={15} /></div>
+              <div className="contact-badges-panel">
+                {[
+                  {
+                    icon: PhoneCall,
+                    label: "Direct Lines",
+                    value: `${contactNumbers.length} active numbers`,
+                    copy: "Multiple office contacts available for faster reachability.",
+                  },
+                  {
+                    icon: MapPin,
+                    label: "Branch Access",
+                    value: `${branchLocations.length} client-facing offices`,
+                    copy: "Meet the team in Chennai or Chengalpattu by prior call.",
+                  },
+                  {
+                    icon: Clock,
+                    label: "Response Time",
+                    value: "Within 1 business day",
+                    copy: "Message form submissions are reviewed promptly during working days.",
+                  },
+                ].map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <div key={item.label} className="contact-badge">
+                      <div className="contact-badge-icon"><Icon size={16} /></div>
+                      <div className="contact-badge-label">{item.label}</div>
+                      <div className="contact-badge-value">{item.value}</div>
+                      <p className="contact-badge-copy">{item.copy}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="contact-main">
+              <div className="contact-form-panel">
+                <h3 className="form-panel-title">Send a Message</h3>
+                <p className="form-panel-sub">Share a short overview of the matter and the team will direct it to the right practice area.</p>
+                <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "22px" }}>
+                  <div>
+                    <p className="form-section-label">Select Service Area</p>
+                    <div className="chip-group">
+                      {serviceOptions.map((s) => (
+                        <button key={s.value} type="button" className={`chip${form.service_type === s.value ? " active" : ""}`} onClick={() => selectPill("service_type", s.value)} aria-pressed={form.service_type === s.value}>{s.label}</button>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="form-section-label">Preferred Timeline</p>
+                    <div className="chip-group">
+                      {budgetOptions.map((b) => (
+                        <button key={b.value} type="button" className={`chip${form.budget === b.value ? " active" : ""}`} onClick={() => selectPill("budget", b.value)} aria-pressed={form.budget === b.value}>{b.label}</button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="form-fields">
+                    <div className="form-field">
+                      <label htmlFor="your_name" className="form-label">Your Name</label>
+                      <input type="text" id="your_name" name="your_name" placeholder="John Doe" required value={form.your_name} onChange={handleChange} className="form-input" />
+                    </div>
+                    <div className="form-field">
+                      <label htmlFor="your_email" className="form-label">Email Address</label>
+                      <input type="email" id="your_email" name="your_email" placeholder="john@email.com" required value={form.your_email} onChange={handleChange} className="form-input" />
+                    </div>
+                    <div className="form-field">
+                      <label htmlFor="your_phone" className="form-label">Phone Number</label>
+                      <input type="tel" id="your_phone" name="your_phone" placeholder="+91 98765 43210" value={form.your_phone} onChange={handleChange} className="form-input" />
+                    </div>
+                    <div className="form-field full">
+                      <label htmlFor="message" className="form-label">Your Message</label>
+                      <textarea id="message" name="message" rows={4} placeholder="Briefly describe your legal matter..." value={form.message} onChange={handleChange} className="form-input" />
+                    </div>
+                  </div>
+                  {submitState.message && (
+                    <div className={`form-msg ${submitState.type}`}>{submitState.message}</div>
+                  )}
+                  <button type="submit" className="form-submit" disabled={isSubmitting}>
+                    {isSubmitting ? "Sending..." : "Send Message"}
+                    {!isSubmitting && <Send size={15} />}
+                  </button>
+                </form>
+              </div>
+              <div className="contact-directory-panel">
+                <div className="contact-panel-head">
+                  <div>
+                    <div className="contact-panel-kicker">Direct Access</div>
+                    <h3 className="contact-panel-title">Call or write without hunting for the right contact.</h3>
+                  </div>
+                  <div className="contact-directory-tag">
+                    Best for urgent follow-up
+                    <br />
+                    <strong>{primaryContactNumber.display}</strong>
+                  </div>
+                </div>
+                <div className="contact-number-grid">
+                  {contactNumbers.map((number, index) => (
+                    <a key={number.tel} href={`tel:${number.tel}`} className="contact-number-link">
+                      <span className="contact-number-index">Line {String(index + 1).padStart(2, "0")}</span>
+                      <span className="contact-number-value">{number.display}</span>
+                    </a>
+                  ))}
+                </div>
+                <div className="contact-quick-grid">
+                  <a href={`mailto:${contactEmail}`} className="contact-detail">
+                    <div className="contact-detail-icon"><Mail size={15} /></div>
                     <div>
-                      <div className="contact-detail-label">{d.label}</div>
-                      <div className="contact-detail-value">{d.value}</div>
+                      <div className="contact-detail-label">Email</div>
+                      <div className="contact-detail-value">{contactEmail}</div>
+                      <p className="contact-detail-copy">Good for sending matter summaries, documents, and written follow-ups.</p>
                     </div>
                   </a>
-                );
-              })}
-              <div className="contact-hours">
-                <p className="contact-hours-title">Office Hours</p>
-                {[
-                  { day: "Monday – Friday", time: "10:00 AM – 6:30 PM" },
-                  { day: "Saturday", time: "11:00 AM – 5:00 PM" },
-                  { day: "2nd & Last Saturday", time: "Closed" },
-                ].map((h) => (
-                  <div className="hours-row" key={h.day}>
-                    <span className="hours-day">{h.day}</span>
-                    <span className="hours-time">{h.time}</span>
+                  <a href={`tel:${primaryContactNumber.tel}`} className="contact-detail">
+                    <div className="contact-detail-icon"><PhoneCall size={15} /></div>
+                    <div>
+                      <div className="contact-detail-label">Primary Line</div>
+                      <div className="contact-detail-value">{primaryContactNumber.display}</div>
+                      <p className="contact-detail-copy">Start here if you want the team to route you to the right branch or lawyer.</p>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div className="contact-offices-panel">
+              <div className="contact-panel-head">
+                <div>
+                  <div className="contact-panel-kicker">Visit Our Offices</div>
+                  <h3 className="contact-panel-title">Two offices, one coordinated client experience.</h3>
+                  <p className="contact-panel-copy">Choose the branch closest to you and call ahead for smoother scheduling and faster intake.</p>
+                </div>
+              </div>
+              <div className="contact-offices-grid">
+                <div className="contact-hours-card">
+                  <div className="contact-hours-head">
+                    <div className="contact-detail-icon"><Clock size={15} /></div>
+                    <div>
+                      <p className="contact-hours-title">Office Hours</p>
+                      <p className="contact-hours-sub">Available through the week for consultations and case discussions.</p>
+                    </div>
+                  </div>
+                  {[
+                    { day: "Monday – Friday", time: "10:00 AM – 6:30 PM" },
+                    { day: "Saturday", time: "11:00 AM – 5:00 PM" },
+                    { day: "2nd & Last Saturday", time: "Closed" },
+                  ].map((h) => (
+                    <div className="hours-row" key={h.day}>
+                      <span className="hours-day">{h.day}</span>
+                      <span className="hours-time">{h.time}</span>
+                    </div>
+                  ))}
+                </div>
+                {branchLocations.map((branch) => (
+                  <div key={branch.label} className="contact-office-card">
+                    <div className="contact-office-head">
+                      <div className="contact-detail-icon"><MapPin size={15} /></div>
+                      <div>
+                        <div className="contact-office-city">{branch.city}</div>
+                        <div className="contact-office-label">{branch.label}</div>
+                      </div>
+                    </div>
+                    <p className="contact-office-address">{branch.address}</p>
+                    <div className="contact-office-foot">Appointments by prior call</div>
                   </div>
                 ))}
               </div>
-            </div>
-            <div className="contact-form-panel">
-              <h3 className="form-panel-title">Send a Message</h3>
-              <p className="form-panel-sub">We typically respond within 1 business day.</p>
-              <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "22px" }}>
-                <div>
-                  <p className="form-section-label">Select Service Area</p>
-                  <div className="chip-group">
-                    {serviceOptions.map((s) => (
-                      <button key={s.value} type="button" className={`chip${form.service_type === s.value ? " active" : ""}`} onClick={() => selectPill("service_type", s.value)} aria-pressed={form.service_type === s.value}>{s.label}</button>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <p className="form-section-label">Preferred Timeline</p>
-                  <div className="chip-group">
-                    {budgetOptions.map((b) => (
-                      <button key={b.value} type="button" className={`chip${form.budget === b.value ? " active" : ""}`} onClick={() => selectPill("budget", b.value)} aria-pressed={form.budget === b.value}>{b.label}</button>
-                    ))}
-                  </div>
-                </div>
-                <div className="form-fields">
-                  <div className="form-field">
-                    <label htmlFor="your_name" className="form-label">Your Name</label>
-                    <input type="text" id="your_name" name="your_name" placeholder="John Doe" required value={form.your_name} onChange={handleChange} className="form-input" />
-                  </div>
-                  <div className="form-field">
-                    <label htmlFor="your_email" className="form-label">Email Address</label>
-                    <input type="email" id="your_email" name="your_email" placeholder="john@email.com" required value={form.your_email} onChange={handleChange} className="form-input" />
-                  </div>
-                  <div className="form-field">
-                    <label htmlFor="your_phone" className="form-label">Phone Number</label>
-                    <input type="tel" id="your_phone" name="your_phone" placeholder="+91 98765 43210" value={form.your_phone} onChange={handleChange} className="form-input" />
-                  </div>
-                  <div className="form-field full">
-                    <label htmlFor="message" className="form-label">Your Message</label>
-                    <textarea id="message" name="message" rows={4} placeholder="Briefly describe your legal matter..." value={form.message} onChange={handleChange} className="form-input" />
-                  </div>
-                </div>
-                {submitState.message && (
-                  <div className={`form-msg ${submitState.type}`}>{submitState.message}</div>
-                )}
-                <button type="submit" className="form-submit" disabled={isSubmitting}>
-                  {isSubmitting ? "Sending..." : "Send Message"}
-                  {!isSubmitting && <Send size={15} />}
-                </button>
-              </form>
             </div>
           </div>
         </div>
