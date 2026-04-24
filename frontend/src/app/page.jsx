@@ -1875,7 +1875,7 @@ const courtRegions = [
     courts: ["Dindigul", "Vedasandur Sub Court"],
   },
   {
-    name: "Madurai District Courts & Madurai Bench Madras High Court",
+    name: "Madurai District Courts & Madurai Bench of Madras High Court",
     courts: [],
   },
   {
