@@ -1884,14 +1884,14 @@ const courtRegions = [
   },
   {
     name: "Villupuram District Courts ",
-    courts: ["Tindivanam"],
+    courts: ["Tindivanam", "Gingee"],
   },
   {
     name: "Tiruvannamalai District Courts ",
-    courts: ["Tiruvannamalai court", "Senji"],
+    courts: ["Tiruvannamalai court"],
   },
   {
-    name: "Kallakurichi District courts ",
+    name: "Kallakurichi District Courts ",
     courts: ["Kallakurichi", "Sankarapuram", "Tirukkoyilur"],
   },
   {
