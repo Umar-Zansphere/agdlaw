@@ -2816,7 +2816,7 @@ function Contact() {
                     <div className="contact-office-foot">
                      {index === 0
                       ? "Meet in person or join via video — book an appointment"
-                      : "Join via video conference — appointment required"}
+                      : ""}
                     </div>
                   </div>
                 ))}
