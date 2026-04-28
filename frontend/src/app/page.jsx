@@ -51,7 +51,6 @@ const SITE_DESCRIPTION =
 
 const contactNumbers = [
   { display: "+91 89396 88855", tel: "+918939688855" },
-  { display: "+91 89395 88855", tel: "+918939588855" },
   { display: "+91 99943 88855", tel: "+919994388855" },
   { display: "+91 88395 88855", tel: "+918839588855" },
   { display: "+91 79049 37891", tel: "+917904937891" },
@@ -1817,11 +1816,12 @@ const teamMembers = [
   { name: "P. Srikanth subash", role: "Advocate" },
   { name: "S. Faiz Hameed Raja", role: "Advocate" },
   { name: "Oviya N", role: "Advocate" },
-  { name: "G. JanaRajan", role: "Advocate" },
+  { name: "G. Janarajan", role: "Advocate" },
   { name: "V. Prabhakaran", role: "Intern" },
   { name: "V. Vel kumaran", role: "Sentinel Law Associate" },
   { name: "S. Mohan Raj", role: "Advocate" },
   { name: "K. Sharmila", role: "Advocate" },
+  { name: "E. Duraisamy", role: "Advocate" },
 ];
 
 const courtRegions = [
@@ -1846,6 +1846,7 @@ const courtRegions = [
       "Tambaram",
       "Alandur",
       "Sholinganallur",
+      "Thirukalikundram",
     ],
   },
   {
@@ -1872,7 +1873,7 @@ const courtRegions = [
   },
   {
     name: "Dindugal District Courts ",
-    courts: ["Dindigul", "Vedasandur Sub Court"],
+    courts: ["Dindigul", "Vedasandur Court"],
   },
   {
     name: "Madurai District Courts & Madurai Bench of Madras High Court",
@@ -1880,7 +1881,7 @@ const courtRegions = [
   },
   {
     name: "Kanchipuram District Courts",
-    courts: [],
+    courts: ["Kanchipuram", "Sriperumbudur", "Uthiramerur"],
   },
   {
     name: "Villupuram District Courts ",
@@ -2738,7 +2739,7 @@ function Contact() {
                 <div className="contact-panel-head">
                   <div>
                     <div className="contact-panel-kicker">Direct Access</div>
-                    <h3 className="contact-panel-title">Call or write without hunting for the right contact.</h3>
+                    <h3 className="contact-panel-title">Call or write </h3>
                   </div>
                   <div className="contact-directory-tag">
                     Best for urgent follow-up
@@ -2787,8 +2788,8 @@ function Contact() {
                   <div className="contact-hours-head">
                     <div className="contact-detail-icon"><Clock size={15} /></div>
                     <div>
-                      <p className="contact-hours-title">Office Hours</p>
-                      <p className="contact-hours-sub">Available through the week for consultations and case discussions.</p>
+                      {/* <p className="contact-hours-title">Office Hours</p> */}
+                      <p className="contact-hours-sub">Office Hours</p>
                     </div>
                   </div>
                   {[
@@ -2802,17 +2803,21 @@ function Contact() {
                     </div>
                   ))}
                 </div>
-                {branchLocations.map((branch) => (
+                {branchLocations.map((branch, index) => (
                   <div key={branch.label} className="contact-office-card">
                     <div className="contact-office-head">
                       <div className="contact-detail-icon"><MapPin size={15} /></div>
                       <div>
-                        <div className="contact-office-city">{branch.city}</div>
+                        {/* <div className="contact-office-city">{branch.city}</div> */}
                         <div className="contact-office-label">{branch.label}</div>
                       </div>
                     </div>
                     <p className="contact-office-address">{branch.address}</p>
-                    <div className="contact-office-foot">Appointments by prior call</div>
+                    <div className="contact-office-foot">
+                     {index === 0
+                      ? "Meet in person or join via video — book an appointment"
+                      : "Join via video conference — appointment required"}
+                    </div>
                   </div>
                 ))}
               </div>
