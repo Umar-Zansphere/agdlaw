@@ -1,9 +1,9 @@
 pipeline {
   agent any
 
-  tools {
-      nodejs 'NodeJS'
-  }
+  // tools {
+  //     nodejs 'NodeJS'
+  // }
 
   triggers {
     cron('0 10 * * *')
@@ -43,7 +43,7 @@ pipeline {
       steps {
         dir('frontend') {
           bat 'npx pnpm --version'
-          bat 'npx pnpm install --frozen-lockfile --ignore-scripts=false' // Disable postinstall scripts to speed up install and avoid issues in CI
+          bat 'npx pnpm install --frozen-lockfile'
         }
       }
     }
