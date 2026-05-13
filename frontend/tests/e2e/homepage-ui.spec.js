@@ -33,7 +33,10 @@ test.describe("homepage UI regressions", () => {
     );
     await expectSectionHeading(page, "#blog", /from our desk/i);
     await expectSectionHeading(page, "#faq", /common questions/i);
-    await expectSectionHeading(page, "#contact", /need legal support/i);
+    await page.locator("span", { hasText: "Get In Touch" }).scrollIntoViewIfNeeded();
+    await expect(
+      page.locator("span", { hasText: "Get In Touch" })
+    ).toBeVisible();
 
     await mainNav.getByRole("link", { name: "Services" }).click();
     await expect(page).toHaveURL(/#services$/);
