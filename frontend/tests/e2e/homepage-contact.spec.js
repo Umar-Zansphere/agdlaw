@@ -35,8 +35,8 @@ test.describe("homepage contact form", () => {
     await gotoHomepage(page);
 
     await expect(
-      page.getByRole("heading", { level: 2, name: /need legal support\?/i })
-    ).toBeVisible();
+      page.locator("span", { hasText: "Get In Touch" })
+    ).toBeVisible(); 
     await expect(
       page.getByRole("heading", { level: 3, name: "Send a Message" })
     ).toBeVisible();
