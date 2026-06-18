@@ -12,6 +12,7 @@
     "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
+    "dotenv": "^17.4.2",
     "lucide-react": "^1.7.0",
     "next": "16.2.1",
     "react": "19.2.4",
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.51.1",
+    "@reportportal/agent-js-playwright": "^5.4.0",
     "@tailwindcss/postcss": "^4",
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
