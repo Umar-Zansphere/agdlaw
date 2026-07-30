@@ -25,6 +25,7 @@ import {
   ArrowRight,
   Phone,
   ArrowLeft,
+  Building2,
   MessageCircle,
   MapPin,
   Mail,
@@ -57,20 +58,24 @@ const contactNumbers = [
   { display: "+91 96000 90066", tel: "+919600090066" },
   { display: "+91 63808 91286", tel: "+916380891286" },
   { display: "+91 98840 77779", tel: "+919884077779" },
+  { display: "+91 74492 66124", tel: "+917449266124" },
 ];
 const contactEmail = "agdlawassociatesoffice@gmail.com";
 const branchLocations = [
   {
     label: "Chennai Office",
     city: "Chennai",
-    address:
+    addresses: [
       "No. 5C, 5th Floor, Sri Venkatesh Bhavan, No. 71/35, Armenian Street, Chennai, Tamil Nadu, India, 600001",
+      "New No. 258, Old No. 193/11/1, 2nd Floor, Linghi Chetty Street, George Town, Chennai - 600001",
+    ],
   },
   {
     label: "Chengalpattu Branch",
     city: "Chengalpattu",
-    address:
+    addresses: [
       "No. 8, Shyla Mahal, First Floor, Near New Bus Stand, Chengalpattu - 603001",
+    ],
   },
 ];
 const primaryContactNumber = contactNumbers[0];
@@ -396,6 +401,193 @@ const GlobalStyles = () => (
     }
     .panel-tinted {
       background: linear-gradient(180deg, rgba(15,20,17,0.62) 0%, rgba(6,8,7,0.72) 100%);
+    }
+
+    /* ── Institutional Experience ── */
+    .institutional-shell {
+      padding: clamp(4rem, 7vw, 6rem) 0;
+    }
+    .institutional-frame {
+      border: 1px solid rgba(197,223,192,0.16);
+      background:
+        radial-gradient(circle at top right, rgba(197,223,192,0.1), transparent 34%),
+        linear-gradient(180deg, rgba(12,16,14,0.84) 0%, rgba(7,10,9,0.92) 100%);
+      border-radius: 32px;
+      padding: clamp(1.4rem, 3vw, 2.2rem);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.24);
+    }
+    .institutional-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
+      gap: 28px;
+      align-items: end;
+      margin-bottom: 28px;
+    }
+    .institutional-title {
+      margin-top: 14px;
+      font-size: clamp(2.4rem, 4vw, 4rem);
+      line-height: 1;
+      color: #fff;
+      max-width: 700px;
+    }
+    .institutional-title em { color: var(--sage); font-style: italic; }
+    .institutional-copy {
+      font-size: 0.95rem;
+      line-height: 1.9;
+      color: var(--text-muted);
+      max-width: 480px;
+      justify-self: end;
+    }
+    .institutional-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .institutional-card {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      padding: 24px;
+      border-radius: 24px;
+      border: 1px solid rgba(197,223,192,0.18);
+      background:
+        linear-gradient(180deg, rgba(23,30,27,0.96) 0%, rgba(10,14,12,0.92) 100%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .institutional-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(197,223,192,0.3);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.04),
+        0 18px 36px rgba(0,0,0,0.18);
+    }
+    .institutional-card-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .institutional-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      border: 1px solid rgba(197,223,192,0.24);
+      background: rgba(197,223,192,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--sage);
+      flex-shrink: 0;
+    }
+    .institutional-card-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;
+      flex: 1;
+    }
+    .institutional-topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .institutional-sector {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--sage);
+    }
+    .institutional-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 36px;
+      height: 36px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: rgba(197,223,192,0.12);
+      border: 1px solid rgba(197,223,192,0.22);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .institutional-sector-copy {
+      font-size: 0.87rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.74);
+    }
+    .institutional-list {
+      display: grid;
+      gap: 10px;
+    }
+    .institutional-name-row {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: center;
+      gap: 12px;
+      min-height: 62px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(197,223,192,0.12);
+      background: linear-gradient(180deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.02) 100%);
+    }
+    .institutional-name-marker {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--sage);
+      box-shadow: 0 0 0 6px rgba(197,223,192,0.08);
+      flex-shrink: 0;
+    }
+    .institutional-name {
+      font-size: 0.94rem;
+      font-weight: 600;
+      line-height: 1.5;
+      letter-spacing: 0.01em;
+      color: #fff;
+    }
+    .institutional-card-foot {
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid rgba(197,223,192,0.1);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(197,223,192,0.68);
+    }
+    .institutional-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(197,223,192,0.12);
+    }
+    .institutional-meta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(197,223,192,0.14);
+      background: rgba(255,255,255,0.03);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      color: var(--text-subtle);
+    }
+    .institutional-meta-chip strong {
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: normal;
+      text-transform: none;
+      color: #fff;
     }
 
     /* ── About ── */
@@ -1535,6 +1727,11 @@ const GlobalStyles = () => (
       line-height: 1.82;
       color: var(--text-body);
     }
+    .contact-office-address + .contact-office-address {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(197,223,192,0.12);
+    }
     .contact-office-foot {
       margin-top: 18px;
       padding-top: 12px;
@@ -1675,9 +1872,12 @@ const GlobalStyles = () => (
 
     /* ── Responsive ── */
     @media (max-width: 1200px) {
+      .institutional-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .services-grid { grid-template-columns: repeat(3, 1fr); }
     }
     @media (max-width: 1024px) {
+      .institutional-head { grid-template-columns: 1fr; }
+      .institutional-copy { justify-self: start; max-width: 100%; }
       .hero-stats-row { flex-wrap: wrap; }
       .cases-stats { grid-template-columns: repeat(2, 1fr); }
       .cases-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1703,6 +1903,7 @@ const GlobalStyles = () => (
       .service-featured-arrow { display: none; }
     }
     @media (max-width: 768px) {
+      .institutional-grid { grid-template-columns: 1fr; }
       .about-proof-strip { grid-template-columns: auto minmax(0, 1fr); }
       .about-founder-exp {
         grid-column: 1 / -1; text-align: left;
@@ -1717,6 +1918,12 @@ const GlobalStyles = () => (
       .contact-quick-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 640px) {
+      .institutional-frame { border-radius: 24px; padding: 20px; }
+      .institutional-card { padding: 18px; border-radius: 20px; }
+      .institutional-topline { align-items: flex-start; }
+      .institutional-count { min-width: 32px; height: 32px; padding: 0 10px; }
+      .institutional-name-row { min-height: 0; padding: 13px 14px; }
+      .institutional-meta { flex-direction: column; }
       .about-stats-row { grid-template-columns: 1fr; }
       .about-value-card { grid-template-columns: auto minmax(0, 1fr); }
       .about-value-num { grid-column: 2; }
@@ -1804,21 +2011,54 @@ const services = [
   { title: "MCOP & Rent Control", description: "Motor accident compensation claims, insurance disputes, eviction proceedings, fair rent fixation, and rent control litigation.", icon: Clock },
 ];
 
+const institutionalExperience = [
+  {
+    sector: "Banking",
+    icon: Building2,
+    description: "Established banking institutions across lending, documentation, and recovery-linked mandates.",
+    names: [
+      "Indian Bank",
+      "Canara Bank",
+      "Equitas Small Finance Bank",
+      "Bank of Maharashtra",
+    ],
+  },
+  {
+    sector: "Finance & NBFC",
+    icon: Shield,
+    description: "Specialty lenders and financial services businesses with commercial and enforcement-sensitive matters.",
+    names: [
+      "Ugro Capital",
+      "Hinduja Leyland Finance",
+    ],
+  },
+  {
+    sector: "Construction & Real Estate",
+    icon: MapPin,
+    description: "Builders, architects, and infrastructure-focused companies operating in project and property-heavy environments.",
+    names: [
+      "Deejos Architects & Construction Pvt Ltd",
+      "Greenwich Construction",
+      "Sri Mahalakshmi Infrastructures",
+      "Lakshmi Builders",
+    ],
+  },
+];
+
 const teamMembers = [
-  { name: "AGD Bala kumar", role: "Lead Advocate" },
-  { name: "A. Yokesh Kumar", role: "Advocate" },
-  { name: "M.R. Vinoth Prabhu", role: "Advocate" },
-  { name: "A. Prabhakaran", role: "Advocate" },
-  { name: "D. Pradeep Kumar", role: "Advocate" },
+  { name: "AGD Bala kumar", role: "Founder" },
+  { name: "A. Prabhakaran", role: "Legal Head" },
+  { name: "M. Ravi Kumar", role: "Asst. Legal Head" },
+  { name: "A. Yokesh Kumar", role: " Associate Advocate" },
+  { name: "D. Pradeep Kumar", role: "Associate Advocate" },
   { name: "K. Rajkumar", role: "Advocate" },
   { name: "T. Ravi shankar", role: "Advocate" },
-  { name: "S. Sivadharshini", role: "Advocate" },
-  { name: "P. Srikanth subash", role: "Advocate" },
+  { name: "S. Sivadharshini", role: "Associate Advocate" },
+  { name: "P. Srikanth subash", role: "Legal Co-ordinator" },
   { name: "S. Faiz Hameed Raja", role: "Advocate" },
   { name: "Oviya N", role: "Advocate" },
   { name: "G. Janarajan", role: "Advocate" },
   { name: "V. Prabhakaran", role: "Intern" },
-  { name: "V. Vel kumaran", role: "Sentinel Law Associate" },
   { name: "S. Mohan Raj", role: "Advocate" },
   { name: "K. Sharmila", role: "Advocate" },
   { name: "E. Duraisamy", role: "Advocate" },
@@ -2207,6 +2447,79 @@ function Ticker() {
         ))}
       </div>
     </div>
+  );
+}
+
+// ─── Institutional Experience ────────────────────────────────────────────────
+
+function InstitutionalExperience() {
+  return (
+    <section className="panel-tinted" aria-labelledby="institutional-experience-title">
+      <div className="container">
+        <div className="institutional-shell">
+          <div className="institutional-frame">
+            <div className="institutional-head">
+              <div>
+                <span className="section-label-dark">Institutional Experience</span>
+                <h2 className="institutional-title" id="institutional-experience-title">
+                  Trusted across <em>banking, finance, and construction</em>
+                </h2>
+              </div>
+              <p className="institutional-copy">
+                A focused panel of organizations that reflects the firm&apos;s institutional-facing
+                work across lender, NBFC, builder, and infrastructure-side matters.
+              </p>
+            </div>
+
+            <div className="institutional-grid">
+              {institutionalExperience.map((group) => {
+                const Icon = group.icon;
+
+                return (
+                  <article className="institutional-card" key={group.sector}>
+                    <div className="institutional-card-head">
+                      <div className="institutional-icon">
+                        <Icon size={18} />
+                      </div>
+                      <div className="institutional-card-copy">
+                        <div className="institutional-topline">
+                          <div className="institutional-sector">{group.sector}</div>
+                          <div className="institutional-count">{group.names.length}</div>
+                        </div>
+                        <p className="institutional-sector-copy">{group.description}</p>
+                      </div>
+                    </div>
+
+                    <div className="institutional-list" aria-label={`${group.sector} institutions`}>
+                      {group.names.map((name) => (
+                        <div className="institutional-name-row" key={name}>
+                          <span className="institutional-name-marker" aria-hidden="true" />
+                          <span className="institutional-name">{name}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="institutional-card-foot">Representative institutions</div>
+                  </article>
+                );
+              })}
+            </div>
+
+            <div className="institutional-meta" aria-label="Institutional panel summary">
+              <div className="institutional-meta-chip">
+                <strong>12</strong> organizations
+              </div>
+              <div className="institutional-meta-chip">
+                <strong>3</strong> sector groups
+              </div>
+              <div className="institutional-meta-chip">
+                Finance, recovery, builder, and project-side exposure
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -2812,7 +3125,11 @@ function Contact() {
                         <div className="contact-office-label">{branch.label}</div>
                       </div>
                     </div>
-                    <p className="contact-office-address">{branch.address}</p>
+                    <div className="contact-office-addresses">
+                      {(branch.addresses || [branch.address]).map((address) => (
+                        <p key={address} className="contact-office-address">{address}</p>
+                      ))}
+                    </div>
                     <div className="contact-office-foot">
                      {index === 0
                       ? "Meet in person or join via video — book an appointment"
@@ -3034,6 +3351,7 @@ export default function Page() {
           <Team />
           <Regions />
           <Blog />
+          <InstitutionalExperience />
           <FAQ />
           <Contact />
         </main>

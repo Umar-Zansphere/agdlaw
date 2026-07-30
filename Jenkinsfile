@@ -18,6 +18,7 @@ pipeline {
   environment {
     CI = 'true'
     PLAYWRIGHT_HTML_EMAIL_REPORT = 'test-results/e2e-email-report.html'
+    RP_API_KEY = credentials('RP_API_KEY')
   }
 
   stages {
