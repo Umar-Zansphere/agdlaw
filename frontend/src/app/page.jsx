@@ -2046,15 +2046,15 @@ const institutionalExperience = [
 ];
 
 const teamMembers = [
-  { name: "AGD Bala kumar", role: "Founder" },
+  { name: "AGD Bala Kumar", role: "Founder" },
   { name: "A. Prabhakaran", role: "Legal Head" },
   { name: "M. Ravi Kumar", role: "Asst. Legal Head" },
   { name: "A. Yokesh Kumar", role: " Associate Advocate" },
   { name: "D. Pradeep Kumar", role: "Associate Advocate" },
   { name: "K. Rajkumar", role: "Advocate" },
-  { name: "T. Ravi shankar", role: "Advocate" },
+  { name: "T. Ravi Shankar", role: "Advocate" },
   { name: "S. Sivadharshini", role: "Associate Advocate" },
-  { name: "P. Srikanth subash", role: "Legal Co-ordinator" },
+  { name: "P. Srikanth Subash", role: "Legal Co-ordinator" },
   { name: "S. Faiz Hameed Raja", role: "Advocate" },
   { name: "Oviya N", role: "Advocate" },
   { name: "G. Janarajan", role: "Advocate" },
@@ -2101,18 +2101,18 @@ const courtRegions = [
   },
   {
     name: "Ramnad District Court ",
-    courts: ["Paramakudi court"],
+    courts: ["Paramakudi Court"],
   },
   {
     name: "Coimbatore District Court campus only",
     courts: [],
   },
   {
-    name: "Tirupur District court campus only",
+    name: "Tirupur District Court campus only",
     courts: [],
   },
   {
-    name: "Dindugal District Courts ",
+    name: "Dindigul District Courts ",
     courts: ["Dindigul", "Vedasandur Court"],
   },
   {
@@ -2129,7 +2129,7 @@ const courtRegions = [
   },
   {
     name: "Tiruvannamalai District Courts ",
-    courts: ["Tiruvannamalai court"],
+    courts: ["Tiruvannamalai Court"],
   },
   {
     name: "Kallakurichi District Courts ",
@@ -3200,7 +3200,7 @@ function Footer() {
               </a>
               <div className="footer-contact-item">
                 <MapPin size={13} className="footer-contact-icon" />
-                <span className="footer-contact-text">No. 5c, 5th floor, Sri Venkatesh bhavan, No. 71/35, Armenian street, Chennai, Tamil Nadu, India, 600001</span>
+                <span className="footer-contact-text">No. 5C, 5th Floor, Sri Venkatesh Bhavan, No. 71/35, Armenian Street, Chennai, Tamil Nadu, India, 600001</span>
               </div>
             </div>
           </div>
