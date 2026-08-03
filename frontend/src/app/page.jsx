@@ -110,6 +110,16 @@ const venturesServiceGroups = [
     ],
   },
 ];
+const venturesTeam = [
+  { name: "AGD Bala Kumar", role: "Founder / Lead Advocate" },
+  { name: "A. Prabhakaran", role: "Legal Head" },
+  { name: "M. Ravi Kumar", role: "Asst. Legal Head" },
+  { name: "A. Yokesh Kumar", role: "Associate Advocate" },
+  { name: "K. Raj Kumar", role: "Associate Advocate" },
+  { name: "D. Pradeep Kumar", role: "Associate Advocate" },
+  { name: "S. Sivadharshini", role: "Associate Advocate" },
+  { name: "V. Latha", role: "Non Legal / Accountant" },
+];
 
 
 // ─── Global Styles ─────────────────────────────────────────────────────────────
@@ -958,6 +968,59 @@ const GlobalStyles = () => (
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
+    }
+    .ventures-team-card {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 22px;
+      border-radius: 8px;
+      border: 1px solid rgba(197,223,192,0.14);
+      background: rgba(12,16,14,0.55);
+    }
+    .ventures-team-head {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(197,223,192,0.12);
+    }
+    .ventures-team-title {
+      font-family: var(--font-cormorant), Georgia, serif;
+      font-size: 1.5rem;
+      line-height: 1.1;
+      color: #fff;
+    }
+    .ventures-team-subtitle {
+      font-size: 0.72rem;
+      line-height: 1.7;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      color: rgba(197,223,192,0.62);
+    }
+    .ventures-team-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px 16px;
+    }
+    .ventures-team-row {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(197,223,192,0.08);
+    }
+    .ventures-team-name {
+      font-size: 0.94rem;
+      line-height: 1.45;
+      color: #fff;
+    }
+    .ventures-team-role {
+      font-size: 0.72rem;
+      line-height: 1.6;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      color: rgba(197,223,192,0.64);
     }
     .ventures-note-card {
       display: flex;
@@ -2205,6 +2268,7 @@ const GlobalStyles = () => (
       }
       .ventures-inner { gap: 24px; }
       .ventures-services-grid,
+      .ventures-team-list,
       .ventures-bottom-grid { grid-template-columns: 1fr; }
       .services-intro-row { flex-direction: column; }
       .service-featured-card { grid-template-columns: 1fr; }
@@ -3022,6 +3086,23 @@ function Ventures() {
                     </div>
                   );
                 })}
+              </div>
+
+              <div className="ventures-team-card">
+                <div className="ventures-team-head">
+                  <div className="ventures-team-title">Ventures Team</div>
+                  <div className="ventures-team-subtitle">
+                    Exclusive for Due Diligence, Title Scrutiny & Registrations
+                  </div>
+                </div>
+                <div className="ventures-team-list">
+                  {venturesTeam.map((member) => (
+                    <div className="ventures-team-row" key={member.name}>
+                      <div className="ventures-team-name">{member.name}</div>
+                      <div className="ventures-team-role">{member.role}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div className="ventures-bottom-grid">
