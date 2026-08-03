@@ -79,6 +79,47 @@ const branchLocations = [
   },
 ];
 const primaryContactNumber = contactNumbers[0];
+const venturesPhoneNumbers = [
+  { display: "+91 99943 88855", tel: "+919994388855" },
+  { display: "+91 79049 37891", tel: "+917904937891" },
+  { display: "+91 74492 66124", tel: "+917449266124" },
+];
+const venturesServiceGroups = [
+  {
+    icon: Shield,
+    title: "Due Diligence & Title Scrutiny",
+    items: [
+      "Property Due Diligence",
+      "Complete Title Investigation",
+      "Parent Document Verification",
+      "Ownership Analysis",
+      "Encumbrance Verification",
+      "Litigation Search",
+      "Revenue Record Verification",
+      "Approval Verification",
+      "Land Use Verification",
+      "Legal Due Diligence Report",
+    ],
+  },
+  {
+    icon: BookOpen,
+    title: "Registrations & Record Verification",
+    items: [
+      "Sale, Gift, Settlement, Release, Partition, Lease, Mortgage, MODT, and POA Registrations",
+      "Patta, Chitta, Adangal, FMB, A-Register, TSLR, and CMDA, DTCP, RERA Verification",
+    ],
+  },
+];
+const venturesTeam = [
+  { name: "AGD Bala Kumar", role: "Founder / Lead Advocate" },
+  { name: "A. Prabhakaran", role: "Legal Head" },
+  { name: "M. Ravi Kumar", role: "Asst. Legal Head" },
+  { name: "A. Yokesh Kumar", role: "Associate Advocate" },
+  { name: "K. Raj Kumar", role: "Associate Advocate" },
+  { name: "D. Pradeep Kumar", role: "Associate Advocate" },
+  { name: "S. Sivadharshini", role: "Associate Advocate" },
+  { name: "V. Latha", role: "Non Legal / Accountant" },
+];
 
 
 // ─── Global Styles ─────────────────────────────────────────────────────────────
@@ -768,6 +809,320 @@ const GlobalStyles = () => (
       margin-top: 2px;
     }
     .about-note svg { color: var(--sage); flex-shrink: 0; margin-top: 3px; }
+
+    /* ── Ventures ── */
+    .ventures-shell {
+      padding: 0 0 clamp(4rem, 7vw, 7rem);
+    }
+    .ventures-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+    .ventures-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(290px, 0.75fr);
+      gap: 26px;
+      align-items: start;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(197,223,192,0.16);
+    }
+    .ventures-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 760px;
+    }
+    .ventures-kicker {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: rgba(197,223,192,0.68);
+    }
+    .ventures-title {
+      font-size: clamp(2.45rem, 4.1vw, 4.35rem);
+      line-height: 1.02;
+      color: #fff;
+      letter-spacing: -0.015em;
+      max-width: 720px;
+    }
+    .ventures-title em {
+      color: var(--sage);
+      font-style: italic;
+    }
+    .ventures-lead {
+      font-size: 1rem;
+      line-height: 1.85;
+      color: var(--text-body);
+      position: relative;
+      padding-left: 20px;
+    }
+    .ventures-lead::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 6px;
+      bottom: 6px;
+      width: 2px;
+      border-radius: 2px;
+      background: linear-gradient(180deg, var(--sage), rgba(197,223,192,0.2));
+    }
+    .ventures-body {
+      font-size: 0.9rem;
+      line-height: 1.85;
+      color: var(--text-muted);
+      max-width: 700px;
+    }
+    .ventures-services-block {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .ventures-section-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .ventures-section-kicker {
+      font-size: 0.66rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: rgba(197,223,192,0.66);
+    }
+    .ventures-section-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(197,223,192,0.38), transparent);
+    }
+    .ventures-services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .ventures-service-card {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 22px 22px 20px;
+      border-radius: 8px;
+      border: 1px solid rgba(197,223,192,0.14);
+      background: rgba(12,16,14,0.58);
+      transition: background 0.25s, border-color 0.25s, transform 0.25s;
+    }
+    .ventures-service-card:hover {
+      background: rgba(18,24,21,0.78);
+      border-color: rgba(197,223,192,0.26);
+      transform: translateY(-2px);
+    }
+    .ventures-service-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .ventures-service-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--sage);
+      background: rgba(197,223,192,0.08);
+      border: 1px solid rgba(197,223,192,0.16);
+      flex-shrink: 0;
+    }
+    .ventures-service-title {
+      font-family: var(--font-cormorant), Georgia, serif;
+      font-size: 1.3rem;
+      line-height: 1.15;
+      color: #fff;
+    }
+    .ventures-service-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .ventures-service-item {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      font-size: 0.84rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+    .ventures-service-bullet {
+      width: 6px;
+      height: 6px;
+      margin-top: 0.48rem;
+      border-radius: 50%;
+      background: var(--sage);
+      opacity: 0.9;
+      flex-shrink: 0;
+    }
+    .ventures-bottom-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .ventures-team-card {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 22px;
+      border-radius: 8px;
+      border: 1px solid rgba(197,223,192,0.14);
+      background: rgba(12,16,14,0.55);
+    }
+    .ventures-team-head {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(197,223,192,0.12);
+    }
+    .ventures-team-title {
+      font-family: var(--font-cormorant), Georgia, serif;
+      font-size: 1.5rem;
+      line-height: 1.1;
+      color: #fff;
+    }
+    .ventures-team-subtitle {
+      font-size: 0.72rem;
+      line-height: 1.7;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      color: rgba(197,223,192,0.62);
+    }
+    .ventures-team-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px 16px;
+    }
+    .ventures-team-row {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(197,223,192,0.08);
+    }
+    .ventures-team-name {
+      font-size: 0.94rem;
+      line-height: 1.45;
+      color: #fff;
+    }
+    .ventures-team-role {
+      font-size: 0.72rem;
+      line-height: 1.6;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      color: rgba(197,223,192,0.64);
+    }
+    .ventures-note-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 22px;
+      border-radius: 8px;
+      border: 1px solid rgba(197,223,192,0.14);
+      background: rgba(255,255,255,0.025);
+    }
+    .ventures-note-label {
+      font-size: 0.66rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: rgba(197,223,192,0.66);
+    }
+    .ventures-note-text {
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: var(--text-body);
+    }
+    .ventures-commitment {
+      font-family: var(--font-cormorant), Georgia, serif;
+      font-size: 1.35rem;
+      line-height: 1.25;
+      color: #fff;
+    }
+    .ventures-contact-card {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      padding: 22px;
+      border-radius: 8px;
+      border: 1px solid rgba(197,223,192,0.18);
+      background: linear-gradient(135deg, rgba(197,223,192,0.07) 0%, rgba(12,16,14,0.7) 72%);
+      align-self: start;
+    }
+    .ventures-contact-head {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .ventures-contact-title {
+      font-family: var(--font-cormorant), Georgia, serif;
+      font-size: 1.85rem;
+      line-height: 1;
+      color: #fff;
+    }
+    .ventures-contact-subtitle {
+      font-size: 0.68rem;
+      line-height: 1.8;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      color: rgba(197,223,192,0.68);
+    }
+    .ventures-contact-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .ventures-contact-row {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+    }
+    .ventures-contact-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--sage);
+      background: rgba(197,223,192,0.08);
+      border: 1px solid rgba(197,223,192,0.15);
+      flex-shrink: 0;
+    }
+    .ventures-contact-label {
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: rgba(197,223,192,0.58);
+      margin-bottom: 5px;
+    }
+    .ventures-contact-text,
+    .ventures-contact-link {
+      font-size: 0.86rem;
+      line-height: 1.75;
+      color: var(--text-body);
+    }
+    .ventures-contact-link {
+      transition: color 0.2s ease;
+    }
+    .ventures-contact-link:hover {
+      color: var(--sage);
+    }
+    .ventures-contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
 
     /* ── Services ── */
     .services-inner { padding: clamp(4rem, 7vw, 8rem) 0; }
@@ -1898,6 +2253,7 @@ const GlobalStyles = () => (
       .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
       .nav-links { display: none; }
       .header-cta-desktop { display: none; }
+      .ventures-top { grid-template-columns: 1fr; }
       .services-grid { grid-template-columns: repeat(2, 1fr); }
       .service-featured-card { grid-template-columns: auto 1fr; }
       .service-featured-arrow { display: none; }
@@ -1910,6 +2266,10 @@ const GlobalStyles = () => (
         padding-left: 0; padding-top: 14px;
         border-left: none; border-top: 1px solid rgba(197,223,192,0.18);
       }
+      .ventures-inner { gap: 24px; }
+      .ventures-services-grid,
+      .ventures-team-list,
+      .ventures-bottom-grid { grid-template-columns: 1fr; }
       .services-intro-row { flex-direction: column; }
       .service-featured-card { grid-template-columns: 1fr; }
       .service-featured-icon-wrap { display: none; }
@@ -1928,6 +2288,11 @@ const GlobalStyles = () => (
       .about-value-card { grid-template-columns: auto minmax(0, 1fr); }
       .about-value-num { grid-column: 2; }
       .about-ctas { flex-direction: column; }
+      .ventures-contact-card,
+      .ventures-service-card,
+      .ventures-note-card { border-radius: 20px; }
+      .ventures-title { font-size: clamp(2rem, 11vw, 3rem); }
+      .ventures-contact-title { font-size: 1.65rem; }
       .services-grid { grid-template-columns: 1fr; }
       .services-intro-stats { gap: 20px; }
       .team-card { grid-template-columns: auto minmax(0, 1fr); }
@@ -2583,6 +2948,179 @@ function About() {
               <a href="#services" className="btn-ghost">
                 Our Services <ArrowRight size={14} />
               </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Ventures() {
+  return (
+    <section className="panel" id="ventures">
+      <div className="container">
+        <div className="ventures-shell">
+          <div className="ventures-inner">
+            <div className="about-eyebrow-row">
+              <span className="section-label">AGD Law Ventures</span>
+              <div className="about-eyebrow-line" />
+            </div>
+
+            <div className="ventures-top">
+              <div className="ventures-copy">
+                <div className="ventures-kicker">
+                  Property Due Diligence | Title Scrutiny | Registration Services
+                </div>
+                <h2 className="ventures-title">
+                  Property transactions deserve <em>verified clarity</em>
+                </h2>
+                <p className="ventures-lead">
+                  AGD Law Ventures is the dedicated paralegal division of AGD Law Associates,
+                  providing professional property due diligence, title scrutiny, registration,
+                  documentation, and legal verification services.
+                </p>
+                <p className="ventures-body">
+                  As a specialized paralegal division, it is structured to support property
+                  buyers, sellers, families, and businesses with dependable verification before
+                  a transaction moves forward, helping clients act with confidence and legal
+                  clarity.
+                </p>
+              </div>
+
+              <aside className="ventures-contact-card">
+                <div className="ventures-contact-head">
+                  <div className="ventures-note-label">Contact</div>
+                  <div className="ventures-contact-title">AGD LAW VENTURES</div>
+                  <div className="ventures-contact-subtitle">
+                    Property verification and registration support
+                  </div>
+                </div>
+
+                <div className="ventures-contact-list">
+                  <div className="ventures-contact-row">
+                    <div className="ventures-contact-icon">
+                      <MapPin size={16} />
+                    </div>
+                    <div>
+                      <div className="ventures-contact-label">Office</div>
+                      <div className="ventures-contact-text">
+                        New No.258/193/11/1, 2nd Floor, Linghi Chetty Street, George Town,
+                        Chennai - 600001
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="ventures-contact-row">
+                    <div className="ventures-contact-icon">
+                      <PhoneCall size={16} />
+                    </div>
+                    <div>
+                      <div className="ventures-contact-label">Mobile</div>
+                      <div className="ventures-contact-links">
+                        {venturesPhoneNumbers.map((phone) => (
+                          <a className="ventures-contact-link" href={`tel:${phone.tel}`} key={phone.tel}>
+                            {phone.display}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="ventures-contact-row">
+                    <div className="ventures-contact-icon">
+                      <Mail size={16} />
+                    </div>
+                    <div>
+                      <div className="ventures-contact-label">Email</div>
+                      <a className="ventures-contact-link" href="mailto:bala@agdlawventures.com">
+                        bala@agdlawventures.com
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="ventures-contact-row">
+                    <div className="ventures-contact-icon">
+                      <ArrowRight size={16} />
+                    </div>
+                    <div>
+                      <div className="ventures-contact-label">Website</div>
+                      <a
+                        className="ventures-contact-link"
+                        href="https://agdlawassociates.in"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        agdlawassociates.in
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </aside>
+            </div>
+
+            <div className="ventures-services-block">
+              <div className="ventures-section-row">
+                <div className="ventures-section-kicker">Core Services</div>
+                <div className="ventures-section-line" />
+              </div>
+              <div className="ventures-services-grid">
+                {venturesServiceGroups.map((group) => {
+                  const Icon = group.icon;
+                  return (
+                    <div className="ventures-service-card" key={group.title}>
+                      <div className="ventures-service-head">
+                        <div className="ventures-service-icon">
+                          <Icon size={18} />
+                        </div>
+                        <div className="ventures-service-title">{group.title}</div>
+                      </div>
+                      <div className="ventures-service-list">
+                        {group.items.map((item) => (
+                          <div className="ventures-service-item" key={item}>
+                            <span className="ventures-service-bullet" />
+                            <span>{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="ventures-team-card">
+                <div className="ventures-team-head">
+                  <div className="ventures-team-title">Ventures Team</div>
+                  <div className="ventures-team-subtitle">
+                    Exclusive for Due Diligence, Title Scrutiny & Registrations
+                  </div>
+                </div>
+                <div className="ventures-team-list">
+                  {venturesTeam.map((member) => (
+                    <div className="ventures-team-row" key={member.name}>
+                      <div className="ventures-team-name">{member.name}</div>
+                      <div className="ventures-team-role">{member.role}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="ventures-bottom-grid">
+                <div className="ventures-note-card">
+                  <div className="ventures-note-label">Vision</div>
+                  <p className="ventures-note-text">
+                    To become one of Tamil Nadu&apos;s most trusted and professionally managed
+                    paralegal organizations delivering dependable, transparent, and legally
+                    compliant property solutions.
+                  </p>
+                </div>
+                <div className="ventures-note-card">
+                  <div className="ventures-note-label">Commitment</div>
+                  <div className="ventures-commitment">
+                    Every Property Verified. Every Title Examined. Every Transaction Protected.
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -3347,6 +3885,7 @@ export default function Page() {
           <Hero />
           <Ticker />
           <About />
+          <Ventures />
           <Services />
           <Team />
           <Regions />
