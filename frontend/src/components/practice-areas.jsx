@@ -497,7 +497,7 @@ const GlobalStyles = () => (
 export const practiceAreas = [
   {
     slug: "criminal-law",
-    title: "Criminal Law Practice",
+    title: "Criminal Law",
     titleItalic: "Practice",
     icon: Scale,
     color: "#1a2f1b",
@@ -1107,7 +1107,8 @@ function PracticeAreaHero({ area }) {
                 Practice Area
               </div>
               <h1 className="pa-hero-title fade-up">
-                {area.title.replace(area.titleItalic, "")}<em>{area.titleItalic}</em>
+                {area.title.replace(area.titleItalic, "").trimEnd()}{" "}
+                <em>{area.titleItalic}</em>
               </h1>
               <p className="pa-hero-subtitle fade-up d1">{area.tagline}</p>
               <div className="pa-hero-actions fade-up d2">
@@ -1154,7 +1155,7 @@ function OverviewSection({ area }) {
           <div className="overview-content">
             <span className="section-label">Overview</span>
             <h2 className="overview-title">
-              About our <em>{area.title.toLowerCase()}</em> practice
+              About our <em>{area.title}</em> practice
             </h2>
             <p className="overview-lead">{area.leadQuote}</p>
             {area.overview.split("\n\n").map((para, i) => (
