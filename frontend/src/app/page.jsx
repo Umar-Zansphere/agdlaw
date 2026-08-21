@@ -2675,6 +2675,13 @@ function Header() {
                   {l.label}
                 </a>
               ))}
+              <Link
+                href="/ventures"
+                className="nav-link"
+                style={{ color: "var(--sage)", fontWeight: 600 }}
+              >
+                Ventures
+              </Link>
             </nav>
             <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
               <a
@@ -2722,6 +2729,15 @@ function Header() {
                 <span className="mobile-num">0{i + 1}</span>
               </a>
             ))}
+            <Link
+              href="/ventures"
+              className="mobile-nav-item"
+              style={{ animationDelay: `${0.06 + navLinks.length * 0.06}s`, color: "var(--sage)" }}
+              onClick={() => setMenuOpen(false)}
+            >
+              <span>Ventures</span>
+              <span className="mobile-num">0{navLinks.length + 1}</span>
+            </Link>
             <a
               href="#contact"
               onClick={() => setMenuOpen(false)}
@@ -2956,171 +2972,70 @@ function About() {
   );
 }
 
+// ─── Ventures Teaser ─────────────────────────────────────────────────────────
+
 function Ventures() {
   return (
     <section className="panel" id="ventures">
       <div className="container">
-        <div className="ventures-shell">
-          <div className="ventures-inner">
-            <div className="about-eyebrow-row">
-              <span className="section-label">AGD Law Ventures</span>
-              <div className="about-eyebrow-line" />
+        <div style={{ maxWidth: "1080px", margin: "0 auto", padding: "clamp(4rem, 7vw, 7rem) 0" }}>
+          <div className="about-eyebrow-row">
+            <span className="section-label">AGD Law Ventures</span>
+            <div className="about-eyebrow-line" />
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1.4fr) minmax(260px,0.6fr)", gap: "40px", alignItems: "center", marginTop: "24px" }}>
+            {/* Left copy */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+              <div style={{ fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.14em", color: "rgba(197,223,192,0.68)" }}>
+                Property Due Diligence · Title Scrutiny · Registration Services
+              </div>
+              <h2 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "clamp(2.2rem, 3.8vw, 4rem)", lineHeight: 1.02, color: "#fff", letterSpacing: "-0.015em" }}>
+                Property transactions deserve{" "}
+                <em style={{ color: "var(--sage)", fontStyle: "italic" }}>verified clarity</em>
+              </h2>
+              <p style={{ fontSize: "1rem", lineHeight: 1.85, color: "var(--text-body)", position: "relative", paddingLeft: "20px", maxWidth: "660px" }}>
+                <span style={{ position: "absolute", left: 0, top: "6px", bottom: "6px", width: "2px", borderRadius: "2px", background: "linear-gradient(180deg, var(--sage), rgba(197,223,192,0.2))" }} />
+                AGD Law Ventures is our dedicated paralegal division — providing property due diligence,
+                title scrutiny, registration, documentation, and legal verification services,
+                backed by the full legal strength of AGD Law Associates.
+              </p>
+              <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+                <Link href="/ventures" className="btn-primary">
+                  Explore AGD Law Ventures <ArrowRight size={14} />
+                </Link>
+                <a href={`tel:${venturesPhoneNumbers[0].tel}`} className="btn-ghost">
+                  <PhoneCall size={14} /> {venturesPhoneNumbers[0].display}
+                </a>
+              </div>
             </div>
 
-            <div className="ventures-top">
-              <div className="ventures-copy">
-                <div className="ventures-kicker">
-                  Property Due Diligence | Title Scrutiny | Registration Services
-                </div>
-                <h2 className="ventures-title">
-                  Property transactions deserve <em>verified clarity</em>
-                </h2>
-                <p className="ventures-lead">
-                  AGD Law Ventures is the dedicated paralegal division of AGD Law Associates,
-                  providing professional property due diligence, title scrutiny, registration,
-                  documentation, and legal verification services.
-                </p>
-                <p className="ventures-body">
-                  As a specialized paralegal division, it is structured to support property
-                  buyers, sellers, families, and businesses with dependable verification before
-                  a transaction moves forward, helping clients act with confidence and legal
-                  clarity.
-                </p>
-              </div>
-
-              <aside className="ventures-contact-card">
-                <div className="ventures-contact-head">
-                  <div className="ventures-note-label">Contact</div>
-                  <div className="ventures-contact-title">AGD LAW VENTURES</div>
-                  <div className="ventures-contact-subtitle">
-                    Property verification and registration support
+            {/* Right: quick highlights */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              {[
+                { label: "Due Diligence & Title Scrutiny", desc: "Complete title investigation, ownership analysis, encumbrance & litigation search" },
+                { label: "Registrations & Records", desc: "Sale, Gift, Mortgage, MODT, POA registrations + Patta, Chitta, RERA verification" },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  style={{ padding: "18px 20px", borderRadius: "10px", border: "1px solid rgba(197,223,192,0.14)", background: "rgba(12,16,14,0.55)" }}
+                >
+                  <div style={{ fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.13em", color: "var(--sage)", marginBottom: "6px" }}>
+                    {item.label}
+                  </div>
+                  <div style={{ fontSize: "0.84rem", lineHeight: 1.7, color: "var(--text-muted)" }}>
+                    {item.desc}
                   </div>
                 </div>
-
-                <div className="ventures-contact-list">
-                  <div className="ventures-contact-row">
-                    <div className="ventures-contact-icon">
-                      <MapPin size={16} />
-                    </div>
-                    <div>
-                      <div className="ventures-contact-label">Office</div>
-                      <div className="ventures-contact-text">
-                        New No.258/193/11/1, 2nd Floor, Linghi Chetty Street, George Town,
-                        Chennai - 600001
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="ventures-contact-row">
-                    <div className="ventures-contact-icon">
-                      <PhoneCall size={16} />
-                    </div>
-                    <div>
-                      <div className="ventures-contact-label">Mobile</div>
-                      <div className="ventures-contact-links">
-                        {venturesPhoneNumbers.map((phone) => (
-                          <a className="ventures-contact-link" href={`tel:${phone.tel}`} key={phone.tel}>
-                            {phone.display}
-                          </a>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="ventures-contact-row">
-                    <div className="ventures-contact-icon">
-                      <Mail size={16} />
-                    </div>
-                    <div>
-                      <div className="ventures-contact-label">Email</div>
-                      <a className="ventures-contact-link" href="mailto:bala@agdlawventures.com">
-                        bala@agdlawventures.com
-                      </a>
-                    </div>
-                  </div>
-
-                  <div className="ventures-contact-row">
-                    <div className="ventures-contact-icon">
-                      <ArrowRight size={16} />
-                    </div>
-                    <div>
-                      <div className="ventures-contact-label">Website</div>
-                      <a
-                        className="ventures-contact-link"
-                        href="https://agdlawassociates.in"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        agdlawassociates.in
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </aside>
-            </div>
-
-            <div className="ventures-services-block">
-              <div className="ventures-section-row">
-                <div className="ventures-section-kicker">Core Services</div>
-                <div className="ventures-section-line" />
-              </div>
-              <div className="ventures-services-grid">
-                {venturesServiceGroups.map((group) => {
-                  const Icon = group.icon;
-                  return (
-                    <div className="ventures-service-card" key={group.title}>
-                      <div className="ventures-service-head">
-                        <div className="ventures-service-icon">
-                          <Icon size={18} />
-                        </div>
-                        <div className="ventures-service-title">{group.title}</div>
-                      </div>
-                      <div className="ventures-service-list">
-                        {group.items.map((item) => (
-                          <div className="ventures-service-item" key={item}>
-                            <span className="ventures-service-bullet" />
-                            <span>{item}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <div className="ventures-team-card">
-                <div className="ventures-team-head">
-                  <div className="ventures-team-title">Ventures Team</div>
-                  <div className="ventures-team-subtitle">
-                    Exclusive for Due Diligence, Title Scrutiny & Registrations
-                  </div>
-                </div>
-                <div className="ventures-team-list">
-                  {venturesTeam.map((member) => (
-                    <div className="ventures-team-row" key={member.name}>
-                      <div className="ventures-team-name">{member.name}</div>
-                      <div className="ventures-team-role">{member.role}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="ventures-bottom-grid">
-                <div className="ventures-note-card">
-                  <div className="ventures-note-label">Vision</div>
-                  <p className="ventures-note-text">
-                    To become one of Tamil Nadu&apos;s most trusted and professionally managed
-                    paralegal organizations delivering dependable, transparent, and legally
-                    compliant property solutions.
-                  </p>
-                </div>
-                <div className="ventures-note-card">
-                  <div className="ventures-note-label">Commitment</div>
-                  <div className="ventures-commitment">
-                    Every Property Verified. Every Title Examined. Every Transaction Protected.
-                  </div>
-                </div>
-              </div>
+              ))}
+              <Link
+                href="/ventures"
+                style={{ display: "inline-flex", alignItems: "center", gap: "7px", fontSize: "0.8rem", fontWeight: 600, color: "var(--sage)", letterSpacing: "0.04em", marginTop: "4px", transition: "color 0.2s" }}
+                onMouseOver={(e) => { e.currentTarget.style.color = "#fff"; }}
+                onMouseOut={(e) => { e.currentTarget.style.color = "var(--sage)"; }}
+              >
+                View full Ventures page <ArrowRight size={12} />
+              </Link>
             </div>
           </div>
         </div>

@@ -10,12 +10,19 @@ export default function sitemap() {
       priority: 1,
     },
     {
+      url: `${siteUrl}/ventures`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
       url: `${siteUrl}/blog`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.8,
     },
   ];
+
 
   const serviceRoutes = practiceAreaSlugs.map((slug) => ({
     url: `${siteUrl}/services/${slug}`,
