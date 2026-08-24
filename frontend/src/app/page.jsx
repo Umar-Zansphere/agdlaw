@@ -2142,6 +2142,14 @@ const GlobalStyles = () => (
     .form-submit:hover:not(:disabled) { background: #fff; transform: translateY(-1px); }
     .form-submit:disabled { opacity: 0.5; cursor: not-allowed; }
 
+    /* ── Ventures Teaser ── */
+    .ventures-teaser-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
+      gap: 40px;
+      align-items: center;
+    }
+
     /* ── Footer ── */
     .footer-section { background: var(--ink); border-top: 1px solid rgba(197,223,192,0.08); padding: clamp(3rem, 5vw, 5rem) 0 0; }
     .footer-top {
@@ -2253,6 +2261,7 @@ const GlobalStyles = () => (
       .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
       .nav-links { display: none; }
       .header-cta-desktop { display: none; }
+      .ventures-teaser-grid { grid-template-columns: 1fr; gap: 32px; }
       .ventures-top { grid-template-columns: 1fr; }
       .services-grid { grid-template-columns: repeat(2, 1fr); }
       .service-featured-card { grid-template-columns: auto 1fr; }
@@ -2975,66 +2984,123 @@ function About() {
 // ─── Ventures Teaser ─────────────────────────────────────────────────────────
 
 function Ventures() {
+  const steps = [
+    {
+      num: "01",
+      title: "Due Diligence & Title Scrutiny",
+      desc: "Complete title investigation, ownership analysis, encumbrance & litigation search",
+    },
+    {
+      num: "02",
+      title: "Registrations & Records",
+      desc: "Sale, Gift, Mortgage, MODT, POA registrations + Patta, Chitta, RERA verification",
+    },
+    {
+      num: "03",
+      title: "Legal Due Diligence Report",
+      desc: "Detailed findings, risk flags, and actionable recommendations — supervised by advocates",
+    },
+  ];
+
   return (
     <section className="panel" id="ventures">
       <div className="container">
         <div style={{ maxWidth: "1080px", margin: "0 auto", padding: "clamp(4rem, 7vw, 7rem) 0" }}>
-          <div className="about-eyebrow-row">
+          {/* Top: label + accent line */}
+          <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "28px" }}>
             <span className="section-label">AGD Law Ventures</span>
-            <div className="about-eyebrow-line" />
+            <div style={{ flex: 1, height: "1px", background: "linear-gradient(90deg, rgba(197,223,192,0.5), transparent)" }} />
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1.4fr) minmax(260px,0.6fr)", gap: "40px", alignItems: "center", marginTop: "24px" }}>
-            {/* Left copy */}
+          {/* Main content: responsive grid */}
+          <div className="ventures-teaser-grid">
+            {/* Left: Copy */}
             <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
-              <div style={{ fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.14em", color: "rgba(197,223,192,0.68)" }}>
-                Property Due Diligence · Title Scrutiny · Registration Services
+              <div style={{ fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.14em", color: "rgba(197,223,192,0.65)" }}>
+                Paralegal Division · Property Services
               </div>
-              <h2 style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: "clamp(2.2rem, 3.8vw, 4rem)", lineHeight: 1.02, color: "#fff", letterSpacing: "-0.015em" }}>
-                Property transactions deserve{" "}
-                <em style={{ color: "var(--sage)", fontStyle: "italic" }}>verified clarity</em>
+              <h2 style={{
+                fontFamily: "var(--font-cormorant), Georgia, serif",
+                fontSize: "clamp(2.2rem, 3.8vw, 3.8rem)",
+                lineHeight: 1.02,
+                color: "#fff",
+                letterSpacing: "-0.015em",
+              }}>
+                Your property,<br />
+                <em style={{ color: "var(--sage)", fontStyle: "italic" }}>legally protected</em>
               </h2>
-              <p style={{ fontSize: "1rem", lineHeight: 1.85, color: "var(--text-body)", position: "relative", paddingLeft: "20px", maxWidth: "660px" }}>
-                <span style={{ position: "absolute", left: 0, top: "6px", bottom: "6px", width: "2px", borderRadius: "2px", background: "linear-gradient(180deg, var(--sage), rgba(197,223,192,0.2))" }} />
-                AGD Law Ventures is our dedicated paralegal division — providing property due diligence,
-                title scrutiny, registration, documentation, and legal verification services,
-                backed by the full legal strength of AGD Law Associates.
+              <p style={{
+                fontSize: "0.96rem", lineHeight: 1.85, color: "var(--text-body)",
+                position: "relative", paddingLeft: "20px", maxWidth: "560px",
+              }}>
+                <span style={{
+                  position: "absolute", left: 0, top: "6px", bottom: "6px",
+                  width: "2px", borderRadius: "2px",
+                  background: "linear-gradient(180deg, var(--sage), rgba(197,223,192,0.15))",
+                }} />
+                AGD Law Ventures is our dedicated paralegal division — providing property
+                due diligence, title scrutiny, and registration services, backed by the
+                full legal strength of AGD Law Associates.
               </p>
-              <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-                <Link href="/ventures" className="btn-primary">
-                  Explore AGD Law Ventures <ArrowRight size={14} />
-                </Link>
-                <a href={`tel:${venturesPhoneNumbers[0].tel}`} className="btn-ghost">
-                  <PhoneCall size={14} /> {venturesPhoneNumbers[0].display}
-                </a>
-              </div>
+              <Link href="/ventures" className="btn-primary" style={{ width: "fit-content" }}>
+                Explore AGD Law Ventures <ArrowRight size={14} />
+              </Link>
             </div>
 
-            {/* Right: quick highlights */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-              {[
-                { label: "Due Diligence & Title Scrutiny", desc: "Complete title investigation, ownership analysis, encumbrance & litigation search" },
-                { label: "Registrations & Records", desc: "Sale, Gift, Mortgage, MODT, POA registrations + Patta, Chitta, RERA verification" },
-              ].map((item) => (
+            {/* Right: numbered steps */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              {steps.map((step) => (
                 <div
-                  key={item.label}
-                  style={{ padding: "18px 20px", borderRadius: "10px", border: "1px solid rgba(197,223,192,0.14)", background: "rgba(12,16,14,0.55)" }}
+                  key={step.num}
+                  style={{
+                    padding: "18px 20px",
+                    borderRadius: "12px",
+                    border: "1px solid rgba(197,223,192,0.12)",
+                    background: "rgba(12,16,14,0.5)",
+                    display: "flex", gap: "14px", alignItems: "flex-start",
+                    transition: "border-color 0.25s, transform 0.25s",
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.borderColor = "rgba(197,223,192,0.28)";
+                    e.currentTarget.style.transform = "translateY(-1px)";
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.borderColor = "rgba(197,223,192,0.12)";
+                    e.currentTarget.style.transform = "translateY(0)";
+                  }}
                 >
-                  <div style={{ fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.13em", color: "var(--sage)", marginBottom: "6px" }}>
-                    {item.label}
+                  <div style={{
+                    fontFamily: "var(--font-cormorant), serif",
+                    fontSize: "1.6rem", lineHeight: 1, color: "var(--sage)",
+                    opacity: 0.5, flexShrink: 0, width: "28px",
+                  }}>
+                    {step.num}
                   </div>
-                  <div style={{ fontSize: "0.84rem", lineHeight: 1.7, color: "var(--text-muted)" }}>
-                    {item.desc}
+                  <div>
+                    <div style={{
+                      fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase",
+                      letterSpacing: "0.12em", color: "var(--sage)", marginBottom: "5px",
+                    }}>
+                      {step.title}
+                    </div>
+                    <div style={{ fontSize: "0.82rem", lineHeight: 1.7, color: "var(--text-muted)" }}>
+                      {step.desc}
+                    </div>
                   </div>
                 </div>
               ))}
               <Link
                 href="/ventures"
-                style={{ display: "inline-flex", alignItems: "center", gap: "7px", fontSize: "0.8rem", fontWeight: 600, color: "var(--sage)", letterSpacing: "0.04em", marginTop: "4px", transition: "color 0.2s" }}
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: "7px",
+                  fontSize: "0.78rem", fontWeight: 600, color: "var(--sage)",
+                  letterSpacing: "0.04em", marginTop: "6px",
+                  transition: "color 0.2s",
+                }}
                 onMouseOver={(e) => { e.currentTarget.style.color = "#fff"; }}
                 onMouseOut={(e) => { e.currentTarget.style.color = "var(--sage)"; }}
               >
-                View full Ventures page <ArrowRight size={12} />
+                View all services & team <ArrowRight size={12} />
               </Link>
             </div>
           </div>

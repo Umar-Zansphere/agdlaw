@@ -1,6 +1,5 @@
 "use client";
 
-
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { AGDLogoImg } from "@/components/AGDLogoImg";
@@ -20,6 +19,14 @@ import {
   CheckCircle,
   Send,
   MessageCircle,
+  FileCheck,
+  Search,
+  FileText,
+  Users,
+  Landmark,
+  ClipboardCheck,
+  Building2,
+  MapPinned,
 } from "lucide-react";
 
 const dmSans = DM_Sans({
@@ -45,31 +52,41 @@ const venturesPhoneNumbers = [
   { display: "+91 74492 66124", tel: "+917449266124" },
 ];
 
-const venturesServiceGroups = [
-  {
-    icon: Shield,
-    title: "Due Diligence & Title Scrutiny",
-    items: [
-      "Property Due Diligence",
-      "Complete Title Investigation",
-      "Parent Document Verification",
-      "Ownership Analysis",
-      "Encumbrance Verification",
-      "Litigation Search",
-      "Revenue Record Verification",
-      "Approval Verification",
-      "Land Use Verification",
-      "Legal Due Diligence Report",
-    ],
-  },
-  {
-    icon: BookOpen,
-    title: "Registrations & Record Verification",
-    items: [
-      "Sale, Gift, Settlement, Release, Partition, Lease, Mortgage, MODT, and POA Registrations",
-      "Patta, Chitta, Adangal, FMB, A-Register, TSLR, and CMDA, DTCP, RERA Verification",
-    ],
-  },
+const dueDiligenceItems = [
+  { icon: Search, label: "Property Due Diligence" },
+  { icon: FileCheck, label: "Complete Title Investigation" },
+  { icon: FileText, label: "Parent Document Verification" },
+  { icon: Users, label: "Ownership Analysis" },
+  { icon: ClipboardCheck, label: "Encumbrance Verification" },
+  { icon: Scale, label: "Litigation Search" },
+  { icon: Landmark, label: "Revenue Record Verification" },
+  { icon: Building2, label: "Approval Verification" },
+  { icon: MapPinned, label: "Land Use Verification" },
+  { icon: FileCheck, label: "Legal Due Diligence Report" },
+];
+
+const registrationItems = [
+  "Sale Registration",
+  "Gift Registration",
+  "Settlement Registration",
+  "Release Registration",
+  "Partition Registration",
+  "Lease Registration",
+  "Mortgage Registration",
+  "MODT Registration",
+  "POA Registration",
+];
+
+const verificationItems = [
+  "Patta Verification",
+  "Chitta Verification",
+  "Adangal Verification",
+  "FMB Verification",
+  "A-Register Verification",
+  "TSLR Verification",
+  "CMDA Verification",
+  "DTCP Verification",
+  "RERA Verification",
 ];
 
 const venturesTeam = [
@@ -83,26 +100,26 @@ const venturesTeam = [
   { name: "V. Latha", role: "Non Legal / Accountant" },
 ];
 
-const whyChooseUs = [
+const trustPoints = [
   {
     icon: Shield,
     title: "Legally Backed",
-    text: "Every verification is performed under the supervision of qualified advocates from AGD Law Associates.",
+    text: "Every verification supervised by qualified advocates from AGD Law Associates.",
   },
   {
     icon: CheckCircle,
-    title: "End-to-End Service",
-    text: "From initial title search to final registration, we handle the entire property transaction lifecycle.",
+    title: "End-to-End",
+    text: "From initial title search to final registration — one team handles it all.",
   },
   {
     icon: BookOpen,
-    title: "Comprehensive Reports",
-    text: "Detailed legal due diligence reports with clear findings, risk flags, and actionable recommendations.",
+    title: "Detailed Reports",
+    text: "Clear findings, risk flags, and actionable recommendations in every report.",
   },
   {
     icon: Scale,
     title: "Trusted Division",
-    text: "A dedicated paralegal arm of AGD Law Associates, serving buyers, sellers, families, and businesses.",
+    text: "Serving property buyers, sellers, families, and businesses since 2016.",
   },
 ];
 
@@ -151,15 +168,15 @@ const VenturesStyles = () => (
       background: #0b0b0b; overflow: hidden; pointer-events: none;
     }
     .vfixed-bg-glow {
-      position: absolute; top: 15%; right: -8%;
-      width: 700px; height: 700px;
-      background: radial-gradient(circle, rgba(197,223,192,0.09) 0%, transparent 70%);
+      position: absolute; top: 10%; right: -12%;
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, rgba(197,223,192,0.08) 0%, transparent 65%);
       border-radius: 50%;
     }
     .vfixed-bg-glow2 {
-      position: absolute; bottom: 10%; left: -5%;
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(197,223,192,0.06) 0%, transparent 70%);
+      position: absolute; bottom: 5%; left: -8%;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(197,223,192,0.05) 0%, transparent 65%);
       border-radius: 50%;
     }
     .vfixed-bg-vignette {
@@ -167,20 +184,18 @@ const VenturesStyles = () => (
       background: radial-gradient(ellipse at center, transparent 40%, rgba(11,11,11,0.6) 100%);
     }
 
-    /* ── Scroll Layer ── */
+    /* ── Core Layout ── */
     .vscroll-layer { position: relative; z-index: 10; }
     section[id] { scroll-margin-top: var(--header-offset); }
-    main { padding-bottom: clamp(80px, 12vh, 160px); }
-
-    /* ── Container ── */
     .vcontainer { max-width: 1200px; margin: 0 auto; padding: 0 24px; width: 100%; }
+    .vnarrow { max-width: 1080px; margin: 0 auto; }
 
-    /* ── Labels ── */
+    /* ── Section Labels ── */
     .vsection-label {
       display: inline-flex; align-items: center; gap: 8px;
-      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.18em;
+      font-size: 0.66rem; font-weight: 600; letter-spacing: 0.18em;
       text-transform: uppercase; color: var(--sage);
-      background: rgba(197,223,192,0.1); border: 1px solid rgba(197,223,192,0.2);
+      background: rgba(197,223,192,0.08); border: 1px solid rgba(197,223,192,0.18);
       border-radius: 100px; padding: 5px 14px;
     }
     .vsection-label::before {
@@ -218,7 +233,7 @@ const VenturesStyles = () => (
       position: fixed; top: 0; left: 0; right: 0; z-index: 900;
       transition: background 0.4s, backdrop-filter 0.4s;
     }
-    .vheader.scrolled { background: rgba(11,11,11,0.9); backdrop-filter: blur(20px); }
+    .vheader.scrolled { background: rgba(11,11,11,0.92); backdrop-filter: blur(24px); }
     .vheader-inner {
       display: flex; align-items: center; justify-content: space-between;
       height: 90px; gap: 16px; position: relative;
@@ -229,7 +244,7 @@ const VenturesStyles = () => (
       display: flex; align-items: center; gap: 10px;
     }
     .vlogo-sub {
-      font-size: 0.58rem; font-weight: 600; text-transform: uppercase;
+      font-size: 0.56rem; font-weight: 600; text-transform: uppercase;
       letter-spacing: 0.18em; color: var(--sage);
       background: rgba(197,223,192,0.1); border: 1px solid rgba(197,223,192,0.2);
       border-radius: 100px; padding: 3px 10px;
@@ -261,17 +276,6 @@ const VenturesStyles = () => (
     }
     .vmobile-num { font-family: var(--font-dm), sans-serif; font-size: 0.68rem; color: rgba(197,223,192,0.35); letter-spacing: 0.1em; }
 
-    /* ── Ticker ── */
-    .vticker-wrap { background: var(--sage); overflow: hidden; height: 36px; display: flex; align-items: center; }
-    .vticker-track { display: flex; gap: 0; white-space: nowrap; animation: vtickMove 24s linear infinite; }
-    @keyframes vtickMove { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-    .vticker-item {
-      display: inline-flex; align-items: center; gap: 16px;
-      font-size: 0.68rem; font-weight: 700; color: var(--ink);
-      text-transform: uppercase; letter-spacing: 0.14em; padding: 0 28px;
-    }
-    .vticker-sep { opacity: 0.35; }
-
     /* ── Panel Surfaces ── */
     .vpanel { background: linear-gradient(180deg, rgba(7,9,8,0.5) 0%, rgba(7,9,8,0.58) 100%); }
     .vpanel-dark { background: linear-gradient(180deg, rgba(4,6,5,0.66) 0%, rgba(4,6,5,0.74) 100%); }
@@ -280,223 +284,385 @@ const VenturesStyles = () => (
     .vhero {
       min-height: 100svh;
       display: flex; align-items: center;
-      padding: clamp(110px, 16vh, 150px) 0 80px;
+      padding: clamp(120px, 16vh, 160px) 0 clamp(60px, 8vh, 80px);
       position: relative; overflow: hidden;
     }
-    .vhero-ornament {
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 700px; height: 700px;
-      border: 1px solid rgba(197,223,192,0.05);
-      border-radius: 50%; pointer-events: none;
+    .vhero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: clamp(32px, 4vw, 56px);
+      align-items: center;
     }
-    .vhero-ornament::after {
-      content: ''; position: absolute; inset: 60px;
-      border: 1px solid rgba(197,223,192,0.03);
-      border-radius: 50%;
-    }
-    .vhero-content {
-      text-align: center; max-width: 920px; margin: 0 auto;
-      display: flex; flex-direction: column; align-items: center; gap: 0;
+    .vhero-left {
+      display: flex; flex-direction: column;
+      gap: 0;
     }
     .vhero-eyebrow {
       display: inline-flex; align-items: center; gap: 10px;
-      font-size: 0.66rem; font-weight: 600; letter-spacing: 0.22em;
+      font-size: 0.64rem; font-weight: 600; letter-spacing: 0.22em;
       text-transform: uppercase; color: var(--sage);
-      border: 1px solid rgba(197,223,192,0.22);
+      border: 1px solid rgba(197,223,192,0.2);
       background: rgba(12,16,14,0.5);
-      border-radius: 100px; padding: 7px 16px; margin-bottom: 24px;
+      border-radius: 100px; padding: 7px 16px; margin-bottom: 20px;
+      width: fit-content;
     }
     .vhero-title {
-      font-size: clamp(3rem, 6vw, 6.2rem);
+      font-size: clamp(3.2rem, 5.5vw, 5.8rem);
       color: #fff; line-height: 0.92;
-      letter-spacing: -0.03em; margin-bottom: 10px;
+      letter-spacing: -0.03em; margin-bottom: 8px;
     }
     .vhero-title em { color: var(--sage); font-style: italic; }
     .vhero-sub {
-      font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
-      letter-spacing: 0.26em; color: rgba(255,255,255,0.38); margin-bottom: 24px;
+      font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.24em; color: rgba(255,255,255,0.35); margin-bottom: 22px;
     }
-    .vhero-tagline {
-      font-size: clamp(1rem, 1.1vw, 1.1rem); color: var(--text-body);
-      line-height: 1.85; max-width: 600px; margin: 0 auto 32px;
-      font-family: var(--font-dm), sans-serif;
+    .vhero-desc {
+      font-size: 1rem; line-height: 1.85; color: var(--text-body);
+      max-width: 540px; margin-bottom: 28px;
     }
-    .vhero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-    .vhero-stats-row {
-      display: flex; justify-content: center; margin-top: 52px;
-      border: 1px solid var(--surface-border);
-      background: linear-gradient(180deg, rgba(9,12,11,0.7) 0%, rgba(9,12,11,0.5) 100%);
-      backdrop-filter: blur(14px);
-      border-radius: 24px; overflow: hidden; width: fit-content;
-      margin-left: auto; margin-right: auto;
+    .vhero-actions {
+      display: flex; gap: 12px; flex-wrap: wrap;
     }
-    .vhero-stat {
-      min-width: 140px; padding: 20px 26px; border-right: 1px solid var(--surface-border);
-    }
-    .vhero-stat:last-child { border-right: none; }
-    .vhero-stat-num { font-family: var(--font-cormorant), serif; font-size: 2rem; color: var(--sage); line-height: 0.95; }
-    .vhero-stat-lbl { font-size: 0.64rem; color: var(--text-subtle); text-transform: uppercase; letter-spacing: 0.13em; margin-top: 8px; }
 
-    /* ── Bridge Banner ── */
-    .vbridge {
-      background: linear-gradient(90deg, rgba(197,223,192,0.08) 0%, rgba(197,223,192,0.04) 100%);
-      border-top: 1px solid rgba(197,223,192,0.14);
-      border-bottom: 1px solid rgba(197,223,192,0.14);
-      padding: 14px 0;
-    }
-    .vbridge-inner { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; }
-    .vbridge-text { font-size: 0.8rem; color: rgba(255,255,255,0.55); }
-    .vbridge-link {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 0.8rem; font-weight: 600; color: var(--sage); transition: color 0.2s;
-    }
-    .vbridge-link:hover { color: #fff; }
-    .vbridge-sep { width: 4px; height: 4px; border-radius: 50%; background: rgba(197,223,192,0.25); }
-
-    /* ── About ── */
-    .vabout-inner {
-      padding: clamp(4rem, 7vw, 8rem) 0;
-      display: grid; grid-template-columns: 1.2fr 0.8fr;
-      gap: 48px; align-items: start;
-      max-width: 1080px; margin: 0 auto;
-    }
-    .vabout-eyebrow-row { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
-    .vabout-eyebrow-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(197,223,192,0.5), transparent); }
-    .vabout-title {
-      font-size: clamp(2.4rem, 3.8vw, 4.2rem);
-      line-height: 1.02; letter-spacing: -0.015em; color: #fff; margin-bottom: 20px;
-    }
-    .vabout-title em { color: var(--sage); font-style: italic; }
-    .vabout-lead {
-      font-size: 1rem; line-height: 1.9; color: var(--text-body);
-      position: relative; padding-left: 20px; margin-bottom: 16px;
-    }
-    .vabout-lead::before {
-      content: ''; position: absolute; left: 0; top: 6px; bottom: 6px;
-      width: 2px; border-radius: 2px;
-      background: linear-gradient(180deg, var(--sage), rgba(197,223,192,0.2));
-    }
-    .vabout-body { font-size: 0.9rem; line-height: 1.9; color: var(--text-muted); margin-bottom: 28px; }
-    .vabout-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
-    .vabout-sidebar { display: flex; flex-direction: column; gap: 14px; }
-
-    /* ── Why Cards ── */
-    .vwhy-card {
-      padding: 20px; border: 1px solid rgba(197,223,192,0.14);
-      background: rgba(12,16,14,0.55); border-radius: 12px;
-      display: flex; gap: 14px; align-items: flex-start;
-      transition: background 0.25s, border-color 0.25s, transform 0.25s;
-    }
-    .vwhy-card:hover { background: rgba(18,24,21,0.8); border-color: rgba(197,223,192,0.26); transform: translateY(-2px); }
-    .vwhy-icon {
-      width: 38px; height: 38px; border-radius: 9px; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      background: rgba(197,223,192,0.09); color: var(--sage);
+    /* Hero Contact Card */
+    .vhero-contact {
+      padding: 28px;
+      border-radius: 16px;
       border: 1px solid rgba(197,223,192,0.18);
-    }
-    .vwhy-title { font-family: var(--font-cormorant), serif; font-size: 1.15rem; color: #fff; margin-bottom: 4px; }
-    .vwhy-text { font-size: 0.82rem; line-height: 1.7; color: var(--text-muted); }
-
-    /* ── Services ── */
-    .vservices-inner { padding: clamp(4rem, 6vw, 7rem) 0; max-width: 1080px; margin: 0 auto; }
-    .vservices-head {
-      display: flex; align-items: flex-end; justify-content: space-between;
-      gap: 24px; margin-bottom: clamp(2rem, 4vw, 3.5rem);
-      padding-bottom: clamp(1.5rem, 2.5vw, 2.5rem);
-      border-bottom: 1px solid rgba(197,223,192,0.16); flex-wrap: wrap;
-    }
-    .vservices-title { font-size: clamp(2.2rem, 3.5vw, 3.6rem); color: #fff; letter-spacing: -0.01em; margin-top: 14px; }
-    .vservices-title em { color: var(--sage); font-style: italic; }
-    .vservices-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-    .vservice-card {
+      background: linear-gradient(145deg, rgba(197,223,192,0.07) 0%, rgba(12,16,14,0.7) 70%);
+      backdrop-filter: blur(12px);
       display: flex; flex-direction: column; gap: 18px;
-      padding: 26px 24px 22px; border-radius: 12px;
-      border: 1px solid rgba(197,223,192,0.14);
-      background: rgba(12,16,14,0.58);
-      transition: background 0.25s, border-color 0.25s, transform 0.25s;
     }
-    .vservice-card:hover { background: rgba(18,24,21,0.78); border-color: rgba(197,223,192,0.28); transform: translateY(-3px); }
-    .vservice-head { display: flex; align-items: center; gap: 14px; }
-    .vservice-icon {
-      width: 44px; height: 44px; border-radius: 11px; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--sage); background: rgba(197,223,192,0.09);
-      border: 1px solid rgba(197,223,192,0.18);
+    .vhero-contact-head {
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(197,223,192,0.12);
+      display: flex; flex-direction: column; gap: 4px;
     }
-    .vservice-title { font-family: var(--font-cormorant), Georgia, serif; font-size: 1.4rem; line-height: 1.15; color: #fff; }
-    .vservice-list { display: flex; flex-direction: column; gap: 10px; }
-    .vservice-item {
+    .vhero-contact-kicker {
+      font-size: 0.58rem; text-transform: uppercase;
+      letter-spacing: 0.16em; color: rgba(197,223,192,0.55);
+    }
+    .vhero-contact-title {
+      font-family: var(--font-cormorant), serif;
+      font-size: 1.6rem; line-height: 1.05; color: #fff;
+    }
+    .vhero-contact-row {
       display: grid; grid-template-columns: auto minmax(0, 1fr);
-      gap: 10px; align-items: start;
-      font-size: 0.86rem; line-height: 1.7; color: var(--text-muted);
+      gap: 12px; align-items: start;
     }
-    .vservice-bullet { width: 6px; height: 6px; margin-top: 0.5rem; border-radius: 50%; background: var(--sage); opacity: 0.9; flex-shrink: 0; }
-
-    /* ── Contact + Team ── */
-    .vcontact-team-inner {
-      padding: clamp(4rem, 6vw, 7rem) 0;
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 24px; align-items: start;
-      max-width: 1080px; margin: 0 auto;
-    }
-    .vcontact-card {
-      display: flex; flex-direction: column; gap: 20px;
-      padding: 28px; border-radius: 14px;
-      border: 1px solid rgba(197,223,192,0.2);
-      background: linear-gradient(135deg, rgba(197,223,192,0.08) 0%, rgba(12,16,14,0.72) 72%);
-    }
-    .vcontact-head { display: flex; flex-direction: column; gap: 6px; }
-    .vcontact-kicker { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.16em; color: rgba(197,223,192,0.6); }
-    .vcontact-title { font-family: var(--font-cormorant), Georgia, serif; font-size: 2rem; line-height: 1; color: #fff; }
-    .vcontact-subtitle { font-size: 0.7rem; line-height: 1.8; text-transform: uppercase; letter-spacing: 0.13em; color: rgba(197,223,192,0.6); }
-    .vcontact-list { display: flex; flex-direction: column; gap: 16px; }
-    .vcontact-row { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: start; }
-    .vcontact-icon {
-      width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+    .vhero-contact-icon {
+      width: 34px; height: 34px; border-radius: 8px; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
-      color: var(--sage); background: rgba(197,223,192,0.09);
+      color: var(--sage); background: rgba(197,223,192,0.08);
+      border: 1px solid rgba(197,223,192,0.14);
+    }
+    .vhero-contact-label {
+      font-size: 0.56rem; text-transform: uppercase;
+      letter-spacing: 0.14em; color: rgba(197,223,192,0.5); margin-bottom: 3px;
+    }
+    .vhero-contact-value {
+      font-size: 0.86rem; line-height: 1.65; color: var(--text-body);
+    }
+    .vhero-contact-link {
+      font-size: 0.86rem; line-height: 1.65; color: var(--text-body);
+      transition: color 0.2s; display: block;
+    }
+    .vhero-contact-link:hover { color: var(--sage); }
+    .vhero-contact-backed {
+      display: flex; align-items: center; gap: 8px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(197,223,192,0.1);
+      font-size: 0.74rem; color: rgba(255,255,255,0.45);
+    }
+    .vhero-contact-backed a {
+      color: var(--sage); font-weight: 600; transition: color 0.2s;
+    }
+    .vhero-contact-backed a:hover { color: #fff; }
+
+    /* ── Ticker ── */
+    .vticker-wrap { background: var(--sage); overflow: hidden; height: 36px; display: flex; align-items: center; }
+    .vticker-track { display: flex; gap: 0; white-space: nowrap; animation: vtickMove 28s linear infinite; }
+    @keyframes vtickMove { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .vticker-item {
+      display: inline-flex; align-items: center; gap: 16px;
+      font-size: 0.66rem; font-weight: 700; color: var(--ink);
+      text-transform: uppercase; letter-spacing: 0.14em; padding: 0 28px;
+    }
+    .vticker-sep { opacity: 0.3; }
+
+    /* ── Trust Strip ── */
+    .vtrust {
+      padding: clamp(3.5rem, 5vw, 5rem) 0;
+    }
+    .vtrust-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    .vtrust-card {
+      padding: 22px 18px;
+      border-radius: 12px;
+      border: 1px solid rgba(197,223,192,0.12);
+      background: rgba(12,16,14,0.5);
+      display: flex; flex-direction: column; gap: 12px;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .vtrust-card:hover {
+      border-color: rgba(197,223,192,0.28);
+      transform: translateY(-2px);
+    }
+    .vtrust-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(197,223,192,0.08); color: var(--sage);
       border: 1px solid rgba(197,223,192,0.16);
     }
-    .vcontact-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(197,223,192,0.55); margin-bottom: 5px; }
-    .vcontact-text, .vcontact-link { font-size: 0.88rem; line-height: 1.75; color: var(--text-body); }
-    .vcontact-link { transition: color 0.2s; }
-    .vcontact-link:hover { color: var(--sage); }
-    .vcontact-links { display: flex; flex-direction: column; gap: 3px; }
+    .vtrust-title {
+      font-family: var(--font-cormorant), serif;
+      font-size: 1.15rem; line-height: 1.15; color: #fff;
+    }
+    .vtrust-text {
+      font-size: 0.8rem; line-height: 1.7; color: var(--text-muted);
+    }
 
-    /* ── Team Card ── */
-    .vteam-card {
-      display: flex; flex-direction: column; gap: 18px;
-      padding: 28px; border-radius: 14px;
+    /* ── Services Section ── */
+    .vservices {
+      padding: clamp(3.5rem, 6vw, 6rem) 0;
+    }
+    .vservices-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      gap: 20px; margin-bottom: clamp(2.5rem, 4vw, 3.5rem);
+      padding-bottom: clamp(1.5rem, 2vw, 2rem);
+      border-bottom: 1px solid rgba(197,223,192,0.14);
+      flex-wrap: wrap;
+    }
+    .vservices-title {
+      font-size: clamp(2.2rem, 3.5vw, 3.4rem);
+      color: #fff; letter-spacing: -0.01em; margin-top: 12px;
+    }
+    .vservices-title em { color: var(--sage); font-style: italic; }
+
+    /* Service Block 1: Due Diligence */
+    .vservice-block {
+      margin-bottom: clamp(2rem, 3vw, 3rem);
+      padding: clamp(24px, 3vw, 32px);
+      border-radius: 16px;
+      border: 1px solid rgba(197,223,192,0.14);
+      background: rgba(12,16,14,0.5);
+    }
+    .vservice-block-head {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 10px;
+    }
+    .vservice-block-icon {
+      width: 46px; height: 46px; border-radius: 12px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--sage); background: rgba(197,223,192,0.09);
+      border: 1px solid rgba(197,223,192,0.18);
+    }
+    .vservice-block-title {
+      font-family: var(--font-cormorant), serif;
+      font-size: clamp(1.5rem, 2vw, 1.8rem); line-height: 1.15; color: #fff;
+    }
+    .vservice-block-desc {
+      font-size: 0.88rem; line-height: 1.8; color: var(--text-muted);
+      max-width: 700px; margin-bottom: clamp(16px, 2vw, 24px);
+    }
+
+    /* Due Diligence: icon + label grid */
+    .vdd-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+    .vdd-item {
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      padding: 16px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(197,223,192,0.1);
+      background: rgba(255,255,255,0.02);
+      transition: border-color 0.25s, background 0.25s, transform 0.25s;
+      text-align: center;
+    }
+    .vdd-item:hover {
+      border-color: rgba(197,223,192,0.24);
+      background: rgba(197,223,192,0.04);
+      transform: translateY(-2px);
+    }
+    .vdd-icon {
+      width: 34px; height: 34px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--sage); background: rgba(197,223,192,0.07);
+    }
+    .vdd-label {
+      font-size: 0.76rem; line-height: 1.45; color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Registration + Verification: tag grids */
+    .vreg-group {
+      margin-bottom: 20px;
+    }
+    .vreg-group:last-child { margin-bottom: 0; }
+    .vreg-group-label {
+      font-size: 0.62rem; text-transform: uppercase;
+      letter-spacing: 0.15em; color: rgba(197,223,192,0.55);
+      margin-bottom: 10px; font-weight: 600;
+    }
+    .vreg-tags {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .vreg-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.8rem; color: var(--text-muted);
+      padding: 8px 14px; border-radius: 8px;
+      border: 1px solid rgba(197,223,192,0.1);
+      background: rgba(255,255,255,0.02);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .vreg-tag:hover {
+      border-color: rgba(197,223,192,0.22);
+      color: var(--sage);
+    }
+    .vreg-tag-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--sage); opacity: 0.7; flex-shrink: 0;
+    }
+
+    /* ── Team Section ── */
+    .vteam-section {
+      padding: clamp(3.5rem, 6vw, 6rem) 0;
+    }
+    .vteam-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: clamp(24px, 3vw, 40px);
+      align-items: start;
+    }
+    .vteam-left {
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    .vteam-heading {
+      font-size: clamp(2rem, 3vw, 3rem);
+      color: #fff; letter-spacing: -0.01em; margin-top: 12px;
+    }
+    .vteam-heading em { color: var(--sage); font-style: italic; }
+    .vteam-lead {
+      font-size: 0.94rem; line-height: 1.85; color: var(--text-body);
+      position: relative; padding-left: 18px;
+    }
+    .vteam-lead::before {
+      content: ''; position: absolute; left: 0; top: 5px; bottom: 5px;
+      width: 2px; border-radius: 2px;
+      background: linear-gradient(180deg, var(--sage), rgba(197,223,192,0.15));
+    }
+
+    /* Vision + Commitment cards inside team left column */
+    .vteam-cards {
+      display: flex; flex-direction: column; gap: 12px;
+      margin-top: 8px;
+    }
+    .vvc-card {
+      padding: 22px;
+      border-radius: 12px;
+      border: 1px solid rgba(197,223,192,0.12);
+      background: rgba(255,255,255,0.02);
+    }
+    .vvc-label {
+      font-size: 0.6rem; text-transform: uppercase;
+      letter-spacing: 0.16em; color: rgba(197,223,192,0.6);
+      margin-bottom: 8px;
+    }
+    .vvc-text {
+      font-size: 0.88rem; line-height: 1.85; color: var(--text-body);
+    }
+    .vvc-quote {
+      font-family: var(--font-cormorant), serif;
+      font-size: 1.35rem; line-height: 1.3; color: #fff;
+      font-style: italic;
+    }
+
+    /* Team right column: member cards */
+    .vteam-right-card {
+      padding: 28px;
+      border-radius: 16px;
       border: 1px solid rgba(197,223,192,0.14);
       background: rgba(12,16,14,0.55);
+      display: flex; flex-direction: column; gap: 18px;
     }
-    .vteam-head {
-      display: flex; flex-direction: column; gap: 6px;
-      padding-bottom: 16px; border-bottom: 1px solid rgba(197,223,192,0.12);
+    .vteam-right-head {
+      display: flex; flex-direction: column; gap: 4px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(197,223,192,0.1);
     }
-    .vteam-title { font-family: var(--font-cormorant), Georgia, serif; font-size: 1.7rem; line-height: 1.1; color: #fff; }
-    .vteam-subtitle { font-size: 0.7rem; line-height: 1.7; text-transform: uppercase; letter-spacing: 0.13em; color: rgba(197,223,192,0.6); }
-    .vteam-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 16px; }
-    .vteam-row { display: flex; flex-direction: column; gap: 3px; padding: 12px 0; border-bottom: 1px solid rgba(197,223,192,0.08); }
-    .vteam-name { font-size: 0.94rem; line-height: 1.45; color: #fff; }
-    .vteam-role { font-size: 0.7rem; line-height: 1.6; text-transform: uppercase; letter-spacing: 0.11em; color: rgba(197,223,192,0.62); }
+    .vteam-right-title {
+      font-family: var(--font-cormorant), serif;
+      font-size: 1.6rem; line-height: 1.1; color: #fff;
+    }
+    .vteam-right-sub {
+      font-size: 0.68rem; text-transform: uppercase;
+      letter-spacing: 0.12em; color: rgba(197,223,192,0.55);
+    }
+    .vteam-members {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px 14px;
+    }
+    .vteam-member {
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(197,223,192,0.07);
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .vteam-member-name {
+      font-size: 0.92rem; line-height: 1.45; color: #fff; font-weight: 500;
+    }
+    .vteam-member-role {
+      font-size: 0.68rem; text-transform: uppercase;
+      letter-spacing: 0.1em; color: rgba(197,223,192,0.58);
+    }
 
-    /* ── Bottom / Vision ── */
-    .vbottom-inner {
-      padding: 0 0 clamp(4rem, 6vw, 7rem);
-      max-width: 1080px; margin: 0 auto;
-      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;
+    /* ── CTA Banner ── */
+    .vcta-banner {
+      background: var(--sage);
+      padding: clamp(40px, 5vw, 56px) 0;
     }
-    .vnote-card {
-      display: flex; flex-direction: column; gap: 14px;
-      padding: 26px; border-radius: 12px;
-      border: 1px solid rgba(197,223,192,0.14);
-      background: rgba(255,255,255,0.025);
+    .vcta-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
     }
-    .vnote-label { font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.16em; color: rgba(197,223,192,0.65); }
-    .vnote-text { font-size: 0.9rem; line-height: 1.85; color: var(--text-body); }
-    .vnote-commitment { font-family: var(--font-cormorant), Georgia, serif; font-size: 1.45rem; line-height: 1.25; color: #fff; }
+    .vcta-text {
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .vcta-heading {
+      font-family: var(--font-cormorant), serif;
+      font-size: clamp(1.8rem, 2.8vw, 2.6rem);
+      line-height: 1.08; color: var(--ink);
+    }
+    .vcta-sub {
+      font-size: 0.82rem; color: rgba(11,11,11,0.6);
+    }
+    .vcta-actions {
+      display: flex; gap: 12px; flex-wrap: wrap;
+    }
+    .vcta-btn-dark {
+      display: inline-flex; align-items: center; gap: 9px;
+      background: var(--ink); color: var(--sage);
+      font-size: 0.85rem; font-weight: 700;
+      padding: 14px 26px; border-radius: 100px;
+      transition: all 0.25s; letter-spacing: 0.03em; white-space: nowrap;
+    }
+    .vcta-btn-dark:hover { background: #222; transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,0,0,0.3); }
+    .vcta-btn-outline {
+      display: inline-flex; align-items: center; gap: 9px;
+      color: var(--ink); font-size: 0.85rem; font-weight: 600;
+      padding: 14px 26px; border-radius: 100px;
+      border: 2px solid rgba(11,11,11,0.25);
+      transition: all 0.25s; white-space: nowrap;
+    }
+    .vcta-btn-outline:hover { border-color: var(--ink); }
 
     /* ── Footer ── */
     .vfooter { border-top: 1px solid rgba(197,223,192,0.1); padding: 32px 0; }
@@ -538,24 +704,24 @@ const VenturesStyles = () => (
 
     /* ── Responsive ── */
     @media (max-width: 1024px) {
-      .vabout-inner { grid-template-columns: 1fr; }
-      .vcontact-team-inner { grid-template-columns: 1fr; }
+      .vhero-grid { grid-template-columns: 1fr; gap: 32px; }
+      .vtrust-grid { grid-template-columns: repeat(2, 1fr); }
+      .vteam-grid { grid-template-columns: 1fr; }
       .vmenu-btn { display: inline-flex !important; }
       .vnav-desktop { display: none !important; }
       .vheader-cta-desktop { display: none !important; }
     }
     @media (max-width: 768px) {
-      .vservices-grid { grid-template-columns: 1fr; }
-      .vteam-list { grid-template-columns: 1fr; }
-      .vbottom-inner { grid-template-columns: 1fr; }
-      .vhero-stats-row { flex-wrap: wrap; }
+      .vdd-grid { grid-template-columns: repeat(2, 1fr); }
+      .vteam-members { grid-template-columns: 1fr; }
+      .vcta-inner { flex-direction: column; align-items: flex-start; }
     }
     @media (max-width: 640px) {
-      .vhero-title { font-size: clamp(2.8rem, 13vw, 4rem); }
-      .vhero-stat { flex: 1 1 50%; text-align: center; min-width: 0; }
-      .vhero-stats-row { width: 100%; }
-      .vabout-ctas { flex-direction: column; }
-      .vservices-head { flex-direction: column; align-items: flex-start; }
+      .vhero-title { font-size: clamp(2.8rem, 12vw, 3.8rem); }
+      .vtrust-grid { grid-template-columns: 1fr; }
+      .vdd-grid { grid-template-columns: 1fr; }
+      .vcta-actions { flex-direction: column; width: 100%; }
+      .vcta-btn-dark, .vcta-btn-outline { justify-content: center; width: 100%; }
     }
     @media (min-width: 1025px) {
       .vmobile-panel { display: none; }
@@ -582,7 +748,6 @@ function VHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const navLinks = [
-    { href: "#about", label: "About" },
     { href: "#services", label: "Services" },
     { href: "#team", label: "Our Team" },
     { href: "#contact", label: "Contact" },
@@ -753,7 +918,7 @@ function VTicker() {
   const items = [
     "Property Due Diligence", "Title Scrutiny", "Registration Services",
     "Document Verification", "Encumbrance Check", "Legal Due Diligence Report",
-    "RERA Verification", "Patta & Chitta Verification",
+    "RERA Verification", "Patta & Chitta Verification", "Ownership Analysis",
   ];
   const doubled = [...items, ...items];
   return (
@@ -769,66 +934,85 @@ function VTicker() {
   );
 }
 
-// ─── Bridge Banner ────────────────────────────────────────────────────────────
-
-function VBridge() {
-  return (
-    <div className="vbridge">
-      <div className="vcontainer">
-        <div className="vbridge-inner">
-          <span className="vbridge-text">A dedicated paralegal division of AGD Law Associates</span>
-          <span className="vbridge-sep" />
-          <Link href="/" className="vbridge-link">
-            Visit the Law Firm <ArrowRight size={12} />
-          </Link>
-          <span className="vbridge-sep" />
-          <span className="vbridge-text">Full legal muscle, behind every property deal</span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 
 function VHero() {
   return (
     <section className="vhero" id="hero">
-      <div className="vhero-ornament" aria-hidden="true" />
       <div className="vcontainer">
-        <div className="vhero-content">
-          <div className="vhero-eyebrow">
-            <Shield size={11} />
-            Property Due Diligence · Title Scrutiny · Registration
-          </div>
-          <h1 className="vhero-title">
-            AGD Law <em>Ventures</em>
-          </h1>
-          <div className="vhero-sub">Paralegal Division · Chennai · Est. 2016</div>
-          <p className="vhero-tagline">
-            Professional property due diligence, title scrutiny, registration, documentation,
-            and legal verification services — backed by the full legal strength of AGD Law Associates.
-          </p>
-          <div className="vhero-actions">
-            <a href="#contact" className="vbtn-primary">
-              Get Property Verified <ArrowRight size={14} />
-            </a>
-            <a href={`tel:${venturesPhoneNumbers[0].tel}`} className="vbtn-ghost">
-              <Phone size={14} /> {venturesPhoneNumbers[0].display}
-            </a>
-          </div>
-          <div className="vhero-stats-row">
-            {[
-              { num: "2016", lbl: "Established" },
-              { num: "2", lbl: "Core Services" },
-              { num: "12+", lbl: "Service Types" },
-              { num: "100%", lbl: "Legally Verified" },
-            ].map((s) => (
-              <div key={s.lbl} className="vhero-stat">
-                <div className="vhero-stat-num">{s.num}</div>
-                <div className="vhero-stat-lbl">{s.lbl}</div>
+        <div className="vnarrow">
+          <div className="vhero-grid">
+            {/* Left: Copy */}
+            <div className="vhero-left">
+              <div className="vhero-eyebrow">
+                <Shield size={11} />
+                Paralegal Division of AGD Law Associates
               </div>
-            ))}
+              <h1 className="vhero-title">
+                AGD Law<br /><em>Ventures</em>
+              </h1>
+              <div className="vhero-sub">Chennai · Established 2016</div>
+              <p className="vhero-desc">
+                Professional property due diligence, title scrutiny, registration,
+                and legal verification services — every step supervised by qualified
+                advocates from AGD Law Associates.
+              </p>
+              <div className="vhero-actions">
+                <a href="#contact" className="vbtn-primary">
+                  Get Property Verified <ArrowRight size={14} />
+                </a>
+                <a href={`tel:${venturesPhoneNumbers[0].tel}`} className="vbtn-ghost">
+                  <Phone size={14} /> {venturesPhoneNumbers[0].display}
+                </a>
+              </div>
+            </div>
+
+            {/* Right: Contact Card */}
+            <div className="vhero-contact" id="contact">
+              <div className="vhero-contact-head">
+                <div className="vhero-contact-kicker">Get In Touch</div>
+                <div className="vhero-contact-title">AGD Law Ventures</div>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+                <div className="vhero-contact-row">
+                  <div className="vhero-contact-icon"><MapPin size={15} /></div>
+                  <div>
+                    <div className="vhero-contact-label">Office</div>
+                    <div className="vhero-contact-value">
+                      New No.258/193/11/1, 2nd Floor,<br />
+                      Linghi Chetty Street, George Town,<br />
+                      Chennai - 600001
+                    </div>
+                  </div>
+                </div>
+                <div className="vhero-contact-row">
+                  <div className="vhero-contact-icon"><PhoneCall size={15} /></div>
+                  <div>
+                    <div className="vhero-contact-label">Mobile</div>
+                    {venturesPhoneNumbers.map((phone) => (
+                      <a className="vhero-contact-link" href={`tel:${phone.tel}`} key={phone.tel}>
+                        {phone.display}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+                <div className="vhero-contact-row">
+                  <div className="vhero-contact-icon"><Mail size={15} /></div>
+                  <div>
+                    <div className="vhero-contact-label">Email</div>
+                    <a className="vhero-contact-link" href="mailto:bala@agdlawventures.com">
+                      bala@agdlawventures.com
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div className="vhero-contact-backed">
+                <Shield size={12} style={{ color: "var(--sage)", flexShrink: 0 }} />
+                <span>Backed by <Link href="/">AGD Law Associates</Link></span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -836,54 +1020,24 @@ function VHero() {
   );
 }
 
-// ─── About ────────────────────────────────────────────────────────────────────
+// ─── Trust Strip ──────────────────────────────────────────────────────────────
 
-function VAbout() {
+function VTrustStrip() {
   return (
-    <section className="vpanel" id="about">
+    <section className="vpanel">
       <div className="vcontainer">
-        <div className="vabout-inner">
-          <div>
-            <div className="vabout-eyebrow-row">
-              <span className="vsection-label">About AGD Law Ventures</span>
-              <div className="vabout-eyebrow-line" />
-            </div>
-            <h2 className="vabout-title">
-              Property transactions deserve{" "}
-              <em>verified clarity</em>
-            </h2>
-            <p className="vabout-lead">
-              AGD Law Ventures is the dedicated paralegal division of AGD Law Associates,
-              providing professional property due diligence, title scrutiny, registration,
-              documentation, and legal verification services.
-            </p>
-            <p className="vabout-body">
-              As a specialised paralegal division, it is structured to support property
-              buyers, sellers, families, and businesses with dependable verification before
-              a transaction moves forward — helping clients act with confidence and legal
-              clarity. Every service we offer is supervised by qualified advocates from
-              AGD Law Associates, ensuring legal precision at every step.
-            </p>
-            <div className="vabout-ctas">
-              <a href="#contact" className="vbtn-primary">
-                Contact Our Team <ArrowRight size={14} />
-              </a>
-              <Link href="/" className="vbtn-ghost">
-                <ArrowLeft size={14} /> AGD Law Associates
-              </Link>
-            </div>
+        <div className="vnarrow vtrust">
+          <div style={{ marginBottom: "20px" }}>
+            <span className="vsection-label">Why AGD Law Ventures</span>
           </div>
-
-          <div className="vabout-sidebar">
-            {whyChooseUs.map((item) => {
+          <div className="vtrust-grid">
+            {trustPoints.map((item) => {
               const Icon = item.icon;
               return (
-                <div className="vwhy-card" key={item.title}>
-                  <div className="vwhy-icon"><Icon size={16} /></div>
-                  <div>
-                    <div className="vwhy-title">{item.title}</div>
-                    <div className="vwhy-text">{item.text}</div>
-                  </div>
+                <div className="vtrust-card" key={item.title}>
+                  <div className="vtrust-icon"><Icon size={17} /></div>
+                  <div className="vtrust-title">{item.title}</div>
+                  <div className="vtrust-text">{item.text}</div>
                 </div>
               );
             })}
@@ -900,10 +1054,10 @@ function VServices() {
   return (
     <section className="vpanel-dark" id="services">
       <div className="vcontainer">
-        <div className="vservices-inner">
-          <div className="vservices-head">
+        <div className="vnarrow vservices">
+          <div className="vservices-header">
             <div>
-              <span className="vsection-label" style={{ background: "rgba(197,223,192,0.08)" }}>
+              <span className="vsection-label" style={{ background: "rgba(197,223,192,0.06)" }}>
                 Core Services
               </span>
               <h2 className="vservices-title">
@@ -914,26 +1068,63 @@ function VServices() {
               Enquire Now <ArrowRight size={13} />
             </a>
           </div>
-          <div className="vservices-grid">
-            {venturesServiceGroups.map((group) => {
-              const Icon = group.icon;
-              return (
-                <div className="vservice-card" key={group.title}>
-                  <div className="vservice-head">
-                    <div className="vservice-icon"><Icon size={18} /></div>
-                    <div className="vservice-title">{group.title}</div>
+
+          {/* Service 1: Due Diligence & Title Scrutiny */}
+          <div className="vservice-block">
+            <div className="vservice-block-head">
+              <div className="vservice-block-icon"><Shield size={20} /></div>
+              <div className="vservice-block-title">Due Diligence & Title Scrutiny</div>
+            </div>
+            <p className="vservice-block-desc">
+              Comprehensive property investigation covering ownership history,
+              encumbrances, litigation status, revenue records, and land use —
+              culminating in a detailed legal due diligence report.
+            </p>
+            <div className="vdd-grid">
+              {dueDiligenceItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <div className="vdd-item" key={item.label}>
+                    <div className="vdd-icon"><Icon size={15} /></div>
+                    <div className="vdd-label">{item.label}</div>
                   </div>
-                  <div className="vservice-list">
-                    {group.items.map((item) => (
-                      <div className="vservice-item" key={item}>
-                        <span className="vservice-bullet" />
-                        <span>{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Service 2: Registrations & Record Verification */}
+          <div className="vservice-block">
+            <div className="vservice-block-head">
+              <div className="vservice-block-icon"><BookOpen size={20} /></div>
+              <div className="vservice-block-title">Registrations & Record Verification</div>
+            </div>
+            <p className="vservice-block-desc">
+              End-to-end document registration services and comprehensive record
+              verification across all major government databases and regulatory bodies.
+            </p>
+            <div className="vreg-group">
+              <div className="vreg-group-label">Property Registrations</div>
+              <div className="vreg-tags">
+                {registrationItems.map((item) => (
+                  <span className="vreg-tag" key={item}>
+                    <span className="vreg-tag-dot" />
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="vreg-group">
+              <div className="vreg-group-label">Record & Approval Verification</div>
+              <div className="vreg-tags">
+                {verificationItems.map((item) => (
+                  <span className="vreg-tag" key={item}>
+                    <span className="vreg-tag-dot" />
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -941,88 +1132,59 @@ function VServices() {
   );
 }
 
-// ─── Contact & Team ───────────────────────────────────────────────────────────
+// ─── Team Section ─────────────────────────────────────────────────────────────
 
-function VContactTeam() {
+function VTeam() {
   return (
-    <section className="vpanel" id="contact">
+    <section className="vpanel" id="team">
       <div className="vcontainer">
-        <div style={{ maxWidth: "1080px", margin: "0 auto", paddingTop: "clamp(4rem, 6vw, 7rem)" }}>
-          <div className="vabout-eyebrow-row" style={{ marginBottom: "32px" }}>
-            <span className="vsection-label">Contact & Team</span>
-            <div className="vabout-eyebrow-line" />
-          </div>
-        </div>
-        <div className="vcontact-team-inner" style={{ paddingTop: 0 }}>
-          <div className="vcontact-card">
-            <div className="vcontact-head">
-              <div className="vcontact-kicker">Get In Touch</div>
-              <div className="vcontact-title">AGD LAW VENTURES</div>
-              <div className="vcontact-subtitle">Property verification and registration support</div>
-            </div>
-            <div className="vcontact-list">
-              <div className="vcontact-row">
-                <div className="vcontact-icon"><MapPin size={16} /></div>
-                <div>
-                  <div className="vcontact-label">Office</div>
-                  <div className="vcontact-text">
-                    New No.258/193/11/1, 2nd Floor, Linghi Chetty Street,
-                    George Town, Chennai - 600001
+        <div className="vnarrow vteam-section">
+          <div className="vteam-grid">
+            {/* Left: heading + vision/commitment */}
+            <div className="vteam-left">
+              <div>
+                <span className="vsection-label">Our People</span>
+                <h2 className="vteam-heading">
+                  Led by advocates with<br /><em>12+ years</em> of practice
+                </h2>
+              </div>
+              <p className="vteam-lead">
+                AGD Law Ventures is structured as a specialised paralegal division to support
+                property buyers, sellers, families, and businesses with dependable verification
+                before a transaction moves forward — helping clients act with confidence and
+                legal clarity.
+              </p>
+              <div className="vteam-cards">
+                <div className="vvc-card">
+                  <div className="vvc-label">Vision</div>
+                  <p className="vvc-text">
+                    To become one of Tamil Nadu&apos;s most trusted and professionally managed
+                    paralegal organisations delivering dependable, transparent, and legally
+                    compliant property solutions.
+                  </p>
+                </div>
+                <div className="vvc-card">
+                  <div className="vvc-label">Our Commitment</div>
+                  <div className="vvc-quote">
+                    Every Property Verified. Every Title Examined. Every Transaction Protected.
                   </div>
                 </div>
               </div>
-              <div className="vcontact-row">
-                <div className="vcontact-icon"><PhoneCall size={16} /></div>
-                <div>
-                  <div className="vcontact-label">Mobile</div>
-                  <div className="vcontact-links">
-                    {venturesPhoneNumbers.map((phone) => (
-                      <a className="vcontact-link" href={`tel:${phone.tel}`} key={phone.tel}>
-                        {phone.display}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              <div className="vcontact-row">
-                <div className="vcontact-icon"><Mail size={16} /></div>
-                <div>
-                  <div className="vcontact-label">Email</div>
-                  <a className="vcontact-link" href="mailto:bala@agdlawventures.com">
-                    bala@agdlawventures.com
-                  </a>
-                </div>
-              </div>
-              <div className="vcontact-row">
-                <div className="vcontact-icon"><ArrowRight size={16} /></div>
-                <div>
-                  <div className="vcontact-label">Parent Firm</div>
-                  <Link className="vcontact-link" href="/">agdlawassociates.in</Link>
-                </div>
-              </div>
             </div>
-            <a
-              href={`tel:${venturesPhoneNumbers[0].tel}`}
-              className="vbtn-primary"
-              style={{ justifyContent: "center" }}
-            >
-              <Phone size={14} /> Call Now
-            </a>
-          </div>
 
-          <div id="team">
-            <div className="vteam-card">
-              <div className="vteam-head">
-                <div className="vteam-title">Ventures Team</div>
-                <div className="vteam-subtitle">
+            {/* Right: team card */}
+            <div className="vteam-right-card">
+              <div className="vteam-right-head">
+                <div className="vteam-right-title">Ventures Team</div>
+                <div className="vteam-right-sub">
                   Exclusive for Due Diligence, Title Scrutiny & Registrations
                 </div>
               </div>
-              <div className="vteam-list">
+              <div className="vteam-members">
                 {venturesTeam.map((member) => (
-                  <div className="vteam-row" key={member.name}>
-                    <div className="vteam-name">{member.name}</div>
-                    <div className="vteam-role">{member.role}</div>
+                  <div className="vteam-member" key={member.name}>
+                    <div className="vteam-member-name">{member.name}</div>
+                    <div className="vteam-member-role">{member.role}</div>
                   </div>
                 ))}
               </div>
@@ -1034,25 +1196,27 @@ function VContactTeam() {
   );
 }
 
-// ─── Vision / Commitment ──────────────────────────────────────────────────────
+// ─── CTA Banner ───────────────────────────────────────────────────────────────
 
-function VBottom() {
+function VCTABanner() {
   return (
-    <section className="vpanel-dark">
+    <section className="vcta-banner">
       <div className="vcontainer">
-        <div className="vbottom-inner">
-          <div className="vnote-card">
-            <div className="vnote-label">Vision</div>
-            <p className="vnote-text">
-              To become one of Tamil Nadu&apos;s most trusted and professionally managed
-              paralegal organisations delivering dependable, transparent, and legally
-              compliant property solutions.
-            </p>
-          </div>
-          <div className="vnote-card">
-            <div className="vnote-label">Our Commitment</div>
-            <div className="vnote-commitment">
-              Every Property Verified. Every Title Examined. Every Transaction Protected.
+        <div className="vnarrow">
+          <div className="vcta-inner">
+            <div className="vcta-text">
+              <div className="vcta-heading">Get your property verified today</div>
+              <div className="vcta-sub">
+                Backed by the full legal strength of AGD Law Associates.
+              </div>
+            </div>
+            <div className="vcta-actions">
+              <a href={`tel:${venturesPhoneNumbers[0].tel}`} className="vcta-btn-dark">
+                <Phone size={14} /> Call Now
+              </a>
+              <Link href="/" className="vcta-btn-outline">
+                <ArrowLeft size={14} /> Visit Law Firm
+              </Link>
             </div>
           </div>
         </div>
@@ -1187,12 +1351,11 @@ export default function VenturesPage() {
         <main>
           <VHero />
           <VTicker />
-          <VBridge />
-          <VAbout />
+          <VTrustStrip />
           <VServices />
-          <VContactTeam />
-          <VBottom />
+          <VTeam />
         </main>
+        <VCTABanner />
         <VFooter />
       </div>
       <VWhatsApp />
