@@ -49,6 +49,27 @@ function normalizePath(filePath) {
   return path.relative(process.cwd(), filePath).split(path.sep).join("/");
 }
 
+function isImageAttachment(attachment) {
+  return (
+    attachment.contentType?.startsWith("image/") ||
+    /\.(png|jpe?g|webp|gif)$/i.test(attachment.path || "")
+  );
+}
+
+function imageDataUri(attachment) {
+  if (!attachment.path || !isImageAttachment(attachment)) {
+    return "";
+  }
+
+  try {
+    const contentType = attachment.contentType || "image/png";
+    const image = fs.readFileSync(attachment.path).toString("base64");
+    return `data:${contentType};base64,${image}`;
+  } catch (error) {
+    return "";
+  }
+}
+
 class EmailHtmlReporter {
   constructor(options = {}) {
     this.outputFile =
@@ -233,6 +254,30 @@ class EmailHtmlReporter {
     );
 
     const sections = failedEntries.map((entry) => {
+      const imageAttachments = entry.attachments.filter(isImageAttachment);
+      const screenshotHtml = imageAttachments.length
+        ? imageAttachments
+            .map((attachment) => {
+              const dataUri = imageDataUri(attachment);
+
+              if (!dataUri) {
+                return "";
+              }
+
+              return `
+                <div style="margin-top: 12px;">
+                  <p style="margin: 0 0 6px 0;"><strong>${escapeHtml(
+                    attachment.name || "Failure screenshot"
+                  )}</strong></p>
+                  <img src="${dataUri}" alt="${escapeHtml(
+                    attachment.name || "Failure screenshot"
+                  )}" style="display: block; max-width: 100%; height: auto; border: 1px solid #f5c6cb; border-radius: 4px;" />
+                </div>
+              `;
+            })
+            .join("")
+        : "";
+
       const attachmentHtml = entry.attachments.length
         ? `
             <ul style="margin: 8px 0 0 16px; padding: 0;">
@@ -267,6 +312,7 @@ class EmailHtmlReporter {
           )}</pre>
           <p><strong>Artifacts:</strong></p>
           ${attachmentHtml}
+          ${screenshotHtml}
         </div>
       `;
     });

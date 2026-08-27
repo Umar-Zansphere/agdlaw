@@ -67,6 +67,7 @@ pipeline {
         def hasJunit = fileExists(junitPath)
         def hasEmailReport = fileExists(emailReportPath)
         def hasPlaywrightReport = fileExists('frontend/playwright-report/index.html')
+        def screenshotPattern = 'frontend/test-results/**/*.png'
 
         if (currentBuild.currentResult == 'SUCCESS' && !hasJunit && !hasEmailReport) {
           currentBuild.result = 'FAILURE'
@@ -110,6 +111,7 @@ pipeline {
           to: env.E2E_REPORT_RECIPIENTS ?: '$DEFAULT_RECIPIENTS',
           subject: "[${currentBuild.currentResult}] ${env.JOB_NAME} #${env.BUILD_NUMBER} - AGD Law E2E Report",
           mimeType: 'text/html',
+          attachmentsPattern: currentBuild.currentResult != 'SUCCESS' ? screenshotPattern : '',
           attachLog: currentBuild.currentResult != 'SUCCESS',
           body: reportBody
         )
