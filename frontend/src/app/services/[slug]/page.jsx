@@ -1,17 +1,6 @@
 import { notFound } from "next/navigation";
 import { PracticeAreaPageContent } from "@/components/practice-areas";
-
-const practiceAreaSlugs = [
-  "criminal-law",
-  "civil-litigation",
-  "writs-constitutional",
-  "consumer-protection",
-  "property-real-estate",
-  "family-matrimonial",
-  "arbitration-adr",
-  "corporate-advisory",
-  "mcop-rent-control",
-];
+import { practiceAreaSlugs } from "@/lib/site";
 
 export async function generateStaticParams() {
   return practiceAreaSlugs.map((slug) => ({ slug }));

@@ -24,7 +24,6 @@ const cormorant = Cormorant_Garamond({
 import {
   ArrowRight,
   Phone,
-  ArrowLeft,
   Building2,
   MessageCircle,
   MapPin,

@@ -8,7 +8,7 @@
 import { useState, useEffect, useRef } from "react";
 import { AGDLogoImg } from "@/components/AGDLogoImg";
 import {
-  ArrowRight, ArrowLeft, Phone, Mail, MessageCircle,
+  ArrowRight, Phone, Mail, MessageCircle,
   ChevronDown, CheckCircle, Scale, Shield, Clock,
   Award, Users, BookOpen, MapPin, X, Send,
   FileText, Gavel, Home, Building, Heart, Briefcase,

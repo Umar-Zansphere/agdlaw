@@ -86,10 +86,8 @@ module.exports = defineConfig({
   ],
   webServer: {
     command: `pnpm exec next dev --hostname ${HOST} --port ${PORT}`,
-    // command: `npm run dev -- --hostname ${HOST} --port ${PORT}`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
   },
 });
-// console.log(process.env.RP_API_KEY)
